@@ -95,7 +95,7 @@ export function storyboardFor(id, { title, theme, vertical, seed, ending } = {})
     if (name && sketchByName(name)?.keep) continue;
     if (!name) {
       // Diagrams, casts and charts lay themselves out for the frame; a landscape view would squeeze them.
-      if (['diagram', 'cast', 'plot', 'bars', 'bridge', 'stat', 'multiples', 'distribution', 'kpi', 'teaching'].some(k => b.props?.[k] != null)) continue;
+      if (['diagram', 'cast', 'plot', 'bars', 'bridge', 'breakdown', 'process', 'decision', 'table', 'stat', 'multiples', 'distribution', 'kpi', 'teaching'].some(k => b.props?.[k] != null)) continue;
       if ((vertical || book.format === 'vertical') && b.block === 'canvas' && b.props && b.props.view == null)
         b.props.view = [1920, 1080];
       continue;

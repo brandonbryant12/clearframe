@@ -83,6 +83,9 @@ const COMMON = [
   'exitAt',
   'exitSay',
   'exitAfter',
+  // A named moment of the beat (props.moments) instead of a word or seconds (film/moments.mjs).
+  'cue',
+  'exitCue',
   'exitDur',
   'sound',
   'keys',
@@ -91,6 +94,8 @@ const COMMON = [
   'echo',
   'fps',
   'morphDur',
+  // One-to-many morph: start as a slice of an element of the beat before (film/job.mjs linkMorphs).
+  'morphFrom',
   'rough',
   'behind',
   'subject',
@@ -199,7 +204,7 @@ function checkSound(v, where, fail) {
   if (typeof v === 'object' && v.volume != null && !(Number.isFinite(v.volume) && v.volume >= 0 && v.volume <= 1)) fail(`${where}.volume must be 0–1`);
 }
 export const MARK_STYLES = ['highlight', 'underline', 'circle', 'box', 'strike', 'cross', 'stamp'];
-const MARK_FIELDS = ['words', 'style', 'color', 'at', 'say', 'after', 'dur', 'width', 'pad', 'rough', 'label', 'size', 'rotate', 'fill', 'sound'];
+const MARK_FIELDS = ['words', 'style', 'color', 'at', 'say', 'cue', 'after', 'dur', 'width', 'pad', 'rough', 'label', 'size', 'rotate', 'fill', 'sound'];
 /** Whether `phrase` occurs in `text` on word boundaries, as the renderer's `find_words` matches it. */
 function hasWords(text, phrase) {
   const flat = text.split(/\s+/).join(' ');
@@ -262,8 +267,8 @@ function checkDocument(el, at, fail) {
     el.scroll.forEach((k, i) => {
       const ok = Number.isInteger(k?.to) ? k.to >= 0 && k.to < el.sections.length : typeof k?.to === 'string' && el.sections.some(sec => `${sec.heading ?? ''} ${sec.text}`.toLowerCase().includes(k.to.toLowerCase()));
       if (!ok) fail(`${at}.scroll[${i}].to must be a section index or words from a section's heading or text`);
-      if (k.say == null && k.at == null) fail(`${at}.scroll[${i}] needs say or at`);
-      for (const key of Object.keys(k)) if (!['to', 'say', 'at', 'after', 'dur'].includes(key)) fail(`${at}.scroll[${i}]: unsupported field ${key}`);
+      if (k.say == null && k.at == null && k.cue == null) fail(`${at}.scroll[${i}] needs say, at or cue`);
+      for (const key of Object.keys(k)) if (!['to', 'say', 'at', 'cue', 'after', 'dur'].includes(key)) fail(`${at}.scroll[${i}]: unsupported field ${key}`);
     });
   }
   if (el.marks != null) {
@@ -371,13 +376,25 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
       fail(`${at}.drawEase needs enter draw and must be out or linear`);
     if (el.exit != null && !EXITS.includes(el.exit))
       fail(retired('exit', el.exit) ? `${at}: ${retired('exit', el.exit)}` : `${at}.exit must be one of ${EXITS.join(', ')}`);
-    if ((el.exitAt != null || el.exitSay != null) && el.exit == null) el.exit = 'fade';
+    if ((el.exitAt != null || el.exitSay != null || el.exitCue != null) && el.exit == null) el.exit = 'fade';
+    for (const key of ['cue', 'exitCue'])
+      if (el[key] != null && (typeof el[key] !== 'string' || !el[key].trim())) fail(`${at}.${key} must name one of the beat's moments (props.moments)`);
+    if (el.cue != null && (el.say != null || el.at != null)) fail(`${at} takes one of say, at or cue`);
     if (el.enter === 'type' && el.type !== 'text')
       fail(`${at}: enter "${el.enter}" is for text elements`);
     if (el.fps != null && (!finite(el.fps) || el.fps < 2 || el.fps > 60))
       fail(`${at}.fps must be 2–60 (stepped motion, e.g. 12 for "on twos")`);
     if (el.morphDur != null && (!finite(el.morphDur) || el.morphDur < 0.1 || el.morphDur > 4))
       fail(`${at}.morphDur must be 0.1–4 seconds`);
+    if (el.morphFrom != null) {
+      const m = el.morphFrom;
+      const ok = m && typeof m === 'object' && !Array.isArray(m) && typeof m.id === 'string' && m.id.trim() &&
+        Array.isArray(m.slice) && m.slice.length === 2 && m.slice.every(finite) && m.slice[0] >= 0 && m.slice[1] <= 1 + 1e-9 && m.slice[1] > m.slice[0] &&
+        (m.axis == null || ['x', 'y'].includes(m.axis)) && Object.keys(m).every(k => ['id', 'slice', 'axis'].includes(k));
+      if (!ok) fail(`${at}.morphFrom must be {id, slice: [from, to] (fractions 0–1 of that element), axis: x|y}: the slice of an element of the beat before that this one comes out of`);
+      if (el.type !== 'rect') fail(`${at}.morphFrom: only a rect comes out of a slice of another`);
+      if (el.id == null) fail(`${at}.morphFrom needs the element to have its own id`);
+    }
     for (const key of ['say', 'exitSay'])
       if (el[key] != null && (typeof el[key] !== 'string' || !el[key].trim()))
         fail(`${at}.${key} must be a spoken word or phrase`);
@@ -423,12 +440,14 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
               'tiltX',
               'tiltY',
               'sound',
+              'cue',
             ].includes(key)
           )
             fail(`${at}.keys[${j}]: unsupported field ${key}`);
         if (k.sound != null) checkSound(k.sound, `${at}.keys[${j}].sound`, fail);
-        if (k.at == null && k.say == null) fail(`${at}.keys[${j}] needs at (seconds) or say (spoken cue)`);
-        if (k.after != null && (!finite(k.after) || k.after < 0 || k.say == null)) fail(`${at}.keys[${j}].after is seconds (0 or more) after its say cue`);
+        if (k.at == null && k.say == null && k.cue == null) fail(`${at}.keys[${j}] needs at (seconds) or say (spoken cue), or cue (a moment)`);
+        if (k.after != null && (!finite(k.after) || (k.say != null && k.after < 0) || (k.say == null && k.cue == null)))
+          fail(`${at}.keys[${j}].after is seconds after its say cue (0 or more) or its moment`);
         if (k.blur != null && (!finite(k.blur) || k.blur < 0 || k.blur > 60))
           fail(`${at}.keys[${j}].blur must be 0–60 px`);
         for (const key of ['at', 'dur', 'x', 'y', 'scale', 'scaleX', 'scaleY', 'rotate', 'opacity', 'tiltX', 'tiltY'])
@@ -454,7 +473,7 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
       const r = el.along;
       if (!r || typeof r !== 'object' || typeof r.d !== 'string') fail(`${at}.along needs path data d`);
       for (const key of Object.keys(r))
-        if (!['d', 'at', 'say', 'after', 'dur', 'ease', 'rotate', 'loop'].includes(key))
+        if (!['d', 'at', 'say', 'cue', 'after', 'dur', 'ease', 'rotate', 'loop'].includes(key))
           fail(`${at}.along: unsupported field ${key}`);
       pathData(r.d, `${at}.along.d`, fail);
       if (r.ease != null && !EASES.includes(r.ease)) fail(`${at}.along.ease must be one of ${EASES.join(', ')}`);
@@ -981,7 +1000,7 @@ export function shineSpec(v, where, fail) {
   if (!spec || typeof spec !== 'object' || Array.isArray(spec))
     fail(`${where} must be true or {at|say, dur, color, width, angle, opacity, every}`);
   for (const k of Object.keys(spec))
-    if (!['at', 'say', 'dur', 'color', 'width', 'angle', 'opacity', 'every'].includes(k))
+    if (!['at', 'say', 'cue', 'after', 'dur', 'color', 'width', 'angle', 'opacity', 'every'].includes(k))
       fail(`${where}: unsupported field ${k}`);
   const range = (k, lo, hi) => {
     if (spec[k] != null && (!finite(spec[k]) || spec[k] < lo || spec[k] > hi))

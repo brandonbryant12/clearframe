@@ -19,7 +19,7 @@ function hasWords(text, phrase) {
 /** The group a receipt element draws; `fail(message)` throws with the caller's context. */
 export function expandReceipt(input, at, fail) {
   const { type, x = 0, y = 0, w: width, size: s = 30, merchant, detail, items = [], tax, tip, total, paid, footer, slip = false, lines, currency = '$', marks, shadow = true, ...rest } = input;
-  for (const key of Object.keys(input)) if (key !== 'type' && !RECEIPT_FIELDS.includes(key) && !['id', 'at', 'say', 'after', 'dur', 'enter', 'exit', 'exitAt', 'exitSay', 'exitAfter', 'keys', 'scale', 'rotate', 'origin', 'opacity', 'note', 'fill', 'z', 'depth', 'tilt', 'unfinished', 'loop'].includes(key))
+  for (const key of Object.keys(input)) if (key !== 'type' && !RECEIPT_FIELDS.includes(key) && !['id', 'at', 'say', 'cue', 'exitCue', 'after', 'dur', 'enter', 'exit', 'exitAt', 'exitSay', 'exitAfter', 'keys', 'scale', 'rotate', 'origin', 'opacity', 'note', 'fill', 'z', 'depth', 'tilt', 'unfinished', 'loop'].includes(key))
     fail(`${at}: unsupported receipt field ${key} (a receipt takes ${RECEIPT_FIELDS.join(', ')}, plus the timing fields every element takes)`);
   if (typeof merchant !== 'string' || !merchant.trim() || merchant.length > 28) fail(`${at}.merchant must be the name printed at the top, up to 28 characters`);
   if (!Number.isFinite(s) || s < 18 || s > 60) fail(`${at}.size must be 18–60 (the line type, in px)`);

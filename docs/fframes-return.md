@@ -6,6 +6,42 @@ on this machine (M1 iMac, 8 GB, macOS 26) on 2026-10-12 while other agents were 
 timing is the best (and median) of interleaved runs, with the load average recorded. Sections
 marked _planned_ are not built yet.
 
+## October 18 runtime update
+
+The runtime is pinned to upstream main
+[`28356c5b5473`](https://github.com/dmtrKovalenko/fframes/commit/28356c5b5473fc3281167e3b2baff12a0d204a67),
+25 commits after the previous `62f6673` pin. The latest tagged release is still `v1.2.0`
+(October 3); using that tag would move backwards. The MIT notice was checked at the new
+revision and its hash is unchanged. `Cargo.lock` pins the resolved dependencies.
+
+This incorporates encoder frame-colour metadata (#232), the lru dependency update (#229),
+svgr/usvgr 0.50.2, and media decoder size/duration fixes. The scheduler and encoder remain
+the active integration. Upstream's new Lottie adapter, native preview window, SVG inspection,
+and per-track audio APIs do not become authoring features merely by updating the dependency:
+ClearFrame still draws its own native display list and mixes its audio in Node.
+
+Full and range render receipts now retain the native render report. It records the selected
+encoder, the parameters supplied to it, negotiated pixel format and YUV matrix, actual worker
+and segment counts, and the number of frames converted by the GPU, CPU, or upstream converter.
+The final delivery's decoded colour tags remain separate: BT.709 primaries, sRGB transfer
+(`iec61966-2-1`), BT.601 matrix (`smpte170m`), TV range. Timing fields sum work across workers;
+they are not additive wall-clock phase durations. This exposes a conversion fallback instead
+of labelling every render with the requested path.
+
+`scripts/verify-runtime.mjs NEW-DIR [PREVIOUS-NATIVE-BINARY]` renders real 1920×1080 and
+1080×1920 fixtures with one/two workers and forced CPU conversion. It checks all decoded frame
+hashes across worker counts, all frame/stream colour tags, frame and segment counts, receipt
+settings, and the outermost portrait columns (1080 is not a multiple of 16). A previous binary
+adds an independent before/after decoded-frame comparison. On October 18 all six exports
+passed; every frame matched the previous runtime. GPU/CPU middle-frame PSNR was 66.70 dB
+landscape and 64.21 dB portrait on these fixtures. These are narrow compatibility measurements,
+not a performance or whole-library quality claim. Keep the generated evidence outside git.
+
+Run it through `codex-heavy` on this machine. Builds now recognize an inherited heavy gate,
+including an outer `codex-heavy -- node engine/cli.mjs build`, instead of waiting on their
+own parent lock. A dependency upgrade should use an isolated build target so it does not
+replace another checkout's cached renderer.
+
 ## Decision
 
 ClearFrame goes back to [fframes](https://github.com/dmtrKovalenko/fframes) (MIT core, pinned in
@@ -163,7 +199,7 @@ A 48 s workplace draft (1,454 frames at 1080p, static grain, voice only), measur
 | `qa` | 2.8 s | 1.7 s | sheets and loudness read the film beside the picture decode |
 | whole `draft` | about 14.5 s | 9.5–9.9 s | |
 
-A draft is GPU-bound: readback (where each worker waits for its frame) is most of the time, about a third of it a fixed cost per frame that resolution does not change, and a third worker gains 10%. Skia's Ganesh bindings do not expose asynchronous readback, which is what pipelining the next frame behind it would need. A final render is encoder-bound (x264 medium): three encoder threads per segment take it from 10.6 to 9.1 s (`CLEARFRAME_ENCODER_THREADS`, now the default for finals); one worker with four threads is 9.5 s at 519 MiB instead of 880, but GPU-bound films (footage) need the second worker. `superfast` for drafts saved 8% and doubled the file, so drafts stay `veryfast`.
+A draft is GPU-bound: readback (where each worker waits for its frame) is most of the time, about a third of it a fixed cost per frame that resolution does not change, and a third worker gains 10%. Skia's Ganesh bindings do not expose asynchronous readback, which is what pipelining the next frame behind it would need. A final render is encoder-bound (x264 medium): three encoder threads per segment take it from 10.6 to 9.1 s (`CLEARFRAME_ENCODER_THREADS`, the default at that measurement; the October 18 default is two); one worker with four threads is 9.5 s at 519 MiB instead of 880, but GPU-bound films (footage) need the second worker. `superfast` for drafts saved 8% and doubled the file, so drafts stay `veryfast`.
 
 With the mix running beside the render, moving it into fframes' `AudioMap` (stage 3 below) would no longer shorten a render; it remains worth doing only for audio-reactive pictures.
 

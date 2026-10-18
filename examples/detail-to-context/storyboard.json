@@ -1,0 +1,193 @@
+{
+ "version": 2,
+ "title": "From the line to the claim",
+ "format": {
+  "preset": "landscape",
+  "fps": 30
+ },
+ "theme": "paper",
+ "type": "inter",
+ "camera": "none",
+ "texture": "none",
+ "captions": false,
+ "music": false,
+ "sfx": false,
+ "sources": [
+  {
+   "claim": "The receipt, the claim and its amounts are an illustrative example.",
+   "source": "Example claim for illustration"
+  }
+ ],
+ "beats": [
+  {
+   "id": "detail",
+   "block": "canvas",
+   "duration": 8,
+   "props": {
+    "source": "Example claim for illustration",
+    "moments": {
+     "LAND": {
+      "at": 0.3
+     },
+     "MARK": {
+      "at": 5.6
+     }
+    },
+    "reveal": {
+     "from": "rcpt",
+     "pad": 0.12,
+     "state": "end",
+     "at": 2.4,
+     "dur": 1.6
+    },
+    "elements": [
+     {
+      "id": "desk",
+      "type": "rect",
+      "x": 120,
+      "y": 180,
+      "w": 1680,
+      "h": 760,
+      "r": 24,
+      "fill": "surface",
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "id": "rcpt",
+      "type": "receipt",
+      "x": 260,
+      "y": 250,
+      "w": 520,
+      "size": 30,
+      "merchant": "City Taxi",
+      "detail": "12 Oct · 18:42",
+      "items": [
+       {
+        "name": "Fare",
+        "price": 104
+       },
+       {
+        "name": "Airport fee",
+        "price": 16
+       }
+      ],
+      "total": 120,
+      "footer": "Example",
+      "cue": "LAND",
+      "enter": "drop",
+      "dur": 0.5,
+      "keys": [
+       {
+        "cue": "LAND",
+        "after": 0.45,
+        "dur": 0.12,
+        "scaleY": 0.97
+       },
+       {
+        "cue": "LAND",
+        "after": 0.57,
+        "dur": 0.2,
+        "scaleY": 1
+       }
+      ],
+      "marks": [
+       {
+        "words": "$120.00",
+        "style": "circle",
+        "cue": "MARK"
+       }
+      ]
+     },
+     {
+      "id": "claim",
+      "type": "app",
+      "x": 900,
+      "y": 250,
+      "w": 800,
+      "title": "Expenses",
+      "heading": "New claim",
+      "fields": [
+       {
+        "label": "Merchant",
+        "value": "City Taxi",
+        "at": 4.6
+       },
+       {
+        "label": "Amount",
+        "value": "$120.00",
+        "at": 5.0
+       }
+      ],
+      "button": {
+       "label": "Submit"
+      },
+      "at": 4.1,
+      "enter": "fade",
+      "dur": 0.4
+     }
+    ]
+   }
+  },
+  {
+   "id": "sent",
+   "block": "canvas",
+   "duration": 4,
+   "camera": {
+    "to": {
+     "on": "claim",
+     "pad": 0.06
+    },
+    "at": 0.5,
+    "dur": 1.4
+   },
+   "props": {
+    "source": "Example claim for illustration",
+    "elements": [
+     {
+      "id": "desk",
+      "type": "rect",
+      "x": 120,
+      "y": 180,
+      "w": 1680,
+      "h": 760,
+      "r": 24,
+      "fill": "surface",
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "id": "claim",
+      "type": "app",
+      "x": 900,
+      "y": 250,
+      "w": 800,
+      "title": "Expenses",
+      "heading": "New claim",
+      "fields": [
+       {
+        "label": "Merchant",
+        "value": "City Taxi"
+       },
+       {
+        "label": "Amount",
+        "value": "$120.00"
+       }
+      ],
+      "button": {
+       "label": "Claim sent"
+      },
+      "at": 0,
+      "enter": "none"
+     }
+    ],
+    "view": [
+     0,
+     0,
+     1920,
+     1080
+    ]
+   }
+  }
+ ]
+}

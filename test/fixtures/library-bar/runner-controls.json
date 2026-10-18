@@ -1,0 +1,328 @@
+{
+  "name": "runner-controls",
+  "reference": "https://ft-interactive.github.io/visual-vocabulary/",
+  "cases": [
+    {
+      "id": "split-wide",
+      "storyboard": {
+        "version": 2,
+        "title": "Split calibration",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "The four sample parts total 100 percent.",
+            "source": "Original illustrative fixture"
+          }
+        ],
+        "beats": [
+          {
+            "id": "parts",
+            "block": "canvas",
+            "duration": 8,
+            "props": {
+              "sketch": "split",
+              "sketchParams": {
+                "parts": [
+                  22,
+                  8,
+                  10,
+                  60
+                ]
+              },
+              "sketchText": {
+                "WHOLE": "Example allocation",
+                "PARTONE": "Operations",
+                "PARTTWO": "Tools",
+                "PARTTHREE": "Reserves",
+                "PARTFOUR": "Delivery"
+              },
+              "source": "Illustrative allocation \u00b7 Example"
+            }
+          }
+        ]
+      },
+      "at": [
+        0.8,
+        3,
+        6.5
+      ],
+      "takeaway": "Four proportional parts form the whole."
+    },
+    {
+      "id": "split-changed",
+      "storyboard": {
+        "version": 2,
+        "title": "Split calibration",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "The four sample parts total 100 percent.",
+            "source": "Original illustrative fixture"
+          }
+        ],
+        "beats": [
+          {
+            "id": "parts",
+            "block": "canvas",
+            "duration": 8,
+            "props": {
+              "sketch": "split",
+              "sketchParams": {
+                "parts": [
+                  40,
+                  10,
+                  10,
+                  40
+                ]
+              },
+              "sketchText": {
+                "WHOLE": "Example allocation",
+                "PARTONE": "Operations",
+                "PARTTWO": "Tools",
+                "PARTTHREE": "Reserves",
+                "PARTFOUR": "Delivery"
+              },
+              "source": "Illustrative allocation \u00b7 Example"
+            }
+          }
+        ]
+      },
+      "at": [
+        6.5
+      ],
+      "takeaway": "Changing source values changes the partition."
+    },
+    {
+      "id": "split-tall",
+      "storyboard": {
+        "version": 2,
+        "title": "Split calibration",
+        "format": {
+          "preset": "vertical",
+          "fps": 30
+        },
+        "theme": "paper",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "The four sample parts total 100 percent.",
+            "source": "Original illustrative fixture"
+          }
+        ],
+        "beats": [
+          {
+            "id": "parts",
+            "block": "canvas",
+            "duration": 8,
+            "props": {
+              "sketch": "split",
+              "sketchParams": {
+                "parts": [
+                  22,
+                  8,
+                  10,
+                  60
+                ]
+              },
+              "sketchText": {
+                "WHOLE": "Example allocation",
+                "PARTONE": "Operations",
+                "PARTTWO": "Tools",
+                "PARTTHREE": "Reserves",
+                "PARTFOUR": "Delivery"
+              },
+              "source": "Illustrative allocation \u00b7 Example"
+            }
+          }
+        ]
+      },
+      "at": [
+        0.8,
+        6.5
+      ],
+      "takeaway": "The same quantities remain readable in portrait."
+    },
+    {
+      "id": "split-undrawn",
+      "storyboard": {
+        "version": 2,
+        "title": "A different metadata title with identical picture",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "The four sample parts total 100 percent.",
+            "source": "Original illustrative fixture"
+          }
+        ],
+        "beats": [
+          {
+            "id": "parts",
+            "block": "canvas",
+            "duration": 8,
+            "props": {
+              "sketch": "split",
+              "sketchParams": {
+                "parts": [
+                  22,
+                  8,
+                  10,
+                  60
+                ]
+              },
+              "sketchText": {
+                "WHOLE": "Example allocation",
+                "PARTONE": "Operations",
+                "PARTTWO": "Tools",
+                "PARTTHREE": "Reserves",
+                "PARTFOUR": "Delivery"
+              },
+              "source": "Illustrative allocation \u00b7 Example"
+            }
+          }
+        ]
+      },
+      "at": [
+        6.5
+      ],
+      "takeaway": "Planted unchanged pixels: a metadata-only edit is not a visible prop."
+    },
+    {
+      "id": "overflow",
+      "storyboard": {
+        "version": 2,
+        "title": "Planted overflow",
+        "format": {
+          "preset": "vertical",
+          "fps": 30
+        },
+        "theme": "paper",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "beats": [
+          {
+            "id": "overflow",
+            "block": "canvas",
+            "duration": 2,
+            "props": {
+              "elements": [
+                {
+                  "type": "text",
+                  "id": "long",
+                  "text": "This deliberately overlong line must be detected outside the picture",
+                  "x": 80,
+                  "y": 950,
+                  "size": 100,
+                  "at": 0,
+                  "enter": "none",
+                  "fill": "ink"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "at": [
+        1
+      ],
+      "takeaway": "Planted failure: the native audit must detect clipped text."
+    }
+  ],
+  "refusals": [
+    {
+      "id": "negative-part",
+      "storyboard": {
+        "version": 2,
+        "title": "Split calibration",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "The four sample parts total 100 percent.",
+            "source": "Original illustrative fixture"
+          }
+        ],
+        "beats": [
+          {
+            "id": "parts",
+            "block": "canvas",
+            "duration": 8,
+            "props": {
+              "sketch": "split",
+              "sketchParams": {
+                "parts": [
+                  -10,
+                  110
+                ]
+              },
+              "sketchText": {
+                "WHOLE": "Example allocation",
+                "PARTONE": "Operations",
+                "PARTTWO": "Tools",
+                "PARTTHREE": "Reserves",
+                "PARTFOUR": "Delivery"
+              },
+              "source": "Illustrative allocation \u00b7 Example"
+            }
+          }
+        ]
+      },
+      "match": "numbers of 0 or more"
+    }
+  ],
+  "sensitivities": [
+    {
+      "id": "values-drawn",
+      "base": "split-wide",
+      "changed": "split-changed",
+      "at": 6.5
+    },
+    {
+      "id": "planted-undrawn",
+      "base": "split-wide",
+      "changed": "split-undrawn",
+      "at": 6.5
+    }
+  ]
+}

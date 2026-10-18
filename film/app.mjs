@@ -8,7 +8,7 @@
 import { expandReceipt } from './receipt.mjs';
 
 export const APP_FIELDS = ['x', 'y', 'w', 'h', 'device', 'title', 'tabs', 'heading', 'open', 'upload', 'fields', 'button', 'pages', 'size'];
-const TIMING = ['id', 'at', 'say', 'after', 'dur', 'enter', 'exit', 'exitAt', 'exitSay', 'exitAfter', 'keys', 'scale', 'rotate', 'origin', 'opacity', 'note', 'z', 'depth', 'unfinished'];
+const TIMING = ['id', 'at', 'say', 'cue', 'exitCue', 'after', 'dur', 'enter', 'exit', 'exitAt', 'exitSay', 'exitAfter', 'keys', 'scale', 'rotate', 'origin', 'opacity', 'note', 'z', 'depth', 'unfinished'];
 
 const slug = t => String(t).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const round = v => Math.round(v);

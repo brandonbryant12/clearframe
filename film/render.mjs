@@ -19,8 +19,8 @@ import { snapshot, attachVideo } from '../engine/lib/revisions.mjs';
 export function validateVideo(file, { width, height, fps, frames }) {
   const r = spawnSync(
     'ffprobe',
-    // Every frame is decoded (a broken segment fails here); four threads halve the wait.
-    ['-v', 'error', '-threads', '4', '-count_frames', '-show_streams', '-of', 'json', file],
+    // Every frame is decoded (a broken segment fails here), within the two-worker budget.
+    ['-v', 'error', '-threads', '2', '-count_frames', '-show_streams', '-of', 'json', file],
     { encoding: 'utf8' },
   );
   if (r.status !== 0) throw new Error(r.stderr || 'ffprobe failed');
@@ -94,6 +94,7 @@ export async function renderProject(
     throw new Error(`Output exists: ${output}; choose a new file or use --force.`);
   const token = crypto.randomUUID(),
     raw = path.join(ctx.dir, `${token}-raw.mp4`),
+    nativeReport = path.join(ctx.dir, `${token}-native-report.json`),
     silent = path.join(ctx.dir, `${token}-video.mp4`),
     audio = path.join(ctx.dir, `${token}-mix.wav`),
     encoded = path.join(ctx.dir, `${token}-mix.m4a`),
@@ -115,9 +116,10 @@ export async function renderProject(
         );
     sound.catch(() => {});
     // Scale only the output raster; layout, frame rate, speech and source media clocks stay authored.
-    await phase('native-render', () => nativeCommand(ctx, 'render', [...(fast ? ['--draft', '--scale', String(scale)] : []), '-o', raw]), {
+    await phase('native-render', () => nativeCommand(ctx, 'render', [...(fast ? ['--draft', '--scale', String(scale)] : []), '-o', raw, '--report', nativeReport]), {
       frames: ctx.job.frames,
     });
+    const native = JSON.parse(fs.readFileSync(nativeReport, 'utf8'));
     await phase('timeline', () => packetTimeline(raw, silent));
     const track = await sound;
     await phase('mux', () => mux(silent, track, finished));
@@ -137,7 +139,8 @@ export async function renderProject(
       fps: ctx.job.fps,
       frames: ctx.job.frames,
       seconds: (performance.now() - start) / 1000,
-      backend: backend(),
+      backend: native.backend ?? backend(),
+      native,
       planSha256: ctx.manifest.planSha256,
       audio: !!probe.audio,
       colorSpace: probe.video.color_space ?? null,
@@ -168,7 +171,7 @@ export async function renderProject(
   } finally {
     // A render that failed while the sound was still mixing waits for it before cleaning up.
     await sound.catch(() => {});
-    for (const f of [raw, silent, audio, encoded, finished]) fs.rmSync(f, { force: true });
+    for (const f of [raw, silent, audio, encoded, finished, nativeReport]) fs.rmSync(f, { force: true });
   }
 }
 
@@ -310,6 +313,7 @@ export async function renderRange(
   const output = path.resolve(out ?? path.join(dir, `${base}.mp4`));
   const token = crypto.randomUUID(),
     raw = path.join(ctx.dir, `${token}-range-raw.mp4`),
+    nativeReport = path.join(ctx.dir, `${token}-range-native-report.json`),
     silent = path.join(ctx.dir, `${token}-range-video.mp4`),
     cut = path.join(ctx.dir, `${token}-range.wav`),
     finished = path.join(ctx.dir, `${token}-range-final.mp4`),
@@ -317,7 +321,8 @@ export async function renderRange(
   const start = performance.now();
   try {
     await phase('native-build', () => buildScene());
-    await phase('native-render', () => nativeCommand(ctx, 'render', [`${a}..${b}`, '--draft', '--scale', '1', '-o', raw]), { frames });
+    await phase('native-render', () => nativeCommand(ctx, 'render', [`${a}..${b}`, '--draft', '--scale', '1', '-o', raw, '--report', nativeReport]), { frames });
+    const native = JSON.parse(fs.readFileSync(nativeReport, 'utf8'));
     await phase('timeline', () => packetTimeline(raw, silent));
     await phase('validate', () => validateVideo(silent, { ...ctx.job, frames }));
     const full = await phase('mix', () => fullMix(root, ctx));
@@ -391,6 +396,7 @@ export async function renderRange(
       fps,
       frames,
       encoder: ENCODERS.draft,
+      native,
       audio,
       verified: check,
       captions: ctx.job.captions ? 'burned in by the renderer, as in the film' : 'none in the picture; speech cues in the .vtt beside the preview',
@@ -404,7 +410,7 @@ export async function renderRange(
     record({ preview: path.relative(root, output), frames });
     return report;
   } finally {
-    for (const f of [raw, silent, cut, finished]) fs.rmSync(f, { force: true });
+    for (const f of [raw, silent, cut, finished, nativeReport]) fs.rmSync(f, { force: true });
     fs.rmSync(shots, { recursive: true, force: true });
   }
 }

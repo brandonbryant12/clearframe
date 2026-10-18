@@ -11,7 +11,7 @@ const round = v => Math.round(v);
 export function expandCrumbs(input, at, fail) {
   const { type, x = 0, y = 0, w: width, items, size = 40, anchor = 'start', ...rest } = input;
   for (const key of Object.keys(input))
-    if (key !== 'type' && !CRUMB_FIELDS.includes(key) && !['id', 'at', 'say', 'after', 'dur', 'enter', 'exit', 'exitAt', 'exitSay', 'exitAfter', 'keys', 'scale', 'origin', 'opacity', 'note', 'unfinished'].includes(key))
+    if (key !== 'type' && !CRUMB_FIELDS.includes(key) && !['id', 'at', 'say', 'cue', 'exitCue', 'after', 'dur', 'enter', 'exit', 'exitAt', 'exitSay', 'exitAfter', 'keys', 'scale', 'origin', 'opacity', 'note', 'unfinished'].includes(key))
       fail(`${at}: unsupported crumbs field ${key} (crumbs take ${CRUMB_FIELDS.join(', ')}, plus the timing fields every element takes)`);
   if (!Array.isArray(items) || items.length < 2 || items.length > 5) fail(`${at}.items must be 2–5 steps: {label, say|at}, or labels`);
   if (!Number.isFinite(size) || size < 28 || size > 72) fail(`${at}.size must be 28–72 (the chip type, in px)`);

@@ -1,0 +1,1137 @@
+{
+  "name": "audience-table",
+  "reference": "https://www.carbondesignsystem.com/building-blocks/core/components/data-table/guidelines#anatomy",
+  "cases": [
+    {
+      "id": "table-wide",
+      "storyboard": {
+        "version": 2,
+        "title": "One claim, two audiences",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Example claims and audience views are illustrative.",
+            "source": "Original illustrative fixture"
+          }
+        ],
+        "beats": [
+          {
+            "id": "views",
+            "block": "canvas",
+            "duration": 9,
+            "props": {
+              "table": {
+                "id": "claims",
+                "title": "Who sees a claim",
+                "source": "Illustrative expense records",
+                "columns": [
+                  {
+                    "id": "person",
+                    "label": "Employee",
+                    "weight": 1.2
+                  },
+                  {
+                    "id": "amount",
+                    "label": "Amount",
+                    "align": "right",
+                    "weight": 0.8
+                  },
+                  {
+                    "id": "status",
+                    "label": "Status"
+                  }
+                ],
+                "rows": [
+                  {
+                    "id": "r1",
+                    "cells": {
+                      "person": "Alex Morgan",
+                      "amount": "$120",
+                      "status": "Approved"
+                    }
+                  },
+                  {
+                    "id": "r2",
+                    "cells": {
+                      "person": "Sam Patel",
+                      "amount": "$850",
+                      "status": "Review"
+                    }
+                  },
+                  {
+                    "id": "r3",
+                    "cells": {
+                      "person": "Jordan Lee",
+                      "amount": "$45",
+                      "status": "Returned"
+                    }
+                  }
+                ],
+                "views": [
+                  {
+                    "id": "manager",
+                    "label": "Managers see the full claim"
+                  },
+                  {
+                    "id": "contractor",
+                    "label": "Contractors see claim status",
+                    "hide": [
+                      "person",
+                      "amount"
+                    ]
+                  }
+                ],
+                "show": [
+                  {
+                    "view": "contractor",
+                    "at": 3
+                  },
+                  {
+                    "view": "manager",
+                    "at": 6
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "at": [
+        1,
+        4,
+        7
+      ],
+      "takeaway": "Managers see the claim amounts; contractors see status in the same rows."
+    },
+    {
+      "id": "table-tall",
+      "storyboard": {
+        "version": 2,
+        "title": "One claim, two audiences",
+        "format": {
+          "preset": "vertical",
+          "fps": 30
+        },
+        "theme": "paper",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Example claims and audience views are illustrative.",
+            "source": "Original illustrative fixture"
+          }
+        ],
+        "beats": [
+          {
+            "id": "views",
+            "block": "canvas",
+            "duration": 9,
+            "props": {
+              "table": {
+                "id": "claims",
+                "title": "Who sees a claim",
+                "source": "Illustrative expense records",
+                "columns": [
+                  {
+                    "id": "person",
+                    "label": "Employee",
+                    "weight": 1.2
+                  },
+                  {
+                    "id": "amount",
+                    "label": "Amount",
+                    "align": "right",
+                    "weight": 0.8
+                  },
+                  {
+                    "id": "status",
+                    "label": "Status"
+                  }
+                ],
+                "rows": [
+                  {
+                    "id": "r1",
+                    "cells": {
+                      "person": "Alex Morgan",
+                      "amount": "$120",
+                      "status": "Approved"
+                    }
+                  },
+                  {
+                    "id": "r2",
+                    "cells": {
+                      "person": "Sam Patel",
+                      "amount": "$850",
+                      "status": "Review"
+                    }
+                  },
+                  {
+                    "id": "r3",
+                    "cells": {
+                      "person": "Jordan Lee",
+                      "amount": "$45",
+                      "status": "Returned"
+                    }
+                  }
+                ],
+                "views": [
+                  {
+                    "id": "manager",
+                    "label": "Managers see the full claim"
+                  },
+                  {
+                    "id": "contractor",
+                    "label": "Contractors see claim status",
+                    "hide": [
+                      "person",
+                      "amount"
+                    ]
+                  }
+                ],
+                "show": [
+                  {
+                    "view": "contractor",
+                    "at": 3
+                  },
+                  {
+                    "view": "manager",
+                    "at": 6
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "at": [
+        1,
+        4,
+        7
+      ],
+      "takeaway": "Switching audience hides names and amounts without moving the rows."
+    },
+    {
+      "id": "table-changed",
+      "storyboard": {
+        "version": 2,
+        "title": "One claim, two audiences",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Example claims and audience views are illustrative.",
+            "source": "Original illustrative fixture"
+          }
+        ],
+        "beats": [
+          {
+            "id": "views",
+            "block": "canvas",
+            "duration": 9,
+            "props": {
+              "table": {
+                "id": "claims",
+                "title": "Who sees a claim",
+                "source": "Illustrative expense records",
+                "columns": [
+                  {
+                    "id": "person",
+                    "label": "Employee",
+                    "weight": 1.2
+                  },
+                  {
+                    "id": "amount",
+                    "label": "Amount",
+                    "align": "right",
+                    "weight": 0.8
+                  },
+                  {
+                    "id": "status",
+                    "label": "Status"
+                  }
+                ],
+                "rows": [
+                  {
+                    "id": "r1",
+                    "cells": {
+                      "person": "Alex Morgan",
+                      "amount": "$2,400",
+                      "status": "Approved"
+                    }
+                  },
+                  {
+                    "id": "r2",
+                    "cells": {
+                      "person": "Sam Patel",
+                      "amount": "$850",
+                      "status": "Review"
+                    }
+                  },
+                  {
+                    "id": "r3",
+                    "cells": {
+                      "person": "Jordan Lee",
+                      "amount": "$45",
+                      "status": "Returned"
+                    }
+                  }
+                ],
+                "views": [
+                  {
+                    "id": "manager",
+                    "label": "Managers see the full claim"
+                  },
+                  {
+                    "id": "contractor",
+                    "label": "Contractors see claim status",
+                    "hide": [
+                      "person",
+                      "amount"
+                    ]
+                  }
+                ],
+                "show": [
+                  {
+                    "view": "contractor",
+                    "at": 3
+                  },
+                  {
+                    "view": "manager",
+                    "at": 6
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "at": [
+        1,
+        4,
+        7
+      ],
+      "takeaway": "Alex\u2019s amount is $2,400 in the manager view."
+    },
+    {
+      "id": "table-dense",
+      "storyboard": {
+        "version": 2,
+        "title": "One claim, two audiences",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Example claims and audience views are illustrative.",
+            "source": "Original illustrative fixture"
+          }
+        ],
+        "beats": [
+          {
+            "id": "views",
+            "block": "canvas",
+            "duration": 9,
+            "props": {
+              "table": {
+                "id": "claims",
+                "title": "Claims awaiting review",
+                "source": "Illustrative expense records",
+                "columns": [
+                  {
+                    "id": "person",
+                    "label": "Employee",
+                    "weight": 1.35
+                  },
+                  {
+                    "id": "amount",
+                    "label": "Amount",
+                    "align": "right"
+                  },
+                  {
+                    "id": "status",
+                    "label": "Status"
+                  },
+                  {
+                    "id": "team",
+                    "label": "Team"
+                  },
+                  {
+                    "id": "age",
+                    "label": "Age",
+                    "align": "right"
+                  },
+                  {
+                    "id": "owner",
+                    "label": "Reviewer"
+                  }
+                ],
+                "rows": [
+                  {
+                    "id": "r1",
+                    "cells": {
+                      "person": "Alex Morgan",
+                      "amount": "$120",
+                      "status": "Review",
+                      "team": "Operations",
+                      "age": "1 days",
+                      "owner": "Sam Patel"
+                    }
+                  },
+                  {
+                    "id": "r2",
+                    "cells": {
+                      "person": "Jordan Lee",
+                      "amount": "$850",
+                      "status": "Review",
+                      "team": "Sales",
+                      "age": "2 days",
+                      "owner": "Ali Chen"
+                    }
+                  },
+                  {
+                    "id": "r3",
+                    "cells": {
+                      "person": "Sam Patel",
+                      "amount": "$45",
+                      "status": "Review",
+                      "team": "Support",
+                      "age": "3 days",
+                      "owner": "Avery Kim"
+                    }
+                  },
+                  {
+                    "id": "r4",
+                    "cells": {
+                      "person": "Ali Chen",
+                      "amount": "$1,500",
+                      "status": "Review",
+                      "team": "Design",
+                      "age": "4 days",
+                      "owner": "Morgan Ray"
+                    }
+                  },
+                  {
+                    "id": "r5",
+                    "cells": {
+                      "person": "Avery Kim",
+                      "amount": "$27",
+                      "status": "Review",
+                      "team": "Research",
+                      "age": "5 days",
+                      "owner": "Jordan Lee"
+                    }
+                  },
+                  {
+                    "id": "r6",
+                    "cells": {
+                      "person": "Morgan Ray",
+                      "amount": "$4,750",
+                      "status": "Review",
+                      "team": "Accounts",
+                      "age": "6 days",
+                      "owner": "Alex Morgan"
+                    }
+                  },
+                  {
+                    "id": "r7",
+                    "cells": {
+                      "person": "Casey Park",
+                      "amount": "$80",
+                      "status": "Review",
+                      "team": "Delivery",
+                      "age": "7 days",
+                      "owner": "Quinn Reed"
+                    }
+                  },
+                  {
+                    "id": "r8",
+                    "cells": {
+                      "person": "Quinn Reed",
+                      "amount": "$310",
+                      "status": "Review",
+                      "team": "Service",
+                      "age": "8 days",
+                      "owner": "Casey Park"
+                    }
+                  }
+                ],
+                "views": [
+                  {
+                    "id": "manager",
+                    "label": "Managers see the full claim"
+                  },
+                  {
+                    "id": "contractor",
+                    "label": "Shared summary hides names",
+                    "hide": [
+                      "person",
+                      "owner"
+                    ]
+                  }
+                ],
+                "show": [
+                  {
+                    "view": "contractor",
+                    "at": 3
+                  },
+                  {
+                    "view": "manager",
+                    "at": 6
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "at": [
+        1,
+        4,
+        7
+      ],
+      "takeaway": "Eight claims stay aligned while the first and last columns are hidden."
+    },
+    {
+      "id": "table-captions",
+      "storyboard": {
+        "version": 2,
+        "title": "One claim, two audiences",
+        "format": {
+          "preset": "vertical",
+          "fps": 30
+        },
+        "theme": "paper",
+        "camera": "none",
+        "texture": "none",
+        "captions": true,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Example claims and audience views are illustrative.",
+            "source": "Original illustrative fixture"
+          }
+        ],
+        "beats": [
+          {
+            "id": "views",
+            "block": "canvas",
+            "props": {
+              "table": {
+                "id": "claims",
+                "title": "Who sees a claim",
+                "source": "Illustrative expense records",
+                "columns": [
+                  {
+                    "id": "person",
+                    "label": "Employee",
+                    "weight": 1.2
+                  },
+                  {
+                    "id": "amount",
+                    "label": "Amount",
+                    "align": "right",
+                    "weight": 0.8
+                  },
+                  {
+                    "id": "status",
+                    "label": "Status"
+                  }
+                ],
+                "rows": [
+                  {
+                    "id": "r1",
+                    "cells": {
+                      "person": "Alex Morgan",
+                      "amount": "$120",
+                      "status": "Approved"
+                    }
+                  },
+                  {
+                    "id": "r2",
+                    "cells": {
+                      "person": "Sam Patel",
+                      "amount": "$850",
+                      "status": "Review"
+                    }
+                  },
+                  {
+                    "id": "r3",
+                    "cells": {
+                      "person": "Jordan Lee",
+                      "amount": "$45",
+                      "status": "Returned"
+                    }
+                  }
+                ],
+                "views": [
+                  {
+                    "id": "manager",
+                    "label": "Managers see the full claim"
+                  },
+                  {
+                    "id": "contractor",
+                    "label": "Contractors see claim status",
+                    "hide": [
+                      "person",
+                      "amount"
+                    ]
+                  }
+                ],
+                "show": [
+                  {
+                    "view": "contractor",
+                    "say": "Contractors"
+                  },
+                  {
+                    "view": "manager",
+                    "say": "original audience"
+                  }
+                ]
+              }
+            },
+            "vo": "Managers read the full expense record. Contractors receive the claim status, while names and amounts stay hidden. The original audience view returns at the end.",
+            "min": 9
+          }
+        ]
+      },
+      "at": [
+        1,
+        4,
+        7
+      ],
+      "takeaway": "Captioned narration leaves the table readable as the audience view changes."
+    },
+    {
+      "id": "table-detail",
+      "storyboard": {
+        "version": 2,
+        "title": "One claim, two audiences",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Example claims and audience views are illustrative.",
+            "source": "Original illustrative fixture"
+          }
+        ],
+        "beats": [
+          {
+            "id": "views",
+            "block": "canvas",
+            "duration": 9,
+            "props": {
+              "table": {
+                "id": "claims",
+                "title": "Claims awaiting review",
+                "source": "Illustrative expense records",
+                "columns": [
+                  {
+                    "id": "person",
+                    "label": "Employee",
+                    "weight": 1.35
+                  },
+                  {
+                    "id": "amount",
+                    "label": "Amount",
+                    "align": "right"
+                  },
+                  {
+                    "id": "status",
+                    "label": "Status"
+                  },
+                  {
+                    "id": "team",
+                    "label": "Team"
+                  },
+                  {
+                    "id": "age",
+                    "label": "Age",
+                    "align": "right"
+                  },
+                  {
+                    "id": "owner",
+                    "label": "Reviewer"
+                  }
+                ],
+                "rows": [
+                  {
+                    "id": "r1",
+                    "cells": {
+                      "person": "Alex Morgan",
+                      "amount": "$120",
+                      "status": "Review",
+                      "team": "Operations",
+                      "age": "1 days",
+                      "owner": "Sam Patel"
+                    }
+                  },
+                  {
+                    "id": "r2",
+                    "cells": {
+                      "person": "Jordan Lee",
+                      "amount": "$850",
+                      "status": "Review",
+                      "team": "Sales",
+                      "age": "2 days",
+                      "owner": "Ali Chen"
+                    }
+                  },
+                  {
+                    "id": "r3",
+                    "cells": {
+                      "person": "Sam Patel",
+                      "amount": "$45",
+                      "status": "Review",
+                      "team": "Support",
+                      "age": "3 days",
+                      "owner": "Avery Kim"
+                    }
+                  },
+                  {
+                    "id": "r4",
+                    "cells": {
+                      "person": "Ali Chen",
+                      "amount": "$1,500",
+                      "status": "Review",
+                      "team": "Design",
+                      "age": "4 days",
+                      "owner": "Morgan Ray"
+                    }
+                  },
+                  {
+                    "id": "r5",
+                    "cells": {
+                      "person": "Avery Kim",
+                      "amount": "$27",
+                      "status": "Review",
+                      "team": "Research",
+                      "age": "5 days",
+                      "owner": "Jordan Lee"
+                    }
+                  },
+                  {
+                    "id": "r6",
+                    "cells": {
+                      "person": "Morgan Ray",
+                      "amount": "$4,750",
+                      "status": "Review",
+                      "team": "Accounts",
+                      "age": "6 days",
+                      "owner": "Alex Morgan"
+                    }
+                  },
+                  {
+                    "id": "r7",
+                    "cells": {
+                      "person": "Casey Park",
+                      "amount": "$80",
+                      "status": "Review",
+                      "team": "Delivery",
+                      "age": "7 days",
+                      "owner": "Quinn Reed"
+                    }
+                  },
+                  {
+                    "id": "r8",
+                    "cells": {
+                      "person": "Quinn Reed",
+                      "amount": "$310",
+                      "status": "Review",
+                      "team": "Service",
+                      "age": "8 days",
+                      "owner": "Casey Park"
+                    }
+                  }
+                ],
+                "views": [
+                  {
+                    "id": "manager",
+                    "label": "Managers see the full claim"
+                  },
+                  {
+                    "id": "contractor",
+                    "label": "Shared summary hides names",
+                    "hide": [
+                      "person",
+                      "owner"
+                    ]
+                  }
+                ],
+                "show": [
+                  {
+                    "view": "contractor",
+                    "at": 3
+                  },
+                  {
+                    "view": "manager",
+                    "at": 6
+                  }
+                ]
+              },
+              "reveal": {
+                "from": [
+                  "tbl-claims-r1-person",
+                  "tbl-claims-r1-amount"
+                ],
+                "at": 2,
+                "dur": 1.2
+              }
+            }
+          }
+        ]
+      },
+      "at": [
+        1,
+        4,
+        7
+      ],
+      "takeaway": "The camera starts on Alex\u2019s $120 claim, then shows its place in the eight-row table."
+    },
+    {
+      "id": "table-detail-tall",
+      "storyboard": {
+        "version": 2,
+        "title": "One claim, two audiences",
+        "format": {
+          "preset": "vertical",
+          "fps": 30
+        },
+        "theme": "paper",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Example claims and audience views are illustrative.",
+            "source": "Original illustrative fixture"
+          }
+        ],
+        "beats": [
+          {
+            "id": "views",
+            "block": "canvas",
+            "duration": 9,
+            "props": {
+              "table": {
+                "id": "claims",
+                "title": "Who sees a claim",
+                "source": "Illustrative expense records",
+                "columns": [
+                  {
+                    "id": "person",
+                    "label": "Employee",
+                    "weight": 1.2
+                  },
+                  {
+                    "id": "amount",
+                    "label": "Amount",
+                    "align": "right",
+                    "weight": 0.8
+                  },
+                  {
+                    "id": "status",
+                    "label": "Status"
+                  }
+                ],
+                "rows": [
+                  {
+                    "id": "r1",
+                    "cells": {
+                      "person": "Alex Morgan",
+                      "amount": "$120",
+                      "status": "Approved"
+                    }
+                  },
+                  {
+                    "id": "r2",
+                    "cells": {
+                      "person": "Sam Patel",
+                      "amount": "$850",
+                      "status": "Review"
+                    }
+                  },
+                  {
+                    "id": "r3",
+                    "cells": {
+                      "person": "Jordan Lee",
+                      "amount": "$45",
+                      "status": "Returned"
+                    }
+                  }
+                ],
+                "views": [
+                  {
+                    "id": "manager",
+                    "label": "Managers see the full claim"
+                  },
+                  {
+                    "id": "contractor",
+                    "label": "Contractors see claim status",
+                    "hide": [
+                      "person",
+                      "amount"
+                    ]
+                  }
+                ],
+                "show": [
+                  {
+                    "view": "contractor",
+                    "at": 3
+                  },
+                  {
+                    "view": "manager",
+                    "at": 6
+                  }
+                ]
+              },
+              "reveal": {
+                "from": [
+                  "tbl-claims-r1-person",
+                  "tbl-claims-r1-amount"
+                ],
+                "at": 2,
+                "dur": 1.2
+              }
+            }
+          }
+        ]
+      },
+      "at": [
+        1,
+        4,
+        7
+      ],
+      "takeaway": "The portrait shot starts on Alex and the amount, then returns to the full table."
+    }
+  ],
+  "refusals": [
+    {
+      "id": "portrait-too-wide",
+      "storyboard": {
+        "version": 2,
+        "title": "One claim, two audiences",
+        "format": {
+          "preset": "vertical",
+          "fps": 30
+        },
+        "theme": "paper",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Example claims and audience views are illustrative.",
+            "source": "Original illustrative fixture"
+          }
+        ],
+        "beats": [
+          {
+            "id": "views",
+            "block": "canvas",
+            "duration": 9,
+            "props": {
+              "table": {
+                "id": "claims",
+                "title": "Claims awaiting review",
+                "source": "Illustrative expense records",
+                "columns": [
+                  {
+                    "id": "person",
+                    "label": "Employee",
+                    "weight": 1.35
+                  },
+                  {
+                    "id": "amount",
+                    "label": "Amount",
+                    "align": "right"
+                  },
+                  {
+                    "id": "status",
+                    "label": "Status"
+                  },
+                  {
+                    "id": "team",
+                    "label": "Team"
+                  },
+                  {
+                    "id": "age",
+                    "label": "Age",
+                    "align": "right"
+                  },
+                  {
+                    "id": "owner",
+                    "label": "Reviewer"
+                  }
+                ],
+                "rows": [
+                  {
+                    "id": "r1",
+                    "cells": {
+                      "person": "Alex Morgan",
+                      "amount": "$120",
+                      "status": "Review",
+                      "team": "Operations",
+                      "age": "1 days",
+                      "owner": "Sam Patel"
+                    }
+                  },
+                  {
+                    "id": "r2",
+                    "cells": {
+                      "person": "Jordan Lee",
+                      "amount": "$850",
+                      "status": "Review",
+                      "team": "Sales",
+                      "age": "2 days",
+                      "owner": "Ali Chen"
+                    }
+                  },
+                  {
+                    "id": "r3",
+                    "cells": {
+                      "person": "Sam Patel",
+                      "amount": "$45",
+                      "status": "Review",
+                      "team": "Support",
+                      "age": "3 days",
+                      "owner": "Avery Kim"
+                    }
+                  },
+                  {
+                    "id": "r4",
+                    "cells": {
+                      "person": "Ali Chen",
+                      "amount": "$1,500",
+                      "status": "Review",
+                      "team": "Design",
+                      "age": "4 days",
+                      "owner": "Morgan Ray"
+                    }
+                  },
+                  {
+                    "id": "r5",
+                    "cells": {
+                      "person": "Avery Kim",
+                      "amount": "$27",
+                      "status": "Review",
+                      "team": "Research",
+                      "age": "5 days",
+                      "owner": "Jordan Lee"
+                    }
+                  },
+                  {
+                    "id": "r6",
+                    "cells": {
+                      "person": "Morgan Ray",
+                      "amount": "$4,750",
+                      "status": "Review",
+                      "team": "Accounts",
+                      "age": "6 days",
+                      "owner": "Alex Morgan"
+                    }
+                  },
+                  {
+                    "id": "r7",
+                    "cells": {
+                      "person": "Casey Park",
+                      "amount": "$80",
+                      "status": "Review",
+                      "team": "Delivery",
+                      "age": "7 days",
+                      "owner": "Quinn Reed"
+                    }
+                  },
+                  {
+                    "id": "r8",
+                    "cells": {
+                      "person": "Quinn Reed",
+                      "amount": "$310",
+                      "status": "Review",
+                      "team": "Service",
+                      "age": "8 days",
+                      "owner": "Casey Park"
+                    }
+                  }
+                ],
+                "views": [
+                  {
+                    "id": "manager",
+                    "label": "Managers see the full claim"
+                  },
+                  {
+                    "id": "contractor",
+                    "label": "Shared summary hides names",
+                    "hide": [
+                      "person",
+                      "owner"
+                    ]
+                  }
+                ],
+                "show": [
+                  {
+                    "view": "contractor",
+                    "at": 3
+                  },
+                  {
+                    "view": "manager",
+                    "at": 6
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "match": "portrait tables take at most 3 columns"
+    }
+  ],
+  "sensitivities": [
+    {
+      "id": "amount-is-drawn",
+      "base": "table-wide",
+      "changed": "table-changed",
+      "at": 1,
+      "minChangedFraction": 0.0001
+    }
+  ]
+}

@@ -18,6 +18,8 @@ import {
 import { plateElements } from '../engine/lib/plates.mjs';
 import { chartSpec, chartElements } from './data-canvas.mjs';
 import { sketch, sketchByName } from './sketches.mjs';
+import { momentSpec } from './moments.mjs';
+import { isTarget, targetSpec } from './target.mjs';
 
 /** Validation helpers bound to one block's props and error prefix. */
 export function helpers(p, fail, { findPhrase, precision }) {
@@ -429,6 +431,7 @@ export const VALIDATORS = {
     if (p.support != null) h.fail('a stage draws its own picture; put supporting words in an element');
   },
   canvas: (p, h, frame = {}) => {
+    if (p.moments != null) momentSpec(p.moments, h.fail);
     if (p.diagram != null) {
       try { p.elements = [...diagramElements(p.diagram, frame), ...(p.elements ?? [])]; } catch (e) { h.fail(e.message); }
       delete p.diagram;
@@ -512,7 +515,17 @@ export const VALIDATORS = {
       delete p.plates;
     }
     if (p.support != null) h.fail('canvas draws only its elements; add a text element instead of support');
-    const camera = v => Array.isArray(v) && v.length === 4 && v.every(Number.isFinite) && v[2] >= 16 && v[3] >= 16;
+    // A camera rect may be addressed to what is drawn: {on: id(s), pad, state} (film/target.mjs).
+    for (const k of ['view', 'viewFrom', 'viewTall']) if (isTarget(p[k])) targetSpec(p[k], k, h.fail);
+    if (p.reveal != null) {
+      const r = p.reveal;
+      if (!r || typeof r !== 'object' || Array.isArray(r)) h.fail('reveal must be {from: an element id or [ids], pad?, state?, say|cue|at, dur?}');
+      for (const k of Object.keys(r)) if (!['from', 'pad', 'state', 'say', 'cue', 'at', 'after', 'dur'].includes(k)) h.fail(`reveal: unsupported field ${k}`);
+      targetSpec({ on: r.from, pad: r.pad, state: r.state }, 'reveal', m => h.fail(m.replace('reveal.on', 'reveal.from')));
+      if (r.dur != null && !(Number.isFinite(r.dur) && r.dur >= 0.4 && r.dur <= 6)) h.fail('reveal.dur is 0.4–6 seconds (the pull back)');
+      if (p.viewFrom != null) h.fail('reveal sets where the camera starts; drop viewFrom');
+    }
+    const camera = v => isTarget(v) || (Array.isArray(v) && v.length === 4 && v.every(Number.isFinite) && v[2] >= 16 && v[3] >= 16);
     if (
       p.view != null &&
       p.view !== 'auto' &&

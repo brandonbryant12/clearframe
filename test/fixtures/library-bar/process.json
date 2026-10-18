@@ -1,0 +1,654 @@
+{
+  "name": "process",
+  "reference": "Operations queue explainers (e.g. a Little's-law teaching diagram): stages in a row, the queue where work waits, computed counts; compare whether the change visibly drains a carried queue rather than resetting it",
+  "cases": [
+    {
+      "id": "wide",
+      "storyboard": "../../../examples/where-work-waits/storyboard.json",
+      "at": [
+        0.5,
+        5.4,
+        6.4,
+        7.2,
+        11.0,
+        12.5
+      ],
+      "takeaway": "Ten a day arrive and Review takes eight, so ten wait after five days; with a second reviewer the same queue drains two a day, carried, to zero."
+    },
+    {
+      "id": "tall",
+      "storyboard": {
+        "version": 2,
+        "title": "Where requests wait",
+        "format": {
+          "preset": "vertical",
+          "fps": 30
+        },
+        "theme": "ink",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Arrival and capacity rates are illustrative assumptions for a model, not measurements.",
+            "source": "Illustrative model of stated rates"
+          }
+        ],
+        "beats": [
+          {
+            "id": "wait",
+            "block": "canvas",
+            "duration": 13,
+            "props": {
+              "moments": {
+                "HIRE": {
+                  "at": 6.2
+                }
+              },
+              "process": {
+                "id": "requests",
+                "title": "Where requests wait",
+                "unit": "requests",
+                "period": "day",
+                "arrivals": 10,
+                "done": "Completed",
+                "stages": [
+                  {
+                    "id": "intake",
+                    "label": "Intake",
+                    "capacity": 12
+                  },
+                  {
+                    "id": "review",
+                    "label": "Policy review and checks",
+                    "capacity": 8
+                  },
+                  {
+                    "id": "approve",
+                    "label": "Approval",
+                    "capacity": 12
+                  }
+                ],
+                "runs": [
+                  {
+                    "periods": 5,
+                    "at": 0.8,
+                    "dur": 4.5
+                  },
+                  {
+                    "periods": 5,
+                    "cue": "HIRE",
+                    "dur": 4.5,
+                    "set": {
+                      "review": 12
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "at": [
+        5.4,
+        7.2,
+        12.5
+      ],
+      "takeaway": "The same model in a tall frame, with a long stage name."
+    },
+    {
+      "id": "changed",
+      "storyboard": {
+        "version": 2,
+        "title": "Where requests wait",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Arrival and capacity rates are illustrative assumptions for a model, not measurements.",
+            "source": "Illustrative model of stated rates"
+          }
+        ],
+        "beats": [
+          {
+            "id": "wait",
+            "block": "canvas",
+            "duration": 13,
+            "props": {
+              "moments": {
+                "HIRE": {
+                  "at": 6.2
+                }
+              },
+              "process": {
+                "id": "requests",
+                "title": "Where requests wait",
+                "unit": "requests",
+                "period": "day",
+                "arrivals": 10,
+                "done": "Completed",
+                "stages": [
+                  {
+                    "id": "intake",
+                    "label": "Intake",
+                    "capacity": 12
+                  },
+                  {
+                    "id": "review",
+                    "label": "Review",
+                    "capacity": 9
+                  },
+                  {
+                    "id": "approve",
+                    "label": "Approval",
+                    "capacity": 12
+                  }
+                ],
+                "runs": [
+                  {
+                    "periods": 5,
+                    "at": 0.8,
+                    "dur": 4.5
+                  },
+                  {
+                    "periods": 5,
+                    "cue": "HIRE",
+                    "dur": 4.5,
+                    "set": {
+                      "review": 12
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "at": [
+        5.4
+      ],
+      "takeaway": "A capacity of nine computes a different queue (five waiting, +1 a day)."
+    },
+    {
+      "id": "token",
+      "storyboard": {
+        "version": 2,
+        "title": "Where requests wait",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Arrival and capacity rates are illustrative assumptions for a model, not measurements.",
+            "source": "Illustrative model of stated rates"
+          }
+        ],
+        "beats": [
+          {
+            "id": "wait",
+            "block": "canvas",
+            "duration": 13,
+            "props": {
+              "moments": {
+                "HIRE": {
+                  "at": 6.2
+                }
+              },
+              "process": {
+                "id": "requests",
+                "title": "Where requests wait",
+                "unit": "requests",
+                "period": "day",
+                "arrivals": 40,
+                "done": "Completed",
+                "stages": [
+                  {
+                    "id": "intake",
+                    "label": "Intake",
+                    "capacity": 48
+                  },
+                  {
+                    "id": "review",
+                    "label": "Review",
+                    "capacity": 30
+                  },
+                  {
+                    "id": "approve",
+                    "label": "Approval",
+                    "capacity": 48
+                  }
+                ],
+                "runs": [
+                  {
+                    "periods": 5,
+                    "at": 0.8,
+                    "dur": 4.5
+                  },
+                  {
+                    "periods": 5,
+                    "cue": "HIRE",
+                    "dur": 4.5,
+                    "set": {
+                      "review": 12
+                    }
+                  }
+                ],
+                "token": 10
+              }
+            }
+          }
+        ]
+      },
+      "at": [
+        5.4,
+        12.5
+      ],
+      "takeaway": "Larger flows draw one square per ten requests, with a key, and exact counts."
+    },
+    {
+      "id": "captions",
+      "storyboard": {
+        "version": 2,
+        "title": "Where requests wait",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": true,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Arrival and capacity rates are illustrative assumptions for a model, not measurements.",
+            "source": "Illustrative model of stated rates"
+          }
+        ],
+        "beats": [
+          {
+            "id": "wait",
+            "block": "canvas",
+            "duration": 13,
+            "props": {
+              "moments": {
+                "HIRE": "second reviewer"
+              },
+              "process": {
+                "id": "requests",
+                "title": "Where requests wait",
+                "unit": "requests",
+                "period": "day",
+                "arrivals": 10,
+                "done": "Completed",
+                "stages": [
+                  {
+                    "id": "intake",
+                    "label": "Intake",
+                    "capacity": 12
+                  },
+                  {
+                    "id": "review",
+                    "label": "Review",
+                    "capacity": 8
+                  },
+                  {
+                    "id": "approve",
+                    "label": "Approval",
+                    "capacity": 12
+                  }
+                ],
+                "runs": [
+                  {
+                    "periods": 5,
+                    "at": 0.8,
+                    "dur": 4.5
+                  },
+                  {
+                    "periods": 5,
+                    "cue": "HIRE",
+                    "dur": 4.5,
+                    "set": {
+                      "review": 12
+                    }
+                  }
+                ]
+              }
+            },
+            "vo": "Ten requests arrive each day. Review finishes eight, so two more wait every day. Then a second reviewer joins and the queue drains, two a day."
+          }
+        ]
+      },
+      "at": [
+        4.0,
+        9.0
+      ],
+      "takeaway": "The intervention lands on the narrated words; captions stay clear (estimated draft timing)."
+    },
+    {
+      "id": "partial-token",
+      "storyboard": {
+        "version": 2,
+        "title": "Where requests wait",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Arrival and capacity rates are illustrative assumptions for a model, not measurements.",
+            "source": "Illustrative model of stated rates"
+          }
+        ],
+        "beats": [
+          {
+            "id": "wait",
+            "block": "canvas",
+            "duration": 6,
+            "props": {
+              "process": {
+                "id": "grouped",
+                "title": "Every waiting item counts",
+                "unit": "requests",
+                "arrivals": 5,
+                "token": 4,
+                "stages": [
+                  {
+                    "id": "intake",
+                    "label": "Intake",
+                    "capacity": 5
+                  },
+                  {
+                    "id": "review",
+                    "label": "Review",
+                    "capacity": 3
+                  }
+                ],
+                "runs": [
+                  {
+                    "periods": 3,
+                    "at": 0.5,
+                    "dur": 3
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "at": [
+        1.8,
+        2.8,
+        3.8
+      ],
+      "takeaway": "Two waiting requests fill half a square; four fill one, and six fill one and a half."
+    }
+  ],
+  "refusals": [
+    {
+      "id": "not-serial",
+      "storyboard": {
+        "version": 2,
+        "title": "Where requests wait",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Arrival and capacity rates are illustrative assumptions for a model, not measurements.",
+            "source": "Illustrative model of stated rates"
+          }
+        ],
+        "beats": [
+          {
+            "id": "wait",
+            "block": "canvas",
+            "duration": 13,
+            "props": {
+              "moments": {
+                "HIRE": {
+                  "at": 6.2
+                }
+              },
+              "process": {
+                "id": "requests",
+                "title": "Where requests wait",
+                "unit": "requests",
+                "period": "day",
+                "arrivals": 10,
+                "done": "Completed",
+                "stages": [
+                  {
+                    "id": "intake",
+                    "label": "Intake",
+                    "capacity": 12
+                  }
+                ],
+                "runs": [
+                  {
+                    "periods": 5,
+                    "at": 0.8,
+                    "dur": 4.5
+                  },
+                  {
+                    "periods": 5,
+                    "cue": "HIRE",
+                    "dur": 4.5,
+                    "set": {
+                      "review": 12
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "match": "2\u20135 stages in order \\(a serial flow"
+    },
+    {
+      "id": "fractional",
+      "storyboard": {
+        "version": 2,
+        "title": "Where requests wait",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Arrival and capacity rates are illustrative assumptions for a model, not measurements.",
+            "source": "Illustrative model of stated rates"
+          }
+        ],
+        "beats": [
+          {
+            "id": "wait",
+            "block": "canvas",
+            "duration": 13,
+            "props": {
+              "moments": {
+                "HIRE": {
+                  "at": 6.2
+                }
+              },
+              "process": {
+                "id": "requests",
+                "title": "Where requests wait",
+                "unit": "requests",
+                "period": "day",
+                "arrivals": 9.5,
+                "done": "Completed",
+                "stages": [
+                  {
+                    "id": "intake",
+                    "label": "Intake",
+                    "capacity": 12
+                  },
+                  {
+                    "id": "review",
+                    "label": "Review",
+                    "capacity": 8
+                  },
+                  {
+                    "id": "approve",
+                    "label": "Approval",
+                    "capacity": 12
+                  }
+                ],
+                "runs": [
+                  {
+                    "periods": 5,
+                    "at": 0.8,
+                    "dur": 4.5
+                  },
+                  {
+                    "periods": 5,
+                    "cue": "HIRE",
+                    "dur": 4.5,
+                    "set": {
+                      "review": 12
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "match": "arrivals must be a whole number"
+    },
+    {
+      "id": "overlapping-runs",
+      "storyboard": {
+        "version": 2,
+        "title": "Where requests wait",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Arrival and capacity rates are illustrative assumptions for a model, not measurements.",
+            "source": "Illustrative model of stated rates"
+          }
+        ],
+        "beats": [
+          {
+            "id": "wait",
+            "block": "canvas",
+            "duration": 13,
+            "props": {
+              "moments": {
+                "HIRE": {
+                  "at": 3.0
+                }
+              },
+              "process": {
+                "id": "requests",
+                "title": "Where requests wait",
+                "unit": "requests",
+                "period": "day",
+                "arrivals": 10,
+                "done": "Completed",
+                "stages": [
+                  {
+                    "id": "intake",
+                    "label": "Intake",
+                    "capacity": 12
+                  },
+                  {
+                    "id": "review",
+                    "label": "Review",
+                    "capacity": 8
+                  },
+                  {
+                    "id": "approve",
+                    "label": "Approval",
+                    "capacity": 12
+                  }
+                ],
+                "runs": [
+                  {
+                    "periods": 5,
+                    "at": 0.8,
+                    "dur": 4.5
+                  },
+                  {
+                    "periods": 5,
+                    "cue": "HIRE",
+                    "dur": 4.5,
+                    "set": {
+                      "review": 12
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "match": "before runs\\[0\\] ends"
+    }
+  ],
+  "sensitivities": [
+    {
+      "id": "capacity-is-computed",
+      "base": "wide",
+      "changed": "changed",
+      "at": 5.4,
+      "minChangedFraction": 0.001
+    }
+  ]
+}

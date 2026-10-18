@@ -8,6 +8,7 @@ import crypto from 'node:crypto';
 import { spawn, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { readJSON, writeJSON, log } from '../engine/lib/util.mjs';
+import { gateIsInherited } from '../engine/lib/resource-gate.mjs';
 
 export const SCENE = path.dirname(fileURLToPath(import.meta.url));
 export const REPO = path.dirname(SCENE);
@@ -105,7 +106,7 @@ export async function buildScene({ force = false } = {}) {
   log.step(`Building the renderer ${warm ? 'with the existing dependency cache' : 'from a cold cache'} (one Cargo job)`);
   const gate = path.join(os.homedir(), '.local/bin/codex-heavy');
   const cargo = ['build', '--manifest-path', path.join(CRATE, 'Cargo.toml'), '--release', '--locked', '--jobs', '1'];
-  if (fs.existsSync(gate) && process.env.CLEARFRAME_HEAVY_HELD !== '1') {
+  if (fs.existsSync(gate) && !gateIsInherited()) {
     const holder = lockHolder();
     if (holder) log.warn(`Heavy-job lock is held by ${holder}; the build starts when it finishes.`);
     // Keep saying so while the lock is someone else's, so a queued build is not taken for a hang.

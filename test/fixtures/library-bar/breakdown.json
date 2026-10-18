@@ -1,0 +1,862 @@
+{
+ "name": "breakdown",
+ "reference": "https://github.com/Financial-Times/chart-doctor/blob/main/visual-vocabulary/README.md (part-to-whole: proportional bars on one scale, labels beside values; compare quantity honesty and hierarchy)",
+ "cases": [
+  {
+   "id": "wide",
+   "storyboard": "../../../examples/breakdown/storyboard.json",
+   "at": [
+    2.5,
+    6.4,
+    9.5,
+    12.7,
+    15.0
+   ],
+   "takeaway": "Operating costs are 41.8; People (24.1) opens into Salaries, Benefits and Contractors, which come out of People's own bar and add up to it, then gather back."
+  },
+  {
+   "id": "tall",
+   "storyboard": {
+    "version": 2,
+    "title": "Where operating costs go",
+    "format": {
+     "preset": "vertical",
+     "fps": 30
+    },
+    "theme": "ink",
+    "type": "inter",
+    "camera": "none",
+    "texture": "none",
+    "captions": false,
+    "music": false,
+    "sfx": false,
+    "sources": [
+     {
+      "claim": "Operating cost figures are illustrative.",
+      "source": "Example figures for illustration"
+     }
+    ],
+    "beats": [
+     {
+      "id": "whole",
+      "block": "canvas",
+      "duration": 6,
+      "props": {
+       "breakdown": {
+        "id": "opex",
+        "title": "Where operating costs go",
+        "unit": "Operating costs, $ millions",
+        "asOf": "2026-09-30",
+        "decimals": 1,
+        "prefix": "$",
+        "source": "Example figures for illustration",
+        "total": {
+         "label": "Operating costs",
+         "value": 41.8
+        },
+        "parts": [
+         {
+          "id": "people",
+          "label": "People",
+          "value": 24.1,
+          "highlight": true,
+          "parts": [
+           {
+            "label": "Salaries",
+            "value": 18.0
+           },
+           {
+            "label": "Benefits",
+            "value": 4.2
+           },
+           {
+            "label": "Contractors",
+            "value": 1.9
+           }
+          ]
+         },
+         {
+          "label": "Technology",
+          "value": 9.6
+         },
+         {
+          "label": "Facilities",
+          "value": 8.1
+         }
+        ]
+       }
+      }
+     },
+     {
+      "id": "people",
+      "block": "canvas",
+      "duration": 6.5,
+      "props": {
+       "breakdown": {
+        "id": "opex",
+        "title": "Inside people costs",
+        "unit": "People costs, $ millions",
+        "asOf": "2026-09-30",
+        "decimals": 1,
+        "prefix": "$",
+        "source": "Example figures for illustration",
+        "total": {
+         "label": "Operating costs",
+         "value": 41.8
+        },
+        "parts": [
+         {
+          "id": "people",
+          "label": "People",
+          "value": 24.1,
+          "highlight": true,
+          "parts": [
+           {
+            "label": "Salaries",
+            "value": 18.0
+           },
+           {
+            "label": "Benefits",
+            "value": 4.2
+           },
+           {
+            "label": "Contractors",
+            "value": 1.9
+           }
+          ]
+         },
+         {
+          "label": "Technology",
+          "value": 9.6
+         },
+         {
+          "label": "Facilities",
+          "value": 8.1
+         }
+        ],
+        "focus": "people"
+       }
+      }
+     },
+     {
+      "id": "back",
+      "block": "canvas",
+      "duration": 5,
+      "props": {
+       "breakdown": {
+        "id": "opex",
+        "title": "Where operating costs go",
+        "unit": "Operating costs, $ millions",
+        "asOf": "2026-09-30",
+        "decimals": 1,
+        "prefix": "$",
+        "source": "Example figures for illustration",
+        "total": {
+         "label": "Operating costs",
+         "value": 41.8
+        },
+        "parts": [
+         {
+          "id": "people",
+          "label": "People",
+          "value": 24.1,
+          "highlight": true,
+          "parts": [
+           {
+            "label": "Salaries",
+            "value": 18.0
+           },
+           {
+            "label": "Benefits",
+            "value": 4.2
+           },
+           {
+            "label": "Contractors",
+            "value": 1.9
+           }
+          ]
+         },
+         {
+          "label": "Technology",
+          "value": 9.6
+         },
+         {
+          "label": "Facilities",
+          "value": 8.1
+         }
+        ],
+        "gather": "people"
+       }
+      }
+     }
+    ]
+   },
+   "at": [
+    2.5,
+    6.4,
+    9.5,
+    12.7,
+    15.0
+   ],
+   "takeaway": "The same drill-down reads in a tall frame: names above full-width bars."
+  },
+  {
+   "id": "changed",
+   "storyboard": {
+    "version": 2,
+    "title": "Where operating costs go",
+    "format": {
+     "preset": "landscape",
+     "fps": 30
+    },
+    "theme": "paper",
+    "type": "inter",
+    "camera": "none",
+    "texture": "none",
+    "captions": false,
+    "music": false,
+    "sfx": false,
+    "sources": [
+     {
+      "claim": "Operating cost figures are illustrative.",
+      "source": "Example figures for illustration"
+     }
+    ],
+    "beats": [
+     {
+      "id": "whole",
+      "block": "canvas",
+      "duration": 6,
+      "props": {
+       "breakdown": {
+        "id": "opex",
+        "title": "Where operating costs go",
+        "unit": "Operating costs, $ millions",
+        "asOf": "2026-09-30",
+        "decimals": 1,
+        "prefix": "$",
+        "source": "Example figures for illustration",
+        "total": {
+         "label": "Operating costs",
+         "value": 41.8
+        },
+        "parts": [
+         {
+          "id": "people",
+          "label": "People",
+          "value": 24.1,
+          "highlight": true,
+          "parts": [
+           {
+            "label": "Salaries",
+            "value": 18.0
+           },
+           {
+            "label": "Benefits",
+            "value": 4.2
+           },
+           {
+            "label": "Contractors",
+            "value": 1.9
+           }
+          ]
+         },
+         {
+          "label": "Technology",
+          "value": 11.6
+         },
+         {
+          "label": "Facilities",
+          "value": 6.1
+         }
+        ]
+       }
+      }
+     },
+     {
+      "id": "people",
+      "block": "canvas",
+      "duration": 6.5,
+      "props": {
+       "breakdown": {
+        "id": "opex",
+        "title": "Inside people costs",
+        "unit": "People costs, $ millions",
+        "asOf": "2026-09-30",
+        "decimals": 1,
+        "prefix": "$",
+        "source": "Example figures for illustration",
+        "total": {
+         "label": "Operating costs",
+         "value": 41.8
+        },
+        "parts": [
+         {
+          "id": "people",
+          "label": "People",
+          "value": 24.1,
+          "highlight": true,
+          "parts": [
+           {
+            "label": "Salaries",
+            "value": 18.0
+           },
+           {
+            "label": "Benefits",
+            "value": 4.2
+           },
+           {
+            "label": "Contractors",
+            "value": 1.9
+           }
+          ]
+         },
+         {
+          "label": "Technology",
+          "value": 11.6
+         },
+         {
+          "label": "Facilities",
+          "value": 6.1
+         }
+        ],
+        "focus": "people"
+       }
+      }
+     },
+     {
+      "id": "back",
+      "block": "canvas",
+      "duration": 5,
+      "props": {
+       "breakdown": {
+        "id": "opex",
+        "title": "Where operating costs go",
+        "unit": "Operating costs, $ millions",
+        "asOf": "2026-09-30",
+        "decimals": 1,
+        "prefix": "$",
+        "source": "Example figures for illustration",
+        "total": {
+         "label": "Operating costs",
+         "value": 41.8
+        },
+        "parts": [
+         {
+          "id": "people",
+          "label": "People",
+          "value": 24.1,
+          "highlight": true,
+          "parts": [
+           {
+            "label": "Salaries",
+            "value": 18.0
+           },
+           {
+            "label": "Benefits",
+            "value": 4.2
+           },
+           {
+            "label": "Contractors",
+            "value": 1.9
+           }
+          ]
+         },
+         {
+          "label": "Technology",
+          "value": 11.6
+         },
+         {
+          "label": "Facilities",
+          "value": 6.1
+         }
+        ],
+        "gather": "people"
+       }
+      }
+     }
+    ]
+   },
+   "at": [
+    2.5
+   ],
+   "takeaway": "Different technology and facilities values draw different bars on the same total."
+  },
+  {
+   "id": "hard-copy",
+   "storyboard": {
+    "version": 2,
+    "title": "Where operating costs go",
+    "format": {
+     "preset": "landscape",
+     "fps": 30
+    },
+    "theme": "paper",
+    "type": "inter",
+    "camera": "none",
+    "texture": "none",
+    "captions": false,
+    "music": false,
+    "sfx": false,
+    "sources": [
+     {
+      "claim": "Operating cost figures are illustrative.",
+      "source": "Example figures for illustration"
+     }
+    ],
+    "beats": [
+     {
+      "id": "whole",
+      "block": "canvas",
+      "duration": 9,
+      "props": {
+       "breakdown": {
+        "id": "returns",
+        "title": "Why requests came back",
+        "unit": "Returned requests in an example sample",
+        "asOf": "2026-09-30",
+        "decimals": 0,
+        "prefix": "",
+        "source": "Example figures for illustration",
+        "total": {
+         "label": "Returned requests",
+         "value": 104
+        },
+        "parts": [
+         {
+          "id": "docs",
+          "label": "Incomplete documentation and attachments",
+          "value": 55,
+          "highlight": true,
+          "parts": [
+           {
+            "label": "Missing itemised receipts",
+            "value": 40
+           },
+           {
+            "label": "Missing dates",
+            "value": 15
+           }
+          ]
+         },
+         {
+          "label": "Missing cost centre",
+          "value": 30
+         },
+         {
+          "label": "Policy exception",
+          "value": 15
+         }
+        ],
+        "residual": "Reason not recorded",
+        "open": {
+         "part": "docs",
+         "at": 3.2
+        }
+       }
+      }
+     }
+    ]
+   },
+   "at": [
+    2.0,
+    3.6,
+    6.5
+   ],
+   "takeaway": "Long names, an explicit 'Reason not recorded' remainder, and a part opened in the same beat from its own bar."
+  },
+  {
+   "id": "hard-copy-tall",
+   "storyboard": {
+    "version": 2,
+    "title": "Where operating costs go",
+    "format": {
+     "preset": "vertical",
+     "fps": 30
+    },
+    "theme": "ink",
+    "type": "inter",
+    "camera": "none",
+    "texture": "none",
+    "captions": false,
+    "music": false,
+    "sfx": false,
+    "sources": [
+     {
+      "claim": "Operating cost figures are illustrative.",
+      "source": "Example figures for illustration"
+     }
+    ],
+    "beats": [
+     {
+      "id": "whole",
+      "block": "canvas",
+      "duration": 9,
+      "props": {
+       "breakdown": {
+        "id": "returns",
+        "title": "Why requests came back",
+        "unit": "Returned requests in an example sample",
+        "asOf": "2026-09-30",
+        "decimals": 0,
+        "prefix": "",
+        "source": "Example figures for illustration",
+        "total": {
+         "label": "Returned requests",
+         "value": 104
+        },
+        "parts": [
+         {
+          "id": "docs",
+          "label": "Incomplete documentation and attachments",
+          "value": 55,
+          "highlight": true,
+          "parts": [
+           {
+            "label": "Missing itemised receipts",
+            "value": 40
+           },
+           {
+            "label": "Missing dates",
+            "value": 15
+           }
+          ]
+         },
+         {
+          "label": "Missing cost centre",
+          "value": 30
+         },
+         {
+          "label": "Policy exception",
+          "value": 15
+         }
+        ],
+        "residual": "Reason not recorded",
+        "open": {
+         "part": "docs",
+         "at": 3.2
+        }
+       }
+      }
+     }
+    ]
+   },
+   "at": [
+    2.0,
+    3.6,
+    6.5
+   ],
+   "takeaway": "Long names wrap onto two lines above their bars instead of shrinking."
+  },
+  {
+   "id": "captions",
+   "storyboard": {
+    "version": 2,
+    "title": "Where operating costs go",
+    "format": {
+     "preset": "landscape",
+     "fps": 30
+    },
+    "theme": "paper",
+    "type": "inter",
+    "camera": "none",
+    "texture": "none",
+    "captions": true,
+    "music": false,
+    "sfx": false,
+    "sources": [
+     {
+      "claim": "Operating cost figures are illustrative.",
+      "source": "Example figures for illustration"
+     }
+    ],
+    "beats": [
+     {
+      "id": "whole",
+      "block": "canvas",
+      "duration": 7,
+      "props": {
+       "breakdown": {
+        "id": "opex",
+        "title": "Where operating costs go",
+        "unit": "Operating costs, $ millions",
+        "asOf": "2026-09-30",
+        "decimals": 1,
+        "prefix": "$",
+        "source": "Example figures for illustration",
+        "total": {
+         "label": "Operating costs",
+         "value": 41.8
+        },
+        "parts": [
+         {
+          "id": "people",
+          "label": "People",
+          "value": 24.1,
+          "highlight": true,
+          "parts": [
+           {
+            "label": "Salaries",
+            "value": 18.0
+           },
+           {
+            "label": "Benefits",
+            "value": 4.2
+           },
+           {
+            "label": "Contractors",
+            "value": 1.9
+           }
+          ],
+          "say": "People"
+         },
+         {
+          "label": "Technology",
+          "value": 9.6
+         },
+         {
+          "label": "Facilities",
+          "value": 8.1
+         }
+        ]
+       }
+      },
+      "vo": "Operating costs came to forty-one point eight million. People were the largest part."
+     }
+    ]
+   },
+   "at": [
+    1.5,
+    5.5
+   ],
+   "takeaway": "With captions on, the bars stay clear of the caption band; People lands on its word (estimated draft timing)."
+  }
+ ],
+ "refusals": [
+  {
+   "id": "does-not-add-up",
+   "storyboard": {
+    "version": 2,
+    "title": "Where operating costs go",
+    "format": {
+     "preset": "landscape",
+     "fps": 30
+    },
+    "theme": "paper",
+    "type": "inter",
+    "camera": "none",
+    "texture": "none",
+    "captions": false,
+    "music": false,
+    "sfx": false,
+    "sources": [
+     {
+      "claim": "Operating cost figures are illustrative.",
+      "source": "Example figures for illustration"
+     }
+    ],
+    "beats": [
+     {
+      "id": "whole",
+      "block": "canvas",
+      "duration": 6,
+      "props": {
+       "breakdown": {
+        "id": "opex",
+        "title": "Where operating costs go",
+        "unit": "Operating costs, $ millions",
+        "asOf": "2026-09-30",
+        "decimals": 1,
+        "prefix": "$",
+        "source": "Example figures for illustration",
+        "total": {
+         "label": "Operating costs",
+         "value": 43
+        },
+        "parts": [
+         {
+          "id": "people",
+          "label": "People",
+          "value": 24.1,
+          "highlight": true,
+          "parts": [
+           {
+            "label": "Salaries",
+            "value": 18.0
+           },
+           {
+            "label": "Benefits",
+            "value": 4.2
+           },
+           {
+            "label": "Contractors",
+            "value": 1.9
+           }
+          ]
+         },
+         {
+          "label": "Technology",
+          "value": 9.6
+         },
+         {
+          "label": "Facilities",
+          "value": 8.1
+         }
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "match": "add up to \\$41\\.8, but Operating costs is \\$43\\.0"
+  },
+  {
+   "id": "printed-sum",
+   "storyboard": {
+    "version": 2,
+    "title": "Where operating costs go",
+    "format": {
+     "preset": "landscape",
+     "fps": 30
+    },
+    "theme": "paper",
+    "type": "inter",
+    "camera": "none",
+    "texture": "none",
+    "captions": false,
+    "music": false,
+    "sfx": false,
+    "sources": [
+     {
+      "claim": "Operating cost figures are illustrative.",
+      "source": "Example figures for illustration"
+     }
+    ],
+    "beats": [
+     {
+      "id": "whole",
+      "block": "canvas",
+      "duration": 6,
+      "props": {
+       "breakdown": {
+        "id": "opex",
+        "title": "Where operating costs go",
+        "unit": "Operating costs, $ millions",
+        "asOf": "2026-09-30",
+        "decimals": 0,
+        "prefix": "",
+        "source": "Example figures for illustration",
+        "total": {
+         "label": "Total",
+         "value": 100
+        },
+        "parts": [
+         {
+          "label": "A",
+          "value": 33.3
+         },
+         {
+          "label": "B",
+          "value": 33.3
+         },
+         {
+          "label": "C",
+          "value": 33.4
+         }
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "match": "print as 33 \\+ 33 \\+ 33 = 99, next to 100"
+  },
+  {
+   "id": "negative-remainder",
+   "storyboard": {
+    "version": 2,
+    "title": "Where operating costs go",
+    "format": {
+     "preset": "landscape",
+     "fps": 30
+    },
+    "theme": "paper",
+    "type": "inter",
+    "camera": "none",
+    "texture": "none",
+    "captions": false,
+    "music": false,
+    "sfx": false,
+    "sources": [
+     {
+      "claim": "Operating cost figures are illustrative.",
+      "source": "Example figures for illustration"
+     }
+    ],
+    "beats": [
+     {
+      "id": "whole",
+      "block": "canvas",
+      "duration": 6,
+      "props": {
+       "breakdown": {
+        "id": "opex",
+        "title": "Where operating costs go",
+        "unit": "Operating costs, $ millions",
+        "asOf": "2026-09-30",
+        "decimals": 1,
+        "prefix": "$",
+        "source": "Example figures for illustration",
+        "total": {
+         "label": "Operating costs",
+         "value": 40
+        },
+        "parts": [
+         {
+          "id": "people",
+          "label": "People",
+          "value": 24.1,
+          "highlight": true,
+          "parts": [
+           {
+            "label": "Salaries",
+            "value": 18.0
+           },
+           {
+            "label": "Benefits",
+            "value": 4.2
+           },
+           {
+            "label": "Contractors",
+            "value": 1.9
+           }
+          ]
+         },
+         {
+          "label": "Technology",
+          "value": 9.6
+         },
+         {
+          "label": "Facilities",
+          "value": 8.1
+         }
+        ],
+        "residual": true
+       }
+      }
+     }
+    ]
+   },
+   "match": "A negative remainder is not a share"
+  }
+ ],
+ "sensitivities": [
+  {
+   "id": "values-are-drawn",
+   "base": "wide",
+   "changed": "changed",
+   "at": 2.5,
+   "minChangedFraction": 0.001
+  }
+ ]
+}

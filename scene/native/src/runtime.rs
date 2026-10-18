@@ -81,6 +81,14 @@ pub struct Stats {
     read_us: AtomicU64,
     encode_us: AtomicU64,
     frames: AtomicU64,
+    workers: AtomicU64,
+    segments: AtomicU64,
+    gpu_yuv_frames: AtomicU64,
+    cpu_yuv_frames: AtomicU64,
+    runtime_conversion_frames: AtomicU64,
+    encoder: std::sync::OnceLock<String>,
+    pixel_format: std::sync::OnceLock<String>,
+    color_matrix: std::sync::OnceLock<String>,
     backend: std::sync::OnceLock<&'static str>,
 }
 
@@ -124,10 +132,13 @@ impl FFramesRenderBackend for Backend<'_> {
             render_options,
             &logger,
         );
-        let input = writer
-            .encoder_info()
-            .and_then(|encoder| self.negotiate_encoder_input(&encoder))
+        let encoder = writer.encoder_info().map_err(|err| FFramesRendererError::RenderChunkError(0, err))?;
+        let _ = self.stats.encoder.set(encoder.name().to_owned());
+        let input = self.negotiate_encoder_input(&encoder)
             .map_err(|err| FFramesRendererError::RenderChunkError(0, err))?;
+        let _ = self.stats.pixel_format.set(format!("{:?}", input.pixel_format));
+        let _ = self.stats.color_matrix.set(format!("{:?}", input.color_matrix));
+        self.stats.workers.store(scheduler.workers() as u64, Ordering::Relaxed);
         let writer = writer.with_encoder_input(input);
         let failed = AtomicBool::new(false);
         let (w, h) = (size.width as i32, size.height as i32);
@@ -179,16 +190,21 @@ impl FFramesRenderBackend for Backend<'_> {
                     for (claim, picture) in frames {
                         let t = Instant::now();
                         match (picture, pool) {
-                            (Picture::Yuv(frame), _) => writer.submit_frame(claim, frame).map_err(chunk)?,
+                            (Picture::Yuv(frame), _) => {
+                                writer.submit_frame(claim, frame).map_err(chunk)?;
+                                stats.gpu_yuv_frames.fetch_add(1, Ordering::Relaxed);
+                            }
                             (Picture::Rgba(pixels), Some(pool)) => {
                                 let frame = pool.get().map_err(chunk)?;
                                 let [y, u, v] = planes(&frame);
                                 yuv::rgba_to_i420(&pixels, w as usize, h as usize, y, u, v);
                                 writer.submit_frame(claim, frame).map_err(chunk)?;
+                                stats.cpu_yuv_frames.fetch_add(1, Ordering::Relaxed);
                                 let _ = to_painter.send(pixels);
                             }
                             (Picture::Rgba(pixels), None) => {
                                 writer.submit(claim, &pixels).map_err(chunk)?;
+                                stats.runtime_conversion_frames.fetch_add(1, Ordering::Relaxed);
                                 let _ = to_painter.send(pixels);
                             }
                         }
@@ -255,6 +271,7 @@ impl FFramesRenderBackend for Backend<'_> {
         })?;
 
         let files = writer.finish().map_err(|err| FFramesRendererError::RenderChunkError(0, err))?;
+        stats.segments.store(files.len() as u64, Ordering::Relaxed);
         // SAFETY: the segment files were all written and closed by `finish`.
         unsafe {
             fframes::concatenator::concat_video_files_with_audio(
@@ -310,9 +327,9 @@ pub fn render(plan: &Path, scale: f32, draft: bool, a: usize, b: usize, out: &Pa
     let stats = Arc::new(Stats::default());
     let start = Instant::now();
     let tmp: PathBuf = out.with_extension("segments");
-    // A final render waits on x264 (medium preset): a third thread per segment took a 48 s film from
-    // 10.6 to 9.1 s for 60 MiB; a draft (veryfast) waits on the GPU, where threads change nothing.
-    let threads = std::env::var("CLEARFRAME_ENCODER_THREADS").ok().and_then(|s| s.parse::<u8>().ok()).unwrap_or(if draft { 2 } else { 3 }).clamp(1, 4);
+    // Two codec threads by default keeps both draft and final within the local resource budget.
+    // Larger machines can explicitly override this, independently of the render worker count.
+    let threads = std::env::var("CLEARFRAME_ENCODER_THREADS").ok().and_then(|s| s.parse::<u8>().ok()).unwrap_or(2).clamp(1, 4);
     let owned = x264(draft, &threads.to_string());
     let params: Vec<(&str, &str)> = owned.iter().map(|(k, v)| (*k, v.as_str())).collect();
     let options = RenderOptions {
@@ -368,7 +385,18 @@ pub fn render(plan: &Path, scale: f32, draft: bool, a: usize, b: usize, out: &Pa
     let ms = |v: &AtomicU64| v.load(Ordering::Relaxed) as f64 / 1e3;
     Ok(serde_json::json!({
         "runtime": "fframes", "frames": stats.frames.load(Ordering::Relaxed), "range": [a, b],
-        "seconds": start.elapsed().as_secs_f64(), "workers": workers, "encoderThreads": threads,
+        "seconds": start.elapsed().as_secs_f64(), "workers": stats.workers.load(Ordering::Relaxed),
+        "requestedWorkers": workers, "encoderThreads": threads,
+        "segments": stats.segments.load(Ordering::Relaxed),
+        "encoder": {
+            "name": stats.encoder.get(), "parameters": owned.iter().cloned().collect::<std::collections::BTreeMap<_, _>>(),
+            "pixelFormat": stats.pixel_format.get(), "colorMatrix": stats.color_matrix.get(), "gopSize": 250
+        },
+        "conversion": {
+            "gpuI420Frames": stats.gpu_yuv_frames.load(Ordering::Relaxed),
+            "cpuI420Frames": stats.cpu_yuv_frames.load(Ordering::Relaxed),
+            "runtimeFrames": stats.runtime_conversion_frames.load(Ordering::Relaxed)
+        },
         "drawMs": ms(&stats.draw_us), "readbackMs": ms(&stats.read_us), "encodeSubmitMs": ms(&stats.encode_us),
         "backend": stats.backend.get().copied().unwrap_or(backend_name),
         "width": out_w, "height": out_h, "fps": fps
