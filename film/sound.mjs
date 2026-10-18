@@ -4,6 +4,23 @@ import { rules } from './registry.mjs';
 
 const LEVELS = { subtle: 0.6, normal: 1, punchy: 1.35 };
 
+/**
+ * The beat time at which an element's own moment `at` is first on screen, inverting the canvas
+ * clock (scene/native/src/blocks/canvas.rs): each element steps `fps` times a second (it shows the
+ * moment on its next drawing), and a group runs its children `shift` seconds ahead (a world beat
+ * carrying earlier drawings forward). `clock` lists those steps from the beat inward.
+ */
+export function beatTime(at, clock) {
+  let t = at,
+    moved = false;
+  for (const step of [...clock].reverse()) {
+    if (step.shift) (t -= step.shift), (moved = true);
+    if (step.fps > 0) (t = Math.ceil(t * step.fps - 1e-6) / step.fps), (moved = true);
+  }
+  // An element on the beat's own continuous clock keeps its authored time to the bit.
+  return moved ? Math.round(t * 1e6) / 1e6 : at;
+}
+
 /** `sfx`: true/'normal', 'subtle', 'punchy', or false/'off'. */
 export function soundDesign(job, sfx) {
   const level = sfx === true ? 'normal' : sfx;
@@ -31,17 +48,28 @@ export function soundDesign(job, sfx) {
       add('whoosh', start + (b.props.viewAt ?? 0), 0.18, 2);
     // Sounds the author placed on an element (as it enters) or on its keys (as it moves): a click
     // as the pointer presses, a whoosh as the email is yanked out. Heavier than the automatic ones.
-    const authored = list =>
-      (list ?? []).forEach(el => {
-        const hit = (v, at) => at != null && add(typeof v === 'string' ? v : v.name, start + at, typeof v === 'object' && v.volume != null ? v.volume : 0.3, 4);
-        if (el.sound != null) hit(el.sound, el.at);
+    // Each plays at its moment on the renderer's clock (beatTime): on a stepped element's next
+    // drawing, and never for a drawing a world beat carries forward already finished. An unstepped,
+    // unshifted element keeps its authored time exactly. A moment no frame of the beat shows (a
+    // stepped drawing that would arrive after the cut) is silent rather than heard in the next scene.
+    // Precision is the film frame's, as for every sound: a cue may lead its first frame by under 1/fps.
+    const authored = (list, outer = [], inherited = 0, stagger = 0) =>
+      (list ?? []).forEach((el, i) => {
+        const own = el.at ?? (outer.length ? inherited + i * stagger : null);
+        const clock = [...outer, { fps: el.fps }];
+        const hit = (v, at) => {
+          const t = at == null ? null : beatTime(at, clock);
+          if (t != null && t >= 0 && Math.ceil(t * job.fps - 1e-6) < b.frames)
+            add(typeof v === 'string' ? v : v.name, start + t, typeof v === 'object' && v.volume != null ? v.volume : 0.3, 4);
+        };
+        if (el.sound != null) hit(el.sound, own);
         for (const k of el.keys ?? []) if (k.sound != null) hit(k.sound, k.at);
         // A mark's sound as it lands; a stamp is pressed with a thud (it sets down in 0.2 s).
         for (const m of el.marks ?? []) {
           const v = m.sound ?? (m.style === 'stamp' ? 'thud' : false);
           if (v !== false) hit(v, m.at + (m.style === 'stamp' ? 0.15 : 0));
         }
-        authored(el.children);
+        if (el.type === 'group') authored(el.children, [...clock, { shift: el.shift ?? 0 }], el.at ?? 0, el.stagger ?? 0);
       });
     if (b.block === 'canvas') authored(b.props.elements);
     let grows = 0;

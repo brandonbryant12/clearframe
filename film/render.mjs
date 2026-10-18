@@ -19,8 +19,8 @@ import { snapshot, attachVideo } from '../engine/lib/revisions.mjs';
 export function validateVideo(file, { width, height, fps, frames }) {
   const r = spawnSync(
     'ffprobe',
-    // Every frame is decoded (a broken segment fails here); four threads halve the wait.
-    ['-v', 'error', '-threads', '4', '-count_frames', '-show_streams', '-of', 'json', file],
+    // Every frame is decoded (a broken segment fails here), within the two-worker budget.
+    ['-v', 'error', '-threads', '2', '-count_frames', '-show_streams', '-of', 'json', file],
     { encoding: 'utf8' },
   );
   if (r.status !== 0) throw new Error(r.stderr || 'ffprobe failed');
@@ -37,8 +37,16 @@ export function validateVideo(file, { width, height, fps, frames }) {
     throw new Error('Native output dimensions, frame rate or decoded frame count differ from the storyboard.');
   return { video: v, audio: streams.find(s => s.codec_type === 'audio') ?? null };
 }
-// The encoder settings live in scene/native/src/encode.rs; these labels describe them.
+// The encoder settings live in scene/native/src/runtime.rs (`x264`); these labels describe them.
 export const ENCODERS = { draft: 'draft (x264 veryfast, CRF 21)', final: 'final (x264 medium, CRF 16)' };
+
+/** The finishing step's code, by content (repo-relative path → sha256), recorded in every receipt
+ * and checked by `qa` and `review`: these files decide what is heard and where. */
+export const FINISHING_SOURCES = ['film/render.mjs', 'engine/lib/audio.mjs', 'engine/lib/sfx.mjs', 'film/sound.mjs'];
+/** Of those, the code that turns a cue sheet and recordings into the mixed samples. */
+const MIXING_SOURCES = ['engine/lib/audio.mjs', 'engine/lib/sfx.mjs'];
+export const finishingSources = () =>
+  Object.fromEntries(FINISHING_SOURCES.map(rel => [rel, sha256(fs.readFileSync(new URL(`../${rel}`, import.meta.url)))]));
 
 /** Rebuild the MP4 timeline from the packets themselves (an edit list that ends a frame early
  * makes players drop the final frame); frames are copied bit-for-bit. */
@@ -86,6 +94,7 @@ export async function renderProject(
     throw new Error(`Output exists: ${output}; choose a new file or use --force.`);
   const token = crypto.randomUUID(),
     raw = path.join(ctx.dir, `${token}-raw.mp4`),
+    nativeReport = path.join(ctx.dir, `${token}-native-report.json`),
     silent = path.join(ctx.dir, `${token}-video.mp4`),
     audio = path.join(ctx.dir, `${token}-mix.wav`),
     encoded = path.join(ctx.dir, `${token}-mix.m4a`),
@@ -107,9 +116,10 @@ export async function renderProject(
         );
     sound.catch(() => {});
     // Scale only the output raster; layout, frame rate, speech and source media clocks stay authored.
-    await phase('native-render', () => nativeCommand(ctx, 'render', [...(fast ? ['--draft', '--scale', String(scale)] : []), '-o', raw]), {
+    await phase('native-render', () => nativeCommand(ctx, 'render', [...(fast ? ['--draft', '--scale', String(scale)] : []), '-o', raw, '--report', nativeReport]), {
       frames: ctx.job.frames,
     });
+    const native = JSON.parse(fs.readFileSync(nativeReport, 'utf8'));
     await phase('timeline', () => packetTimeline(raw, silent));
     const track = await sound;
     await phase('mux', () => mux(silent, track, finished));
@@ -129,18 +139,16 @@ export async function renderProject(
       fps: ctx.job.fps,
       frames: ctx.job.frames,
       seconds: (performance.now() - start) / 1000,
-      backend: backend(),
+      backend: native.backend ?? backend(),
+      native,
       planSha256: ctx.manifest.planSha256,
       audio: !!probe.audio,
       colorSpace: probe.video.color_space ?? null,
       colorTransfer: probe.video.color_transfer ?? null,
       colorPrimaries: probe.video.color_primaries ?? null,
       colorRange: probe.video.color_range ?? null,
-      // The native source hash excludes the JavaScript finishing step.
-      finishingSourceHashes: {
-        'film/render.mjs': sha256(fs.readFileSync(new URL(import.meta.url))),
-        'engine/lib/audio.mjs': sha256(fs.readFileSync(new URL('../engine/lib/audio.mjs', import.meta.url))),
-      },
+      // The native source hash excludes the JavaScript finishing step: the mix, its cues and where they land.
+      finishingSourceHashes: finishingSources(),
       outputSha256: await phase('hash', () => sha256File(output)),
       voiceProviders: [...new Set(ctx.timing.beats.map(b => b.vo?.provider).filter(Boolean))],
       ...(fast ? { notValidated: unvalidated(ctx, check) } : {}),
@@ -163,7 +171,7 @@ export async function renderProject(
   } finally {
     // A render that failed while the sound was still mixing waits for it before cleaning up.
     await sound.catch(() => {});
-    for (const f of [raw, silent, audio, encoded, finished]) fs.rmSync(f, { force: true });
+    for (const f of [raw, silent, audio, encoded, finished, nativeReport]) fs.rmSync(f, { force: true });
   }
 }
 
@@ -222,8 +230,13 @@ async function fullMix(root, ctx) {
         beats: ctx.timing.beats.map(b => [b.vo?.src, b.vo?.start, b.sfx, b.start, b.end, !!b.vo]),
         music: ctx.timing.music,
         duration: ctx.timing.duration,
-        // Only what can be heard: a picture-only edit reuses the mix.
-        audio: Object.entries(ctx.manifest.hashes).filter(([k]) => /^assets\/(vo|music|sfx)\//.test(k) || k === ctx.timing.music?.src),
+        // Only what can be heard, by content: a picture-only edit reuses the mix, and a recording,
+        // a bed or a cue file replaced in place (or a built-in cue's recipe) never does.
+        audio: [...new Set([...ctx.timing.beats.map(b => b.vo?.src), ctx.timing.music?.src].filter(Boolean))].map(k => [k, ctx.manifest.hashes[k] ?? null]),
+        sounds: ctx.manifest.sounds ?? {},
+        // And by the code that mixes it (cue placement is already in `cues`): a new mixer never
+        // reuses a mix the old one made, and a picture-code edit still keeps the sound.
+        mixer: Object.fromEntries(MIXING_SOURCES.map(rel => [rel, finishingSources()[rel]])),
         mix: ctx.sb.mix,
         cues,
       }),
@@ -253,6 +266,8 @@ export function loudness(file) {
     ['-hide_banner', '-nostats', '-i', file, '-map', '0:a:0', '-af', 'ebur128=peak=true', '-f', 'null', '-'],
     { encoding: 'utf8', maxBuffer: 2 ** 28 },
   );
+  // A meter that failed part-way may still have printed numbers: only a clean exit measures.
+  if (r.status !== 0) return null;
   const tail = r.stderr.slice(r.stderr.lastIndexOf('Summary:'));
   const i = tail.match(/I:\s+(-?[\d.]+) LUFS/),
     p = tail.match(/Peak:\s+(-?[\d.]+) dBFS/);
@@ -298,6 +313,7 @@ export async function renderRange(
   const output = path.resolve(out ?? path.join(dir, `${base}.mp4`));
   const token = crypto.randomUUID(),
     raw = path.join(ctx.dir, `${token}-range-raw.mp4`),
+    nativeReport = path.join(ctx.dir, `${token}-range-native-report.json`),
     silent = path.join(ctx.dir, `${token}-range-video.mp4`),
     cut = path.join(ctx.dir, `${token}-range.wav`),
     finished = path.join(ctx.dir, `${token}-range-final.mp4`),
@@ -305,7 +321,8 @@ export async function renderRange(
   const start = performance.now();
   try {
     await phase('native-build', () => buildScene());
-    await phase('native-render', () => nativeCommand(ctx, 'render', [`${a}..${b}`, '--draft', '--scale', '1', '-o', raw]), { frames });
+    await phase('native-render', () => nativeCommand(ctx, 'render', [`${a}..${b}`, '--draft', '--scale', '1', '-o', raw, '--report', nativeReport]), { frames });
+    const native = JSON.parse(fs.readFileSync(nativeReport, 'utf8'));
     await phase('timeline', () => packetTimeline(raw, silent));
     await phase('validate', () => validateVideo(silent, { ...ctx.job, frames }));
     const full = await phase('mix', () => fullMix(root, ctx));
@@ -379,6 +396,7 @@ export async function renderRange(
       fps,
       frames,
       encoder: ENCODERS.draft,
+      native,
       audio,
       verified: check,
       captions: ctx.job.captions ? 'burned in by the renderer, as in the film' : 'none in the picture; speech cues in the .vtt beside the preview',
@@ -392,7 +410,7 @@ export async function renderRange(
     record({ preview: path.relative(root, output), frames });
     return report;
   } finally {
-    for (const f of [raw, silent, cut, finished]) fs.rmSync(f, { force: true });
+    for (const f of [raw, silent, cut, finished, nativeReport]) fs.rmSync(f, { force: true });
     fs.rmSync(shots, { recursive: true, force: true });
   }
 }

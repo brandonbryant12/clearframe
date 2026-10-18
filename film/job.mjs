@@ -36,11 +36,17 @@ import { expandTeachingProps } from './teaching.mjs';
 import { expandPlotProps } from './plots.mjs';
 import { expandBarsProps } from './bars.mjs';
 import { expandBridgeProps, orderBridgeTimes } from './bridge.mjs';
+import { expandBreakdownProps, breakdownSettle } from './breakdown.mjs';
+import { expandProcessProps } from './process.mjs';
+import { expandDecisionProps } from './decision.mjs';
+import { expandTableProps } from './table.mjs';
+import { isTarget, targetSpec, targetRect } from './target.mjs';
 import { expandCastProps } from './cast.mjs';
 import { expandPointers } from './pointer.mjs';
 import { expandStatProps } from './stat.mjs';
 import { expandHistogramProps } from './histogram.mjs';
 import { expandMultiplesProps } from './multiples.mjs';
+import { resolveMoments, applyMoments, namesMoments, timedByMoment } from './moments.mjs';
 import { captionCues, findWord } from '../engine/lib/timing.mjs';
 
 const unit = v => Number.isFinite(v) && v >= 0 && v <= 1;
@@ -85,6 +91,7 @@ export function createJob(sb, timing, { draft = false } = {}) {
       report.errors.push(`${b.id}: ${e.message}`);
     }
   }
+  resolveTargets(beats, timing, report);
   mirrorExitStyles(beats);
   linkMorphs(beats, sb, timing, report);
   linkCasts(beats, sb, timing, report, cast);
@@ -183,11 +190,18 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
     source = sb.beats[b.index],
     spec = rules(b.block);
   const helperFrame = { width: timing.width, height: timing.height, beatId: b.id, duration: b.dur };
+  // Named moments resolve first, from the measured words, so every structured picture and element
+  // that lands on one shares its exact time (film/moments.mjs).
+  const spoken = cueResolver(b, frame);
+  const moments = b.block === 'canvas' && b.props?.moments != null ? resolveMoments(b.props.moments, { word: v => spoken(v), dur: b.dur }) : null;
+  helperFrame.moments = moments;
+  helperFrame.usedMoments = new Set();
+  helperFrame.when = (item, fallback = 0, where = 'cue') => timeOf(item, { moments, spoken, fallback, where, used: helperFrame.usedMoments });
   const castProps = b.block === 'canvas' && b.props?.cast != null
     ? expandCastProps(b.props, helperFrame, { state: cast.state, objects: cast.objects, threads: cast.threads, look: cast.look, camera: cast.camera, unit: cast.unit, heading: b.heading ?? sb.beats[b.index]?.heading ?? sb.heading, cue: cueResolver(b, frame), carry: cast, notes: report.warnings, captions: Boolean(film.captions && b.vo) })
     : b.props;
   const authoredProps = b.block === 'canvas'
-    ? expandMultiplesProps(expandHistogramProps(expandStatProps(expandBridgeProps(expandBarsProps(expandPlotProps(expandTeachingProps(castProps ?? {}, helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame)
+    ? expandTableProps(expandDecisionProps(expandProcessProps(expandBreakdownProps(expandMultiplesProps(expandHistogramProps(expandStatProps(expandBridgeProps(expandBarsProps(expandPlotProps(expandTeachingProps(castProps ?? {}, helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame)
     : (b.props ?? {});
   const props = normalizeProps(b.block, authoredProps, {
     vertical: film.vertical,
@@ -199,6 +213,23 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
     // Spoken cues resolve before a system diagram compiles, so its derived timing is exact.
     resolve: cueResolver(b, frame),
   });
+  if (b.block === 'canvas' && (moments || namesMoments(props.elements))) {
+    const used = applyMoments(props.elements, moments, 'elements', m => { throw new Error(m); }, b.dur);
+    for (const name of moments?.keys() ?? [])
+      if (!used.has(name) && !(helperFrame.usedMoments?.has(name)))
+        report.warnings.push(`${b.id}: moment ${name} is named but nothing lands on it.`);
+  }
+  delete props.moments;
+  // reveal: open on the detail, hold, and pull back to the whole picture on its word.
+  if (b.block === 'canvas' && props.reveal != null) {
+    const r = props.reveal;
+    props.viewFrom = { on: r.from, ...(r.pad != null ? { pad: r.pad } : {}), ...(r.state != null ? { state: r.state } : {}) };
+    props.view ??= [0, 0, timing.width, timing.height];
+    props.viewAt = helperFrame.when(r, 0.8, 'reveal');
+    props.viewDur = r.dur ?? 1.6;
+    if (props.viewAt + props.viewDur > b.dur) throw new Error(`reveal pulls back until ${(props.viewAt + props.viewDur).toFixed(2)} s, after the beat ends; cue it earlier`);
+    delete props.reveal;
+  }
   const motion = { ...film.motion, ...source.motion };
   if (!validMotion(motion)) throw new Error('Invalid beat motion');
   const entrance = ENTRANCE[motion.preset];
@@ -246,9 +277,10 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
     return end;
   };
   if (b.block === 'canvas') {
-    if ((b.props?.plot != null || b.props?.bars != null || b.props?.bridge != null || b.props?.stat != null || b.props?.distribution != null || b.props?.multiples != null) && !sb.sources.length)
+    if ((b.props?.plot != null || b.props?.bars != null || b.props?.bridge != null || b.props?.breakdown != null || b.props?.process != null || b.props?.decision != null || b.props?.table != null || b.props?.stat != null || b.props?.distribution != null || b.props?.multiples != null) && !sb.sources.length)
       throw new Error('Quantitative plots need a storyboard.sources entry.');
     settle = Math.max(settle, scheduleArt(props.elements, at, props.stagger ?? 0));
+    if (isTarget(props.viewFrom) && props.viewAt != null) settle = Math.max(settle, props.viewAt + (props.viewDur ?? 1.2));
     // A hard cut lands on the drawing's ground: its cards and panels at the start are there on
     // the first frame instead of rising in, which left a blank frame or two after every cut (a
     // reviewer called them render glitches). Details, words and later moments still enter.
@@ -270,6 +302,13 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
       if (b.dur - landed < 1.5)
         report.warnings.push(`${b.id}: the bridge's last total settles ${landed.toFixed(1)} s into a ${b.dur.toFixed(1)} s beat; cue it earlier or hold the beat (min) so it can be read.`);
       if (landed > b.dur) throw new Error(`the bridge finishes at ${landed.toFixed(2)} s, after the beat ends; cue the drivers earlier or extend the beat.`);
+    }
+    // A breakdown's last value is read after it lands, like a bridge's last total.
+    if (b.props?.breakdown != null) {
+      const landed = breakdownSettle(props.elements);
+      settle = Math.max(settle, landed);
+      if (b.dur - landed < 1.5)
+        report.warnings.push(`${b.id}: the breakdown settles ${landed.toFixed(1)} s into a ${b.dur.toFixed(1)} s beat; cue its parts earlier or hold the beat so the last value can be read.`);
     }
     // Camera depth keys resolve their spoken cues; like camera drift, they never hold the beat.
     for (const k of [...(props.dolly ?? []), ...(props.focus?.keys ?? [])]) {
@@ -371,6 +410,26 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
       .filter(c => c.start >= b.start - frame / 2 && c.start < b.end - frame / 2)
       .map(c => ({ start: Math.max(0, c.start - b.start), end: Math.min(c.end, b.end) - b.start, text: c.text, lines: c.lines })),
   };
+}
+
+/**
+ * Scene seconds for a structured item's time: `{cue, after}` (a named moment), `{say, after}` (a
+ * spoken word, measured) or `{at}` (seconds); `fallback` when it gives none.
+ */
+function timeOf(item, { moments, spoken, fallback = 0, where = 'cue', used }) {
+  if (item == null) return fallback;
+  if (typeof item === 'number' || typeof item === 'string') return spoken(item);
+  const given = ['cue', 'say', 'at'].filter(k => item[k] != null);
+  if (given.length > 1) throw new Error(`${where} takes one of say, at or cue`);
+  if (item.cue != null) {
+    if (!moments?.has(item.cue))
+      throw new Error(`${where}.cue "${item.cue}" names no moment${moments?.size ? ` (this beat's moments: ${[...moments.keys()].join(', ')})` : '; declare it in the canvas props moments'}`);
+    used?.add(item.cue);
+    return Math.max(0, moments.get(item.cue) + (item.after ?? 0));
+  }
+  if (item.say != null) return Math.max(0, spoken(item.say) + (item.after ?? 0));
+  if (item.at != null) return spoken(item.at);
+  return fallback;
 }
 
 /** Seconds or a spoken word/phrase → scene seconds. */
@@ -484,6 +543,14 @@ function keepPace(b, source, props, art, at, { sb, report }) {
   if (b.block === 'canvas' && own.length) {
     const shift = content - Math.max(0, voice - 0.1);
     const pulled = own.filter(el => (el.at ?? 0) <= earliest + 1e-6);
+    // A drawing on a named moment keeps its time: moving one reaction would split an event the
+    // author shared (and carry its sound away). The empty opening is reported instead.
+    if (pulled.some(timedByMoment)) {
+      report.warnings.push(
+        `${b.id}: the voice talks for ${gap.toFixed(1)} s over an empty scene before the first drawing, which lands on a named moment and keeps its time. Draw the ground or picture from the cut (at: 0, enter: "none"), cue something to the opening words, or set pace: "hold" for a deliberate wait.`,
+      );
+      return;
+    }
     const move = el => {
       el.at = Math.max(0, (el.at ?? 0) - shift);
       if (el.type === 'group') el.children?.forEach(move);
@@ -570,8 +637,11 @@ function beatLayers(source, b, sb, report) {
     // A push to a detail: the picture travels from the full frame into a frame-pixel rect.
     if (camera.to != null) {
       const r = camera.to;
-      if (!(Array.isArray(r) && r.length === 4 && r.every(Number.isFinite) && r[2] >= 64 && r[3] >= 36))
-        throw new Error('camera.to must be a frame-pixel rect [x, y, w, h] (at least 64 × 36)');
+      if (isTarget(r)) {
+        if (b.block !== 'canvas') throw new Error('camera.to {on} frames an element of a canvas; give a frame-pixel rect on other blocks');
+        targetSpec(r, 'camera.to');
+      } else if (!(Array.isArray(r) && r.length === 4 && r.every(Number.isFinite) && r[2] >= 64 && r[3] >= 36))
+        throw new Error('camera.to must be a frame-pixel rect [x, y, w, h] (at least 64 × 36), or {on: an element id} on a canvas');
       if (camera.dur != null && !(Number.isFinite(camera.dur) && camera.dur >= 0.2 && camera.dur <= 8))
         throw new Error('camera.dur must be 0.2–8 seconds');
     }
@@ -764,15 +834,88 @@ function movedBy(state, keys) {
 }
 
 /**
+ * Camera rects addressed to what is drawn (`{on, pad, state}` in view, viewFrom or a beat's
+ * camera.to) become exact rects from the elements' own geometry. A world beat can frame what an
+ * earlier beat of its world drew; a beat camera (frame pixels) needs a canvas without a view.
+ */
+function resolveTargets(beats, timing, { errors }) {
+  const frame = { width: timing.width, height: timing.height };
+  beats.forEach((b, i) => {
+    if (b.block !== 'canvas') return;
+    try {
+      const seen = [...(b.props.elements ?? [])];
+      if (b.props.world) for (let k = i - 1; k >= 0 && beats[k].props?.world === b.props.world; k--) seen.push(...(beats[k].props.elements ?? []));
+      for (const key of ['view', 'viewFrom', 'viewTall'])
+        if (isTarget(b.props[key])) b.props[key] = targetRect({ ...targetSpec(b.props[key], key), world: b.props.world }, seen, { ...frame, where: key });
+      if (isTarget(b.camera?.to)) {
+        // camera.to is in frame pixels: the canvas's own coordinates must be frame pixels too.
+        const v = b.props.view, identity = v == null || (Array.isArray(v) && v.length === 4 && v[0] === 0 && v[1] === 0 && v[2] === frame.width && v[3] === frame.height && !b.props.world);
+        if (!identity) throw new Error('camera.to {on} frames frame pixels; this canvas has its own view, so frame it with view: {on} or reveal instead');
+        b.camera.to = targetRect(targetSpec(b.camera.to, 'camera.to'), seen, { ...frame, where: 'camera.to' });
+      }
+    } catch (e) {
+      errors.push(`${b.id}: ${e.message}`);
+    }
+  });
+}
+
+/**
+ * One-to-many morphs (`morphFrom: {id, slice, axis}`): elements of this beat that come out of one
+ * element of the beat before each start as their slice of it, so a part's bar breaks into its
+ * parts. The slices of one source must not overlap (that would show a quantity twice), and the
+ * source cannot also stay on screen under its own id. A source the beat before does not draw is
+ * no morph: the parts arrive as authored. Returns whether anything was linked.
+ */
+function linkSlices(beat, list, prev) {
+  const bySource = new Map();
+  for (const el of list) {
+    if (!el.morphFrom) continue;
+    const m = el.morphFrom;
+    delete el.morphFrom;
+    const from = prev.get(m.id);
+    if (!from) continue;
+    if (from.type !== 'rect') throw new Error(`${el.id} comes out of ${m.id}, which the beat before draws as a ${from.type}; only a rect can be divided`);
+    (bySource.get(m.id) ?? bySource.set(m.id, []).get(m.id)).push({ el, m, from });
+  }
+  let linked = false;
+  for (const [id, parts] of bySource) {
+    if (list.some(el => el.id === id))
+      throw new Error(`${id} is divided into ${parts.map(x => x.el.id).join(', ')} in this beat, so it cannot also stay on screen as itself (its quantity would show twice)`);
+    const sorted = [...parts].sort((a, b) => a.m.slice[0] - b.m.slice[0]);
+    for (let k = 1; k < sorted.length; k++)
+      if (sorted[k].m.slice[0] < sorted[k - 1].m.slice[1] - 1e-6)
+        throw new Error(`${sorted[k].el.id} and ${sorted[k - 1].el.id} come out of overlapping slices of ${id}; the slices of one element must not overlap`);
+    for (const { el, m, from } of parts) {
+      const { morph, echo, keys, loop, along, exitAt, exitDur, exit, ...state } = from;
+      if (keys?.length && !movedBy(state, keys)) throw new Error(`${id} has keys a slice cannot follow (blur, tilt or a stretch); give it a still state before it divides`);
+      const axis = m.axis ?? 'x', [pos, size] = axis === 'x' ? ['x', 'w'] : ['y', 'h'];
+      const scale = state.scale ?? 1;
+      if (scale !== 1) throw new Error(`${id} is scaled; divide an unscaled rect`);
+      const slice = { ...state, [pos]: (state[pos] ?? 0) + state[size] * m.slice[0], [size]: state[size] * (m.slice[1] - m.slice[0]) };
+      el.morph = { from: { ...slice, at: 0, dur: 0, enter: 'none' }, dur: el.morphDur ?? 0.8 };
+      Object.assign(el, { enter: 'none', at: 0, dur: 0 });
+      delete el.morphDur;
+      delete from.exit;
+      delete from.exitAt;
+      delete from.exitDur;
+      linked = true;
+    }
+  }
+  return linked;
+}
+
+/**
  * Morph by id: an element whose id also appears in the previous beat animates from that
  * element's geometry and colour across the cut, like Magic Move.
  */
-function linkMorphs(beats, sb, timing, { warnings }) {
+function linkMorphs(beats, sb, timing, { warnings, errors }) {
   const layers = b => [
     ...(b.block === 'canvas' ? b.props.elements : []),
     ...(b.art?.under ?? []),
     ...(b.art?.over ?? []),
   ];
+  // The first beat has nothing before it to come out of: its slices arrive as authored.
+  if (beats.length) for (const el of layers(beats[0])) delete el.morphFrom;
   for (let i = 1; i < beats.length; i++) {
     const prev = new Map(
       layers(beats[i - 1])
@@ -780,6 +923,11 @@ function linkMorphs(beats, sb, timing, { warnings }) {
         .map(el => [el.id, el]),
     );
     let linked = false;
+    try {
+      linked = linkSlices(beats[i], layers(beats[i]), prev) || linked;
+    } catch (e) {
+      errors.push(`${beats[i].id}: ${e.message}`);
+    }
     for (const el of layers(beats[i])) {
       const from = el.id && prev.get(el.id);
       if (!from) continue;

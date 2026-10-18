@@ -23,6 +23,17 @@ A smaller library of good pieces makes better films than a large one with junk i
 5. **Professional register.** The films are for companies and financial firms. No comic bursts, halftone pop art, synthwave grids, hyperspace tunnels, retro sunbursts, neon, lens flares or trailer looks; no blur standing in for depth; no placeholder titles.
 6. **Works and is distinct.** It validates and renders, its cues fit its beat, and it is not a near-duplicate of something better already here.
 
+### Evidence to add or recommend a piece
+
+A piece earns its place with evidence, not a count. Before adding one, or recommending one found elsewhere, have all of these, and say in its commit which film needed it:
+
+- **A use case from a real film.** A brief, bench film or example whose beat had no good picture (the `receipt`, `app` and `was-now` pieces came from bench films that hand-drew them). A clever effect looking for a film is not one.
+- **Difficult content.** The longest copy it will be given, the largest and smallest numbers, both shapes (16:9 and 9:16), under two-line captions, and the content that should be refused (a total its lines do not add up to). Each renders through `check` (the frame audit) without type cut, overlapping or under size.
+- **Rendered evidence.** Its frames from `sheet` and a draft, read at 360 px (`qa DIR` writes `phone.png`), judged against a professional reference. A passing test or a validating schema is technical readiness, not visual acceptance; the person's acceptance is recorded separately (`accept --by NAME --said`).
+- **Provenance.** An idea seen in another project is reimplemented natively. Code or assets come in only under the MIT rule in `AGENTS.md`, at a pinned revision with notices; a published port of someone else's component is checked file by file (fframes-components' Remotion Elements ports, for example, had no component-level MIT grant). Configurable fields must be drawn: a `logo` field that renders a monogram instead is a placeholder, not a feature.
+
+Creativity comes from specific ideas carried by native primitives (a world the camera travels, an id that morphs across a cut, a mark attached to its words, a cast that changes with the voice), not from more stock pieces. When nothing clears the bar, draw it on canvas for the one film and leave the library as it is.
+
 The file name is the id (`library/palettes/noir.json` is `noir`). Files starting with `_` are ignored, so `_draft.json` stays out of listings. `order` sets the listing position. Items without it sort after the numbered ones, by id.
 
 The native creative catalog is validated when the engine starts, so a bad file fails immediately and names itself. Run `node --test test/library.test.mjs` after adding one.

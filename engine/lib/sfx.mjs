@@ -1,6 +1,7 @@
 // A small, tasteful sound-cue library synthesized with ffmpeg (no samples to license, fully reproducible).
 // Professional register: soft ticks for counters, a quiet pop for arrivals, a low air "whoosh" for chapter
 // changes, a gentle chime for a key landing. Everything sits well under a voiceover.
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { ffmpeg, REPO_DIR } from './util.mjs';
@@ -79,33 +80,52 @@ export const SFX = {
   },
 };
 
-/** Path to a built-in cue, synthesizing it on first use. */
-export async function sfxFile(name) {
+/** The ffmpeg arguments that synthesize a built-in cue into `out`. */
+const synthesis = (def, out) => [
+  '-y',
+  '-f',
+  'lavfi',
+  '-i',
+  `aevalsrc=exprs='${def.expr}|${def.expr}':s=48000:d=${def.dur}`,
+  '-af',
+  `${def.filters},afade=t=out:st=${Math.max(0, def.dur - 0.01)}:d=0.01`,
+  '-c:a',
+  'pcm_s16le',
+  out,
+];
+
+/** A built-in cue's identity: the recipe that makes it, so an edited cue never plays a stale take. */
+export function cueIdentity(name) {
   const def = SFX[name];
   if (!def) throw new Error(`Unknown sfx "${name}". Built-ins: ${Object.keys(SFX).join(', ')}`);
-  const file = path.join(SFX_DIR, `${name}.wav`);
+  return crypto.createHash('sha256').update(JSON.stringify(synthesis(def, ''))).digest('hex').slice(0, 16);
+}
+
+/** Path to a built-in cue, synthesizing it on first use. */
+export async function sfxFile(name) {
+  const file = path.join(SFX_DIR, `${name}-${cueIdentity(name)}.wav`);
   if (fs.existsSync(file)) return file;
   fs.mkdirSync(SFX_DIR, { recursive: true });
   const tmp = `${file}.${process.pid}.tmp.wav`;
-  await ffmpeg([
-    '-y',
-    '-f',
-    'lavfi',
-    '-i',
-    `aevalsrc=exprs='${def.expr}|${def.expr}':s=48000:d=${def.dur}`,
-    '-af',
-    `${def.filters},afade=t=out:st=${Math.max(0, def.dur - 0.01)}:d=0.01`,
-    '-c:a',
-    'pcm_s16le',
-    tmp,
-  ]);
+  await ffmpeg(synthesis(SFX[name], tmp));
   fs.renameSync(tmp, file);
   return file;
 }
 
-/** Resolve a cue name or project-relative path to an absolute file. */
+/** A project cue file (a path inside the project), or null for a built-in or a file outside it. */
+export function cueFile(root, name) {
+  if (SFX[name] || typeof name !== 'string' || !name) return null;
+  // Joined, as cue names always were (a leading "/" is still the project's root); only a path
+  // that climbs out of the project is refused.
+  const base = path.resolve(root),
+    file = path.join(base, name);
+  return file.startsWith(base + path.sep) ? file : null;
+}
+
+/** Resolve a cue name or project-relative path to an absolute file. Sounds come from the project
+ * (where its inputs are hashed and its revisions can restore them), never from elsewhere on disk. */
 export async function resolveCue(root, name) {
   if (SFX[name]) return sfxFile(name);
-  const file = path.join(root, name);
-  return fs.existsSync(file) ? file : null;
+  const file = cueFile(root, name);
+  return file && fs.existsSync(file) ? file : null;
 }

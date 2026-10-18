@@ -1,0 +1,75 @@
+{
+ "version": 2,
+ "title": "Where requests wait",
+ "format": {
+  "preset": "landscape",
+  "fps": 30
+ },
+ "theme": "paper",
+ "type": "inter",
+ "camera": "none",
+ "texture": "none",
+ "captions": false,
+ "music": false,
+ "sfx": false,
+ "sources": [
+  {
+   "claim": "Arrival and capacity rates are illustrative assumptions for a model, not measurements.",
+   "source": "Illustrative model of stated rates"
+  }
+ ],
+ "beats": [
+  {
+   "id": "wait",
+   "block": "canvas",
+   "duration": 13,
+   "props": {
+    "moments": {
+     "HIRE": {
+      "at": 6.2
+     }
+    },
+    "process": {
+     "id": "requests",
+     "title": "Where requests wait",
+     "unit": "requests",
+     "period": "day",
+     "arrivals": 10,
+     "done": "Completed",
+     "stages": [
+      {
+       "id": "intake",
+       "label": "Intake",
+       "capacity": 12
+      },
+      {
+       "id": "review",
+       "label": "Review",
+       "capacity": 8
+      },
+      {
+       "id": "approve",
+       "label": "Approval",
+       "capacity": 12
+      }
+     ],
+     "runs": [
+      {
+       "periods": 5,
+       "at": 0.8,
+       "dur": 4.5
+      },
+      {
+       "periods": 5,
+       "cue": "HIRE",
+       "dur": 4.5,
+       "set": {
+        "review": 12
+       }
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

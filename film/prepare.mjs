@@ -14,6 +14,8 @@ import { computeTiming, captionCues, toSRT, toVTT, assetSrc } from '../engine/li
 import { writeJSON, readJSON } from '../engine/lib/util.mjs';
 import { phase } from '../engine/lib/runlog.mjs';
 import { footageProblems } from '../engine/lib/continuity.mjs';
+import { SFX, cueFile, cueIdentity } from '../engine/lib/sfx.mjs';
+import { soundDesign } from './sound.mjs';
 
 /**
  * Rough cuts stand in for what isn't made yet, and only for what is declared:
@@ -187,13 +189,25 @@ export function classifyAudit(findings, { rough = false, allowed = [], job } = {
 export async function prepareProject(root, options) {
   return prepareProjectSync(root, options);
 }
-export function prepareProjectSync(root, { draft = false, rough = false } = {}) {
+/**
+ * The job a render of the working copy is asked to draw, before any media is staged: the pure
+ * half of preparation. `jobSha256` names it, so a receipt can be checked against the working copy
+ * (a palette, treatment or library edit changes the film without changing any hashed file)
+ * without rewriting build/native under a render that may be running.
+ */
+export function preparedJob(root, { draft = false, rough = false } = {}) {
   root = fs.realpathSync(root);
   const loaded = loadStoryboard(root),
     computed = computeTiming(root);
   const { sb, timing, placeholders, unfinished, allowed } = roughStandIns(root, loaded, computed, { rough });
   const result = createJob(sb, timing, { draft: draft || rough });
   if (result.errors.length) throw new Error(result.errors.join('\n'));
+  return { root, sb, timing, placeholders, unfinished, allowed, result, jobSha256: sha256(JSON.stringify(result.job)) };
+}
+export function prepareProjectSync(root, { draft = false, rough = false } = {}) {
+  const prepared = preparedJob(root, { draft, rough });
+  root = prepared.root;
+  const { sb, timing, placeholders, unfinished, allowed, result, jobSha256 } = prepared;
   const timingBeat = i => timing.beats[i];
   const dir = path.join(root, 'build/native'),
     media = path.join(dir, 'media');
@@ -339,6 +353,23 @@ export function prepareProjectSync(root, { draft = false, rough = false } = {}) 
     });
   }
   if (timing.music?.src) record(path.join(root, timing.music.src));
+  // Every sound the mix plays is an input: a cue file edited or replaced makes a different film
+  // (a new input id, a new revision, a fresh preview mix). A built-in cue is named by its recipe.
+  const sounds = {};
+  const named = [...timing.beats.flatMap(b => (b.sfx ?? []).map(s => s.src)), ...soundDesign(result.job, sb.sfx).map(c => c.name)];
+  for (const name of new Set(named.filter(Boolean))) {
+    if (SFX[name]) {
+      sounds[name] = `builtin:${cueIdentity(name)}`;
+      continue;
+    }
+    const file = cueFile(root, name);
+    if (!file || !fs.existsSync(file) || !fs.statSync(file).isFile()) {
+      result.warnings.push(`sound "${name}" is not a built-in cue or a file inside the project: the mix leaves it out (built-ins: ${Object.keys(SFX).join(', ')})`);
+      continue;
+    }
+    record(file);
+    sounds[name] = hashes[path.relative(root, file)];
+  }
   for (const f of fs.readdirSync(path.join(ROOT, 'assets/fonts')).filter(f => /\.ttf$/i.test(f))) {
     neededMedia.add(f);
     fs.copyFileSync(path.join(ROOT, 'assets/fonts', f), path.join(media, f));
@@ -365,9 +396,14 @@ export function prepareProjectSync(root, { draft = false, rough = false } = {}) 
     rendererSourceHash,
     fontHashes,
     planSha256,
+    jobSha256,
     provenance: compiled.provenance,
     hashes,
-    inputId: sha256(JSON.stringify({ job: result.job, hashes, rendererSourceHash, fontHashes, planSha256 })),
+    ...(Object.keys(sounds).length ? { sounds } : {}),
+    // What this render is made from. A cue file is among `hashes` (so also among a revision's
+    // inputs and content id); a built-in cue is code, named by its recipe in `sounds`: it changes
+    // this input id and the preview mix, not a revision's content id (which names inputs, not code).
+    inputId: sha256(JSON.stringify({ job: result.job, hashes, rendererSourceHash, fontHashes, planSha256, ...(Object.keys(sounds).length ? { sounds } : {}) })),
     draft: draft || rough,
     profile: rough ? 'rough' : draft ? 'draft' : 'final',
     ...(placeholders.length ? { placeholders } : {}),

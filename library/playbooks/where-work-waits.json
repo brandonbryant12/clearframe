@@ -1,0 +1,74 @@
+{
+  "order": 42,
+  "title": "Where work waits: a bottleneck, and what a change does to it",
+  "audience": "Operations, service and shared-services teams explaining why work backs up and what a capacity change does",
+  "inputs": "Arrivals per period and each stage's capacity per period (stated assumptions), and the change to show",
+  "theme": "paper",
+  "type": "inter",
+  "motion": "gentle",
+  "backdrop": "none",
+  "transition": "cut",
+  "format": "landscape",
+  "texture": "none",
+  "camera": "none",
+  "beats": [
+    {
+      "id": "wait",
+      "block": "canvas",
+      "hold": 1.5,
+      "vo": "Ten requests arrive each day. Review finishes eight, so two more wait every day. After a second reviewer joins, the queue drains two a day; it does not vanish.",
+      "props": {
+        "moments": {
+          "HIRE": "second reviewer"
+        },
+        "process": {
+          "id": "requests",
+          "title": "Where requests wait",
+          "unit": "requests",
+          "period": "day",
+          "arrivals": 10,
+          "done": "Completed",
+          "stages": [
+            {
+              "id": "intake",
+              "label": "Intake",
+              "capacity": 12
+            },
+            {
+              "id": "review",
+              "label": "Review",
+              "capacity": 8
+            },
+            {
+              "id": "approve",
+              "label": "Approval",
+              "capacity": 12
+            }
+          ],
+          "runs": [
+            {
+              "periods": 5,
+              "say": "Review",
+              "dur": 4
+            },
+            {
+              "periods": 5,
+              "cue": "HIRE",
+              "dur": 4,
+              "set": {
+                "review": 12
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "sources": [
+    {
+      "claim": "Arrival and capacity rates are illustrative assumptions for a model, not measurements.",
+      "source": "Illustrative model of stated rates"
+    }
+  ],
+  "note": "The model is serial and deterministic: the numbers on screen are computed from the rates you state, period by period, and a change carries the queue it inherits. Say in the narration that it is an illustration of the stated rates. Every figure and rule here is an illustrative sample: replace it with your source's before publishing."
+}

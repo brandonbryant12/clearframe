@@ -9,7 +9,8 @@ import { computeTiming } from './timing.mjs';
 import { loadStoryboard } from './project.mjs';
 import { ffmpeg, ffmpegBin, writeJSON } from './util.mjs';
 import { measureDrop } from './beatmap.mjs';
-import { sha256 } from '../../scene/engine.mjs';
+import { sha256File } from './store.mjs';
+import { bindVideo, identityFindings, evidenceLine, recheck } from './evidence.mjs';
 import { reviewGeometry } from '../../film/render-geometry.mjs';
 import { COVER, INTO_SECONDS } from '../../film/constants.mjs';
 import { pictureFor, chartFor, castFor, figuresIn } from './pictures.mjs';
@@ -41,7 +42,8 @@ function decode(file, w, h) {
   const r = spawnSync(
     ffmpegBin(),
     [
-      '-v', 'error', '-threads', '4', '-filter_threads', '2', '-i', file, '-an',
+      // Two decoder threads: this machine runs at most two workers (AGENTS.md).
+      '-v', 'error', '-threads', '2', '-filter_threads', '2', '-i', file, '-an',
       '-vf', `scale=${w}:${h}:flags=area,format=gray`, '-threads', '2', '-f', 'rawvideo', '-',
     ],
     { maxBuffer: 2 ** 31 - 1 },
@@ -225,8 +227,34 @@ export function timeFindings({ d, skip, second, local = [], fps, beats = [], wor
   return findings;
 }
 
+/**
+ * Whether an MP4's index (moov) comes before its media (mdat): a player can start and seek
+ * before the whole file has arrived. Reads only the top-level box headers. null if neither is found.
+ */
+export function moovFirst(file) {
+  const fd = fs.openSync(file, 'r'),
+    head = Buffer.alloc(16),
+    size = fs.fstatSync(fd).size;
+  try {
+    for (let at = 0, boxes = 0; at + 8 <= size && boxes < 64; boxes++) {
+      fs.readSync(fd, head, 0, 16, at);
+      let len = head.readUInt32BE(0);
+      const type = head.toString('latin1', 4, 8);
+      if (type === 'moov') return true;
+      if (type === 'mdat') return false;
+      if (len === 1) len = Number(head.readBigUInt64BE(8));
+      else if (len === 0) return null;
+      if (len < 8) return null;
+      at += len;
+    }
+    return null;
+  } finally {
+    fs.closeSync(fd);
+  }
+}
+
 /** Container and loudness facts a platform reads before it shows a single frame. */
-export function deliveryFindings(probe, { loudness, target = -14, fps, frames, width, height }) {
+export function deliveryFindings(probe, { loudness, target = -14, fps, frames, width, height, moovFirst: indexed }) {
   const v = probe.streams.find(s => s.codec_type === 'video'),
     a = probe.streams.find(s => s.codec_type === 'audio');
   const out = [];
@@ -254,9 +282,13 @@ export function deliveryFindings(probe, { loudness, target = -14, fps, frames, w
     if (loudness) {
       if (Math.abs(loudness.integrated - target) > 1)
         bad('warn', `loudness ${loudness.integrated} LUFS, target ${target}`);
-      if (loudness.peak > -1) bad('warn', `true peak ${loudness.peak} dBTP; keep it under −1`);
-    }
+      if (loudness.peak == null) bad('warn', 'true peak not reported by the meter: the ceiling is unchecked');
+      else if (loudness.peak > -1) bad('warn', `true peak ${loudness.peak} dBTP; keep it under −1`);
+    } else if (loudness === null)
+      // A meter that returned nothing is a missing measurement, not a pass.
+      bad('error', 'the film has sound, but its loudness and true peak could not be measured (and the music drop was not checked)');
   }
+  if (indexed === false) bad('warn', 'the MP4 index (moov) sits after the media: streaming playback can start and seek late, or needs extra range requests to find it (remux with -movflags +faststart)');
   return out;
 }
 
@@ -276,7 +308,8 @@ function measureLoudness(file) {
     let err = '';
     child.stderr.on('data', d => (err = (err + d).slice(-20000)));
     child.on('error', () => resolve(null));
-    child.on('close', () => resolve(loudnessOf(err)));
+    // A meter that failed part-way may still have printed numbers: only a clean exit measures.
+    child.on('close', code => resolve(code === 0 ? loudnessOf(err) : null));
   });
 }
 function loudnessOf(stderr) {
@@ -388,11 +421,14 @@ export async function qaProject(root, { video, loop = false } = {}) {
   const sb = loadStoryboard(root);
   const timing = computeTiming(root);
   const probe = probeStreams(file);
+  // What this QA is about: the receipt is checked against the video's bytes and the working copy
+  // before anything in it (a draft's reduced size) is believed.
+  const evidence = bindVideo(root, file, { timing, probe });
   let receipt;
-  try { receipt = JSON.parse(fs.readFileSync(`${file}.json`, 'utf8')); } catch {}
+  if (evidence.scope === 'bound') receipt = JSON.parse(fs.readFileSync(evidence.receipt, 'utf8'));
   const output = reviewGeometry(sb.format, receipt, {
-    videoHash: receipt?.draft ? sha256(fs.readFileSync(file)) : undefined,
-    storyboardHash: receipt?.draft ? sha256(fs.readFileSync(path.join(root, 'storyboard.json'))) : undefined,
+    videoHash: evidence.videoSha256,
+    storyboardHash: sha256File(path.join(root, 'storyboard.json')),
   });
   const v = probe.streams.find(s => s.codec_type === 'video');
   const [w, h] = grid(v.width, v.height);
@@ -437,7 +473,7 @@ export async function qaProject(root, { video, loop = false } = {}) {
     }),
   );
   const holds = new Set(sb.beats.filter(b => b.pace === 'hold').map(b => b.id));
-  const findings = timeFindings({ d, skip, second, local, fps, beats, worlds, covers, holds });
+  const findings = [...identityFindings(evidence), ...timeFindings({ d, skip, second, local, fps, beats, worlds, covers, holds })];
   // A frame with next to nothing on it (a hairline, a footer) while the voice talks: reviewers
   // read the first seconds of four films as empty or broken. Sampled every half second.
   {
@@ -533,6 +569,7 @@ export async function qaProject(root, { video, loop = false } = {}) {
       frames: timing.frames,
       width: output.width,
       height: output.height,
+      moovFirst: moovFirst(file),
     }),
   );
   // Measure the result, not the plan: the music's drop should be heard where it was placed.
@@ -551,6 +588,9 @@ export async function qaProject(root, { video, loop = false } = {}) {
   }
   // The phone sheet is what a viewer's thumb sees: 360 px wide frames.
   await sheeting;
+  // Everything above was read from the file over seconds: it must still be the file that was bound.
+  const replaced = recheck(evidence);
+  if (replaced) findings.unshift({ level: 'error', kind: 'identity', message: `${replaced}: these measurements belong to neither version. Run qa again.` });
   const change = second.filter(Number.isFinite);
   const summary = {
     seconds: r2(n / fps),
@@ -560,10 +600,14 @@ export async function qaProject(root, { video, loop = false } = {}) {
     deliberateSeconds: r2(findings.filter(f => f.kind === 'held' && f.deliberate).reduce((s, f) => s + f.seconds, 0)),
     pops: findings.filter(f => f.kind === 'pop').length,
     loudness,
+    audio: probe.streams.some(x => x.codec_type === 'audio'),
     color: [v.color_primaries, v.color_transfer, v.color_space, v.color_range].join('/'),
+    evidence: evidence.scope,
   };
   writeJSON(path.join(dir, 'qa.json'), {
     video: file,
+    // Which film these measurements are about, and what that was checked against.
+    evidence,
     output: { width: output.width, height: output.height, scale: output.scale, draft: output.draft },
     summary,
     findings,
@@ -574,7 +618,7 @@ export async function qaProject(root, { video, loop = false } = {}) {
       advisory: true,
     },
   });
-  return { dir, summary, findings };
+  return { dir, summary, findings, evidence };
 }
 
 /**
@@ -654,11 +698,19 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
   const overlaps = [...new Set([...warnings, ...castNotes])].map(w => w.match(/^([^:]+): overlap: (.*)$/)).filter(Boolean);
   // An error qa found in time (a one-frame pop, a jumping seam) is on screen: a round-19 film read
   // READY with a counter jittering as its digits changed width, found only in qa.json.
-  const broken = q.findings.filter(f => f.level === 'error');
-  const ready = !(share >= 40 || (typeShare >= 60 && share < 40) || blank.length || short || mute || placeholders.length || fileSources.length || overlaps.length || broken.length);
+  // Only a film bound to its receipt can be ready: an unbound file's measurements say nothing about
+  // which state of the project they show, and a stale or broken binding describes another film.
+  const evidence = q.evidence ?? { scope: 'unbound', problems: [] };
+  const unbound = evidence.scope !== 'bound';
+  const broken = q.findings.filter(f => f.level === 'error' && f.kind !== 'identity');
+  const ready = !(unbound || share >= 40 || (typeShare >= 60 && share < 40) || blank.length || short || mute || placeholders.length || fileSources.length || overlaps.length || broken.length);
   // One edit to make first, spelled out: weaker models act on the last concrete line they read and
   // hand over a NOT READY film when the verdict ends on "fix the beats above".
   const nextEdit = () => {
+    if (unbound)
+      return evidence.scope === 'unbound'
+        ? 'measure the film\'s own render: run draft (or render), then qa on that video with its receipt beside it.'
+        : `${evidence.problems[0] ?? 'the receipt does not describe this video'}: render again, then run qa on the new video.`;
     if (placeholders.length) return `fill ${placeholders[0][1].join(', ')} in ${placeholders[0][0]}'s sketchText.`;
     if (fileSources.length) return `give ${fileSources[0]} a source line people know (the document's name, not a file).`;
     if (mute) return 'record the narration (`voice DIR --draft`).';
@@ -676,7 +728,8 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
     return worst.length ? `${worst[0][0]}: ${fixOf(worst[0][0])?.fix ?? 'change something on its later words.'}` : 'fix the first item above.';
   };
   const lines = [
-    `motion: ${ready ? 'READY' : 'NOT READY'} · ${s.changePerSecond} change/s; still under the voice ${Math.round(10 * (voicedHeld + overflow)) / 10} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds${overflow ? `, ${overflow} s of them over budget and counted above` : ''}` : ''}): ${said}.`,
+    `motion: ${ready ? 'READY' : `NOT READY${unbound ? ` (${evidence.scope} evidence)` : ''}`} · ${s.changePerSecond} change/s; still under the voice ${Math.round(10 * (voicedHeld + overflow)) / 10} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds${overflow ? `, ${overflow} s of them over budget and counted above` : ''}` : ''}): ${said}.`,
+    ...(q.evidence ? [`  ${evidenceLine(q.evidence)}`] : ['  evidence: not recorded (this QA result predates bound evidence)']),
     ...(overflow
       ? [`  holds: ${s.deliberateSeconds} s are declared as reading holds (pace: "hold"), more than a fifth of the film; ${overflow} s of them count as still. A reading hold is for a figure or a step that must be read, not a way past this check.`]
       : []),

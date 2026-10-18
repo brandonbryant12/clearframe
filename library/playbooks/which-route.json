@@ -1,0 +1,93 @@
+{
+  "order": 43,
+  "title": "Which route: a rule, a case and what changes it",
+  "audience": "Policy, compliance and HR audiences learning how a stated rule routes a case, and what one changed answer does",
+  "inputs": "The rule's own questions and outcomes from its source, one representative case, and the single answer to change",
+  "theme": "paper",
+  "type": "inter",
+  "motion": "gentle",
+  "backdrop": "none",
+  "transition": "cut",
+  "format": "landscape",
+  "texture": "none",
+  "camera": "none",
+  "beats": [
+    {
+      "id": "route",
+      "block": "canvas",
+      "hold": 1.5,
+      "vo": "A taxi fare of one hundred and twenty dollars with an itemised receipt is approved automatically. Take away the receipt, and the same claim comes back to you. Keep the receipt, and it goes straight through.",
+      "props": {
+        "decision": {
+          "id": "claim",
+          "title": "Which route a claim takes",
+          "source": "Example rule for illustration",
+          "ask": [
+            {
+              "id": "amount",
+              "label": "Over $500?"
+            },
+            {
+              "id": "receipt",
+              "label": "Itemised receipt?"
+            }
+          ],
+          "tree": {
+            "ask": "amount",
+            "yes": "manager",
+            "no": {
+              "ask": "receipt",
+              "yes": "auto",
+              "no": "returned"
+            }
+          },
+          "outcomes": [
+            {
+              "id": "manager",
+              "label": "Manager approves",
+              "tone": "accent"
+            },
+            {
+              "id": "auto",
+              "label": "Approved automatically",
+              "tone": "positive"
+            },
+            {
+              "id": "returned",
+              "label": "Returned to you",
+              "tone": "negative"
+            }
+          ],
+          "cases": [
+            {
+              "label": "A $120 taxi",
+              "answers": {
+                "amount": "no",
+                "receipt": "yes"
+              },
+              "say": "taxi"
+            },
+            {
+              "label": "Same taxi, no receipt",
+              "answers": {
+                "amount": "no",
+                "receipt": "no"
+              },
+              "say": "Take"
+            }
+          ],
+          "return": {
+            "say": "Keep"
+          }
+        }
+      }
+    }
+  ],
+  "sources": [
+    {
+      "claim": "The rule and its threshold are an example, not a real policy.",
+      "source": "Example rule for illustration"
+    }
+  ],
+  "note": "Copy the questions and outcomes from the rule's own text. Keep the counterfactual to one changed answer, so the picture shows what that answer does. Every figure and rule here is an illustrative sample: replace it with your source's before publishing."
+}
