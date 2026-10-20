@@ -2,16 +2,32 @@
 // This verifies the renderer clock, not recognition quality on continuous speech.
 import fs from 'node:fs';
 import path from 'node:path';
-import { draftVoice, speechSegments } from '../engine/lib/audio.mjs';
-import { pcmToWav, wavDuration, writeJSON, ffmpeg } from '../engine/lib/util.mjs';
-import { importSpeech } from '../engine/lib/speech.mjs';
-import { scaffold } from '../film/playbooks.mjs';
-import { checkProject, renderProject, sheetProject } from '../film/production.mjs';
+import {
+  draftVoice,
+  speechSegments,
+} from '../packages/engine/dist/engine/lib/audio.mjs';
+import {
+  pcmToWav,
+  wavDuration,
+  writeJSON,
+  ffmpeg,
+} from '../packages/engine/dist/engine/lib/util.mjs';
+import { importSpeech } from '../packages/engine/dist/engine/lib/speech.mjs';
+import { scaffold } from '../packages/engine/dist/film/playbooks.mjs';
+import {
+  checkProject,
+  renderProject,
+  sheetProject,
+} from '../packages/engine/dist/film/production.mjs';
 const root = path.resolve(process.argv[2] ?? 'build/speech-smoke');
 if (fs.existsSync(path.join(root, 'storyboard.json')))
-  throw new Error('Smoke fixture already exists; choose a new output path in the script to retain evidence.');
+  throw new Error(
+    'Smoke fixture already exists; choose a new output path in the script to retain evidence.',
+  );
 scaffold(root, { playbook: 'concept-explainer', theme: 'ink' });
-const sb = JSON.parse(fs.readFileSync(path.join(root, 'storyboard.json'), 'utf8'));
+const sb = JSON.parse(
+  fs.readFileSync(path.join(root, 'storyboard.json'), 'utf8'),
+);
 // Speech-following text is the subject: one kinetic beat.
 sb.beats = [{ id: 'speech', block: 'kinetic', props: {} }];
 const words = ['Make', 'each', 'word', 'count.'];
@@ -38,7 +54,11 @@ for (const [i, word] of words.entries()) {
   const data = pcm(file),
     duration = data.length / 48000;
   chunks.push(data);
-  timings.push({ w: word, t0: cursor + (segments[0]?.start ?? 0), t1: cursor + (segments.at(-1)?.end ?? duration) });
+  timings.push({
+    w: word,
+    t0: cursor + (segments[0]?.start ?? 0),
+    t1: cursor + (segments.at(-1)?.end ?? duration),
+  });
   cursor += duration;
   const silence = Buffer.alloc(48000 * 0.2);
   chunks.push(silence);
@@ -57,10 +77,21 @@ sb.motion = { preset: 'spring', intensity: 0.45 };
 sb.music = false;
 writeJSON(path.join(root, 'storyboard.json'), sb);
 for (const b of sb.beats)
-  await importSpeech(root, { beat: b.id, audio: take, transcript: words.join(' '), words: { words: timings } });
+  await importSpeech(root, {
+    beat: b.id,
+    audio: take,
+    transcript: words.join(' '),
+    words: { words: timings },
+  });
 const check = await checkProject(root);
 writeJSON(path.join(root, 'build/check.json'), check);
 if (check.errors.length) throw new Error(check.errors.join('\n'));
 await sheetProject(root, { per: 3, thumb: 270 });
 const report = await renderProject(root);
-console.log(JSON.stringify({ root, seconds: wavDuration(take), timings, report }, null, 2));
+console.log(
+  JSON.stringify(
+    { root, seconds: wavDuration(take), timings, report },
+    null,
+    2,
+  ),
+);

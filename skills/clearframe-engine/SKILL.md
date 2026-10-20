@@ -5,7 +5,7 @@ description: Author, validate and render ClearFrame storyboard.json projects wit
 
 # Engine contract
 
-Read `README.md`, `docs/style.md` and the schema at `schema/storyboard.schema.json`. The shared Node layer owns project loading, media generation, timing and audio. `film/production.mjs` prepares a version 2 block job and `scene/compile.mjs` the scene plan (`build/native/plan.json`); `scene/engine.mjs` builds and runs the renderer. Native GPU stages (`stage` block, beat `stage`, film `stages`): `skills/clearframe-scene/SKILL.md`.
+Read `README.md`, `docs/style.md` and the schema at `packages/engine/src/schema/storyboard.schema.json`. The shared Node layer owns project loading, media generation, timing and audio. `packages/engine/src/film/production.mts` prepares a version 2 block job and `packages/engine/src/scene/compile.mts` the scene plan (`build/native/plan.json`); `packages/engine/src/scene/engine.mts` builds and runs the renderer. Native GPU stages (`stage` block, beat `stage`, film `stages`): `skills/clearframe-scene/SKILL.md`.
 
 `start DIR --idea ... --document ... --brand ...` gathers portable inputs (see `docs/intake.md`), writes evidence and brand briefs, copies assets unchanged and records hashes. It creates a starter for the directing agent to rewrite, not a finished film. No paid calls run.
 
@@ -18,22 +18,22 @@ By default, beat length follows lead + recorded/estimated voice + block tail. Fo
 `check` also fails when a beat ends before its counters and bars reach their final values (drafts warn), when staged items are cued too late to finish, and when displayed text uses characters the bundled fonts cannot draw (it names the character and prop).
 
 ```sh
-node engine/cli.mjs new film --playbook policy-change --treatment workplace
-node engine/cli.mjs voice film --draft
-node engine/cli.mjs timing film
-node engine/cli.mjs sheet film --draft
-node engine/cli.mjs still film --beat receipt --pos 0.7 --grid --draft   # --grid: coordinates for art
-node engine/cli.mjs sketch route --vertical                             # canvas starting points
-node engine/cli.mjs check film --draft
-node engine/cli.mjs looks film --beat receipt --draft
-node engine/cli.mjs render film --draft
-node engine/cli.mjs review film
-node engine/cli.mjs qa film            # time bugs, export tags, loudness, timeline + phone sheets
-node engine/cli.mjs beatmap film       # tempo, measured drop, cuts against the beat grid
-node engine/cli.mjs draft film --rough # first full-length look: placeholders as slates (docs/editing.md)
-node engine/cli.mjs preview film --beats receipt --handles 2   # one stretch of the full timeline
-node engine/cli.mjs diff film r002     # what changed since a revision: content, appearance, timing
-node engine/cli.mjs runlog film        # measured command and phase times
+pnpm cf new film --playbook policy-change --treatment workplace
+pnpm cf voice film --draft
+pnpm cf timing film
+pnpm cf sheet film --draft
+pnpm cf still film --beat receipt --pos 0.7 --grid --draft   # --grid: coordinates for art
+pnpm cf sketch route --vertical                             # canvas starting points
+pnpm cf check film --draft
+pnpm cf looks film --beat receipt --draft
+pnpm cf render film --draft
+pnpm cf review film
+pnpm cf qa film            # time bugs, export tags, loudness, timeline + phone sheets
+pnpm cf beatmap film       # tempo, measured drop, cuts against the beat grid
+pnpm cf draft film --rough # first full-length look: placeholders as slates (docs/editing.md)
+pnpm cf preview film --beats receipt --handles 2   # one stretch of the full timeline
+pnpm cf diff film r002     # what changed since a revision: content, appearance, timing
+pnpm cf runlog film        # measured command and phase times
 ```
 
 Review state lives in `DIR/review/` (`docs/editing.md`): every full render saves a revision (inputs preserved by content in `review/objects/`), `note`/`notes` anchor feedback to the revision watched, `revise` makes a candidate with before/after passages, `accept`/`reject` record a person's verdict (`decide` an agent's), `restore` brings back a revision after saving the current state, `keep` pins voice, words, facts, picture or look. Recorded narration is edited with `cut`/`uncut`/`split`/`merge`, rebuilt from `source/recording.wav`; never by editing `vo`.
@@ -44,7 +44,7 @@ For a full 1080p final, give the calling shell/harness at least **300,000 ms (fi
 
 On this 8 GB Mac, run one full render or full test suite at a time. Keep at least 20 GiB free for expensive work.
 
-Compilation uses one Cargo job and names the lock holder while waiting. Small checks can run directly. No browser or npm runtime dependencies are required.
+Compilation uses one Cargo job and names the lock holder while waiting. Small checks can run directly. Native rendering does not require a browser. The checked Node runtime uses the pinned workspace dependencies.
 
 `pipeline DIR [--draft] [--scale 0.5] [--no-render] [--json]` runs a retained production pass: critique, optional free draft narration, check, matching sheet, encode, QA and boundary review. It automatically enters/inherits the local heavy gate. Each run gets `build/pipeline/<run-id>/` with timings, inputs, artifacts and an unresolved review queue. `ready-for-review` is not human acceptance. `--no-render` ends at `checked-no-render`. Final mode uses prepared inputs; no paid provider calls run. See `docs/production.md`.
 

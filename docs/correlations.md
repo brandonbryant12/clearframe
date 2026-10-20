@@ -1,6 +1,6 @@
 # Native correlation windows
 
-`correlationMatrix` in `film/correlation-data.mjs` computes a descriptive Pearson matrix from supplied monthly simple returns. `correlationScene` in `film/correlations.mjs` makes an editable native matrix or a synchronized pair of return charts.
+`correlationMatrix` in `packages/engine/src/film/correlation-data.mts` computes a descriptive Pearson matrix from supplied monthly simple returns. `correlationScene` in `packages/engine/src/film/correlations.mts` makes an editable native matrix or a synchronized pair of return charts.
 
 ```js
 import { correlationScene } from '../film/correlations.mjs';

@@ -86,6 +86,6 @@ Models and prices change. When a call fails with a model-not-found or schema err
 
 ## Native speech and sparse Omni footage (verified 2026-09-28)
 
-- `gemini-3.5-transcribe`: Interactions, uploaded audio URI, `generation_config.transcription_config.mode = {type:"verbatim", timestamp_granularities:["word"]}`. Parse model-output `word_info` annotations with second-valued offsets. See `engine/lib/speech.mjs` and [Google transcription](https://ai.google.dev/gemini-api/docs/transcribe).
+- `gemini-3.5-transcribe`: Interactions, uploaded audio URI, `generation_config.transcription_config.mode = {type:"verbatim", timestamp_granularities:["word"]}`. Parse model-output `word_info` annotations with second-valued offsets. See `packages/engine/src/engine/lib/speech.mts` and [Google transcription](https://ai.google.dev/gemini-api/docs/transcribe).
 - `gemini-omni-1.1-flash`: Interactions, ordered image/text input, video response format with aspect ratio, resolution and URI delivery. Duration is prompt-steered; no duration_seconds parameter. Poll file ACTIVE then download MP4. See `skills/gemini-omni/scripts/omni.mjs` and [Google Omni](https://ai.google.dev/gemini-api/docs/omni).
 - Clip continuity/cache keys include palette, visual instructions and reference bytes. Clip audio is excluded from the native film's shared mix. Provider correctness is covered by mocked tests; no live paid call was made for this migration.

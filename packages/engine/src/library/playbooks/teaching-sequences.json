@@ -1,0 +1,411 @@
+{
+  "order": 44,
+  "title": "Think, reveal, explain",
+  "audience": "Viewers learning a distinction through a short video question",
+  "inputs": "Replace the illustrative question, answer, worked explanation and exact source; give each reading phase a useful hold",
+  "theme": "porcelain",
+  "type": "geometric",
+  "motion": "gentle",
+  "backdrop": "none",
+  "transition": "cut",
+  "sfx": "off",
+  "sources": [
+    {
+      "claim": "The questions use an arithmetic example: a change from 4% to 5% is 1 percentage point or a 25% relative increase.",
+      "source": "Arithmetic example: (5 - 4) = 1; (5 - 4) / 4 = 0.25."
+    }
+  ],
+  "beats": [
+    {
+      "id": "choice-question",
+      "block": "canvas",
+      "duration": 4.5,
+      "camera": "none",
+      "props": {
+        "source": "Arithmetic example · 4% to 5%",
+        "teaching": {
+          "form": "choice",
+          "prompt": "What changed from 4% to 5%?",
+          "options": ["1 percent", "5 percent", "1 percentage point"],
+          "correctIndex": 2,
+          "explanation": "The rates differ by 1 percentage point. The relative increase is 25%.",
+          "phase": "question",
+          "motion": "fade",
+          "revealAt": 0.25,
+          "explainAt": 1.1
+        },
+        "elements": [
+          {
+            "type": "line",
+            "x1": 1200,
+            "y1": 570,
+            "x2": 1640,
+            "y2": 570,
+            "stroke": "muted",
+            "width": 2,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1240,
+            "y": 346,
+            "w": 150,
+            "h": 224,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.4
+          },
+          {
+            "type": "rect",
+            "x": 1440,
+            "y": 290,
+            "w": 150,
+            "h": 280,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.4
+          },
+          {
+            "type": "text",
+            "text": "4%",
+            "x": 1315,
+            "y": 324,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.4
+          },
+          {
+            "type": "text",
+            "text": "5%",
+            "x": 1515,
+            "y": 268,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.4
+          }
+        ]
+      },
+      "tall": {
+        "elements": []
+      }
+    },
+    {
+      "id": "choice-answer",
+      "block": "canvas",
+      "duration": 6,
+      "camera": "none",
+      "props": {
+        "source": "Arithmetic example · 4% to 5%",
+        "teaching": {
+          "form": "choice",
+          "prompt": "What changed from 4% to 5%?",
+          "options": ["1 percent", "5 percent", "1 percentage point"],
+          "correctIndex": 2,
+          "explanation": "The rates differ by 1 percentage point. The relative increase is 25%.",
+          "phase": "answer",
+          "motion": "fade",
+          "revealAt": 0.25,
+          "explainAt": 1.1
+        },
+        "elements": [
+          {
+            "type": "line",
+            "x1": 1200,
+            "y1": 570,
+            "x2": 1640,
+            "y2": 570,
+            "stroke": "muted",
+            "width": 2,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1240,
+            "y": 346,
+            "w": 150,
+            "h": 224,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1440,
+            "y": 290,
+            "w": 150,
+            "h": 280,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "text": "4%",
+            "x": 1315,
+            "y": 324,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "text": "5%",
+            "x": 1515,
+            "y": 268,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1440,
+            "y": 290,
+            "w": 150,
+            "h": 56,
+            "r": 6,
+            "fill": "accent",
+            "at": 0.25,
+            "enter": "fade",
+            "dur": 0.25
+          },
+          {
+            "type": "text",
+            "text": "+1 point",
+            "x": 1614,
+            "y": 332,
+            "size": 40,
+            "font": "semibold",
+            "fill": "accent",
+            "at": 0.25,
+            "enter": "fade",
+            "dur": 0.25
+          }
+        ]
+      },
+      "tall": {
+        "elements": []
+      }
+    },
+    {
+      "id": "gap-question",
+      "block": "canvas",
+      "duration": 4,
+      "camera": "none",
+      "props": {
+        "source": "Arithmetic example · 4% to 5%",
+        "teaching": {
+          "form": "gap",
+          "prompt": "Complete the statement.",
+          "before": "From 4% to 5% is",
+          "answer": "1 percentage point",
+          "after": "higher.",
+          "explanation": "Subtract the two percentages: 5 minus 4 equals 1 percentage point.",
+          "phase": "question",
+          "motion": "fade",
+          "revealAt": 0.25,
+          "explainAt": 1.1
+        },
+        "elements": [
+          {
+            "type": "line",
+            "x1": 1200,
+            "y1": 570,
+            "x2": 1640,
+            "y2": 570,
+            "stroke": "muted",
+            "width": 2,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1240,
+            "y": 346,
+            "w": 150,
+            "h": 224,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1440,
+            "y": 290,
+            "w": 150,
+            "h": 280,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "text": "4%",
+            "x": 1315,
+            "y": 324,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "text": "5%",
+            "x": 1515,
+            "y": 268,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          }
+        ]
+      },
+      "tall": {
+        "elements": []
+      }
+    },
+    {
+      "id": "gap-answer",
+      "block": "canvas",
+      "duration": 6,
+      "camera": "none",
+      "props": {
+        "source": "Arithmetic example · 4% to 5%",
+        "teaching": {
+          "form": "gap",
+          "prompt": "Complete the statement.",
+          "before": "From 4% to 5% is",
+          "answer": "1 percentage point",
+          "after": "higher.",
+          "explanation": "Subtract the two percentages: 5 minus 4 equals 1 percentage point.",
+          "phase": "answer",
+          "motion": "fade",
+          "revealAt": 0.25,
+          "explainAt": 1.1
+        },
+        "elements": [
+          {
+            "type": "line",
+            "x1": 1200,
+            "y1": 570,
+            "x2": 1640,
+            "y2": 570,
+            "stroke": "muted",
+            "width": 2,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1240,
+            "y": 346,
+            "w": 150,
+            "h": 224,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1440,
+            "y": 290,
+            "w": 150,
+            "h": 280,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "text": "4%",
+            "x": 1315,
+            "y": 324,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "text": "5%",
+            "x": 1515,
+            "y": 268,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1440,
+            "y": 290,
+            "w": 150,
+            "h": 56,
+            "r": 6,
+            "fill": "accent",
+            "at": 0.25,
+            "enter": "fade",
+            "dur": 0.25
+          },
+          {
+            "type": "text",
+            "text": "+1 point",
+            "x": 1614,
+            "y": 332,
+            "size": 40,
+            "font": "semibold",
+            "fill": "accent",
+            "at": 0.25,
+            "enter": "fade",
+            "dur": 0.25
+          }
+        ]
+      },
+      "tall": {
+        "elements": []
+      }
+    }
+  ],
+  "note": "A linear video sequence, not a clickable quiz. The two rates stand to scale in the right half (a point lights in the answers); redraw them for your question, and drop them in a vertical cut. Text and phase durations stay editable. Show an image poster while viewers read; a one-way answer clip may begin in the answer beat. Match any selected 3D object to the correctIndex before use. Keep the complete answer and explanation visible after the reveal."
+}

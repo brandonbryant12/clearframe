@@ -1,9 +1,9 @@
 # From idea, document and brand to a film
 
-ClearFrame is a standalone, agent-directed proof of concept. Its inputs and outputs are local files, suitable for a future host to call through the CLI. This workflow uses the native renderer (`scene/native`); it adds no HyperFrames dependency, service, browser runtime or Content Studio integration.
+ClearFrame is a standalone, agent-directed proof of concept. Its inputs and outputs are local files, suitable for a future host to call through the CLI. This workflow uses the native renderer (`packages/engine/src/scene/native`); it adds no HyperFrames dependency, service, browser runtime or Content Studio integration.
 
 ```sh
-node engine/cli.mjs start film \
+pnpm cf start film \
   --idea 'What should the viewer understand?' \
   --document report.pdf --brand brand.json \
   --audience 'Business owners' --takeaway 'The decision the evidence supports' --length 75 \
@@ -55,10 +55,10 @@ Recording intake also accepts `--brand brand.json`, alongside `--direction` and 
 ## Faster review copies
 
 ```sh
-node engine/cli.mjs preview film --scale 0.5
-node engine/cli.mjs draft film --scale 0.5
-node engine/cli.mjs qa film
-node engine/cli.mjs render film
+pnpm cf preview film --scale 0.5
+pnpm cf draft film --scale 0.5
+pnpm cf qa film
+pnpm cf render film
 ```
 
 `--scale` accepts 0.25–1 for drafts, default 1. It reduces the output raster, leaving authored coordinates, narration, frame rate, frame count and sound timing unchanged. Dimensions round to even values for H.264; 1080×1350 at 0.5 becomes 540×676. Stills, contact sheets and layout diagnostics keep authored dimensions.

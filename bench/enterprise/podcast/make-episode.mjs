@@ -2,12 +2,14 @@
 // Rebuilds episode.wav, a local text-to-speech mock of the Money at Work clip, from turns.txt
 // with the macOS `say` voices (host Samantha, guest Reed) and FFmpeg. Free and offline.
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
+const output = process.argv[2] ? resolve(process.argv[2]) : join(here, 'episode.wav');
+mkdirSync(dirname(output), { recursive: true });
 const voices = { host: 'Samantha', guest: 'Reed (English (US))' };
 const tmp = mkdtempSync(join(tmpdir(), 'episode-'));
 const ff = (...args) => execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...args]);
@@ -23,5 +25,5 @@ readFileSync(join(here, 'turns.txt'), 'utf8').split('\n').filter(Boolean).forEac
   list.push(`file '${wav}'`, `file '${silence}'`);
 });
 writeFileSync(join(tmp, 'list.txt'), list.join('\n') + '\n');
-ff('-f', 'concat', '-safe', '0', '-i', join(tmp, 'list.txt'), '-c:a', 'pcm_s16le', join(here, 'episode.wav'));
-console.log(join(here, 'episode.wav'));
+ff('-f', 'concat', '-safe', '0', '-i', join(tmp, 'list.txt'), '-c:a', 'pcm_s16le', output);
+console.log(output);

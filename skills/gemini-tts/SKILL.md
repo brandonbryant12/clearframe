@@ -24,10 +24,11 @@ clearframe voice <dir> --draft          # free OS voice, one continuous take, wo
 clearframe voice <dir>                  # Gemini: one continuous take (cached by text, voice, style, model)
 clearframe voice <dir> --force          # re-record after changing words
 clearframe voice <dir> --dry-run        # the exact request per take (one text, one style); no key, no call
-node skills/gemini-tts/scripts/tts.mjs --text "Seventy percent." --voice Charon --style "calm, measured" --out vo.wav
-node skills/gemini-tts/scripts/tts.mjs --text "…" --dry-run    # prints the exact request; no key, no call
-node skills/gemini-tts/scripts/tts.mjs --list-voices
+node packages/engine/dist/skills/gemini-tts/scripts/tts.mjs --text "Seventy percent." --voice Charon --style "calm, measured" --out vo.wav
+node packages/engine/dist/skills/gemini-tts/scripts/tts.mjs --text "…" --dry-run    # prints the exact request; no key, no call
+node packages/engine/dist/skills/gemini-tts/scripts/tts.mjs --list-voices
 ```
+
 `voice` prints the estimated seconds and cost and honours `--budget` / `storyboard.budget`. Don't make paid calls merely to test code; use `--dry-run`.
 
 ## Directing the voice: cast, direct, speak
@@ -49,11 +50,11 @@ node skills/gemini-tts/scripts/tts.mjs --list-voices
 
 Tags go exactly where the sound happens. In other languages, keep the tags in English.
 
-| Use | Tags |
-|---|---|
-| **Narration** (sparingly) | `<short pause>` before a number or reveal, `<long pause>` after a turn, `<breath>` before a big line |
-| **Conversation** (one or two per minute) | `<chuckle>`, `<laugh>`, `<sigh>`, `<exhales>`, `<gasp>`, `<tsk>`, `<phew>`, `<whispering>` |
-| **Character and drama only** | `<laughter>`, `<giggle>`, `<snicker>`, `<cackle>`, `<cheer>`, `<shout>`, `<scream>`, `<shriek>`, `<cry>`, `<sob>`, `<whimper>`, `<groan>`, `<moan>`, `<grunt>`, `<growl>`, `<grr>`, `<hiss>`, `<argh>`, `<pant>`, `<heavy breath>`, `<cough>`, `<sneeze>`, `<yawn>`, `<throat-clearing>`, `<snort>`, `<pff>` |
+| Use                                      | Tags                                                                                                                                                                                                                                                                                                         |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Narration** (sparingly)                | `<short pause>` before a number or reveal, `<long pause>` after a turn, `<breath>` before a big line                                                                                                                                                                                                         |
+| **Conversation** (one or two per minute) | `<chuckle>`, `<laugh>`, `<sigh>`, `<exhales>`, `<gasp>`, `<tsk>`, `<phew>`, `<whispering>`                                                                                                                                                                                                                   |
+| **Character and drama only**             | `<laughter>`, `<giggle>`, `<snicker>`, `<cackle>`, `<cheer>`, `<shout>`, `<scream>`, `<shriek>`, `<cry>`, `<sob>`, `<whimper>`, `<groan>`, `<moan>`, `<grunt>`, `<growl>`, `<grr>`, `<hiss>`, `<argh>`, `<pant>`, `<heavy breath>`, `<cough>`, `<sneeze>`, `<yawn>`, `<throat-clearing>`, `<snort>`, `<pff>` |
 
 **Backchannels:** in a two-voice take, a listener's reaction goes in pipes inside the other speaker's turn, for example `|mm-hm|`, `|oh really?|` or `|right|`. `critique` flags heavy tag use and bracketed directions.
 
@@ -75,49 +76,66 @@ Set `voice.cast` (for example `{"host": {"voice": "Puck", "style": "curious"}, "
 ```json
 {
   "model": "gemini-3.8-flash-tts",
-  "input": [{ "type": "user_input", "content": [{
-    "type": "text",
-    "text": "Seven degrees. That's how much hotter a city night can run.\n\nIt's only a few degrees, right?\n\n…",
-    "annotations": [{ "type": "speech_metadata", "style": "warm, curious, quietly concerned" }]
-  }]}],
-  "response_format": { "type": "audio", "mime_type": "audio/wav", "sample_rate": 24000 },
+  "input": [
+    {
+      "type": "user_input",
+      "content": [
+        {
+          "type": "text",
+          "text": "Seven degrees. That's how much hotter a city night can run.\n\nIt's only a few degrees, right?\n\n…",
+          "annotations": [
+            {
+              "type": "speech_metadata",
+              "style": "warm, curious, quietly concerned"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "response_format": {
+    "type": "audio",
+    "mime_type": "audio/wav",
+    "sample_rate": 24000
+  },
   "generation_config": { "speech_config": [{ "voice": "Charon" }] }
 }
 ```
+
 - **Response:** `steps[type="model_output"].content[type="audio"] = { mime_type, data: <base64>, sample_rate, channels }`. Unary responses are a complete `audio/wav` file (24 kHz mono s16le); write it straight to disk. The script wraps `audio/l16` if it ever appears.
 - **`speech_metadata` applies per content part (turn).** One part means one style. Two voices need `speech_config: { mode: "conversational", speakers: [{ speaker, voice }] }` and `speech_metadata.speaker` on every part.
 - **Limits:** 8,192 input tokens and 16,384 output tokens per call (audio is 25 tokens/s, so about 10 minutes). No thinking and no tools.
 - **Languages:** 130+ languages, with `language` set on the speaker.
 - The legacy `generateContent` form still works; ClearFrame uses Interactions, which Google recommends.
 
-| Model | Status | Audio out (per 1M tokens) | ≈ per 10 s |
-|---|---|---|---|
-| `gemini-3.8-flash-tts` (default) | GA, most expressive | $9.00 until 2026-12-31, then $18 | $0.0023 |
-| `gemini-3.8-flash-lite-tts` | GA, cheapest | $6.00 until 2026-12-31, then $12 | $0.0015 |
+| Model                            | Status              | Audio out (per 1M tokens)        | ≈ per 10 s |
+| -------------------------------- | ------------------- | -------------------------------- | ---------- |
+| `gemini-3.8-flash-tts` (default) | GA, most expressive | $9.00 until 2026-12-31, then $18 | $0.0023    |
+| `gemini-3.8-flash-lite-tts`      | GA, cheapest        | $6.00 until 2026-12-31, then $12 | $0.0015    |
 
 Batch and Flex are 50% off. The 2.5 and 3.1 preview TTS models are deprecated.
 
 ## Prebuilt voices
 
-| Tone | Voices |
-|---|---|
-| Informative, neutral (default) | **Charon**, Rasalgethi, Sadaltager (knowledgeable), Schedar (even) |
-| Clear, precise | Iapetus, Erinome |
-| Warm, reassuring | Sulafat, Achird (friendly), Vindemiatrix (gentle) |
-| Firm, authoritative | Kore, Orus, Alnilam |
-| Mature, grounded | Gacrux |
-| Lively (launches, social, used sparingly) | Laomedeia, Puck, Sadachbia, Zephyr |
+| Tone                                      | Voices                                                             |
+| ----------------------------------------- | ------------------------------------------------------------------ |
+| Informative, neutral (default)            | **Charon**, Rasalgethi, Sadaltager (knowledgeable), Schedar (even) |
+| Clear, precise                            | Iapetus, Erinome                                                   |
+| Warm, reassuring                          | Sulafat, Achird (friendly), Vindemiatrix (gentle)                  |
+| Firm, authoritative                       | Kore, Orus, Alnilam                                                |
+| Mature, grounded                          | Gacrux                                                             |
+| Lively (launches, social, used sparingly) | Laomedeia, Puck, Sadachbia, Zephyr                                 |
 
 The full list: Zephyr, Puck, Charon, Kore, Fenrir, Leda, Orus, Aoede, Callirrhoe, Autonoe, Enceladus, Iapetus, Umbriel, Algieba, Despina, Erinome, Algenib, Rasalgethi, Laomedeia, Achernar, Alnilam, Schedar, Gacrux, Pulcherrima, Achird, Zubenelgenubi, Vindemiatrix, Sadachbia, Sadaltager, Sulafat. More than 2,000 more are in the Extended Voice Library (`--list-voices`).
 
 ## When the voice is wrong
 
-| Symptom | Fix |
-|---|---|
-| The voice changes between lines | Make sure `voice.takes` is `film` (the default) and there is no `voice.perBeatStyle`; remove per-beat `style`. Re-record the whole take. |
-| It drifts over a long take | Shorten `voice.style` to 2–6 words. Remove anything like "maintain the same voice". Consider a designed voice. |
-| Flat | The words are flat. Add fragments, one question, a pause before the reveal, and put the stressed word last. Then try a livelier voice before a stronger style. |
-| Too theatrical | Remove tags, soften the style ("clear, conversational"), and pick a neutral voice (Charon, Schedar). |
-| A direction was read aloud | It was in the text. Move it to a tag or the style. |
-| One line reads wrong | Change that line's punctuation or word order and re-record the take. Don't patch in a single-line take. |
-| Beat cuts land mid-word | Install Whisper (`align --whisper`) so the take is split on measured words. Give each beat a clear full stop. |
+| Symptom                         | Fix                                                                                                                                                            |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| The voice changes between lines | Make sure `voice.takes` is `film` (the default) and there is no `voice.perBeatStyle`; remove per-beat `style`. Re-record the whole take.                       |
+| It drifts over a long take      | Shorten `voice.style` to 2–6 words. Remove anything like "maintain the same voice". Consider a designed voice.                                                 |
+| Flat                            | The words are flat. Add fragments, one question, a pause before the reveal, and put the stressed word last. Then try a livelier voice before a stronger style. |
+| Too theatrical                  | Remove tags, soften the style ("clear, conversational"), and pick a neutral voice (Charon, Schedar).                                                           |
+| A direction was read aloud      | It was in the text. Move it to a tag or the style.                                                                                                             |
+| One line reads wrong            | Change that line's punctuation or word order and re-record the take. Don't patch in a single-line take.                                                        |
+| Beat cuts land mid-word         | Install Whisper (`align --whisper`) so the take is split on measured words. Give each beat a clear full stop.                                                  |

@@ -2,7 +2,7 @@
 
 ClearFrame's harness gives directors a stable boundary for running native production work: submit a job, inspect its state and evidence, and cancel it. The browser studio and its OpenCode agent use the same production commands. A future director can use this boundary without replacing the renderer or taking ownership of the film's editorial records.
 
-The first durable slice is the existing studio job queue. SQLite stores local job state and lifecycle events; Effect provides a small schema, operation and resource boundary. Storyboards, source media, revisions, decisions and render receipts keep their existing project formats. The pipeline's rendered and checked artifacts remain the evidence for a film.
+The first durable slice is the existing studio job queue. SQLite stores local job state and lifecycle events; Effect provides runtime decoding, structured errors and scoped services for the ledger, process runner and agent boundary. Storyboards, source media, revisions, decisions and render receipts keep their existing project formats. The pipeline's rendered and checked artifacts remain the evidence for a film.
 
 ## Ownership
 
@@ -20,7 +20,7 @@ A completed process is not a human acceptance decision. A persisted job is not a
 
 ## Durable job contract
 
-The public `createJobHarness` export from `clearframe/harness` (`engine/harness.mjs`) is independent of a model provider. The studio's `createStudioJobs` entry point remains a compatibility wrapper. The adapter retains its existing request validation, sound approval checks, preview cache and native CLI execution.
+The public `createJobHarness` export from `clearframe/harness` (`packages/engine/src/engine/harness.mts`) is independent of a model provider. The studio's `createStudioJobs` entry point remains a compatibility wrapper. The adapter retains its existing request validation, sound approval checks, preview cache and native CLI execution.
 
 | Operation | Contract |
 | --- | --- |
@@ -53,9 +53,9 @@ Paid narration and music keep their content-bound approval and budget checks. Re
 
 ## Runtime and Effect scope
 
-The harness requires Node.js 22.13 or newer (23.x requires 23.4+) and uses the built-in `node:sqlite` `DatabaseSync` API. No separate SQLite native add-on is needed. The [Node 22.13 SQLite documentation](https://nodejs.org/download/release/v22.13.0/docs/api/sqlite.html) describes the synchronous connection and prepared-statement APIs used at this boundary.
+The harness requires Node.js 22.19 or newer (23.x requires 23.4+) to satisfy the HTTP runtime dependencies, and uses the built-in `node:sqlite` `DatabaseSync` API. No separate SQLite native add-on is needed. The [Node 22.19 SQLite documentation](https://nodejs.org/download/release/v22.19.0/docs/api/sqlite.html) describes the synchronous connection and prepared-statement APIs used at this boundary.
 
-Effect is pinned to `4.0.0-rc.112`, matching the exact peer version required by the installed OpenCode packages. Its first role is schema validation, structured operation errors and scoped resource management around the ledger. This is a deliberate compatibility pin rather than a claim that this is the latest Effect release. Native frame evaluation and existing production commands keep their current execution paths.
+Effect is pinned to `4.0.1`, matching the exact peer version required by the installed OpenCode packages. It supplies schema validation, structured operation errors and scoped resource management for the ledger, process runner and agent integration. This is a deliberate compatibility pin rather than a claim that this is the latest Effect release. Native frame evaluation and existing production commands keep their current execution paths.
 
 The official Effect SQLite Node adapter is a possible later consolidation, not a requirement for this slice. Its [documented Node floor is 22.16](https://github.com/Effect-TS/effect/blob/main/packages/sql/sqlite-node/README.md), because it imports `sqlite.backup()`. A future switch must preserve stored-schema compatibility, transaction behavior and the public job contract; changing a library does not supply recovery semantics by itself.
 
@@ -87,7 +87,7 @@ ADK provides a useful architectural reference: sessions retain conversation even
 
 The relevant lesson for ClearFrame is to separate conversation identity, invocation identity, persisted job state and artifact identity. A rendering tool needs its own repeat-execution and output-reconciliation policy even when an agent framework can resume its conversation.
 
-ADK is a reference rather than an imported dependency here. Its [Apache-2.0 source license](https://github.com/google/adk-python/blob/main/LICENSE) is outside this project's current MIT-only import policy. Effect's [license at the pinned release](https://github.com/Effect-TS/effect/blob/effect%404.0.0-rc.112/LICENSE) is MIT. No ADK, HyperFrames or Remotion source is copied into the harness.
+ADK is a reference rather than an imported dependency here. Its [Apache-2.0 source license](https://github.com/google/adk-python/blob/main/LICENSE) is outside this project's current MIT-only import policy. Effect's [license at the pinned release](https://github.com/Effect-TS/effect/blob/effect%404.0.1/LICENSE) is MIT. No ADK, HyperFrames or Remotion source is copied into the harness.
 
 ## Recovery verification
 

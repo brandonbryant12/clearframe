@@ -1,6 +1,6 @@
 # Expectations and information dates
 
-`engine/lib/expectations.mjs` prepares auditable native chart inputs. Its lifecycle is prototype.
+`packages/engine/src/engine/lib/expectations.mts` prepares auditable native chart inputs. Its lifecycle is prototype.
 
 ## Available information
 

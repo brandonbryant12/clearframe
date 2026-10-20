@@ -46,7 +46,7 @@ Declare it in the storyboard, then generate:
 ```bash
 clearframe plan <dir>      # shows ≈ cost
 clearframe images <dir>    # → assets/img/<id>.jpg (+ .json with prompt & model), cached by hash
-node skills/gemini-image/scripts/image.mjs --prompt "…" --aspect 16:9 --size 2K --out out.jpg [--ref style.jpg] [--dry-run]
+node packages/engine/dist/skills/gemini-image/scripts/image.mjs --prompt "…" --aspect 16:9 --size 2K --out out.jpg [--ref style.jpg] [--dry-run]
 ```
 Reference it from an `image` block (`"props": {"asset": "paper"}`); add `"drift": true` for a slow push-in and `"fit": "cover"` to fill the frame. Titles stay native text on top of or beside the plate.
 

@@ -33,7 +33,7 @@ Backdrops in the catalog: none, grid, paper — all drawn natively.
 
 ## Blocks
 
-32 blocks, each drawn as a display list (`scene/native/src/blocks/`); `stage` beats are native stages under the block's heading.
+32 blocks, each drawn as a display list (`packages/engine/src/scene/native/src/blocks/`); `stage` beats are native stages under the block's heading.
 
 The block gallery (`clearframe gallery`, every catalog example, landscape and vertical); PSNR per block against the FFFrames-era gallery.
 
@@ -85,7 +85,7 @@ The block gallery (`clearframe gallery`, every catalog example, landscape and ve
 
 ## Sketches
 
-38 public sketches expand into canvas elements in `film/sketches.mjs` and are drawn by the canvas block. The sketch gallery (`clearframe gallery DIR --sketches`, landscape), PSNR per sketch against the FFFrames-era gallery:
+38 public sketches expand into canvas elements in `packages/engine/src/film/sketches.mts` and are drawn by the canvas block. The sketch gallery (`clearframe gallery DIR --sketches`, landscape), PSNR per sketch against the FFFrames-era gallery:
 
 | Sketch | Landscape (dB) |
 | --- | --- |

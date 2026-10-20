@@ -1,4 +1,10 @@
 node_modules/
+# Checked workspace output and local build state.
+**/dist/
+**/.dist-*/
+**/.turbo/
+**/.cache/
+*.tsbuildinfo
 **/build/
 # Leftovers of the retired FFFrames layout (its build cache and paired comparison renders).
 /fframes/
@@ -22,8 +28,8 @@ archive/comparison/examples/paired/assets/vo/
 archive/comparison/examples/paired/assets/music/
 
 # Variable sources for the display voices are fetched by scene/native/tools/generate-fonts.py, hash-checked, not committed.
-film/assets/fonts/source/*
-!film/assets/fonts/source/Inter.ttf
+packages/engine/src/film/assets/fonts/source/*
+!packages/engine/src/film/assets/fonts/source/Inter.ttf
 
 # Reproducible Python bytecode from procedural recipe inspection.
 __pycache__/

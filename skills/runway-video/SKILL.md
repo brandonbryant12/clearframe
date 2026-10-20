@@ -20,7 +20,7 @@ Set `RUNWAYML_API_SECRET` (a key from dev.runway.com). Select it per asset by mo
 ```bash
 clearframe plan <dir>                       # credit estimate per clip
 clearframe clips <dir> --only approach --budget 3
-node skills/runway-video/scripts/runway.mjs --prompt "…" --image first.png --last last.png --seconds 5 --dry-run
+node packages/engine/dist/skills/runway-video/scripts/runway.mjs --prompt "…" --image first.png --last last.png --seconds 5 --dry-run
 ```
 
 One reference is the opening frame; two are the opening and closing keyframes (Seedance only). Clip audio is never generated (`audio: false`) because the film keeps one shared mix.

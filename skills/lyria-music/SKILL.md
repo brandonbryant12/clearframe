@@ -21,7 +21,7 @@ Music gives a professional film warmth and pace, if it stays **under** the voice
 clearframe music <dir> --draft   # free synthesized pad, for timing and mix checks
 clearframe plan <dir>            # ≈ $0.08
 clearframe music <dir>           # → assets/music/bed.mp3 (+ bed.json with prompt and model notes)
-node skills/lyria-music/scripts/music.mjs --style "…" --bpm 80 --key "D major" --seconds 60 --section "0:00-0:08|sparse intro" --dry-run
+node packages/engine/dist/skills/lyria-music/scripts/music.mjs --style "…" --bpm 80 --key "D major" --seconds 60 --section "0:00-0:08|sparse intro" --dry-run
 ```
 **The engine writes the structure for you.** It groups beats by `chapter`, converts them to timestamps (`[0:00 - 0:09] Intro: …`), asks for about the film's length plus 2 s, adds "Instrumental only, no vocals" and a mix note ("sits under a spoken voiceover"), and asks for a clean ending on a sustained chord. Override per chapter with `music.arc` or fully with `music.sections`.
 

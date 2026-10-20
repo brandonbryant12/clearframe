@@ -16,4 +16,4 @@ It began as nine slide-like scenes, each a heading over a graphic. Four rounds w
 - **Land on the words.** Each camera move starts as the previous line ends and arrives by the new line's first word. Far buildings (`depth: 0.55`) give parallax. The opening's 7°C bracket fades while the chart plays and re-draws on "Seven" in the callback.
 - **Tidy while away.** Labels that would clutter a later wide shot leave at an `exitAt` after their beat ends, while the camera is elsewhere.
 
-Regenerate with `python3 make.py`. Then run `node engine/cli.mjs draft DIR` from the repository root with this folder as DIR.
+Regenerate with `python3 make.py`. Then run `pnpm cf draft DIR` from the repository root with this folder as DIR.

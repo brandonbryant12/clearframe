@@ -1,7 +1,7 @@
 // Native integration checks. Run after the Node contract suite.
 import fs from 'node:fs';
 import path from 'node:path';
-import { writeGallery } from '../film/playbooks.mjs';
+import { writeGallery } from '../packages/engine/dist/film/playbooks.mjs';
 import {
   checkProject,
   sheetProject,
@@ -10,27 +10,34 @@ import {
   lookbookProject,
   buildScene,
   run,
-} from '../film/production.mjs';
-import { SCENE, sceneEnv } from '../scene/engine.mjs';
-import { reviewProject } from '../engine/lib/review.mjs';
-import { blockByName } from '../film/catalog.mjs';
-import { writeJSON, ffmpeg } from '../engine/lib/util.mjs';
+} from '../packages/engine/dist/film/production.mjs';
+import { SCENE, sceneEnv } from '../packages/engine/dist/scene/engine.mjs';
+import { reviewProject } from '../packages/engine/dist/engine/lib/review.mjs';
+import { blockByName } from '../packages/engine/dist/film/catalog.mjs';
+import { writeJSON, ffmpeg } from '../packages/engine/dist/engine/lib/util.mjs';
 const out = path.resolve(process.argv[2] ?? 'build/native-verified');
-if (fs.existsSync(out)) throw new Error('Verification output exists; retain or move it before rerunning.');
+if (fs.existsSync(out))
+  throw new Error(
+    'Verification output exists; retain or move it before rerunning.',
+  );
 fs.mkdirSync(out, { recursive: true });
 const reports = [];
 await buildScene();
-await run('cargo', [
-  'test',
-  '--manifest-path',
-  path.join(SCENE, 'native/Cargo.toml'),
-  '--release',
-  '--locked',
-  '--jobs',
-  '1',
-  '--',
-  '--test-threads=2',
-], { env: sceneEnv() });
+await run(
+  'cargo',
+  [
+    'test',
+    '--manifest-path',
+    path.join(SCENE, 'native/Cargo.toml'),
+    '--release',
+    '--locked',
+    '--jobs',
+    '1',
+    '--',
+    '--test-threads=2',
+  ],
+  { env: sceneEnv() },
+);
 for (const [name, vertical, theme] of [
   ['landscape', false, 'paper'],
   ['vertical', true, 'ink'],
@@ -55,16 +62,34 @@ for (const [name, vertical, theme] of [
   ]);
   const check = await checkProject(dir, { draft: true });
   if (check.errors.length) throw new Error(check.errors.join('\n'));
-  await sheetProject(dir, { draft: true, per: 1, columns: 4, thumb: vertical ? 240 : 440 });
+  await sheetProject(dir, {
+    draft: true,
+    per: 1,
+    columns: 4,
+    thumb: vertical ? 240 : 440,
+  });
   reports.push({ name, check });
   if (!vertical) {
-    const sb = JSON.parse(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8'));
+    const sb = JSON.parse(
+      fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8'),
+    );
     const transitions = ['cut', 'fade', 'rise', 'wipe', 'push', 'zoom'];
-    sb.beats.forEach((b, i) => (b.transition = transitions[i % transitions.length]));
+    sb.beats.forEach(
+      (b, i) => (b.transition = transitions[i % transitions.length]),
+    );
     writeJSON(path.join(dir, 'storyboard.json'), sb);
-    reports.push({ name: 'all-blocks-render', report: await renderProject(dir, { draft: true, noAudio: true }) });
-    reports.push({ name: 'encoded-boundaries', path: await reviewProject(dir) });
-    reports.push({ name: 'palette-comparison', path: await lookbookProject(dir, { beat: 'flow', draft: true }) });
+    reports.push({
+      name: 'all-blocks-render',
+      report: await renderProject(dir, { draft: true, noAudio: true }),
+    });
+    reports.push({
+      name: 'encoded-boundaries',
+      path: await reviewProject(dir),
+    });
+    reports.push({
+      name: 'palette-comparison',
+      path: await lookbookProject(dir, { beat: 'flow', draft: true }),
+    });
   }
 }
 for (const [name, preset] of [
@@ -74,10 +99,14 @@ for (const [name, preset] of [
   const source = path.join(out, 'vertical'),
     dir = path.join(out, name);
   fs.mkdirSync(dir);
-  const sb = JSON.parse(fs.readFileSync(path.join(source, 'storyboard.json'), 'utf8'));
-  fs.cpSync(path.join(source, 'assets'), path.join(dir, 'assets'), { recursive: true });
+  const sb = JSON.parse(
+    fs.readFileSync(path.join(source, 'storyboard.json'), 'utf8'),
+  );
+  fs.cpSync(path.join(source, 'assets'), path.join(dir, 'assets'), {
+    recursive: true,
+  });
   sb.format = { preset, fps: 25 };
-  sb.beats = sb.beats.filter(b =>
+  sb.beats = sb.beats.filter((b) =>
     [
       'bars',
       'kpis',
@@ -118,7 +147,12 @@ writeJSON(path.join(compact, 'storyboard.json'), {
       id: 'b',
       block: 'stat',
       duration: 2.2,
-      props: { value: 60, suffix: ' fps', label: 'Frame rate', source: 'Synthetic verification' },
+      props: {
+        value: 60,
+        suffix: ' fps',
+        label: 'Frame rate',
+        source: 'Synthetic verification',
+      },
     },
   ],
 });
@@ -134,9 +168,19 @@ writeJSON(path.join(lengths, 'storyboard.json'), {
   music: false,
   captions: false,
   sources: [],
-  beats: [{ id: 'a', block: 'statement', duration: 451 / 30, props: { text: 'Every frame survives muxing' } }],
+  beats: [
+    {
+      id: 'a',
+      block: 'statement',
+      duration: 451 / 30,
+      props: { text: 'Every frame survives muxing' },
+    },
+  ],
 });
-reports.push({ name: 'final-frame-451', report: await renderProject(lengths, { noAudio: true }) });
+reports.push({
+  name: 'final-frame-451',
+  report: await renderProject(lengths, { noAudio: true }),
+});
 for (const preset of ['landscape', 'vertical']) {
   const dir = path.join(out, `dense-${preset}`);
   fs.mkdirSync(dir);
@@ -171,14 +215,22 @@ for (const preset of ['landscape', 'vertical']) {
         id: 'flow-six',
         block: 'flow',
         duration: 5,
-        props: { title: 'Six connected observations', nodes: items.slice(0, 6), source },
+        props: {
+          title: 'Six connected observations',
+          nodes: items.slice(0, 6),
+          source,
+        },
       },
     ],
   };
   writeJSON(path.join(dir, 'storyboard.json'), sb);
   const check = await checkProject(dir);
   if (check.errors.length) throw new Error(check.errors.join('\n'));
-  await sheetProject(dir, { per: 2, columns: 2, thumb: preset === 'vertical' ? 300 : 500 });
+  await sheetProject(dir, {
+    per: 2,
+    columns: 2,
+    thumb: preset === 'vertical' ? 300 : 500,
+  });
   reports.push({ name: `dense-${preset}`, check });
 }
 const speech = path.resolve('build/speech-smoke');
@@ -186,19 +238,32 @@ if (fs.existsSync(speech)) {
   const check = await checkProject(speech);
   if (check.errors.length) throw new Error(check.errors.join('\n'));
   const report = await renderProject(speech);
-  reports.push({ name: 'measured-speech-final', check, report, review: await reviewProject(speech) });
+  reports.push({
+    name: 'measured-speech-final',
+    check,
+    report,
+    review: await reviewProject(speech),
+  });
   const captions = path.join(out, 'captions');
   fs.mkdirSync(captions);
-  fs.cpSync(path.join(speech, 'assets'), path.join(captions, 'assets'), { recursive: true });
-  const sb = JSON.parse(fs.readFileSync(path.join(speech, 'storyboard.json'), 'utf8'));
+  fs.cpSync(path.join(speech, 'assets'), path.join(captions, 'assets'), {
+    recursive: true,
+  });
+  const sb = JSON.parse(
+    fs.readFileSync(path.join(speech, 'storyboard.json'), 'utf8'),
+  );
   sb.beats = sb.beats.slice(0, 1);
   sb.beats[0].block = 'title';
-  sb.beats[0].props = { text: 'Let the voice lead', support: 'A native caption follows the recording.' };
+  sb.beats[0].props = {
+    text: 'Let the voice lead',
+    support: 'A native caption follows the recording.',
+  };
   sb.captions = true;
   sb.theme = 'porcelain';
   writeJSON(path.join(captions, 'storyboard.json'), sb);
   const captionCheck = await checkProject(captions);
-  if (captionCheck.errors.length) throw new Error(captionCheck.errors.join('\n'));
+  if (captionCheck.errors.length)
+    throw new Error(captionCheck.errors.join('\n'));
   const captionReport = await renderProject(captions);
   await stillProject(captions, { at: 0.35 });
   reports.push({

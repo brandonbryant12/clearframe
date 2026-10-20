@@ -3,21 +3,60 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { BLOCKS, normalizeProps, palette, precision } from '../film/catalog.mjs';
-import { playbooks, scaffold, storyboardFor } from '../film/playbooks.mjs';
-import { createJob, missingGlyph } from '../film/production.mjs';
-import { THEMES, findPhrase } from '../film/catalog.mjs';
-import { wireframePNG } from '../film/wireframe.mjs';
-import { computeTiming, findWord, toSRT } from '../engine/lib/timing.mjs';
-import { loadStoryboard, validateStoryboard } from '../engine/lib/project.mjs';
-import { pcmToWav, writeJSON, hashOf } from '../engine/lib/util.mjs';
-import { normalizeWords, validateWords, activeWord, audioHash } from '../engine/lib/word-timing.mjs';
-import { alignSpeech, transcriptionRequest, transcribeSpeech } from '../engine/lib/speech.mjs';
-import { clipSpec } from '../engine/lib/continuity.mjs';
-import * as omni from '../skills/gemini-omni/scripts/omni.mjs';
-import { fileName, downloadVideo, uploadAudio } from '../engine/lib/google-files.mjs';
-import { ICONS, ICON_SOURCE } from '../film/icons.mjs';
-import { reviewSamples, reviewProject } from '../engine/lib/review.mjs';
+import {
+  BLOCKS,
+  normalizeProps,
+  palette,
+  precision,
+} from '../packages/engine/dist/film/catalog.mjs';
+import {
+  playbooks,
+  scaffold,
+  storyboardFor,
+} from '../packages/engine/dist/film/playbooks.mjs';
+import {
+  createJob,
+  missingGlyph,
+} from '../packages/engine/dist/film/production.mjs';
+import { THEMES, findPhrase } from '../packages/engine/dist/film/catalog.mjs';
+import { wireframePNG } from '../packages/engine/dist/film/wireframe.mjs';
+import {
+  computeTiming,
+  findWord,
+  toSRT,
+} from '../packages/engine/dist/engine/lib/timing.mjs';
+import {
+  loadStoryboard,
+  validateStoryboard,
+} from '../packages/engine/dist/engine/lib/project.mjs';
+import {
+  pcmToWav,
+  writeJSON,
+  hashOf,
+} from '../packages/engine/dist/engine/lib/util.mjs';
+import {
+  normalizeWords,
+  validateWords,
+  activeWord,
+  audioHash,
+} from '../packages/engine/dist/engine/lib/word-timing.mjs';
+import {
+  alignSpeech,
+  transcriptionRequest,
+  transcribeSpeech,
+} from '../packages/engine/dist/engine/lib/speech.mjs';
+import { clipSpec } from '../packages/engine/dist/engine/lib/continuity.mjs';
+import * as omni from '../packages/engine/dist/skills/gemini-omni/scripts/omni.mjs';
+import {
+  fileName,
+  downloadVideo,
+  uploadAudio,
+} from '../packages/engine/dist/engine/lib/google-files.mjs';
+import { ICONS, ICON_SOURCE } from '../packages/engine/dist/film/icons.mjs';
+import {
+  reviewSamples,
+  reviewProject,
+} from '../packages/engine/dist/engine/lib/review.mjs';
 import crypto from 'node:crypto';
 
 function project(t, sb) {
@@ -35,38 +74,56 @@ test('all 32 catalog examples (31 blocks and the stage) validate in landscape an
       assert.equal(JSON.stringify(b.example), before);
     }
 });
-test('every playbook compiles to a native job without paid assets, slide chrome or custom code, and each arc is distinct', t => {
+test('every playbook compiles to a native job without paid assets, slide chrome or custom code, and each arc is distinct', (t) => {
   const arcs = new Set();
   for (const p of playbooks()) {
     const root = project(t, storyboardFor(p.id)),
       sb = loadStoryboard(root),
       result = createJob(sb, computeTiming(root), { draft: true });
     assert.deepEqual(result.errors, [], p.id);
-    assert.ok(result.job.beats.every(b => b.frames > 0));
+    assert.ok(result.job.beats.every((b) => b.frames > 0));
     assert.equal(result.job.chrome, false);
     // All-canvas films differ by what they draw, not by block names.
     arcs.add(
       result.job.beats
-        .map(b => (b.block === 'canvas' ? `canvas[${b.props.elements.length}]` : b.block))
+        .map((b) =>
+          b.block === 'canvas' ? `canvas[${b.props.elements.length}]` : b.block,
+        )
         .join(','),
     );
     assert.equal(sb.assets.length, 0);
   }
   assert.equal(arcs.size, playbooks().length);
 });
-test('graphic contracts reject unknown assets and invalid phase clocks while preserving cue controls', t => {
+test('graphic contracts reject unknown assets and invalid phase clocks while preserving cue controls', (t) => {
   assert.equal(
     normalizeProps(
       'flow',
-      { nodes: [{ label: 'Start' }, { label: 'End' }], orientation: 'horizontal' },
+      {
+        nodes: [{ label: 'Start' }, { label: 'End' }],
+        orientation: 'horizontal',
+      },
       { vertical: true },
     ).orientation,
     'vertical',
   );
-  assert.throws(() => normalizeProps('flow', { nodes: [{ icon: 'nonexistent', label: 'Bad' }, { label: 'Fine' }] }), /unknown icon/);
-  assert.throws(() => normalizeProps('list', { items: ['a', 'b'] }), /retired: a list of takeaways is a slide/);
   assert.throws(
-    () => normalizeProps('cycle', { nodes: [{ label: 'A' }, { label: 'B' }, { label: 'C' }], period: 0 }),
+    () =>
+      normalizeProps('flow', {
+        nodes: [{ icon: 'nonexistent', label: 'Bad' }, { label: 'Fine' }],
+      }),
+    /unknown icon/,
+  );
+  assert.throws(
+    () => normalizeProps('list', { items: ['a', 'b'] }),
+    /retired: a list of takeaways is a slide/,
+  );
+  assert.throws(
+    () =>
+      normalizeProps('cycle', {
+        nodes: [{ label: 'A' }, { label: 'B' }, { label: 'C' }],
+        period: 0,
+      }),
     /period/,
   );
   assert.throws(
@@ -98,7 +155,7 @@ test('graphic contracts reject unknown assets and invalid phase clocks while pre
     ],
   });
   assert.deepEqual(
-    p.phases.map(p => p.scale),
+    p.phases.map((p) => p.scale),
     ['expand', 'contract'],
   );
   const sb = storyboardFor('concept-explainer');
@@ -119,16 +176,22 @@ test('graphic contracts reject unknown assets and invalid phase clocks while pre
     result = createJob(loadStoryboard(root), computeTiming(root));
   assert.deepEqual(result.errors, []);
   assert.deepEqual(
-    result.job.beats[0].props.nodes.map(n => n.at),
+    result.job.beats[0].props.nodes.map((n) => n.at),
     [0.25, 2],
   );
 });
 test('all bundled icon bytes match the MIT source manifest', () => {
   assert.equal(ICONS.length, 133);
   assert.equal(ICON_SOURCE.license, 'MIT');
-  const dir = new URL('../film/assets/icons/tabler/', import.meta.url),
+  const dir = new URL(
+      '../packages/engine/dist/film/assets/icons/tabler/',
+      import.meta.url,
+    ),
     manifest = JSON.parse(fs.readFileSync(new URL('manifest.json', dir)));
-  assert.match(fs.readFileSync(new URL('LICENSE', dir), 'utf8'), /^MIT License/);
+  assert.match(
+    fs.readFileSync(new URL('LICENSE', dir), 'utf8'),
+    /^MIT License/,
+  );
   for (const f of manifest.files)
     assert.equal(
       crypto
@@ -139,20 +202,27 @@ test('all bundled icon bytes match the MIT source manifest', () => {
       f.file,
     );
 });
-test('dense automatic arrivals finish before the last frame; late authored cues fail', t => {
+test('dense automatic arrivals finish before the last frame; late authored cues fail', (t) => {
   const sb = storyboardFor('concept-explainer');
   sb.beats = [
     {
       id: 'dense',
       block: 'flow',
       duration: 1.5,
-      props: { nodes: Array.from({ length: 6 }, (_, i) => ({ icon: 'leaf', label: `Leaf ${i}` })) },
+      props: {
+        nodes: Array.from({ length: 6 }, (_, i) => ({
+          icon: 'leaf',
+          label: `Leaf ${i}`,
+        })),
+      },
     },
   ];
   let root = project(t, sb),
     r = createJob(loadStoryboard(root), computeTiming(root));
   assert.deepEqual(r.errors, []);
-  assert.ok(r.job.beats[0].props.nodes.every(it => it.at + 0.55 <= 1.5 - 1 / 30));
+  assert.ok(
+    r.job.beats[0].props.nodes.every((it) => it.at + 0.55 <= 1.5 - 1 / 30),
+  );
   sb.beats[0].props.nodes[5].say = 1.4;
   root = project(t, sb);
   r = createJob(loadStoryboard(root), computeTiming(root));
@@ -160,37 +230,49 @@ test('dense automatic arrivals finish before the last frame; late authored cues 
   delete sb.beats[0].props.nodes[5].say;
   sb.beats[0].duration = 0.2;
   root = project(t, sb);
-  assert.match(createJob(loadStoryboard(root), computeTiming(root)).errors.join(), /too short/);
+  assert.match(
+    createJob(loadStoryboard(root), computeTiming(root)).errors.join(),
+    /too short/,
+  );
   sb.beats[0].duration = 1.5;
   sb.beats[0].props.land = 0.9;
   root = project(t, sb);
   r = createJob(loadStoryboard(root), computeTiming(root));
   assert.deepEqual(r.errors, []);
   assert.ok(
-    r.job.beats[0].props.nodes.every(it => it.at === 0.9),
+    r.job.beats[0].props.nodes.every((it) => it.at === 0.9),
     'An explicit scene cue must never move earlier',
   );
   sb.beats[0].props.land = 1.1;
   root = project(t, sb);
-  assert.match(createJob(loadStoryboard(root), computeTiming(root)).errors.join(), /Scene cue is too late/);
+  assert.match(
+    createJob(loadStoryboard(root), computeTiming(root)).errors.join(),
+    /Scene cue is too late/,
+  );
 });
 test('encoded review samples both sides of cuts and uses end-exclusive word frames', () => {
   const timing = {
     fps: 30,
     frames: 90,
     beats: [
-      { id: 'a', start: 0, end: 1, vo: { words: [{ w: 'Hi', t0: 0.105, t1: 0.401 }] } },
+      {
+        id: 'a',
+        start: 0,
+        end: 1,
+        vo: { words: [{ w: 'Hi', t0: 0.105, t1: 0.401 }] },
+      },
       { id: 'b', start: 1, end: 3 },
     ],
   };
   const samples = reviewSamples(timing),
-    frames = samples.map(s => s.frame);
-  for (const f of [0, 3, 4, 12, 13, 29, 30, 89]) assert.ok(frames.includes(f), `frame ${f}`);
+    frames = samples.map((s) => s.frame);
+  for (const f of [0, 3, 4, 12, 13, 29, 30, 89])
+    assert.ok(frames.includes(f), `frame ${f}`);
   assert.equal(new Set(frames).size, frames.length);
-  assert.ok(samples.every(s => s.frame >= 0 && s.frame < 90));
+  assert.ok(samples.every((s) => s.frame >= 0 && s.frame < 90));
   assert.throws(() => reviewSamples(timing, { beat: 'missing' }), /No beat/);
 });
-test('encoded review refuses a video whose receipt no longer matches its bytes', async t => {
+test('encoded review refuses a video whose receipt no longer matches its bytes', async (t) => {
   const root = project(t, storyboardFor('concept-explainer')),
     file = path.join(root, 'build/video.mp4');
   fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -198,7 +280,7 @@ test('encoded review refuses a video whose receipt no longer matches its bytes',
   writeJSON(`${file}.json`, { outputSha256: 'stale' });
   await assert.rejects(reviewProject(root), /Video changed/);
 });
-test('scaffold refuses to overwrite a project', t => {
+test('scaffold refuses to overwrite a project', (t) => {
   const dir = project(t, storyboardFor('podcast-clip'));
   assert.throws(() => scaffold(dir), /not empty/);
 });
@@ -210,7 +292,11 @@ test('palettes accept scoped hex overrides and reject typos', () => {
 });
 test('chart contracts preserve suffix precision, zero scales, and configurable focus', () => {
   assert.equal(precision(1e-7), 7);
-  assert.equal(normalizeProps('stat', { value: 12.4, suffix: ' ms', label: 'Delay' }).decimals, 1);
+  assert.equal(
+    normalizeProps('stat', { value: 12.4, suffix: ' ms', label: 'Delay' })
+      .decimals,
+    1,
+  );
   const b = normalizeProps('bars', {
     data: [
       { label: 'A', value: 0 },
@@ -246,19 +332,38 @@ test('chart contracts preserve suffix precision, zero scales, and configurable f
     /cover/,
   );
   assert.equal(
-    normalizeProps('delta', { from: { value: 0, label: 'Before' }, to: { value: 3, label: 'After' } }).change,
+    normalizeProps('delta', {
+      from: { value: 0, label: 'Before' },
+      to: { value: 3, label: 'After' },
+    }).change,
     'From zero',
   );
 });
-test('native rejects legacy scenes, unknown props, and missing numeric sources', t => {
+test('native rejects legacy scenes, unknown props, and missing numeric sources', (t) => {
   const sb = storyboardFor('concept-explainer');
-  sb.beats = [{ id: 'bad', block: 'stat', duration: 3, props: { value: 3, label: 'Count' } }];
+  sb.beats = [
+    {
+      id: 'bad',
+      block: 'stat',
+      duration: 3,
+      props: { value: 3, label: 'Count' },
+    },
+  ];
   let root = project(t, sb);
-  assert.match(createJob(loadStoryboard(root), computeTiming(root)).errors.join(), /source/);
+  assert.match(
+    createJob(loadStoryboard(root), computeTiming(root)).errors.join(),
+    /source/,
+  );
   sb.beats = [{ id: 'bad', scene: 'scenes/custom.js', duration: 3 }];
   root = project(t, sb);
-  assert.match(createJob(loadStoryboard(root), computeTiming(root)).errors.join(), /retired/);
-  assert.throws(() => normalizeProps('stat', { value: 1, sufix: 'k' }), /unsupported/);
+  assert.match(
+    createJob(loadStoryboard(root), computeTiming(root)).errors.join(),
+    /retired/,
+  );
+  assert.throws(
+    () => normalizeProps('stat', { value: 1, sufix: 'k' }),
+    /unsupported/,
+  );
 });
 test('input validation rejects path-like asset ids, invalid durations and negative leads', () => {
   assert.ok(
@@ -287,7 +392,12 @@ test('spoken cues match complete words, not prefixes or empty punctuation', () =
 });
 test('word import accepts native, WhisperX, and Gemini REST annotations', () => {
   const expected = [{ w: 'Hello', t0: 0.1, t1: 0.4 }];
-  assert.deepEqual(normalizeWords({ segments: [{ words: [{ word: 'Hello', start: 0.1, end: 0.4 }] }] }), expected);
+  assert.deepEqual(
+    normalizeWords({
+      segments: [{ words: [{ word: 'Hello', start: 0.1, end: 0.4 }] }],
+    }),
+    expected,
+  );
   assert.deepEqual(
     normalizeWords({
       steps: [
@@ -296,7 +406,14 @@ test('word import accepts native, WhisperX, and Gemini REST annotations', () => 
           content: [
             {
               type: 'text',
-              annotations: [{ type: 'word_info', text: 'Hello', start_offset: '0.100s', end_offset: '0.400s' }],
+              annotations: [
+                {
+                  type: 'word_info',
+                  text: 'Hello',
+                  start_offset: '0.100s',
+                  end_offset: '0.400s',
+                },
+              ],
             },
           ],
         },
@@ -314,8 +431,14 @@ test('alignment never hides missing words, overlaps, or stale transcripts', () =
   assert.deepEqual(validateWords(w, ['Hello', 'world'], 1), w);
   assert.throws(() => validateWords(w, ['Hello'], 1), /mismatch/);
   assert.throws(() => validateWords(w, ['Goodbye', 'world'], 1), /mismatch/);
-  assert.throws(() => validateWords([{ ...w[0], t1: 0.501 }, w[1]], ['Hello', 'world'], 1), /Invalid/);
-  assert.throws(() => normalizeWords({ segments: [{ text: 'Hello', start: 0, end: 1 }] }), /No word/);
+  assert.throws(
+    () => validateWords([{ ...w[0], t1: 0.501 }, w[1]], ['Hello', 'world'], 1),
+    /Invalid/,
+  );
+  assert.throws(
+    () => normalizeWords({ segments: [{ text: 'Hello', start: 0, end: 1 }] }),
+    /No word/,
+  );
 });
 test('word selection is end-exclusive, gap-aware, and stable under backward seeks', () => {
   const w = [
@@ -331,17 +454,31 @@ test('word selection is end-exclusive, gap-aware, and stable under backward seek
     [0, -1],
   ])
     assert.equal(activeWord(w, time), index);
-  assert.doesNotMatch(toSRT([{ start: 0, end: 0.4, text: 'Hello' }]), /00:00:00,550/);
+  assert.doesNotMatch(
+    toSRT([{ start: 0, end: 0.4, text: 'Hello' }]),
+    /00:00:00,550/,
+  );
 });
-test('final kinetic rejects estimates, accepts measured words, then rejects replaced audio', t => {
+test('final kinetic rejects estimates, accepts measured words, then rejects replaced audio', (t) => {
   const sb = storyboardFor('podcast-clip');
-  sb.beats = [{ id: 'speech', block: 'kinetic', vo: 'Hello world', props: { mode: 'highlight' } }];
+  sb.beats = [
+    {
+      id: 'speech',
+      block: 'kinetic',
+      vo: 'Hello world',
+      props: { mode: 'highlight' },
+    },
+  ];
   const root = project(t, sb),
     vo = path.join(root, 'assets/vo');
   fs.mkdirSync(vo, { recursive: true });
   const file = path.join(vo, 'speech.wav');
   fs.writeFileSync(file, pcmToWav(Buffer.alloc(48000)));
-  writeJSON(path.join(vo, 'speech.json'), { textHash: hashOf('Hello world'), provider: 'imported', duration: 1 });
+  writeJSON(path.join(vo, 'speech.json'), {
+    textHash: hashOf('Hello world'),
+    provider: 'imported',
+    duration: 1,
+  });
   let result = createJob(loadStoryboard(root), computeTiming(root));
   assert.match(result.errors.join(), /measured/);
   alignSpeech(root, {
@@ -360,7 +497,7 @@ test('final kinetic rejects estimates, accepts measured words, then rejects repl
   result = createJob(loadStoryboard(root), computeTiming(root));
   assert.match(result.errors.join(), /audio changed/);
 });
-test('a final native job preserves quantized timing and known word boundaries', t => {
+test('a final native job preserves quantized timing and known word boundaries', (t) => {
   const sb = storyboardFor('concept-explainer');
   sb.beats = [
     { id: 'a', block: 'statement', duration: 1.111, props: { text: 'First' } },
@@ -375,23 +512,37 @@ test('a final native job preserves quantized timing and known word boundaries', 
     job.beats.reduce((n, b) => n + b.frames, 0),
   );
 });
-test('Omni request uses documented fields, MP4 URI delivery and reference order', t => {
+test('Omni request uses documented fields, MP4 URI delivery and reference order', (t) => {
   const dir = project(t, storyboardFor('concept-explainer'));
   const ref = path.join(dir, 'ref.png');
   fs.writeFileSync(ref, 'image');
-  const r = omni.buildRequest({ prompt: 'One continuous shot', refs: [ref], previousInteractionId: 'previous' });
+  const r = omni.buildRequest({
+    prompt: 'One continuous shot',
+    refs: [ref],
+    previousInteractionId: 'previous',
+  });
   assert.equal(r.model, 'gemini-omni-1.1-flash');
   assert.equal(r.input[0].type, 'image');
   assert.equal(r.previous_interaction_id, 'previous');
-  assert.deepEqual(r.response_format, { type: 'video', aspect_ratio: '16:9', resolution: '720p', delivery: 'uri' });
+  assert.deepEqual(r.response_format, {
+    type: 'video',
+    aspect_ratio: '16:9',
+    resolution: '720p',
+    delivery: 'uri',
+  });
   assert.equal(r.duration_seconds, undefined);
   assert.ok(omni.estimateCost({ seconds: 4 }) > 0.4);
   assert.throws(() => omni.estimateCost({ resolution: '4k' }), /720p/);
 });
-test('clip cache changes with palette, continuity instructions and reference bytes', t => {
+test('clip cache changes with palette, continuity instructions and reference bytes', (t) => {
   const root = project(t, storyboardFor('concept-explainer')),
     sb = loadStoryboard(root),
-    a = { id: 'plate', prompt: 'A quiet room', image: 'reference.png', seconds: 4 };
+    a = {
+      id: 'plate',
+      prompt: 'A quiet room',
+      image: 'reference.png',
+      seconds: 4,
+    };
   fs.writeFileSync(path.join(root, 'reference.png'), 'one');
   const before = clipSpec(root, sb, a);
   assert.match(before.prompt, /No written words/);
@@ -404,25 +555,36 @@ test('transcription request nests word timestamps under verbatim mode', () => {
   const r = transcriptionRequest('files/speech');
   assert.equal(r.model, 'gemini-3.5-transcribe');
   assert.deepEqual(r.generation_config, {
-    transcription_config: { mode: { type: 'verbatim', timestamp_granularities: ['word'] } },
+    transcription_config: {
+      mode: { type: 'verbatim', timestamp_granularities: ['word'] },
+    },
   });
 });
-test('Google file names reject foreign hosts and prevent credential forwarding', async t => {
+test('Google file names reject foreign hosts and prevent credential forwarding', async (t) => {
   assert.throws(() => fileName('https://evil.test/files/a'), /Untrusted/);
-  assert.equal(fileName('https://generativelanguage.googleapis.com/v1beta/files/a:download?alt=media'), 'files/a');
+  assert.equal(
+    fileName(
+      'https://generativelanguage.googleapis.com/v1beta/files/a:download?alt=media',
+    ),
+    'files/a',
+  );
   const calls = [];
   t.mock.method(globalThis, 'fetch', async (url, opts) => {
     calls.push({ url, opts });
-    if (calls.length === 1) return new Response(JSON.stringify({ state: 'ACTIVE' }));
+    if (calls.length === 1)
+      return new Response(JSON.stringify({ state: 'ACTIVE' }));
     if (calls.length === 2)
-      return new Response(null, { status: 302, headers: { location: 'https://storage.googleapis.com/signed-video' } });
+      return new Response(null, {
+        status: 302,
+        headers: { location: 'https://storage.googleapis.com/signed-video' },
+      });
     return new Response(Buffer.from('video'));
   });
   await downloadVideo('files/a', { key: 'test-only-key' });
   assert.equal(calls[0].opts.headers['x-goog-api-key'], 'test-only-key');
   assert.deepEqual(calls[2].opts.headers, {});
 });
-test('Omni handles inline REST output without a live paid call', async t => {
+test('Omni handles inline REST output without a live paid call', async (t) => {
   const data = Buffer.from([0, 0, 0, 24, ...Buffer.from('ftypisom')]);
   t.mock.method(
     globalThis,
@@ -435,41 +597,63 @@ test('Omni handles inline REST output without a live paid call', async t => {
           steps: [
             {
               type: 'model_output',
-              content: [{ type: 'video', mime_type: 'video/mp4', data: data.toString('base64') }],
+              content: [
+                {
+                  type: 'video',
+                  mime_type: 'video/mp4',
+                  data: data.toString('base64'),
+                },
+              ],
             },
           ],
         }),
       ),
   );
-  const r = await omni.generateVideo({ prompt: 'A quiet plate', key: 'test-only-key' });
+  const r = await omni.generateVideo({
+    prompt: 'A quiet plate',
+    key: 'test-only-key',
+  });
   assert.deepEqual(r.data, data);
   assert.equal(r.interactionId, 'mock');
 });
 
-test('draft generation preserves imported aligned recordings unless forced', async t => {
+test('draft generation preserves imported aligned recordings unless forced', async (t) => {
   const sb = storyboardFor('podcast-clip');
-  sb.beats = [{ id: 'speech', block: 'kinetic', vo: 'Hello', props: { mode: 'word' } }];
+  sb.beats = [
+    { id: 'speech', block: 'kinetic', vo: 'Hello', props: { mode: 'word' } },
+  ];
   const root = project(t, sb),
     dir = path.join(root, 'assets/vo');
   fs.mkdirSync(dir, { recursive: true });
   const file = path.join(dir, 'speech.wav');
   fs.writeFileSync(file, pcmToWav(Buffer.alloc(48000)));
-  writeJSON(path.join(dir, 'speech.json'), { provider: 'imported', textHash: hashOf('Hello'), duration: 1 });
+  writeJSON(path.join(dir, 'speech.json'), {
+    provider: 'imported',
+    textHash: hashOf('Hello'),
+    duration: 1,
+  });
   const hash = audioHash(file);
-  const { voice, plan } = await import('../engine/lib/generate.mjs');
+  const { voice, plan } =
+    await import('../packages/engine/dist/engine/lib/generate.mjs');
   await voice(root, { draft: true });
   assert.equal(audioHash(file), hash);
   assert.equal(plan(root).rows[0].cost, 0);
 });
 
-test('speech transcription uploads only the selected take, aligns it, and deletes the upload', async t => {
+test('speech transcription uploads only the selected take, aligns it, and deletes the upload', async (t) => {
   const sb = storyboardFor('podcast-clip');
-  sb.beats = [{ id: 'speech', block: 'kinetic', vo: 'Hello', props: { mode: 'word' } }];
+  sb.beats = [
+    { id: 'speech', block: 'kinetic', vo: 'Hello', props: { mode: 'word' } },
+  ];
   const root = project(t, sb),
     dir = path.join(root, 'assets/vo');
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'speech.wav'), pcmToWav(Buffer.alloc(48000)));
-  writeJSON(path.join(dir, 'speech.json'), { provider: 'imported', textHash: hashOf('Hello'), duration: 1 });
+  writeJSON(path.join(dir, 'speech.json'), {
+    provider: 'imported',
+    textHash: hashOf('Hello'),
+    duration: 1,
+  });
   const old = process.env.GEMINI_API_KEY;
   process.env.GEMINI_API_KEY = 'mock-speech-key';
   t.after(() => {
@@ -481,12 +665,18 @@ test('speech transcription uploads only the selected take, aligns it, and delete
     calls.push({ url, opts });
     if (url.endsWith('/upload/v1beta/files'))
       return new Response('{}', {
-        headers: { 'x-goog-upload-url': 'https://generativelanguage.googleapis.com/upload/test' },
+        headers: {
+          'x-goog-upload-url':
+            'https://generativelanguage.googleapis.com/upload/test',
+        },
       });
     if (url.endsWith('/upload/test'))
       return new Response(
         JSON.stringify({
-          file: { name: 'files/test', uri: 'https://generativelanguage.googleapis.com/v1beta/files/test' },
+          file: {
+            name: 'files/test',
+            uri: 'https://generativelanguage.googleapis.com/v1beta/files/test',
+          },
         }),
       );
     if (opts.method === 'DELETE') return new Response('{}');
@@ -500,7 +690,14 @@ test('speech transcription uploads only the selected take, aligns it, and delete
               content: [
                 {
                   type: 'text',
-                  annotations: [{ type: 'word_info', text: 'Hello', start_offset: '0.1s', end_offset: '0.9s' }],
+                  annotations: [
+                    {
+                      type: 'word_info',
+                      text: 'Hello',
+                      start_offset: '0.1s',
+                      end_offset: '0.9s',
+                    },
+                  ],
                 },
               ],
             },
@@ -516,22 +713,36 @@ test('speech transcription uploads only the selected take, aligns it, and delete
   assert.ok(fs.existsSync(path.join(dir, 'speech.transcription.json')));
   const count = calls.length;
   await transcribeSpeech(root, { beat: 'speech', budget: 0 });
-  assert.equal(calls.length, count, 'reuses measured timestamps without another paid request');
+  assert.equal(
+    calls.length,
+    count,
+    'reuses measured timestamps without another paid request',
+  );
 });
 
-test('upload refuses a redirecting or foreign resumable destination', async t => {
+test('upload refuses a redirecting or foreign resumable destination', async (t) => {
   const dir = project(t, storyboardFor('podcast-clip')),
     file = path.join(dir, 'take.wav');
   fs.writeFileSync(file, pcmToWav(Buffer.alloc(48000)));
   t.mock.method(
     globalThis,
     'fetch',
-    async () => new Response('{}', { headers: { 'x-goog-upload-url': 'https://unrelated.test/upload' } }),
+    async () =>
+      new Response('{}', {
+        headers: { 'x-goog-upload-url': 'https://unrelated.test/upload' },
+      }),
   );
   await assert.rejects(uploadAudio(file, { key: 'test' }), /Invalid resumable/);
 });
 
-const native = file => fs.readFileSync(new URL(`../scene/native/src/${file}`, import.meta.url), 'utf8');
+const native = (file) =>
+  fs.readFileSync(
+    new URL(
+      `../packages/engine/dist/scene/native/src/${file}`,
+      import.meta.url,
+    ),
+    'utf8',
+  );
 const job = (t, beats, extra = {}) => {
   const sb = { ...storyboardFor('concept-explainer'), ...extra, beats };
   const root = project(t, sb);
@@ -543,16 +754,25 @@ test('the renderer and catalog agree on every block name, and the fallback is pa
     ...native('blocks/mod.rs')
       .match(/pub const BLOCKS: &\[&str\] = &\[([\s\S]*?)\];/)[1]
       .matchAll(/"([a-z-]+)"/g),
-  ].map(m => m[1]);
-  assert.deepEqual([...rust].sort(), BLOCKS.map(b => b.name).sort());
+  ].map((m) => m[1]);
+  assert.deepEqual([...rust].sort(), BLOCKS.map((b) => b.name).sort());
   const fallback = [
     ...native('design.rs')
       .match(/const FALLBACK: \[&str; 8\] = \[([^\]]+)\]/)[1]
       .matchAll(/"(#[0-9a-f]{6})"/g),
   ];
   assert.deepEqual(
-    fallback.map(m => m[1]),
-    ['bg', 'surface', 'ink', 'muted', 'accent', 'accent2', 'positive', 'negative'].map(k => THEMES.paper[k]),
+    fallback.map((m) => m[1]),
+    [
+      'bg',
+      'surface',
+      'ink',
+      'muted',
+      'accent',
+      'accent2',
+      'positive',
+      'negative',
+    ].map((k) => THEMES.paper[k]),
   );
 });
 test('emphasis and highlight phrases must be whole words of the displayed text', () => {
@@ -560,14 +780,27 @@ test('emphasis and highlight phrases must be whole words of the displayed text',
   assert.equal(findPhrase('scattered', 'cat'), -1);
   assert.equal(findPhrase('a  long\ntail', 'long tail'), 2);
   assert.throws(
-    () => normalizeProps('statement', { text: 'Busy is not effective', emphasis: ['effect'] }),
+    () =>
+      normalizeProps('statement', {
+        text: 'Busy is not effective',
+        emphasis: ['effect'],
+      }),
     /whole words/,
   );
-  assert.throws(() => normalizeProps('highlight', { text: 'A long tail', phrases: ['short'] }), /whole words/);
-  assert.deepEqual(normalizeProps('highlight', { text: 'A long tail', phrases: ['long tail'] }).phrases, [
-    { text: 'long tail' },
-  ]);
-  assert.throws(() => normalizeProps('statement', { text: 'x', emphasis: [] }), /1–4/);
+  assert.throws(
+    () =>
+      normalizeProps('highlight', { text: 'A long tail', phrases: ['short'] }),
+    /whole words/,
+  );
+  assert.deepEqual(
+    normalizeProps('highlight', { text: 'A long tail', phrases: ['long tail'] })
+      .phrases,
+    [{ text: 'long tail' }],
+  );
+  assert.throws(
+    () => normalizeProps('statement', { text: 'x', emphasis: [] }),
+    /1–4/,
+  );
 });
 test('new blocks reject values that cannot be drawn honestly', () => {
   assert.throws(
@@ -600,7 +833,14 @@ test('new blocks reject values that cannot be drawn honestly', () => {
       }),
     /positive/,
   );
-  assert.throws(() => normalizeProps('annotate', { file: 'a.png', pins: [{ x: 1.2, y: 0.5, label: 'A' }] }), /0 to 1/);
+  assert.throws(
+    () =>
+      normalizeProps('annotate', {
+        file: 'a.png',
+        pins: [{ x: 1.2, y: 0.5, label: 'A' }],
+      }),
+    /0 to 1/,
+  );
   assert.throws(
     () =>
       normalizeProps('annotate', {
@@ -610,9 +850,17 @@ test('new blocks reject values that cannot be drawn honestly', () => {
       }),
     /inside/,
   );
-  assert.throws(() => normalizeProps('callout', { text: 'x', icon: 'nope' }), /unknown icon/);
   assert.throws(
-    () => normalizeProps('delta', { from: { value: 1 }, to: { value: 2 }, better: 'sideways' }),
+    () => normalizeProps('callout', { text: 'x', icon: 'nope' }),
+    /unknown icon/,
+  );
+  assert.throws(
+    () =>
+      normalizeProps('delta', {
+        from: { value: 1 },
+        to: { value: 2 },
+        better: 'sideways',
+      }),
     /up or down/,
   );
   assert.throws(
@@ -627,61 +875,113 @@ test('new blocks reject values that cannot be drawn honestly', () => {
       }),
     /column index/,
   );
-  assert.deepEqual(normalizeProps('checklist', { items: ['One', 'Two'] }).items, [{ text: 'One' }, { text: 'Two' }]);
-  assert.equal(normalizeProps('chapter', { text: 'Part one' }).title, 'Part one');
+  assert.deepEqual(
+    normalizeProps('checklist', { items: ['One', 'Two'] }).items,
+    [{ text: 'One' }, { text: 'Two' }],
+  );
+  assert.equal(
+    normalizeProps('chapter', { text: 'Part one' }).title,
+    'Part one',
+  );
 });
-test('each scene exits the way the next one enters, and the film ends on a fade', t => {
-  const beats = ['fade', 'cut', 'push', 'wipe', 'fade', 'panel'].map((transition, i) => ({
-    id: `b${i}`,
-    block: 'statement',
-    duration: 2,
-    transition,
-    props: { text: `Scene ${i}` },
-  }));
+test('each scene exits the way the next one enters, and the film ends on a fade', (t) => {
+  const beats = ['fade', 'cut', 'push', 'wipe', 'fade', 'panel'].map(
+    (transition, i) => ({
+      id: `b${i}`,
+      block: 'statement',
+      duration: 2,
+      transition,
+      props: { text: `Scene ${i}` },
+    }),
+  );
   const first = job(t, beats);
   assert.deepEqual(first.errors, []);
   // A push carries the outgoing scene off beside the next one and a wipe's edge crosses it held
   // whole, so the scene before either stays; a cut is a cut.
   assert.deepEqual(
-    first.job.beats.map(b => b.exit),
+    first.job.beats.map((b) => b.exit),
     ['none', 'none', 'none', 'fade', 'panel', 'fade'],
   );
   beats[5].exit = 'none';
   beats[0].exit = 'wipe';
   assert.deepEqual(
-    job(t, beats).job.beats.map(b => b.exit),
+    job(t, beats).job.beats.map((b) => b.exit),
     ['wipe', 'none', 'none', 'fade', 'panel', 'none'],
   );
   beats[1].exit = 'dissolve';
   assert.match(job(t, beats).errors.join(), /exit must be/);
   beats[1].exit = 'whip';
-  assert.match(job(t, beats).errors.join(), /exit "whip" was retired: .*use push/);
+  assert.match(
+    job(t, beats).errors.join(),
+    /exit "whip" was retired: .*use push/,
+  );
   delete beats[1].exit;
   beats[2].transition = 'rise';
-  assert.match(job(t, beats).errors.join(), /transition "rise" was retired: .*use cut/);
+  assert.match(
+    job(t, beats).errors.join(),
+    /transition "rise" was retired: .*use cut/,
+  );
   beats[2].transition = 'zoom';
-  assert.match(job(t, beats).errors.join(), /transition "zoom" was retired: .*into/);
+  assert.match(
+    job(t, beats).errors.join(),
+    /transition "zoom" was retired: .*into/,
+  );
 });
 
-test('a film cuts by default, and into goes through an element of the last canvas scene', t => {
-  const card = { type: 'rect', id: 'screen', x: 600, y: 200, w: 400, h: 300, fill: 'surface' };
+test('a film cuts by default, and into goes through an element of the last canvas scene', (t) => {
+  const card = {
+    type: 'rect',
+    id: 'screen',
+    x: 600,
+    y: 200,
+    w: 400,
+    h: 300,
+    fill: 'surface',
+  };
   const beats = [
-    { id: 'a', block: 'canvas', duration: 2, props: { elements: [{ type: 'group', x: 100, y: 50, children: [card] }] } },
-    { id: 'b', block: 'canvas', duration: 2, into: 'screen', props: { elements: [{ type: 'rect', x: 0, y: 0, w: 100, h: 100 }] } },
+    {
+      id: 'a',
+      block: 'canvas',
+      duration: 2,
+      props: { elements: [{ type: 'group', x: 100, y: 50, children: [card] }] },
+    },
+    {
+      id: 'b',
+      block: 'canvas',
+      duration: 2,
+      into: 'screen',
+      props: { elements: [{ type: 'rect', x: 0, y: 0, w: 100, h: 100 }] },
+    },
     { id: 'c', block: 'statement', duration: 2, props: { text: 'Next' } },
   ];
   const { job: j, errors } = job(t, beats);
   assert.deepEqual(errors, []);
-  assert.deepEqual(j.beats.map(b => b.transition), ['cut', 'into', 'cut'], 'cut unless told otherwise');
-  assert.deepEqual(j.beats[1].into, [700, 250, 400, 300], 'the element in frame pixels, through its group');
-  assert.equal(j.beats[0].exit, 'none', 'the scene gone through stays until the camera is through it');
+  assert.deepEqual(
+    j.beats.map((b) => b.transition),
+    ['cut', 'into', 'cut'],
+    'cut unless told otherwise',
+  );
+  assert.deepEqual(
+    j.beats[1].into,
+    [700, 250, 400, 300],
+    'the element in frame pixels, through its group',
+  );
+  assert.equal(
+    j.beats[0].exit,
+    'none',
+    'the scene gone through stays until the camera is through it',
+  );
   // An element that has moved by its keys is entered where it stands.
   beats[0].props.elements[0].keys = [{ at: 0.5, x: 200, y: -50 }];
-  assert.deepEqual(job(t, beats).job.beats[1].into, [900, 200, 400, 300], 'into follows the keyed move');
+  assert.deepEqual(
+    job(t, beats).job.beats[1].into,
+    [900, 200, 400, 300],
+    'into follows the keyed move',
+  );
   beats[1].into = 'nowhere';
   assert.match(job(t, beats).errors.join(), /into "nowhere" names no element/);
 });
-test('a beat that ends before its numbers finish counting fails, but drafts only warn', t => {
+test('a beat that ends before its numbers finish counting fails, but drafts only warn', (t) => {
   const sb = {
     ...storyboardFor('concept-explainer'),
     beats: [
@@ -703,7 +1003,7 @@ test('a beat that ends before its numbers finish counting fails, but drafts only
   const ok = project(t, sb);
   assert.deepEqual(createJob(loadStoryboard(ok), computeTiming(ok)).errors, []);
 });
-test('text the bundled fonts cannot draw fails with the character and its location', t => {
+test('text the bundled fonts cannot draw fails with the character and its location', (t) => {
   assert.equal(missingGlyph('Café — 42% → “ok” Ωμέγα Привет'), null);
   assert.equal(missingGlyph('Hello 東京'), '東');
   assert.equal(
@@ -712,43 +1012,76 @@ test('text the bundled fonts cannot draw fails with the character and its locati
     'invisible format characters render without boxes',
   );
   assert.equal(missingGlyph('launch 🚀'), '🚀');
-  const { errors } = job(t, [{ id: 'cjk', block: 'title', duration: 3, props: { text: '駅はどこですか' } }]);
+  const { errors } = job(t, [
+    {
+      id: 'cjk',
+      block: 'title',
+      duration: 3,
+      props: { text: '駅はどこですか' },
+    },
+  ]);
   assert.match(errors.join(), /U\+99C5.*cjk\.props\.text/);
   assert.deepEqual(
-    job(t, [{ id: 'ok', block: 'title', duration: 3, props: { text: 'Plain text', kicker: 'Überblick' } }]).errors,
+    job(t, [
+      {
+        id: 'ok',
+        block: 'title',
+        duration: 3,
+        props: { text: 'Plain text', kicker: 'Überblick' },
+      },
+    ]).errors,
     [],
   );
 });
-test('staged items of every sequence block fit inside their beat', t => {
+test('staged items of every sequence block fit inside their beat', (t) => {
   const { job: j, errors } = job(t, [
-    { id: 'list', block: 'checklist', duration: 2.4, props: { items: ['One', 'Two', 'Three', 'Four', 'Five', 'Six'] } },
+    {
+      id: 'list',
+      block: 'checklist',
+      duration: 2.4,
+      props: { items: ['One', 'Two', 'Three', 'Four', 'Five', 'Six'] },
+    },
   ]);
   assert.deepEqual(errors, []);
   const items = j.beats[0].props.items;
   assert.ok(
-    items.every(it => it.at + 0.55 <= 2.4 - 1 / 30 + 1e-9),
+    items.every((it) => it.at + 0.55 <= 2.4 - 1 / 30 + 1e-9),
     'every check completes before the cut',
   );
   assert.ok(items.every((it, i) => !i || it.at > items[i - 1].at));
   assert.ok(
-    items.every(it => !('say' in it)),
+    items.every((it) => !('say' in it)),
     'spoken cue words are resolved, not passed to the renderer',
   );
 });
 test('bundled font instances and their tabular figures match recorded provenance', () => {
-  const dir = new URL('../film/assets/fonts/', import.meta.url),
+  const dir = new URL(
+      '../packages/engine/dist/film/assets/fonts/',
+      import.meta.url,
+    ),
     provenance = JSON.parse(fs.readFileSync(new URL('provenance.json', dir)));
   const files = [
     ...provenance.files,
     ...provenance.staticInstances,
-    ...provenance.families.flatMap(f => [...f.files, ...(f.instances ?? [])]),
+    ...provenance.families.flatMap((f) => [...f.files, ...(f.instances ?? [])]),
   ];
-  assert.ok(provenance.staticInstances.some(f => f.family === 'Inter Display Figures'));
+  assert.ok(
+    provenance.staticInstances.some(
+      (f) => f.family === 'Inter Display Figures',
+    ),
+  );
   // Every display voice is a static instance of a pinned OFL source with a bundled notice.
   for (const f of provenance.families) {
     assert.equal(f.license, 'OFL-1.1', f.family);
-    assert.ok(f.files.some(x => /^OFL-.*\.txt$/.test(x.file)), `${f.family} notice`);
-    for (const i of f.instances ?? []) assert.ok(f.source.some(s => s.file === i.source), `${i.file} source`);
+    assert.ok(
+      f.files.some((x) => /^OFL-.*\.txt$/.test(x.file)),
+      `${f.family} notice`,
+    );
+    for (const i of f.instances ?? [])
+      assert.ok(
+        f.source.some((s) => s.file === i.source),
+        `${i.file} source`,
+      );
   }
   for (const f of files)
     assert.equal(
@@ -762,13 +1095,16 @@ test('bundled font instances and their tabular figures match recorded provenance
   const coverage = JSON.parse(fs.readFileSync(new URL('coverage.json', dir)));
   assert.deepEqual(
     coverage.fonts,
-    provenance.staticInstances.map(f => f.file),
+    provenance.staticInstances.map((f) => f.file),
   );
-  const families = JSON.parse(fs.readFileSync(new URL('coverage-families.json', dir)));
+  const families = JSON.parse(
+    fs.readFileSync(new URL('coverage-families.json', dir)),
+  );
   for (const f of provenance.families)
-    for (const i of f.instances ?? []) assert.ok(families.ranges[i.file], `${i.file} has glyph coverage`);
+    for (const i of f.instances ?? [])
+      assert.ok(families.ranges[i.file], `${i.file} has glyph coverage`);
 });
-test('placeholder screenshots are deterministic PNGs and scaffold with their playbook', t => {
+test('placeholder screenshots are deterministic PNGs and scaffold with their playbook', (t) => {
   const a = wireframePNG(THEMES.briefing),
     b = wireframePNG(THEMES.briefing);
   assert.ok(a.equals(b));
@@ -776,10 +1112,17 @@ test('placeholder screenshots are deterministic PNGs and scaffold with their pla
   assert.notDeepEqual(wireframePNG(THEMES.ink), a);
 });
 
-test('settle times include labels, and every beat tells the renderer when its values are final', t => {
+test('settle times include labels, and every beat tells the renderer when its values are final', (t) => {
   const sb = {
     ...storyboardFor('concept-explainer'),
-    beats: [{ id: 'trend', block: 'line', duration: 2, props: { series: [1, 2, 3], source: 'Sample' } }],
+    beats: [
+      {
+        id: 'trend',
+        block: 'line',
+        duration: 2,
+        props: { series: [1, 2, 3], source: 'Sample' },
+      },
+    ],
   };
   const root = project(t, sb);
   assert.match(
@@ -788,22 +1131,53 @@ test('settle times include labels, and every beat tells the renderer when its va
     'the final-value tip label must be visible before the cut',
   );
   const { job: j } = job(t, [
-    { id: 's', block: 'stat', duration: 4, props: { value: 3, label: 'Count', source: 'Sample' } },
-    { id: 'c', block: 'checklist', duration: 4, props: { items: ['One', 'Two'] } },
+    {
+      id: 's',
+      block: 'stat',
+      duration: 4,
+      props: { value: 3, label: 'Count', source: 'Sample' },
+    },
+    {
+      id: 'c',
+      block: 'checklist',
+      duration: 4,
+      props: { items: ['One', 'Two'] },
+    },
   ]);
-  assert.ok(j.beats.every(b => b.settle_seconds > 0 && b.settle_seconds <= b.frames / j.fps));
+  assert.ok(
+    j.beats.every(
+      (b) => b.settle_seconds > 0 && b.settle_seconds <= b.frames / j.fps,
+    ),
+  );
   assert.ok(
     j.beats[1].settle_seconds >= j.beats[1].props.items.at(-1).at + 0.4 - 1e-9,
     'the last tick finishes before the exit may start',
   );
 });
 test('props that would silently drop authored text are rejected', () => {
-  assert.throws(() => normalizeProps('statement', { title: 'Heading', text: 'Body' }), /not both/);
   assert.throws(
-    () => normalizeProps('highlight', { title: 'Heading', text: 'A long tail', phrases: ['tail'] }),
+    () => normalizeProps('statement', { title: 'Heading', text: 'Body' }),
+    /not both/,
+  );
+  assert.throws(
+    () =>
+      normalizeProps('highlight', {
+        title: 'Heading',
+        text: 'A long tail',
+        phrases: ['tail'],
+      }),
     /kicker/,
   );
-  assert.throws(() => normalizeProps('stat', { value: 1, label: 'x', context: 'a', support: 'b' }), /not both/);
+  assert.throws(
+    () =>
+      normalizeProps('stat', {
+        value: 1,
+        label: 'x',
+        context: 'a',
+        support: 'b',
+      }),
+    /not both/,
+  );
   for (const p of playbooks())
     for (const b of storyboardFor(p.id).beats)
       if (['title', 'statement', 'endcard'].includes(b.block))

@@ -12,20 +12,29 @@ import { spawnSync } from 'node:child_process';
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
 const BENCH = path.join(ROOT, 'build', 'bench');
 const args = process.argv.slice(2);
-const flag = name => args.includes(name);
-const opt = name => (args.includes(name) ? args[args.indexOf(name) + 1] : null);
+const flag = (name) => args.includes(name);
+const opt = (name) =>
+  args.includes(name) ? args[args.indexOf(name) + 1] : null;
 const round = opt('--round');
-const out = opt('--out') ?? path.join(BENCH, round ? `ENTERPRISE-${round}.md` : 'ENTERPRISE.md');
-const named = args.filter((a, i) => !a.startsWith('--') && !['--round', '--out'].includes(args[i - 1]));
+const out =
+  opt('--out') ??
+  path.join(BENCH, round ? `ENTERPRISE-${round}.md` : 'ENTERPRISE.md');
+const named = args.filter(
+  (a, i) => !a.startsWith('--') && !['--round', '--out'].includes(args[i - 1]),
+);
 const dirs = named.length
-  ? named.map(d => path.resolve(d))
+  ? named.map((d) => path.resolve(d))
   : fs
       .readdirSync(BENCH)
-      .filter(d => /^r\d+-/.test(d) && (!round || d.startsWith(`${round}-`)))
-      .map(d => path.join(BENCH, d))
-      .filter(d => fs.existsSync(path.join(d, 'storyboard.json')));
+      .filter((d) => /^r\d+-/.test(d) && (!round || d.startsWith(`${round}-`)))
+      .map((d) => path.join(BENCH, d))
+      .filter((d) => fs.existsSync(path.join(d, 'storyboard.json')));
 
-const cli = (...a) => spawnSync('node', [path.join(ROOT, 'engine', 'cli.mjs'), ...a], { encoding: 'utf8', cwd: ROOT });
+const cli = (...a) =>
+  spawnSync('node', [path.join(ROOT, 'apps/cli/dist/main.mjs'), ...a], {
+    encoding: 'utf8',
+    cwd: ROOT,
+  });
 const json = (...a) => {
   const r = cli(...a);
   try {
@@ -34,7 +43,7 @@ const json = (...a) => {
     return null;
   }
 };
-const read = f => {
+const read = (f) => {
   try {
     return JSON.parse(fs.readFileSync(f, 'utf8'));
   } catch {
@@ -43,17 +52,24 @@ const read = f => {
 };
 const newest = (dir, test) => {
   const hits = [];
-  const walk = d => {
-    for (const e of fs.existsSync(d) ? fs.readdirSync(d, { withFileTypes: true }) : []) {
+  const walk = (d) => {
+    for (const e of fs.existsSync(d)
+      ? fs.readdirSync(d, { withFileTypes: true })
+      : []) {
       const p = path.join(d, e.name);
-      if (e.isDirectory() && !['node_modules', 'review'].includes(e.name)) walk(p);
+      if (e.isDirectory() && !['node_modules', 'review'].includes(e.name))
+        walk(p);
       else if (test(e.name, p)) hits.push(p);
     }
   };
   walk(dir);
-  return hits.sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0] ?? null;
+  return (
+    hits.sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0] ??
+    null
+  );
 };
-const count = list => list.reduce((m, k) => ((m[k] = (m[k] ?? 0) + 1), m), {});
+const count = (list) =>
+  list.reduce((m, k) => ((m[k] = (m[k] ?? 0) + 1), m), {});
 const top = (m, n = 6) =>
   Object.entries(m)
     .sort((a, b) => b[1] - a[1])
@@ -61,32 +77,81 @@ const top = (m, n = 6) =>
     .map(([k, v]) => `${k}×${v}`)
     .join(' ');
 
-const rows = dirs.map(dir => {
+const rows = dirs.map((dir) => {
   const sb = read(path.join(dir, 'storyboard.json')) ?? {};
   const beats = sb.beats ?? [];
-  const blocks = count(beats.map(b => b.block));
-  const format = typeof sb.format === 'string' ? sb.format : sb.format?.preset ?? 'landscape';
+  const blocks = count(beats.map((b) => b.block));
+  const format =
+    typeof sb.format === 'string'
+      ? sb.format
+      : (sb.format?.preset ?? 'landscape');
   const devices = [];
-  if (beats.some(b => b.props?.world)) devices.push('world');
-  if (beats.some(b => b.props?.cast)) devices.push('cast');
-  if (beats.some(b => b.block === 'stage' || b.stage) || sb.stages?.length) devices.push('stage');
-  if (beats.some(b => b.props?.place || b.place)) devices.push('board');
-  if (beats.some(b => b.plate || b.props?.plates)) devices.push('plate');
-  if (beats.some(b => b.tone)) devices.push('tone');
-  if (beats.some(b => b.art)) devices.push('art');
-  if (beats.some(b => b.props?.graph || b.props?.accumulate || b.props?.estimate || b.props?.field)) devices.push('explain');
-  if (beats.some(b => b.props?.chart || b.props?.bars || b.props?.stat || ['bars', 'stat', 'line', 'kpis', 'waffle', 'donut', 'ring', 'delta'].includes(b.block)))
+  if (beats.some((b) => b.props?.world)) devices.push('world');
+  if (beats.some((b) => b.props?.cast)) devices.push('cast');
+  if (beats.some((b) => b.block === 'stage' || b.stage) || sb.stages?.length)
+    devices.push('stage');
+  if (beats.some((b) => b.props?.place || b.place)) devices.push('board');
+  if (beats.some((b) => b.plate || b.props?.plates)) devices.push('plate');
+  if (beats.some((b) => b.tone)) devices.push('tone');
+  if (beats.some((b) => b.art)) devices.push('art');
+  if (
+    beats.some(
+      (b) =>
+        b.props?.graph ||
+        b.props?.accumulate ||
+        b.props?.estimate ||
+        b.props?.field,
+    )
+  )
+    devices.push('explain');
+  if (
+    beats.some(
+      (b) =>
+        b.props?.chart ||
+        b.props?.bars ||
+        b.props?.stat ||
+        [
+          'bars',
+          'stat',
+          'line',
+          'kpis',
+          'waffle',
+          'donut',
+          'ring',
+          'delta',
+        ].includes(b.block),
+    )
+  )
     devices.push('chart');
-  if ((sb.assets ?? []).some(a => /\.(mp4|mov|webm)$/i.test(a.file ?? '') || a.kind === 'clip')) devices.push('footage');
-  const transitions = count(beats.map(b => b.transition ?? sb.transition ?? 'default'));
+  if (
+    (sb.assets ?? []).some(
+      (a) => /\.(mp4|mov|webm)$/i.test(a.file ?? '') || a.kind === 'clip',
+    )
+  )
+    devices.push('footage');
+  const transitions = count(
+    beats.map((b) => b.transition ?? sb.transition ?? 'default'),
+  );
   const critique = json('critique', dir, '--json');
-  const mp4 = newest(dir, (n, p) => n.endsWith('.mp4') && !p.includes(`${path.sep}qa${path.sep}`));
+  const mp4 = newest(
+    dir,
+    (n, p) => n.endsWith('.mp4') && !p.includes(`${path.sep}qa${path.sep}`),
+  );
   let qa = null;
-  const qaFile = newest(dir, n => n === 'qa.json');
-  if (flag('--qa') && mp4 && (!qaFile || fs.statSync(qaFile).mtimeMs < fs.statSync(mp4).mtimeMs)) cli('qa', dir, '--video', mp4);
-  qa = read(newest(dir, n => n === 'qa.json') ?? '') ?? null;
+  const qaFile = newest(dir, (n) => n === 'qa.json');
+  if (
+    flag('--qa') &&
+    mp4 &&
+    (!qaFile || fs.statSync(qaFile).mtimeMs < fs.statSync(mp4).mtimeMs)
+  )
+    cli('qa', dir, '--video', mp4);
+  qa = read(newest(dir, (n) => n === 'qa.json') ?? '') ?? null;
   const runlog = json('runlog', dir, '--json');
-  const words = beats.map(b => b.vo ?? '').join(' ').split(/\s+/).filter(Boolean).length;
+  const words = beats
+    .map((b) => b.vo ?? '')
+    .join(' ')
+    .split(/\s+/)
+    .filter(Boolean).length;
   return {
     name: path.basename(dir),
     dir: path.relative(ROOT, dir),
@@ -95,21 +160,25 @@ const rows = dirs.map(dir => {
     theme: sb.theme ?? '-',
     treatment: sb.treatment ?? '-',
     type: sb.type ?? '-',
-    motion: typeof sb.motion === 'string' ? sb.motion : sb.motion?.preset ?? '-',
+    motion:
+      typeof sb.motion === 'string' ? sb.motion : (sb.motion?.preset ?? '-'),
     beats: beats.length,
     words,
     blocks,
     devices,
     transitions,
     film: critique?.summary?.film ?? null,
-    warnings: (critique?.findings ?? []).filter(f => f.level === 'warn' && f.where !== 'check').map(f => `${f.where}: ${f.message}`),
+    warnings: (critique?.findings ?? [])
+      .filter((f) => f.level === 'warn' && f.where !== 'check')
+      .map((f) => `${f.where}: ${f.message}`),
     mp4: mp4 ? path.relative(ROOT, mp4) : null,
     seconds: qa?.summary?.seconds ?? critique?.summary?.seconds ?? null,
     change: qa?.summary?.changePerSecond ?? null,
     held: qa?.summary?.heldSeconds ?? null,
     commands: runlog?.commands ?? null,
     failed: runlog?.failed ?? null,
-    minutes: runlog?.wallMs != null ? Math.round(runlog.wallMs / 6000) / 10 : null,
+    minutes:
+      runlog?.wallMs != null ? Math.round(runlog.wallMs / 6000) / 10 : null,
     trajectory: fs.existsSync(path.join(dir, 'TRAJECTORY.md')),
   };
 });
@@ -121,7 +190,7 @@ const lines = [
   '',
   '| Film | Format | Look | Beats | Words | Blocks | Devices | Cinema | Change/s | Held s | Cmds (failed) | Min | Log |',
   '|---|---|---|---|---|---|---|---|---|---|---|---|---|',
-  ...rows.map(r =>
+  ...rows.map((r) =>
     [
       r.name,
       r.format,
@@ -136,23 +205,48 @@ const lines = [
       r.commands != null ? `${r.commands} (${r.failed})` : '—',
       r.minutes ?? '—',
       r.trajectory ? 'yes' : 'no',
-    ].join(' | ').replace(/^/, '| ').replace(/$/, ' |'),
+    ]
+      .join(' | ')
+      .replace(/^/, '| ')
+      .replace(/$/, ' |'),
   ),
   '',
   '## Sameness across films',
   '',
-  `- Palettes: ${top(count(rows.map(r => r.theme)), 12)}`,
-  `- Treatments: ${top(count(rows.map(r => r.treatment)), 12)}`,
-  `- Type voices: ${top(count(rows.map(r => r.type)), 12)}`,
-  `- Blocks: ${top(rows.reduce((m, r) => (Object.entries(r.blocks).forEach(([k, v]) => (m[k] = (m[k] ?? 0) + v)), m), {}), 14)}`,
-  `- Devices: ${top(count(rows.flatMap(r => r.devices)), 12)}`,
-  `- Transitions: ${top(rows.reduce((m, r) => (Object.entries(r.transitions).forEach(([k, v]) => (m[k] = (m[k] ?? 0) + v)), m), {}), 10)}`,
+  `- Palettes: ${top(count(rows.map((r) => r.theme)), 12)}`,
+  `- Treatments: ${top(count(rows.map((r) => r.treatment)), 12)}`,
+  `- Type voices: ${top(count(rows.map((r) => r.type)), 12)}`,
+  `- Blocks: ${top(
+    rows.reduce(
+      (m, r) => (
+        Object.entries(r.blocks).forEach(([k, v]) => (m[k] = (m[k] ?? 0) + v)),
+        m
+      ),
+      {},
+    ),
+    14,
+  )}`,
+  `- Devices: ${top(count(rows.flatMap((r) => r.devices)), 12)}`,
+  `- Transitions: ${top(
+    rows.reduce(
+      (m, r) => (
+        Object.entries(r.transitions).forEach(
+          ([k, v]) => (m[k] = (m[k] ?? 0) + v),
+        ),
+        m
+      ),
+      {},
+    ),
+    10,
+  )}`,
   '',
-  ...rows.flatMap(r => [
+  ...rows.flatMap((r) => [
     `## ${r.name}: ${r.title}`,
     '',
     `- ${r.dir} · ${r.mp4 ?? 'no film rendered'}`,
-    ...(r.warnings.length ? r.warnings.slice(0, 8).map(w => `- ! ${w}`) : ['- critique: no warnings']),
+    ...(r.warnings.length
+      ? r.warnings.slice(0, 8).map((w) => `- ! ${w}`)
+      : ['- critique: no warnings']),
     '',
   ]),
 ];

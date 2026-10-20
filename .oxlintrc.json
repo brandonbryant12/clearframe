@@ -1,0 +1,148 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "import",
+    "typescript",
+    "oxc"
+  ],
+  "jsPlugins": [
+    {
+      "name": "sonarjs",
+      "specifier": "eslint-plugin-sonarjs"
+    },
+    {
+      "name": "clearframe",
+      "specifier": "./tools/lint/index.ts"
+    }
+  ],
+  "categories": {
+    "correctness": "error"
+  },
+  "env": {
+    "builtin": true
+  },
+  "ignorePatterns": [
+    "**/.cache/**",
+    "**/.output/**",
+    "**/.turbo/**",
+    "**/build/**",
+    "**/coverage/**",
+    "**/dist/**",
+    "vendor/**"
+  ],
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "process",
+            "importNames": [
+              "env"
+            ],
+            "message": "Validate environment configuration at the engine boundary."
+          }
+        ]
+      }
+    ],
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "max-depth": [
+      "error",
+      {
+        "max": 4
+      }
+    ],
+    "max-lines": [
+      "error",
+      {
+        "max": 350
+      }
+    ],
+    "max-lines-per-function": [
+      "error",
+      {
+        "max": 260,
+        "skipBlankLines": true,
+        "skipComments": true
+      }
+    ],
+    "max-statements": [
+      "error",
+      {
+        "max": 80
+      }
+    ],
+    "import/no-duplicates": "error",
+    "no-nested-ternary": "error",
+    "sonarjs/anchor-precedence": "error",
+    "sonarjs/cognitive-complexity": [
+      "error",
+      15
+    ],
+    "sonarjs/no-nested-conditional": "error",
+    "sonarjs/no-nested-functions": [
+      "error",
+      {
+        "threshold": 4
+      }
+    ],
+    "sonarjs/regex-complexity": [
+      "error",
+      {
+        "threshold": 20
+      }
+    ],
+    "typescript/consistent-type-imports": "error",
+    "clearframe/no-chained-type-assertions": "error",
+    "clearframe/no-known-value-widening": "error",
+    "clearframe/no-object-parameters": "error",
+    "clearframe/no-reflect-apply": "error",
+    "clearframe/no-reflect-get": "error",
+    "clearframe/no-shape-in-symbol-names": "error",
+    "clearframe/no-unknown-type-aliases": "error",
+    "clearframe/no-widen-then-assert": "error"
+  },
+  "overrides": [
+    {
+      "files": [
+        "tools/lint/**/*.ts"
+      ],
+      "rules": {
+        "clearframe/no-chained-type-assertions": "off",
+        "clearframe/no-known-value-widening": "off",
+        "clearframe/no-object-parameters": "off",
+        "clearframe/no-reflect-apply": "off",
+        "clearframe/no-reflect-get": "off",
+        "clearframe/no-shape-in-symbol-names": "off",
+        "clearframe/no-unknown-type-aliases": "off",
+        "clearframe/no-widen-then-assert": "off",
+        "max-lines": "off",
+        "no-nested-ternary": "off",
+        "sonarjs/cognitive-complexity": "off",
+        "sonarjs/no-nested-conditional": "off"
+      }
+    },
+    {
+      "files": [
+        "**/*.test.{ts,mts,mjs}",
+        "**/*.spec.{ts,mts,mjs}",
+        "**/__tests__/**/*.{ts,mts}",
+        "**/fixtures/**/*.{ts,mts}"
+      ],
+      "rules": {
+        "clearframe/no-chained-type-assertions": "off",
+        "clearframe/no-known-value-widening": "off",
+        "max-lines": "off",
+        "max-lines-per-function": "off",
+        "max-statements": "off"
+      }
+    }
+  ]
+}

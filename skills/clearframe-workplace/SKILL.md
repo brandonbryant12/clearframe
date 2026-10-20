@@ -18,7 +18,7 @@ From the source document, write in `DIRECTION.md`:
 ## 2. Scaffold
 
 ```
-node engine/cli.mjs start DIR --document SOURCE.md --playbook PLAYBOOK --treatment workplace --length SECONDS --audience "…" --takeaway "…"
+pnpm cf start DIR --document SOURCE.md --playbook PLAYBOOK --treatment workplace --length SECONDS --audience "…" --takeaway "…"
 ```
 
 `start` copies the source document into the project (`source/`) and lists every figure in it in `EVIDENCE.md`; `critique` then names any figure you typed (a word, a chart value, a sketch number) that the document never states, and `draft` says when the film falls well short of the length asked for (a short film usually dropped the brief's facts). With no document, `new DIR --treatment workplace --playbook PLAYBOOK --length SECONDS`.
@@ -27,7 +27,7 @@ Playbooks: `benefit-explainer` (a benefit and how to use it: a match, a share pl
 
 ## 3. One picture per fact
 
-Each fact gets the mechanism that shows it. These are sketches: fill `sketchText` (words from the source), `sketchSay` (the narration word each moment lands on) and `sketchParams` (the figures). `node engine/cli.mjs sketch NAME` prints the beat to paste with every slot named.
+Each fact gets the mechanism that shows it. These are sketches: fill `sketchText` (words from the source), `sketchSay` (the narration word each moment lands on) and `sketchParams` (the figures). `pnpm cf sketch NAME` prints the beat to paste with every slot named.
 
 | The fact says… | Picture | Fill |
 |---|---|---|
@@ -81,7 +81,7 @@ One idea per beat, written for the ear: short sentences, figures as digits, the 
 ## 5. Draft and read the verdict
 
 ```
-node engine/cli.mjs draft DIR
+pnpm cf draft DIR
 ```
 
 It ends with a **motion verdict** that starts READY or NOT READY (a NOT READY draft exits with code 2). **The film is done only when it says READY**: a NOT READY film is not handed over, whatever the time box, and the verdict lists each edit (each is one change to one beat): the stillest beats and what to land on which words, the beats that are only words (a single figure on a card counts: a `number` chart with one value is a stat card; step it through several spoken values or give the figure a picture) and the picture for each, objects standing on each other, the source's facts a short film never states, a voice over an empty frame, pictures too small for the frame, and a film well short of the length asked for. Under 20% still is a film; over 40% is narrated slides, whatever the film score says. A real reading hold (a figure people must read, the action) is fine: mark that beat `pace: "hold"`. Then open `build/sheet.png` and `build/qa/phone.png` and look at every frame. A longer film needs more pictures, not longer narration over the same ones: each added fact gets its own beat and picture.

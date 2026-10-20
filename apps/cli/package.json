@@ -1,0 +1,44 @@
+{
+  "name": "clearframe",
+  "version": "0.4.0",
+  "description": "Agent-directed motion graphics with a native Skia renderer.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "clearframe": "dist/main.mjs"
+  },
+  "exports": {
+    "./harness": {
+      "types": "./dist/runtime/engine/harness.d.mts",
+      "import": "./dist/runtime/engine/harness.mjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": "^22.19.0 || >=23.4.0"
+  },
+  "scripts": {
+    "build": "tsx ../../tools/workspace/cli.mts",
+    "typecheck": "tsx ../../tools/workspace/typecheck.mts",
+    "start": "node dist/main.mjs"
+  },
+  "dependencies": {
+    "@effect/platform-node": "catalog:",
+    "@opencode/cli": "catalog:",
+    "@opencode/client": "catalog:",
+    "@opencode/plugin": "catalog:",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/workspace": "workspace:*",
+    "@repo/engine": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript-7": "catalog:"
+  }
+}

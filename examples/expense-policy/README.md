@@ -10,7 +10,7 @@ A 35-second policy-change film made only from library pieces, and the worked exa
 | `window` | "And from January first, you have **thirty** days to do it, not sixty. After that, a **director** has to approve it." | Sixty days drawn to scale; the second thirty fall away and stay as an outline, 60 days is struck, 30 days lands; the note sits in the span that was cut | `was-now` (`was: 60, now: 30, note: true`) |
 | `close` | "**Thirty** days, an itemised **receipt**, the app. Then **none** of these come back." | The opening's 31 tiles again, then turned to the good colour as last year's figure steps back | `share` with `fix: true` |
 
-`node examples/expense-policy/build.mjs` writes `storyboard-landscape.json` and `storyboard-vertical.json` from one storyboard. Copy one into a project directory as `storyboard.json` and run `node engine/cli.mjs draft DIR`.
+`node examples/expense-policy/build.mjs` writes `storyboard-landscape.json` and `storyboard-vertical.json` from one storyboard. Copy one into a project directory as `storyboard.json` and run `pnpm cf draft DIR`.
 
 ## What to copy
 

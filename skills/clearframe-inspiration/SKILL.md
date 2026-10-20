@@ -5,7 +5,7 @@ description: Turn a video idea into a few distinct visual concepts and find the 
 
 # From an idea to pictures
 
-The library holds blocks, sketches, playbooks, palettes, type voices, cast objects in four looks, stage mechanisms and worked examples, each kept because it meets the bar in `library/README.md`. Don't tour it. Search it with the brief, offer a few distinct ideas, then open only the pieces the chosen idea needs.
+The library holds blocks, sketches, playbooks, palettes, type voices, cast objects in four looks, stage mechanisms and worked examples, each kept because it meets the bar in `packages/engine/src/library/README.md`. Don't tour it. Search it with the brief, offer a few distinct ideas, then open only the pieces the chosen idea needs.
 
 ## 1. Read the brief for three things
 
@@ -18,9 +18,9 @@ Infer them from the material and the wording. Ask only when the subject itself i
 ## 2. Search in plain words
 
 ```sh
-node engine/cli.mjs find "remind staff their FSA money expires in December"  # studio: clearframe_catalog topic find, query
-node engine/cli.mjs find "order delivery" --kind cast-shape,cast-look,example
-node engine/cli.mjs find --id cast-move:travel                               # studio: topic item, name KIND:NAME
+pnpm cf find "remind staff their FSA money expires in December"  # studio: clearframe_catalog topic find, query
+pnpm cf find "order delivery" --kind cast-shape,cast-look,example
+pnpm cf find --id cast-move:travel                               # studio: topic item, name KIND:NAME
 ```
 
 `find` returns a short, mixed shortlist. Each line says what the entry is and when it fits. Read the "when" before choosing.
@@ -69,10 +69,10 @@ What you can change, from lightest to deepest:
 | The words | `sketchText` fills a sketch's placeholder type. Cast objects take `label`, and blocks take their props. | `{"FIRST": "Stale logs"}` |
 | When things happen | `sketchSay` lands a sketch's named moments on narration words. Cast moves and canvas elements take `say`. | `{"ALL": "Lights"}` |
 | The look | `theme` (palette), `type`, the cast `look`, and the stage `material` (`dither`, `chrome`…) on a shape or a ground. | `"theme": "noir"` |
-| What is drawn | Copy the sketch's elements and edit them: other icons, fewer cards, other positions. In the studio, `clearframe_catalog` topic `sketch` (name, `sketchText`, `sketchSay`) returns the filled elements for the film's shape. In a build script, `sketch(name, preset, {text, say})` from `film/sketches.mjs` does the same. By hand, `node engine/cli.mjs sketch NAME [--vertical]` prints them. Put the result in `props.elements` (without `props.sketch`). | `sketch shortcut` |
+| What is drawn | Copy the sketch's elements and edit them: other icons, fewer cards, other positions. In the studio, `clearframe_catalog` topic `sketch` (name, `sketchText`, `sketchSay`) returns the filled elements for the film's shape. In a build script, `sketch(name, preset, {text, say})` from `packages/engine/src/film/sketches.mts` does the same. By hand, `pnpm cf sketch NAME [--vertical]` prints them. Put the result in `props.elements` (without `props.sketch`). | `sketch shortcut` |
 | How something behaves | The `graph`, `accumulate`, `estimate` and `field` props take a formula or a seed, not elements: change the formula, the domain, the labels and the cue words (`find --id mechanism:graph`, `clearframe-explain`). They are never data. | `examples/settling` |
 | Detail, then the whole | `place: [x, y]` draws each beat's picture as a panel of one `world`; the last beat's `view` takes them all in (`find --id mechanism:board`). It does not clip. | `find --id mechanism:board` |
-| A new reusable picture | A sketch module, or a JSON sketch in the project's `library/sketches/`, so other films can use it by name. | `library/README.md` |
+| A new reusable picture | A sketch module, or a JSON sketch in the project's `library/sketches/`, so other films can use it by name. | `packages/engine/src/library/README.md` |
 
 - **Start light.** Change words and cues first; copy elements only when the picture itself must change, such as a different number of things, different objects, or a different layout.
 - **Shapes.** A copied drawing is laid out for one frame shape, so copy it once per shape.

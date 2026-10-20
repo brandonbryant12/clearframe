@@ -3,8 +3,8 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { ingestRecording } from '../engine/lib/ingest.mjs';
-import { pcmToWav } from '../engine/lib/util.mjs';
+import { ingestRecording } from '../packages/engine/dist/engine/lib/ingest.mjs';
+import { pcmToWav } from '../packages/engine/dist/engine/lib/util.mjs';
 
 export const RATE = 48000;
 // [speaker, sentence, pause after (s)]
@@ -42,15 +42,25 @@ export function synthRecording(dir, script = SCRIPT) {
     });
   }
   const input = path.join(dir, 'input.wav');
-  fs.writeFileSync(input, pcmToWav(Buffer.concat(pieces), { sampleRate: RATE }));
+  fs.writeFileSync(
+    input,
+    pcmToWav(Buffer.concat(pieces), { sampleRate: RATE }),
+  );
   return { input, words };
 }
 
-export async function recordedProject(t, { dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-rec-')) } = {}) {
+export async function recordedProject(
+  t,
+  { dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-rec-')) } = {},
+) {
   t?.after(() => fs.rmSync(dir, { recursive: true, force: true }));
   const { input, words } = synthRecording(dir);
   const root = path.join(dir, 'film');
-  await ingestRecording(root, { audio: input, words: { words }, fps: 30, speakers: {} });
+  await ingestRecording(root, {
+    audio: input,
+    words: { words },
+    fps: 30,
+    speakers: {},
+  });
   return { root, input };
 }
-

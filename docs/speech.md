@@ -9,9 +9,9 @@ The renderer uses ordered, end-exclusive word intervals. Silence gaps remain gap
 For a whole recording, `ingest DIR --audio FILE` is the usual route (it splits the recording into beats and measures the words). To set one beat's speech by hand, create a project with a `kinetic` beat, then import its original recording, exact transcript and word file:
 
 ```sh
-node engine/cli.mjs new my-speech --playbook podcast-clip --vertical
-node engine/cli.mjs speech my-speech --beat hook --audio take.wav --transcript transcript.txt --words words.json
-node engine/cli.mjs sheet my-speech --draft
+pnpm cf new my-speech --playbook podcast-clip --vertical
+pnpm cf speech my-speech --beat hook --audio take.wav --transcript transcript.txt --words words.json
+pnpm cf sheet my-speech --draft
 ```
 
 Import converts to 48 kHz mono WAV without trimming silence. Offsets therefore retain their original clock. A word file can be an array, `{ "words": [...] }`, WhisperX `segments[].words`, or a Gemini REST response containing `word_info` annotations. Canonical format:
@@ -28,7 +28,7 @@ Alternatively, import only audio/transcript, then add timings with `align DIR --
 ## Transcribe the current take
 
 ```sh
-node engine/cli.mjs align my-speech --beat kinetic --transcribe --budget 0.10
+pnpm cf align my-speech --beat kinetic --transcribe --budget 0.10
 ```
 
 This explicitly calls `gemini-3.5-transcribe` in verbatim mode with word timestamps, using the Google Files API. It uploads only the selected recording and deletes the upload afterward where possible. The raw paid result is saved as `assets/vo/ID.transcription.json`, including on a transcript mismatch, so corrections do not require another call. Import a reviewed file with `align --words`. The local cost check is an estimate, not a provider billing cap.

@@ -23,4 +23,4 @@ A 38-second explanation built from two explanation primitives, `estimate` and `g
 - **Phone.** On the tall frame the third graph mark is labelled "sixteen" rather than "sixteen: half again". A long label on the curve's flat stretch rises to clear it and drifts away from its mark.
 - **Voice.** The storyboard asks for Charon, "warm, curious, measured", the treatment's provisional pick from published descriptions. The draft used the local OS voice; no synthesis was paid for.
 
-`node examples/settling/build.mjs` writes `storyboard-landscape.json` and `storyboard-vertical.json`. Copy one into a project directory as `storyboard.json` and run `node engine/cli.mjs draft DIR`.
+`node examples/settling/build.mjs` writes `storyboard-landscape.json` and `storyboard-vertical.json`. Copy one into a project directory as `storyboard.json` and run `pnpm cf draft DIR`.

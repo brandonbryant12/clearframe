@@ -2,7 +2,7 @@
 
 For storyboards, use [`props.distribution`](distribution-charts.md), which lays this model out in the editorial chart system. The builder below remains for scripted scenes.
 
-`distribution` in `film/distribution-data.mjs` counts supplied observations into explicit bins. `distributionScene` in `film/distributions.mjs` prepares a native histogram and exact observation strip, with optional threshold focus.
+`distribution` in `packages/engine/src/film/distribution-data.mts` counts supplied observations into explicit bins. `distributionScene` in `packages/engine/src/film/distributions.mts` prepares a native histogram and exact observation strip, with optional threshold focus.
 
 ```js
 import { distributionScene } from '../film/distributions.mjs';

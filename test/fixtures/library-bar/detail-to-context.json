@@ -1,735 +1,717 @@
 {
- "name": "detail-to-context",
- "reference": "Premium product films that open on a material detail and pull back to the place (the detail-to-place craft in issue 9); compare whether the detail is the point and the context arrives as the camera leaves it",
- "cases": [
-  {
-   "id": "wide",
-   "storyboard": "../../../examples/detail-to-context/storyboard.json",
-   "at": [
-    0.5,
-    1.2,
-    1.9,
-    3.3,
-    6.4,
-    9.8
-   ],
-   "takeaway": "The receipt lands (one named moment drives the drop, squash and settle), the camera opens on it and pulls back to the claim; the total is circled on its moment, then the next shot pushes in on the claim."
-  },
-  {
-   "id": "late-moment",
-   "storyboard": {
-    "version": 2,
-    "title": "From the line to the claim",
-    "format": {
-     "preset": "landscape",
-     "fps": 30
+  "name": "detail-to-context",
+  "reference": "Premium product films that open on a material detail and pull back to the place (the detail-to-place craft in issue 9); compare whether the detail is the point and the context arrives as the camera leaves it",
+  "cases": [
+    {
+      "id": "wide",
+      "storyboard": "../../../examples/detail-to-context/storyboard.json",
+      "at": [0.5, 1.2, 1.9, 3.3, 6.4, 9.8],
+      "takeaway": "The receipt lands (one named moment drives the drop, squash and settle), the camera opens on it and pulls back to the claim; the total is circled on its moment, then the next shot pushes in on the claim."
     },
-    "theme": "paper",
-    "type": "inter",
-    "camera": "none",
-    "texture": "none",
-    "captions": false,
-    "music": false,
-    "sfx": false,
-    "sources": [
-     {
-      "claim": "The receipt, the claim and its amounts are an illustrative example.",
-      "source": "Example claim for illustration"
-     }
-    ],
-    "beats": [
-     {
-      "id": "detail",
-      "block": "canvas",
-      "duration": 8,
-      "props": {
-       "source": "Example claim for illustration",
-       "moments": {
-        "LAND": {
-         "at": 1.6
+    {
+      "id": "late-moment",
+      "storyboard": {
+        "version": 2,
+        "title": "From the line to the claim",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
         },
-        "MARK": {
-         "at": 5.6
-        }
-       },
-       "reveal": {
-        "from": "rcpt",
-        "pad": 0.12,
-        "state": "end",
-        "at": 2.4,
-        "dur": 1.6
-       },
-       "elements": [
-        {
-         "id": "desk",
-         "type": "rect",
-         "x": 120,
-         "y": 180,
-         "w": 1680,
-         "h": 760,
-         "r": 24,
-         "fill": "surface",
-         "at": 0,
-         "enter": "none"
-        },
-        {
-         "id": "rcpt",
-         "type": "receipt",
-         "x": 260,
-         "y": 250,
-         "w": 520,
-         "size": 30,
-         "merchant": "City Taxi",
-         "detail": "12 Oct · 18:42",
-         "items": [
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
           {
-           "name": "Fare",
-           "price": 104
+            "claim": "The receipt, the claim and its amounts are an illustrative example.",
+            "source": "Example claim for illustration"
+          }
+        ],
+        "beats": [
+          {
+            "id": "detail",
+            "block": "canvas",
+            "duration": 8,
+            "props": {
+              "source": "Example claim for illustration",
+              "moments": {
+                "LAND": {
+                  "at": 1.6
+                },
+                "MARK": {
+                  "at": 5.6
+                }
+              },
+              "reveal": {
+                "from": "rcpt",
+                "pad": 0.12,
+                "state": "end",
+                "at": 2.4,
+                "dur": 1.6
+              },
+              "elements": [
+                {
+                  "id": "desk",
+                  "type": "rect",
+                  "x": 120,
+                  "y": 180,
+                  "w": 1680,
+                  "h": 760,
+                  "r": 24,
+                  "fill": "surface",
+                  "at": 0,
+                  "enter": "none"
+                },
+                {
+                  "id": "rcpt",
+                  "type": "receipt",
+                  "x": 260,
+                  "y": 250,
+                  "w": 520,
+                  "size": 30,
+                  "merchant": "City Taxi",
+                  "detail": "12 Oct · 18:42",
+                  "items": [
+                    {
+                      "name": "Fare",
+                      "price": 104
+                    },
+                    {
+                      "name": "Airport fee",
+                      "price": 16
+                    }
+                  ],
+                  "total": 120,
+                  "footer": "Example",
+                  "cue": "LAND",
+                  "enter": "drop",
+                  "dur": 0.5,
+                  "keys": [
+                    {
+                      "cue": "LAND",
+                      "after": 0.45,
+                      "dur": 0.12,
+                      "scaleY": 0.97
+                    },
+                    {
+                      "cue": "LAND",
+                      "after": 0.57,
+                      "dur": 0.2,
+                      "scaleY": 1
+                    }
+                  ],
+                  "marks": [
+                    {
+                      "words": "$120.00",
+                      "style": "circle",
+                      "cue": "MARK"
+                    }
+                  ]
+                },
+                {
+                  "id": "claim",
+                  "type": "app",
+                  "x": 900,
+                  "y": 250,
+                  "w": 800,
+                  "title": "Expenses",
+                  "heading": "New claim",
+                  "fields": [
+                    {
+                      "label": "Merchant",
+                      "value": "City Taxi",
+                      "at": 4.6
+                    },
+                    {
+                      "label": "Amount",
+                      "value": "$120.00",
+                      "at": 5.0
+                    }
+                  ],
+                  "button": {
+                    "label": "Submit"
+                  },
+                  "at": 4.1,
+                  "enter": "fade",
+                  "dur": 0.4
+                }
+              ]
+            }
           },
           {
-           "name": "Airport fee",
-           "price": 16
+            "id": "sent",
+            "block": "canvas",
+            "duration": 4,
+            "camera": {
+              "to": {
+                "on": "claim",
+                "pad": 0.06
+              },
+              "at": 0.5,
+              "dur": 1.4
+            },
+            "props": {
+              "source": "Example claim for illustration",
+              "elements": [
+                {
+                  "id": "desk",
+                  "type": "rect",
+                  "x": 120,
+                  "y": 180,
+                  "w": 1680,
+                  "h": 760,
+                  "r": 24,
+                  "fill": "surface",
+                  "at": 0,
+                  "enter": "none"
+                },
+                {
+                  "id": "claim",
+                  "type": "app",
+                  "x": 900,
+                  "y": 250,
+                  "w": 800,
+                  "title": "Expenses",
+                  "heading": "New claim",
+                  "fields": [
+                    {
+                      "label": "Merchant",
+                      "value": "City Taxi"
+                    },
+                    {
+                      "label": "Amount",
+                      "value": "$120.00"
+                    }
+                  ],
+                  "button": {
+                    "label": "Claim sent"
+                  },
+                  "at": 0,
+                  "enter": "none"
+                }
+              ],
+              "view": [0, 0, 1920, 1080]
+            }
           }
-         ],
-         "total": 120,
-         "footer": "Example",
-         "cue": "LAND",
-         "enter": "drop",
-         "dur": 0.5,
-         "keys": [
-          {
-           "cue": "LAND",
-           "after": 0.45,
-           "dur": 0.12,
-           "scaleY": 0.97
-          },
-          {
-           "cue": "LAND",
-           "after": 0.57,
-           "dur": 0.2,
-           "scaleY": 1
-          }
-         ],
-         "marks": [
-          {
-           "words": "$120.00",
-           "style": "circle",
-           "cue": "MARK"
-          }
-         ]
-        },
-        {
-         "id": "claim",
-         "type": "app",
-         "x": 900,
-         "y": 250,
-         "w": 800,
-         "title": "Expenses",
-         "heading": "New claim",
-         "fields": [
-          {
-           "label": "Merchant",
-           "value": "City Taxi",
-           "at": 4.6
-          },
-          {
-           "label": "Amount",
-           "value": "$120.00",
-           "at": 5.0
-          }
-         ],
-         "button": {
-          "label": "Submit"
-         },
-         "at": 4.1,
-         "enter": "fade",
-         "dur": 0.4
-        }
-       ]
-      }
-     },
-     {
-      "id": "sent",
-      "block": "canvas",
-      "duration": 4,
-      "camera": {
-       "to": {
-        "on": "claim",
-        "pad": 0.06
-       },
-       "at": 0.5,
-       "dur": 1.4
-      },
-      "props": {
-       "source": "Example claim for illustration",
-       "elements": [
-        {
-         "id": "desk",
-         "type": "rect",
-         "x": 120,
-         "y": 180,
-         "w": 1680,
-         "h": 760,
-         "r": 24,
-         "fill": "surface",
-         "at": 0,
-         "enter": "none"
-        },
-        {
-         "id": "claim",
-         "type": "app",
-         "x": 900,
-         "y": 250,
-         "w": 800,
-         "title": "Expenses",
-         "heading": "New claim",
-         "fields": [
-          {
-           "label": "Merchant",
-           "value": "City Taxi"
-          },
-          {
-           "label": "Amount",
-           "value": "$120.00"
-          }
-         ],
-         "button": {
-          "label": "Claim sent"
-         },
-         "at": 0,
-         "enter": "none"
-        }
-       ],
-       "view": [
-        0,
-        0,
-        1920,
-        1080
-       ]
-      }
-     }
-    ]
-   },
-   "at": [
-    1.2
-   ],
-   "takeaway": "Moving the LAND moment later moves the whole landing with it."
-  },
-  {
-   "id": "chart-reveal",
-   "storyboard": {
-    "version": 2,
-    "title": "Where operating costs go",
-    "format": {
-     "preset": "landscape",
-     "fps": 30
-    },
-    "theme": "paper",
-    "type": "inter",
-    "camera": "none",
-    "texture": "none",
-    "captions": false,
-    "music": false,
-    "sfx": false,
-    "sources": [
-     {
-      "claim": "Operating cost figures are illustrative.",
-      "source": "Example figures for illustration"
-     }
-    ],
-    "beats": [
-     {
-      "id": "whole",
-      "block": "canvas",
-      "duration": 7,
-      "props": {
-       "breakdown": {
-        "id": "opex",
-        "title": "Where operating costs go",
-        "unit": "Operating costs, $ millions",
-        "asOf": "2026-09-30",
-        "decimals": 1,
-        "prefix": "$",
-        "source": "Example figures for illustration",
-        "total": {
-         "label": "Operating costs",
-         "value": 41.8
-        },
-        "parts": [
-         {
-          "id": "people",
-          "label": "People",
-          "value": 24.1,
-          "highlight": true,
-          "parts": [
-           {
-            "label": "Salaries",
-            "value": 18.0
-           },
-           {
-            "label": "Benefits",
-            "value": 4.2
-           },
-           {
-            "label": "Contractors",
-            "value": 1.9
-           }
-          ]
-         },
-         {
-          "label": "Technology",
-          "value": 9.6
-         },
-         {
-          "label": "Facilities",
-          "value": 8.1
-         }
         ]
-       },
-       "reveal": {
-        "from": "bd-opex-people-bar",
-        "pad": 0.25,
-        "at": 2.2,
-        "dur": 1.6
-       }
-      }
-     }
-    ]
-   },
-   "at": [
-    1.0,
-    3.0,
-    5.0
-   ],
-   "takeaway": "A reveal opens on one bar of a breakdown and pulls back to the whole chart."
-  }
- ],
- "refusals": [
-  {
-   "id": "text-target",
-   "storyboard": {
-    "version": 2,
-    "title": "From the line to the claim",
-    "format": {
-     "preset": "landscape",
-     "fps": 30
+      },
+      "at": [1.2],
+      "takeaway": "Moving the LAND moment later moves the whole landing with it."
     },
-    "theme": "paper",
-    "type": "inter",
-    "camera": "none",
-    "texture": "none",
-    "captions": false,
-    "music": false,
-    "sfx": false,
-    "sources": [
-     {
-      "claim": "The receipt, the claim and its amounts are an illustrative example.",
-      "source": "Example claim for illustration"
-     }
-    ],
-    "beats": [
-     {
-      "id": "detail",
-      "block": "canvas",
-      "duration": 8,
-      "props": {
-       "source": "Example claim for illustration",
-       "moments": {
-        "LAND": {
-         "at": 0.8
+    {
+      "id": "chart-reveal",
+      "storyboard": {
+        "version": 2,
+        "title": "Where operating costs go",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
         },
-        "MARK": {
-         "at": 5.6
-        }
-       },
-       "reveal": {
-        "from": "lbl",
-        "at": 2.4
-       },
-       "elements": [
-        {
-         "id": "desk",
-         "type": "rect",
-         "x": 120,
-         "y": 180,
-         "w": 1680,
-         "h": 760,
-         "r": 24,
-         "fill": "surface",
-         "at": 0,
-         "enter": "none"
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "Operating cost figures are illustrative.",
+            "source": "Example figures for illustration"
+          }
+        ],
+        "beats": [
+          {
+            "id": "whole",
+            "block": "canvas",
+            "duration": 7,
+            "props": {
+              "breakdown": {
+                "id": "opex",
+                "title": "Where operating costs go",
+                "unit": "Operating costs, $ millions",
+                "asOf": "2026-09-30",
+                "decimals": 1,
+                "prefix": "$",
+                "source": "Example figures for illustration",
+                "total": {
+                  "label": "Operating costs",
+                  "value": 41.8
+                },
+                "parts": [
+                  {
+                    "id": "people",
+                    "label": "People",
+                    "value": 24.1,
+                    "highlight": true,
+                    "parts": [
+                      {
+                        "label": "Salaries",
+                        "value": 18.0
+                      },
+                      {
+                        "label": "Benefits",
+                        "value": 4.2
+                      },
+                      {
+                        "label": "Contractors",
+                        "value": 1.9
+                      }
+                    ]
+                  },
+                  {
+                    "label": "Technology",
+                    "value": 9.6
+                  },
+                  {
+                    "label": "Facilities",
+                    "value": 8.1
+                  }
+                ]
+              },
+              "reveal": {
+                "from": "bd-opex-people-bar",
+                "pad": 0.25,
+                "at": 2.2,
+                "dur": 1.6
+              }
+            }
+          }
+        ]
+      },
+      "at": [1.0, 3.0, 5.0],
+      "takeaway": "A reveal opens on one bar of a breakdown and pulls back to the whole chart."
+    }
+  ],
+  "refusals": [
+    {
+      "id": "text-target",
+      "storyboard": {
+        "version": 2,
+        "title": "From the line to the claim",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
         },
-        {
-         "id": "rcpt",
-         "type": "receipt",
-         "x": 260,
-         "y": 250,
-         "w": 520,
-         "size": 30,
-         "merchant": "City Taxi",
-         "detail": "12 Oct · 18:42",
-         "items": [
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
           {
-           "name": "Fare",
-           "price": 104
-          },
-          {
-           "name": "Airport fee",
-           "price": 16
+            "claim": "The receipt, the claim and its amounts are an illustrative example.",
+            "source": "Example claim for illustration"
           }
-         ],
-         "total": 120,
-         "footer": "Example",
-         "cue": "LAND",
-         "enter": "drop",
-         "dur": 0.5,
-         "keys": [
+        ],
+        "beats": [
           {
-           "cue": "LAND",
-           "after": 0.45,
-           "dur": 0.12,
-           "scaleY": 0.97
-          },
-          {
-           "cue": "LAND",
-           "after": 0.57,
-           "dur": 0.2,
-           "scaleY": 1
+            "id": "detail",
+            "block": "canvas",
+            "duration": 8,
+            "props": {
+              "source": "Example claim for illustration",
+              "moments": {
+                "LAND": {
+                  "at": 0.8
+                },
+                "MARK": {
+                  "at": 5.6
+                }
+              },
+              "reveal": {
+                "from": "lbl",
+                "at": 2.4
+              },
+              "elements": [
+                {
+                  "id": "desk",
+                  "type": "rect",
+                  "x": 120,
+                  "y": 180,
+                  "w": 1680,
+                  "h": 760,
+                  "r": 24,
+                  "fill": "surface",
+                  "at": 0,
+                  "enter": "none"
+                },
+                {
+                  "id": "rcpt",
+                  "type": "receipt",
+                  "x": 260,
+                  "y": 250,
+                  "w": 520,
+                  "size": 30,
+                  "merchant": "City Taxi",
+                  "detail": "12 Oct · 18:42",
+                  "items": [
+                    {
+                      "name": "Fare",
+                      "price": 104
+                    },
+                    {
+                      "name": "Airport fee",
+                      "price": 16
+                    }
+                  ],
+                  "total": 120,
+                  "footer": "Example",
+                  "cue": "LAND",
+                  "enter": "drop",
+                  "dur": 0.5,
+                  "keys": [
+                    {
+                      "cue": "LAND",
+                      "after": 0.45,
+                      "dur": 0.12,
+                      "scaleY": 0.97
+                    },
+                    {
+                      "cue": "LAND",
+                      "after": 0.57,
+                      "dur": 0.2,
+                      "scaleY": 1
+                    }
+                  ],
+                  "marks": [
+                    {
+                      "words": "$120.00",
+                      "style": "circle",
+                      "cue": "MARK"
+                    }
+                  ]
+                },
+                {
+                  "id": "claim",
+                  "type": "app",
+                  "x": 900,
+                  "y": 250,
+                  "w": 800,
+                  "title": "Expenses",
+                  "heading": "New claim",
+                  "fields": [
+                    {
+                      "label": "Merchant",
+                      "value": "City Taxi",
+                      "at": 4.6
+                    },
+                    {
+                      "label": "Amount",
+                      "value": "$120.00",
+                      "at": 5.0
+                    }
+                  ],
+                  "button": {
+                    "label": "Submit"
+                  },
+                  "at": 4.1,
+                  "enter": "fade",
+                  "dur": 0.4
+                },
+                {
+                  "id": "lbl",
+                  "type": "text",
+                  "text": "Total",
+                  "x": 300,
+                  "y": 200,
+                  "size": 40
+                }
+              ]
+            }
           }
-         ],
-         "marks": [
-          {
-           "words": "$120.00",
-           "style": "circle",
-           "cue": "MARK"
-          }
-         ]
-        },
-        {
-         "id": "claim",
-         "type": "app",
-         "x": 900,
-         "y": 250,
-         "w": 800,
-         "title": "Expenses",
-         "heading": "New claim",
-         "fields": [
-          {
-           "label": "Merchant",
-           "value": "City Taxi",
-           "at": 4.6
-          },
-          {
-           "label": "Amount",
-           "value": "$120.00",
-           "at": 5.0
-          }
-         ],
-         "button": {
-          "label": "Submit"
-         },
-         "at": 4.1,
-         "enter": "fade",
-         "dur": 0.4
-        },
-        {
-         "id": "lbl",
-         "type": "text",
-         "text": "Total",
-         "x": 300,
-         "y": 200,
-         "size": 40
-        }
-       ]
-      }
-     }
-    ]
-   },
-   "match": "lbl is text, which has no measured box"
-  },
-  {
-   "id": "unknown-moment",
-   "storyboard": {
-    "version": 2,
-    "title": "From the line to the claim",
-    "format": {
-     "preset": "landscape",
-     "fps": 30
+        ]
+      },
+      "match": "lbl is text, which has no measured box"
     },
-    "theme": "paper",
-    "type": "inter",
-    "camera": "none",
-    "texture": "none",
-    "captions": false,
-    "music": false,
-    "sfx": false,
-    "sources": [
-     {
-      "claim": "The receipt, the claim and its amounts are an illustrative example.",
-      "source": "Example claim for illustration"
-     }
-    ],
-    "beats": [
-     {
-      "id": "detail",
-      "block": "canvas",
-      "duration": 8,
-      "props": {
-       "source": "Example claim for illustration",
-       "moments": {
-        "LAND": {
-         "at": 0.8
+    {
+      "id": "unknown-moment",
+      "storyboard": {
+        "version": 2,
+        "title": "From the line to the claim",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
         },
-        "MARK": {
-         "at": 5.6
-        }
-       },
-       "reveal": {
-        "from": "rcpt",
-        "pad": 0.12,
-        "state": "end",
-        "at": 2.4,
-        "dur": 1.6
-       },
-       "elements": [
-        {
-         "id": "desk",
-         "type": "rect",
-         "x": 120,
-         "y": 180,
-         "w": 1680,
-         "h": 760,
-         "r": 24,
-         "fill": "surface",
-         "at": 0,
-         "enter": "none"
-        },
-        {
-         "id": "rcpt",
-         "type": "receipt",
-         "x": 260,
-         "y": 250,
-         "w": 520,
-         "size": 30,
-         "merchant": "City Taxi",
-         "detail": "12 Oct · 18:42",
-         "items": [
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
           {
-           "name": "Fare",
-           "price": 104
-          },
-          {
-           "name": "Airport fee",
-           "price": 16
+            "claim": "The receipt, the claim and its amounts are an illustrative example.",
+            "source": "Example claim for illustration"
           }
-         ],
-         "total": 120,
-         "footer": "Example",
-         "cue": "LANDS",
-         "enter": "drop",
-         "dur": 0.5,
-         "keys": [
+        ],
+        "beats": [
           {
-           "cue": "LAND",
-           "after": 0.45,
-           "dur": 0.12,
-           "scaleY": 0.97
-          },
-          {
-           "cue": "LAND",
-           "after": 0.57,
-           "dur": 0.2,
-           "scaleY": 1
+            "id": "detail",
+            "block": "canvas",
+            "duration": 8,
+            "props": {
+              "source": "Example claim for illustration",
+              "moments": {
+                "LAND": {
+                  "at": 0.8
+                },
+                "MARK": {
+                  "at": 5.6
+                }
+              },
+              "reveal": {
+                "from": "rcpt",
+                "pad": 0.12,
+                "state": "end",
+                "at": 2.4,
+                "dur": 1.6
+              },
+              "elements": [
+                {
+                  "id": "desk",
+                  "type": "rect",
+                  "x": 120,
+                  "y": 180,
+                  "w": 1680,
+                  "h": 760,
+                  "r": 24,
+                  "fill": "surface",
+                  "at": 0,
+                  "enter": "none"
+                },
+                {
+                  "id": "rcpt",
+                  "type": "receipt",
+                  "x": 260,
+                  "y": 250,
+                  "w": 520,
+                  "size": 30,
+                  "merchant": "City Taxi",
+                  "detail": "12 Oct · 18:42",
+                  "items": [
+                    {
+                      "name": "Fare",
+                      "price": 104
+                    },
+                    {
+                      "name": "Airport fee",
+                      "price": 16
+                    }
+                  ],
+                  "total": 120,
+                  "footer": "Example",
+                  "cue": "LANDS",
+                  "enter": "drop",
+                  "dur": 0.5,
+                  "keys": [
+                    {
+                      "cue": "LAND",
+                      "after": 0.45,
+                      "dur": 0.12,
+                      "scaleY": 0.97
+                    },
+                    {
+                      "cue": "LAND",
+                      "after": 0.57,
+                      "dur": 0.2,
+                      "scaleY": 1
+                    }
+                  ],
+                  "marks": [
+                    {
+                      "words": "$120.00",
+                      "style": "circle",
+                      "cue": "MARK"
+                    }
+                  ]
+                },
+                {
+                  "id": "claim",
+                  "type": "app",
+                  "x": 900,
+                  "y": 250,
+                  "w": 800,
+                  "title": "Expenses",
+                  "heading": "New claim",
+                  "fields": [
+                    {
+                      "label": "Merchant",
+                      "value": "City Taxi",
+                      "at": 4.6
+                    },
+                    {
+                      "label": "Amount",
+                      "value": "$120.00",
+                      "at": 5.0
+                    }
+                  ],
+                  "button": {
+                    "label": "Submit"
+                  },
+                  "at": 4.1,
+                  "enter": "fade",
+                  "dur": 0.4
+                }
+              ]
+            }
           }
-         ],
-         "marks": [
-          {
-           "words": "$120.00",
-           "style": "circle",
-           "cue": "MARK"
-          }
-         ]
-        },
-        {
-         "id": "claim",
-         "type": "app",
-         "x": 900,
-         "y": 250,
-         "w": 800,
-         "title": "Expenses",
-         "heading": "New claim",
-         "fields": [
-          {
-           "label": "Merchant",
-           "value": "City Taxi",
-           "at": 4.6
-          },
-          {
-           "label": "Amount",
-           "value": "$120.00",
-           "at": 5.0
-          }
-         ],
-         "button": {
-          "label": "Submit"
-         },
-         "at": 4.1,
-         "enter": "fade",
-         "dur": 0.4
-        }
-       ]
-      }
-     }
-    ]
-   },
-   "match": "cue \"LANDS\" names no moment"
-  },
-  {
-   "id": "moment-loop",
-   "storyboard": {
-    "version": 2,
-    "title": "From the line to the claim",
-    "format": {
-     "preset": "landscape",
-     "fps": 30
+        ]
+      },
+      "match": "cue \"LANDS\" names no moment"
     },
-    "theme": "paper",
-    "type": "inter",
-    "camera": "none",
-    "texture": "none",
-    "captions": false,
-    "music": false,
-    "sfx": false,
-    "sources": [
-     {
-      "claim": "The receipt, the claim and its amounts are an illustrative example.",
-      "source": "Example claim for illustration"
-     }
-    ],
-    "beats": [
-     {
-      "id": "detail",
-      "block": "canvas",
-      "duration": 8,
-      "props": {
-       "source": "Example claim for illustration",
-       "moments": {
-        "LAND": {
-         "cue": "MARK"
+    {
+      "id": "moment-loop",
+      "storyboard": {
+        "version": 2,
+        "title": "From the line to the claim",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
         },
-        "MARK": {
-         "cue": "LAND",
-         "after": 1
-        }
-       },
-       "reveal": {
-        "from": "rcpt",
-        "pad": 0.12,
-        "state": "end",
-        "at": 2.4,
-        "dur": 1.6
-       },
-       "elements": [
-        {
-         "id": "desk",
-         "type": "rect",
-         "x": 120,
-         "y": 180,
-         "w": 1680,
-         "h": 760,
-         "r": 24,
-         "fill": "surface",
-         "at": 0,
-         "enter": "none"
-        },
-        {
-         "id": "rcpt",
-         "type": "receipt",
-         "x": 260,
-         "y": 250,
-         "w": 520,
-         "size": 30,
-         "merchant": "City Taxi",
-         "detail": "12 Oct · 18:42",
-         "items": [
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
           {
-           "name": "Fare",
-           "price": 104
-          },
-          {
-           "name": "Airport fee",
-           "price": 16
+            "claim": "The receipt, the claim and its amounts are an illustrative example.",
+            "source": "Example claim for illustration"
           }
-         ],
-         "total": 120,
-         "footer": "Example",
-         "cue": "LAND",
-         "enter": "drop",
-         "dur": 0.5,
-         "keys": [
+        ],
+        "beats": [
           {
-           "cue": "LAND",
-           "after": 0.45,
-           "dur": 0.12,
-           "scaleY": 0.97
-          },
-          {
-           "cue": "LAND",
-           "after": 0.57,
-           "dur": 0.2,
-           "scaleY": 1
+            "id": "detail",
+            "block": "canvas",
+            "duration": 8,
+            "props": {
+              "source": "Example claim for illustration",
+              "moments": {
+                "LAND": {
+                  "cue": "MARK"
+                },
+                "MARK": {
+                  "cue": "LAND",
+                  "after": 1
+                }
+              },
+              "reveal": {
+                "from": "rcpt",
+                "pad": 0.12,
+                "state": "end",
+                "at": 2.4,
+                "dur": 1.6
+              },
+              "elements": [
+                {
+                  "id": "desk",
+                  "type": "rect",
+                  "x": 120,
+                  "y": 180,
+                  "w": 1680,
+                  "h": 760,
+                  "r": 24,
+                  "fill": "surface",
+                  "at": 0,
+                  "enter": "none"
+                },
+                {
+                  "id": "rcpt",
+                  "type": "receipt",
+                  "x": 260,
+                  "y": 250,
+                  "w": 520,
+                  "size": 30,
+                  "merchant": "City Taxi",
+                  "detail": "12 Oct · 18:42",
+                  "items": [
+                    {
+                      "name": "Fare",
+                      "price": 104
+                    },
+                    {
+                      "name": "Airport fee",
+                      "price": 16
+                    }
+                  ],
+                  "total": 120,
+                  "footer": "Example",
+                  "cue": "LAND",
+                  "enter": "drop",
+                  "dur": 0.5,
+                  "keys": [
+                    {
+                      "cue": "LAND",
+                      "after": 0.45,
+                      "dur": 0.12,
+                      "scaleY": 0.97
+                    },
+                    {
+                      "cue": "LAND",
+                      "after": 0.57,
+                      "dur": 0.2,
+                      "scaleY": 1
+                    }
+                  ],
+                  "marks": [
+                    {
+                      "words": "$120.00",
+                      "style": "circle",
+                      "cue": "MARK"
+                    }
+                  ]
+                },
+                {
+                  "id": "claim",
+                  "type": "app",
+                  "x": 900,
+                  "y": 250,
+                  "w": 800,
+                  "title": "Expenses",
+                  "heading": "New claim",
+                  "fields": [
+                    {
+                      "label": "Merchant",
+                      "value": "City Taxi",
+                      "at": 4.6
+                    },
+                    {
+                      "label": "Amount",
+                      "value": "$120.00",
+                      "at": 5.0
+                    }
+                  ],
+                  "button": {
+                    "label": "Submit"
+                  },
+                  "at": 4.1,
+                  "enter": "fade",
+                  "dur": 0.4
+                }
+              ]
+            }
           }
-         ],
-         "marks": [
-          {
-           "words": "$120.00",
-           "style": "circle",
-           "cue": "MARK"
-          }
-         ]
-        },
-        {
-         "id": "claim",
-         "type": "app",
-         "x": 900,
-         "y": 250,
-         "w": 800,
-         "title": "Expenses",
-         "heading": "New claim",
-         "fields": [
-          {
-           "label": "Merchant",
-           "value": "City Taxi",
-           "at": 4.6
-          },
-          {
-           "label": "Amount",
-           "value": "$120.00",
-           "at": 5.0
-          }
-         ],
-         "button": {
-          "label": "Submit"
-         },
-         "at": 4.1,
-         "enter": "fade",
-         "dur": 0.4
-        }
-       ]
-      }
-     }
-    ]
-   },
-   "match": "moments loop"
-  }
- ],
- "sensitivities": [
-  {
-   "id": "moment-moves-the-landing",
-   "base": "wide",
-   "changed": "late-moment",
-   "at": 1.2,
-   "minChangedFraction": 0.001
-  }
- ]
+        ]
+      },
+      "match": "moments loop"
+    }
+  ],
+  "sensitivities": [
+    {
+      "id": "moment-moves-the-landing",
+      "base": "wide",
+      "changed": "late-moment",
+      "at": 1.2,
+      "minChangedFraction": 0.001
+    }
+  ]
 }

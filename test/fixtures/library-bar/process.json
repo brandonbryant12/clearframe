@@ -5,14 +5,7 @@
     {
       "id": "wide",
       "storyboard": "../../../examples/where-work-waits/storyboard.json",
-      "at": [
-        0.5,
-        5.4,
-        6.4,
-        7.2,
-        11.0,
-        12.5
-      ],
+      "at": [0.5, 5.4, 6.4, 7.2, 11.0, 12.5],
       "takeaway": "Ten a day arrive and Review takes eight, so ten wait after five days; with a second reviewer the same queue drains two a day, carried, to zero."
     },
     {
@@ -92,11 +85,7 @@
           }
         ]
       },
-      "at": [
-        5.4,
-        7.2,
-        12.5
-      ],
+      "at": [5.4, 7.2, 12.5],
       "takeaway": "The same model in a tall frame, with a long stage name."
     },
     {
@@ -176,9 +165,7 @@
           }
         ]
       },
-      "at": [
-        5.4
-      ],
+      "at": [5.4],
       "takeaway": "A capacity of nine computes a different queue (five waiting, +1 a day)."
     },
     {
@@ -259,10 +246,7 @@
           }
         ]
       },
-      "at": [
-        5.4,
-        12.5
-      ],
+      "at": [5.4, 12.5],
       "takeaway": "Larger flows draw one square per ten requests, with a key, and exact counts."
     },
     {
@@ -341,10 +325,7 @@
           }
         ]
       },
-      "at": [
-        4.0,
-        9.0
-      ],
+      "at": [4.0, 9.0],
       "takeaway": "The intervention lands on the narrated words; captions stay clear (estimated draft timing)."
     },
     {
@@ -405,11 +386,7 @@
           }
         ]
       },
-      "at": [
-        1.8,
-        2.8,
-        3.8
-      ],
+      "at": [1.8, 2.8, 3.8],
       "takeaway": "Two waiting requests fill half a square; four fill one, and six fill one and a half."
     }
   ],

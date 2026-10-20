@@ -13,13 +13,13 @@ The drawings are qualitative. Path lengths, positions, marker sizes and animatio
 ## Start a draft
 
 ```sh
-node engine/cli.mjs new /tmp/cash-flow-demo --playbook cash-flow
-node engine/cli.mjs new /tmp/scenario-demo --playbook scenario-lab
-node engine/cli.mjs new /tmp/client-demo --playbook client-update
-node engine/cli.mjs new /tmp/scenario-vertical-demo --playbook scenario-lab --vertical
-node engine/cli.mjs critique /tmp/cash-flow-demo
-node engine/cli.mjs voice /tmp/cash-flow-demo --draft
-node engine/cli.mjs sheet /tmp/cash-flow-demo --draft
+pnpm cf new /tmp/cash-flow-demo --playbook cash-flow
+pnpm cf new /tmp/scenario-demo --playbook scenario-lab
+pnpm cf new /tmp/client-demo --playbook client-update
+pnpm cf new /tmp/scenario-vertical-demo --playbook scenario-lab --vertical
+pnpm cf critique /tmp/cash-flow-demo
+pnpm cf voice /tmp/cash-flow-demo --draft
+pnpm cf sheet /tmp/cash-flow-demo --draft
 ```
 
 Choose a fresh destination for each `new` command. The landscape and vertical scaffolds redraw the mechanism for their frame. Individual sketches also support square and portrait via the library API. A treatment can set a different art direction; brand palettes and type voices can be supplied through `--library` or the project's `library/`.
@@ -41,7 +41,7 @@ Run `critique`, inspect a draft sheet, then run `check`, render and review the c
 On the shared 8 GB Mac, use the heavy-work gate for a full render:
 
 ```sh
-node engine/cli.mjs render /tmp/cash-flow-demo --draft
-node engine/cli.mjs review /tmp/cash-flow-demo
-node engine/cli.mjs qa /tmp/cash-flow-demo
+pnpm cf render /tmp/cash-flow-demo --draft
+pnpm cf review /tmp/cash-flow-demo
+pnpm cf qa /tmp/cash-flow-demo
 ```

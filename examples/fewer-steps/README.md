@@ -36,9 +36,9 @@ Cue `ARRIVE` on a word spoken after the direct token arrives, about 1.6 s after 
 ```sh
 node examples/fewer-steps/build.mjs     # writes storyboard-{landscape,vertical}.json
 mkdir -p build/steps && cp examples/fewer-steps/storyboard-vertical.json build/steps/storyboard.json
-node engine/cli.mjs draft build/steps    # free local draft voice
+pnpm cf draft build/steps    # free local draft voice
 ```
 
 Each shape is 352 frames, about 3 s to render on this Mac, and `check` reports 0 errors and 0 warnings.
 
-Find it with `node engine/cli.mjs find "our checkout is faster now"`.
+Find it with `pnpm cf find "our checkout is faster now"`.

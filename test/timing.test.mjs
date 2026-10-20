@@ -8,12 +8,12 @@ import {
   resolveAt,
   syllables,
   tokenize,
-} from '../engine/lib/timing.mjs';
+} from '../packages/engine/dist/engine/lib/timing.mjs';
 
 test('tokenize turns inline tags into pauses and drops backchannels', () => {
   const t = tokenize('Seventy percent. <short pause> It works |mm-hm| well.');
   assert.deepEqual(
-    t.map(x => x.w),
+    t.map((x) => x.w),
     ['Seventy', 'percent.', 'It', 'works', 'well.'],
   );
   assert.ok(t[1].pause >= 0.38 + 0.35 - 1e-9, 'period + <short pause>');
@@ -27,7 +27,8 @@ test('syllables handles numbers, acronyms and words', () => {
 });
 
 test('estimateDuration is in a plausible range for 150 wpm', () => {
-  const text = 'Good forecasts are calibrated, and good plans account for the thirty percent.';
+  const text =
+    'Good forecasts are calibrated, and good plans account for the thirty percent.';
   const d = estimateDuration(text, 150);
   const wpm = (text.split(' ').length / d) * 60;
   assert.ok(wpm > 110 && wpm < 200, `wpm ${wpm}`);

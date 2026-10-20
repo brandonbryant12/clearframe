@@ -9,7 +9,7 @@ Use image generation to discover a picture: its silhouette, material, light, spa
 | A complex organic subject plus exact branded messaging | Hybrid: approved raster subject, native background, logo, typography and data. |
 | Exact logo, product UI, factual chart or named font | Use the approved source asset or supported native font. Never regenerate it to approximate identity. |
 
-The deterministic guarantee begins with the saved storyboard, assets, palette, fonts and renderer version. Re-running imagegen is not part of rendering. Palette paints resolve to specified colours; shading, blending, antialiasing and encoded video colour conversion produce derived pixel colours. If every flat region must equal a swatch, use opaque solid fills and verify the actual export. A native role such as `bold` selects a bundled font; it does not install an arbitrary named brand font. Check `film/assets/fonts/provenance.json` and the font roles in `docs/canvas.md` before promising an exact face.
+The deterministic guarantee begins with the saved storyboard, assets, palette, fonts and renderer version. Re-running imagegen is not part of rendering. Palette paints resolve to specified colours; shading, blending, antialiasing and encoded video colour conversion produce derived pixel colours. If every flat region must equal a swatch, use opaque solid fills and verify the actual export. A native role such as `bold` selects a bundled font; it does not install an arbitrary named brand font. Check `packages/engine/src/film/assets/fonts/provenance.json` and the font roles in `docs/canvas.md` before promising an exact face.
 
 ## A bounded two-pass exploration
 
@@ -17,14 +17,14 @@ The deterministic guarantee begins with the saved storyboard, assets, palette, f
 2. Generate one concept board with distinct forms. Ask for no text, numbers, logos or UI. Review silhouette and material, not just attractiveness.
 3. Make one targeted revision: reduce tangled topology, expose layer boundaries, simplify reflections, or improve negative space. Keep the subject and mood fixed.
 4. Choose an output path. For a native reconstruction, list the geometry, paint tokens, layer order and motion before coding. Do not trace generated text or preserve accidental detail.
-5. Rebuild with existing primitives. Put the reusable composition in `library/sketches/`, a colour family in `library/palettes/`, and directing defaults in `library/treatments/`. Use a fixed seed where layout varies; animation must depend on frame time, never wall time or live randomness.
+5. Rebuild with existing primitives. Put the reusable composition in `packages/engine/src/library/sketches/`, a colour family in `packages/engine/src/library/palettes/`, and directing defaults in `packages/engine/src/library/treatments/`. Use a fixed seed where layout varies; animation must depend on frame time, never wall time or live randomness.
 6. Render the native version, review it at phone size and in the full MP4, then revise. Similarity to the concept is optional; good typography, meaningful motion and controllability are required.
 
 Keep the two prompts and reference images as provenance, outside the runtime dependency path.
 
 ## What to ask for
 
-Ask for the object or place the story is about (the product, the document, the office, the harbour the shipment leaves from), not an abstract decoration to put behind the words: a decorative object with no job fails the library's bar (`library/README.md`). Name the material, the light and the empty region for copy, and forbid text, numbers and logos.
+Ask for the object or place the story is about (the product, the document, the office, the harbour the shipment leaves from), not an abstract decoration to put behind the words: a decorative object with no job fails the library's bar (`packages/engine/src/library/README.md`). Name the material, the light and the empty region for copy, and forbid text, numbers and logos.
 
 A refinement prompt should name one change: “Keep the composition and materials. Simplify each object into at most four visible layers with broad gradients and clean occlusion. Preserve the empty copy region.”
 
@@ -36,4 +36,4 @@ Built-in imagegen is the default when available. Copy any chosen project-bound r
 
 ## Reuse the deterministic library
 
-Put a rebuilt composition in `library/sketches/` (a project's own library for brand art). A sketch that declares `layer: "under"` can then sit beneath any block as `art: {sketch: NAME, seed, opacity, drift}`; run `node engine/cli.mjs sketch NAME` to copy its elements into a storyboard and edit native geometry, `fill`, `stroke`, `loop` and `keys`. Palette tokens remain live.
+Put a rebuilt composition in `packages/engine/src/library/sketches/` (a project's own library for brand art). A sketch that declares `layer: "under"` can then sit beneath any block as `art: {sketch: NAME, seed, opacity, drift}`; run `pnpm cf sketch NAME` to copy its elements into a storyboard and edit native geometry, `fill`, `stroke`, `loop` and `keys`. Palette tokens remain live.

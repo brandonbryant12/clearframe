@@ -1,6 +1,6 @@
 # The scene engine
 
-ClearFrame renders every film with the **scene engine** (`scene/`), its only renderer: a ClearFrame-owned scene plan evaluated frame by frame and drawn with Skia on the GPU (Metal on macOS). It draws everything on screen itself: the 31 blocks, native stages, film compositing and footage. Its dependencies are Skia, Metal, a text shaper, the FFmpeg tools and **fframes** (MIT, pinned in `archive/fframes/upstream.json`), which is the film runtime for renders: fframes schedules the frames, encodes GOP-aligned segments in parallel with in-process FFmpeg/libx264 and concatenates them, while each of its render workers draws with this engine. See [Returning to fframes](fframes-return.md) for the design and the measured parity, speed and memory.
+ClearFrame renders every film with the **scene engine** (`packages/engine/src/scene/`), its only renderer: a ClearFrame-owned scene plan evaluated frame by frame and drawn with Skia on the GPU (Metal on macOS). It draws everything on screen itself: the 31 blocks, native stages, film compositing and footage. Its dependencies are Skia, Metal, a text shaper, the FFmpeg tools and **fframes** (MIT, pinned in `archive/fframes/upstream.json`), which is the film runtime for renders: fframes schedules the frames, encodes GOP-aligned segments in parallel with in-process FFmpeg/libx264 and concatenates them, while each of its render workers draws with this engine. See [Returning to fframes](fframes-return.md) for the design and the measured parity, speed and memory.
 
 This page is the design and the authoring reference. The plan review that chose this design is summarised under [Decisions](#decisions); [coverage](scene-engine-coverage.md) lists every block, sketch, treatment and playbook with its state.
 
@@ -26,7 +26,7 @@ Every frame is a pure function of its number and the prepared inputs (job, plan,
 
 ## Identity and builds
 
-The prepared manifest and every receipt record the renderer's source hash (its Rust sources, `Cargo.toml`, `Cargo.lock` and the shared `film/constants.json`), the plan's SHA-256, font hashes and input hashes. A render fails if any of them change during the render.
+The prepared manifest and every receipt record the renderer's source hash (its Rust sources, `Cargo.toml`, `Cargo.lock` and the shared `packages/engine/src/film/constants.json`), the plan's SHA-256, font hashes and input hashes. A render fails if any of them change during the render.
 
 `clearframe build` builds the renderer, and every render command builds it first when its sources changed. The Cargo target lives in `scene/.cache/target` (ignored). Builds use one Cargo job. `skia-safe` is pinned with the feature set rust-skia publishes prebuilt binaries for (`gl, metal, svg`), so Skia itself is never compiled.
 
@@ -54,7 +54,7 @@ Times are seconds on the stage's clock or spoken cues (`say`): a word in the bea
 
 ### Elements: the canvas dialect, drawn natively
 
-Stage elements use the canvas block's vocabulary ([canvas.md](canvas.md)): `rect, circle, ellipse, line, path, poly, text, icon, image, group, particles, spotlight` with `fill/stroke` tokens and gradients, `enter` (fade, pop, rise, drop, left, right, grow, grow-x, grow-y, draw, wipe, wipe-up, type, none), `at/say/dur`, `keys` (x, y, scale, rotate, opacity, scaleX, scaleY, blur, tiltX, tiltY — and now **fill/stroke colours**), `along`, `loop` (spin, pulse, float, sway, orbit, dash, blink, rock), `exit`/`exitAt`/`exitSay`, `echo`, `tilt`, `shine`, `glow`, `shadow`, `blur`, `blend`, `z`, `fps`. The rules (default entrances and durations, keys easing from the previous state, values that never overshoot, stroke draw-on) follow the canvas block (`scene/native/src/blocks/canvas.rs`), so an element means the same thing in a canvas and on a stage.
+Stage elements use the canvas block's vocabulary ([canvas.md](canvas.md)): `rect, circle, ellipse, line, path, poly, text, icon, image, group, particles, spotlight` with `fill/stroke` tokens and gradients, `enter` (fade, pop, rise, drop, left, right, grow, grow-x, grow-y, draw, wipe, wipe-up, type, none), `at/say/dur`, `keys` (x, y, scale, rotate, opacity, scaleX, scaleY, blur, tiltX, tiltY — and now **fill/stroke colours**), `along`, `loop` (spin, pulse, float, sway, orbit, dash, blink, rock), `exit`/`exitAt`/`exitSay`, `echo`, `tilt`, `shine`, `glow`, `shadow`, `blur`, `blend`, `z`, `fps`. The rules (default entrances and durations, keys easing from the previous state, values that never overshoot, stroke draw-on) follow the canvas block (`packages/engine/src/scene/native/src/blocks/canvas.rs`), so an element means the same thing in a canvas and on a stage.
 
 Features the canvas block draws but stages do not — `rough`, `print`, `mosaic`, `morph`, `solid`, `meter`, `loop: level` — are **refused by name** when a stage uses them (`box uses rough, which the canvas block draws; native stages do not`). Keep them in a `canvas` beat or `art`.
 
@@ -76,7 +76,7 @@ Each frame places every element first (twice, so an element can follow one liste
 
 ### Recipes: say what happens, not where every shape goes
 
-`scene/recipes.mjs` compiles intent into elements with stable ids:
+`packages/engine/src/scene/recipes.mts` compiles intent into elements with stable ids:
 
 - **actors** `[{id, label, kind, x, y, w?, h?, icon?, status?, detail?, at|say, z?}]` — a card (icon, label, status light) whose group carries the identity. Kinds: service, database, user, users, queue, process, external, file, client, phone, timer, lock, note, state.
 - **links** `[{id?, from, to, label?, route?, bend?, dashed?, color?, arrow?, at|say}]` — connectors inset to the cards' edges, with a label riding the midpoint.
@@ -97,11 +97,11 @@ Each frame places every element first (twice, so an element can follow one liste
 
 ## Blocks
 
-The 31 blocks are drawn by `scene/native/src/blocks/` (the block code ClearFrame has always owned, moved into the renderer). Each block builds a **display list** for its frame (`draw::Node`): groups with a transform, opacity, clip, mask, blend mode or filter; shapes (Skia paths with fills, gradients and strokes); text runs; and pictures. `draw::paint` draws it on the frame's GPU canvas, and the frame audit reads the same tree, so what is judged is exactly what is drawn.
+The 31 blocks are drawn by `packages/engine/src/scene/native/src/blocks/` (the block code ClearFrame has always owned, moved into the renderer). Each block builds a **display list** for its frame (`draw::Node`): groups with a transform, opacity, clip, mask, blend mode or filter; shapes (Skia paths with fills, gradients and strokes); text runs; and pictures. `draw::paint` draws it on the frame's GPU canvas, and the frame audit reads the same tree, so what is judged is exactly what is drawn.
 
 - **Type** is shaped once, with rustybuzz over the bundled OFL fonts. The same shaping measures, wraps and fits the text, and the glyphs are drawn by id with Skia typefaces built from those files, so measurement and pixels cannot disagree. A text that does not fit its box fails the frame, with the scene and box named, instead of spilling.
 - **Effects** keep SVG filter semantics (`fx.rs`): shadows, glows, blurs, image treatments (mono, duotone, tint, blur, soft), the thermal look and worn print are Skia image-filter graphs confined to their region, in linear-light or sRGB as authored.
-- **Shared code** sits beside the renderer, not inside a block: `text` (faces, shaping, layout, fitting), `design` (palettes and colour arithmetic), `motion` (easing, entrances and exits), `icons` (the pinned Tabler subset), `numbers` (grouping, signs, zero baselines), `audit` (the frame audit) and `constants` (timings shared with `film/`).
+- **Shared code** sits beside the renderer, not inside a block: `text` (faces, shaping, layout, fitting), `design` (palettes and colour arithmetic), `motion` (easing, entrances and exits), `icons` (the pinned Tabler subset), `numbers` (grouping, signs, zero baselines), `audit` (the frame audit) and `constants` (timings shared with `packages/engine/src/film/`).
 
 A beat with native `under` layers is drawn in two parts: its ground (tone, plate), then the stage, then its content. That way a stage sits between a plate and the heading.
 
@@ -122,7 +122,7 @@ Footage (stage `video` elements, plates and the `video` block) is decoded by the
 - **Any order.** Small forward steps read on through the pipe. A backward step or a far jump restarts the decoder with an accurate seek just before the wanted frame, so every frame comes out the same in any order.
 - **Colour.** FFmpeg's `scale` filter converts with the source's tagged matrix and range. Untagged sources are BT.601 limited range.
 
-The decoder's regression tests (a delayed final B-frame, a higher film rate, a non-integral end, and backward seeks) use the fixtures in `scene/native/tests/fixtures`.
+The decoder's regression tests (a delayed final B-frame, a higher film rate, a non-integral end, and backward seeks) use the fixtures in `packages/engine/src/scene/native/tests/fixtures`.
 
 ## Commands and the serve protocol
 
@@ -137,7 +137,7 @@ The decoder's regression tests (a delayed final B-frame, a higher film rate, a n
 | `bench [A..B]` | draw + readback per frame, without encoding |
 | `serve` | JSON lines on stdin: `{id, cmd: open|frame|render|inspect|audit|info|quit, …}`; the GPU context, fonts, decoders and shader programs stay warm between requests |
 
-The Node side never calls these directly: `scene/engine.mjs` maps the commands `prepare`, `render`, `revise`, `sheet`, `still`, `check` and the range previews already use.
+The Node side never calls these directly: `packages/engine/src/scene/engine.mts` maps the commands `prepare`, `render`, `revise`, `sheet`, `still`, `check` and the range previews already use.
 
 ## Range renders keep the film's clock
 

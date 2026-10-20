@@ -31,12 +31,7 @@
             "props": {
               "sketch": "split",
               "sketchParams": {
-                "parts": [
-                  22,
-                  8,
-                  10,
-                  60
-                ]
+                "parts": [22, 8, 10, 60]
               },
               "sketchText": {
                 "WHOLE": "Example allocation",
@@ -50,11 +45,7 @@
           }
         ]
       },
-      "at": [
-        0.8,
-        3,
-        6.5
-      ],
+      "at": [0.8, 3, 6.5],
       "takeaway": "Four proportional parts form the whole."
     },
     {
@@ -86,12 +77,7 @@
             "props": {
               "sketch": "split",
               "sketchParams": {
-                "parts": [
-                  40,
-                  10,
-                  10,
-                  40
-                ]
+                "parts": [40, 10, 10, 40]
               },
               "sketchText": {
                 "WHOLE": "Example allocation",
@@ -105,9 +91,7 @@
           }
         ]
       },
-      "at": [
-        6.5
-      ],
+      "at": [6.5],
       "takeaway": "Changing source values changes the partition."
     },
     {
@@ -139,12 +123,7 @@
             "props": {
               "sketch": "split",
               "sketchParams": {
-                "parts": [
-                  22,
-                  8,
-                  10,
-                  60
-                ]
+                "parts": [22, 8, 10, 60]
               },
               "sketchText": {
                 "WHOLE": "Example allocation",
@@ -158,10 +137,7 @@
           }
         ]
       },
-      "at": [
-        0.8,
-        6.5
-      ],
+      "at": [0.8, 6.5],
       "takeaway": "The same quantities remain readable in portrait."
     },
     {
@@ -193,12 +169,7 @@
             "props": {
               "sketch": "split",
               "sketchParams": {
-                "parts": [
-                  22,
-                  8,
-                  10,
-                  60
-                ]
+                "parts": [22, 8, 10, 60]
               },
               "sketchText": {
                 "WHOLE": "Example allocation",
@@ -212,9 +183,7 @@
           }
         ]
       },
-      "at": [
-        6.5
-      ],
+      "at": [6.5],
       "takeaway": "Planted unchanged pixels: a metadata-only edit is not a visible prop."
     },
     {
@@ -255,9 +224,7 @@
           }
         ]
       },
-      "at": [
-        1
-      ],
+      "at": [1],
       "takeaway": "Planted failure: the native audit must detect clipped text."
     }
   ],
@@ -291,10 +258,7 @@
             "props": {
               "sketch": "split",
               "sketchParams": {
-                "parts": [
-                  -10,
-                  110
-                ]
+                "parts": [-10, 110]
               },
               "sketchText": {
                 "WHOLE": "Example allocation",

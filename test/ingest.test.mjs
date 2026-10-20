@@ -1,14 +1,20 @@
 // Source-material ingestion: evidence briefs, gapless recording cuts and honest word timing.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseResearch, segmentWords, cutPoints, scriptedWords, scriptTurns } from '../engine/lib/ingest.mjs';
-import { alignScript } from '../engine/lib/word-align.mjs';
+import {
+  parseResearch,
+  segmentWords,
+  cutPoints,
+  scriptedWords,
+  scriptTurns,
+} from '../packages/engine/dist/engine/lib/ingest.mjs';
+import { alignScript } from '../packages/engine/dist/engine/lib/word-align.mjs';
 
 test('research briefs keep figures with their sentence and source, and skip years and list numbers', () => {
   const r = parseResearch(
     `# Heat\n\n## Scale\n\nNights run 7°C warmer in 2024 [1]. Only 18 of 100 cities had a plan, however [2]. Roofs cost $2.50 per square metre.\n\n1. Step one\n\n## References\n1. Lab report https://example.org/a\n2. Survey https://example.org/b\n`,
   );
-  const figs = r.figures.map(f => [f.figure, f.sources.join()]);
+  const figs = r.figures.map((f) => [f.figure, f.sources.join()]);
   assert.deepEqual(figs, [
     ['7°C', '1'],
     ['18 of 100', '2'],
@@ -32,12 +38,15 @@ test('recording cuts are frame-aligned, ordered and tile the recording without g
   assert.equal(cuts[0], 0);
   assert.ok(cuts.every((c, i) => !i || c > cuts[i - 1]));
   assert.ok(
-    cuts.every(c => Math.abs(c * 30 - Math.round(c * 30)) < 1e-9),
+    cuts.every((c) => Math.abs(c * 30 - Math.round(c * 30)) < 1e-9),
     'every cut is on a frame',
   );
   assert.equal(segs.at(-1)[0].speaker, 'B', 'a speaker change starts a beat');
   segs.forEach((s, i) =>
-    assert.ok(cuts[i] <= s[0].t0 && s.at(-1).t1 <= cuts[i + 1] + 1 / 30, 'each beat holds its words'),
+    assert.ok(
+      cuts[i] <= s[0].t0 && s.at(-1).t1 <= cuts[i + 1] + 1 / 30,
+      'each beat holds its words',
+    ),
   );
 });
 
@@ -50,18 +59,30 @@ test('script alignment keeps the script spelling, times substitutions, and never
   ].map(([w, t0, t1]) => ({ w, t0, t1 }));
   const same = alignScript(['Trees', 'help', 'a', 'lot'], heard);
   assert.deepEqual(
-    same.words.map(w => w.w),
+    same.words.map((w) => w.w),
     ['Trees', 'help', 'a', 'lot'],
   );
-  assert.equal(same.interpolated, 0, 'a one-for-one substitution keeps measured timing');
+  assert.equal(
+    same.interpolated,
+    0,
+    'a one-for-one substitution keeps measured timing',
+  );
   const extra = alignScript(['Trees', 'really', 'help', 'a', 'lot'], heard);
-  assert.ok(extra.interpolated > 0 && extra.words.every((w, i, a) => !i || w.t0 >= a[i - 1].t1));
+  assert.ok(
+    extra.interpolated > 0 &&
+      extra.words.every((w, i, a) => !i || w.t0 >= a[i - 1].t1),
+  );
   const { words } = scriptedWords(heard, scriptTurns('HOST: Trees help a lot'));
-  assert.ok(words.every(w => w.speaker === 'HOST'));
+  assert.ok(words.every((w) => w.speaker === 'HOST'));
 });
 
 test('a brand name heard as two words is measured, not estimated', () => {
-  const heard = [['open', 0, 0.3], ['my', 0.35, 0.5], ['Kestrel', 0.5, 0.9], ['then', 1, 1.2]].map(([w, t0, t1]) => ({ w, t0, t1 }));
+  const heard = [
+    ['open', 0, 0.3],
+    ['my', 0.35, 0.5],
+    ['Kestrel', 0.5, 0.9],
+    ['then', 1, 1.2],
+  ].map(([w, t0, t1]) => ({ w, t0, t1 }));
   const r = alignScript(['open', 'myKestrel', 'then'], heard);
   assert.equal(r.interpolated, 0);
   assert.deepEqual([r.words[1].t0, r.words[1].t1], [0.35, 0.9]);

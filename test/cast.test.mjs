@@ -1,329 +1,1201 @@
 // A cast carries the same objects across cuts: each beat starts exactly where the last one left them.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { expandCastProps, castOverlaps } from '../film/cast.mjs';
+import {
+  expandCastProps,
+  castOverlaps,
+} from '../packages/engine/dist/film/cast.mjs';
 
 const wide = { width: 1920, height: 1080 };
-const objects = [{ id: 'a', icon: 'file' }, { id: 'b', icon: 'chart-bar', color: 'accent2' }, { id: 'c', icon: 'photo', enter: 'none' }];
+const objects = [
+  { id: 'a', icon: 'file' },
+  { id: 'b', icon: 'chart-bar', color: 'accent2' },
+  { id: 'c', icon: 'photo', enter: 'none' },
+];
 // Where a group stands once its keys have run: the base plus the last offsets, scale and opacity.
-const end = g => g.keys.reduce((p, k) => ({ x: g.x + (k.x ?? p.x - g.x), y: g.y + (k.y ?? p.y - g.y), scale: k.scale ?? p.scale, opacity: k.opacity ?? p.opacity }), { x: g.x, y: g.y, scale: 1, opacity: 1 });
-const film = beats => {
+const end = (g) =>
+  g.keys.reduce(
+    (p, k) => ({
+      x: g.x + (k.x ?? p.x - g.x),
+      y: g.y + (k.y ?? p.y - g.y),
+      scale: k.scale ?? p.scale,
+      opacity: k.opacity ?? p.opacity,
+    }),
+    { x: g.x, y: g.y, scale: 1, opacity: 1 },
+  );
+const film = (beats) => {
   const carry = {};
-  return beats.map((cast, i) => expandCastProps({ cast }, { ...wide, beatId: `b${i}` }, { state: carry.state, objects: carry.objects, threads: carry.threads, cue: v => (typeof v === 'number' ? v : 1), carry }).elements);
+  return beats.map(
+    (cast, i) =>
+      expandCastProps(
+        { cast },
+        { ...wide, beatId: `b${i}` },
+        {
+          state: carry.state,
+          objects: carry.objects,
+          threads: carry.threads,
+          cue: (v) => (typeof v === 'number' ? v : 1),
+          carry,
+        },
+      ).elements,
+  );
 };
-const group = (els, beat, id) => els.find(e => e.id === `b${beat}-cast-${id}`);
+const group = (els, beat, id) =>
+  els.find((e) => e.id === `b${beat}-cast-${id}`);
 
 test('each beat starts every object where the last beat left it, without compounding opacity', () => {
-  const [one, two] = film([{ objects, formations: [{ form: 'scatter', at: 0 }, { form: 'hero', hero: 'b', at: 1 }] }, { formations: [{ form: 'line', ids: ['a', 'b', 'c'], at: 0.5, thread: true }] }]);
+  const [one, two] = film([
+    {
+      objects,
+      formations: [
+        { form: 'scatter', at: 0 },
+        { form: 'hero', hero: 'b', at: 1 },
+      ],
+    },
+    {
+      formations: [
+        { form: 'line', ids: ['a', 'b', 'c'], at: 0.5, thread: true },
+      ],
+    },
+  ]);
   for (const id of ['a', 'b', 'c']) {
-    const was = end(group(one, 0, id)), now = group(two, 1, id);
-    assert.ok(Math.abs(now.x - was.x) < 1e-6 && Math.abs(now.y - was.y) < 1e-6, `${id} keeps its place across the cut`);
-    assert.equal(now.keys[0].at, 0); assert.equal(now.keys[0].scale, was.scale); assert.equal(now.keys[0].opacity, was.opacity, `${id} keeps its scale and opacity as absolute keys`);
+    const was = end(group(one, 0, id)),
+      now = group(two, 1, id);
+    assert.ok(
+      Math.abs(now.x - was.x) < 1e-6 && Math.abs(now.y - was.y) < 1e-6,
+      `${id} keeps its place across the cut`,
+    );
+    assert.equal(now.keys[0].at, 0);
+    assert.equal(now.keys[0].scale, was.scale);
+    assert.equal(
+      now.keys[0].opacity,
+      was.opacity,
+      `${id} keeps its scale and opacity as absolute keys`,
+    );
     assert.equal(end(now).opacity, 1, `${id} is fully back in the line`);
   }
-  assert.equal(group(one, 0, 'c').enter, 'none', 'an object can stand on frame one');
-  assert.equal(two.filter(e => e.type === 'line').length, 2, 'the line is threaded');
+  assert.equal(
+    group(one, 0, 'c').enter,
+    'none',
+    'an object can stand on frame one',
+  );
+  assert.equal(
+    two.filter((e) => e.type === 'line').length,
+    2,
+    'the line is threaded',
+  );
 });
 
 test('objects no formation names are still drawn; a swap hands one pose to another, its cause drawn on top', () => {
   const beats = film([
     { objects, formations: [{ form: 'hero', hero: 'b', at: 0 }] },
-    { objects: [{ id: 'note', icon: 'pencil', color: 'surface' }, { id: 'd', icon: 'chart-line', color: 'positive' }],
-      formations: [{ form: 'cluster', ids: ['note'], beside: 'b', at: 0.2 }, { form: 'swap', out: 'b', in: 'd', by: ['note'], at: 2 }] },
+    {
+      objects: [
+        { id: 'note', icon: 'pencil', color: 'surface' },
+        { id: 'd', icon: 'chart-line', color: 'positive' },
+      ],
+      formations: [
+        { form: 'cluster', ids: ['note'], beside: 'b', at: 0.2 },
+        { form: 'swap', out: 'b', in: 'd', by: ['note'], at: 2 },
+      ],
+    },
     { formations: [{ form: 'wave', ids: ['d'], at: 0.5 }] },
   ]);
   const [, two, three] = beats;
-  assert.ok(group(two, 1, 'a') && group(two, 1, 'c'), 'the quiet ring is still on screen while the note acts');
-  const b = end(group(two, 1, 'b')), d = end(group(two, 1, 'd'));
-  assert.equal(b.opacity, 0); assert.ok(Math.abs(d.x - b.x) < 1e-6 && Math.abs(d.y - b.y) < 1e-6, 'the new object stands where the old one was');
-  const order = two.filter(e => e.type === 'group').map(e => e.id);
-  assert.ok(order.indexOf('b1-cast-note') > order.indexOf('b1-cast-d'), 'what causes the change is drawn over it');
-  const order3 = three.filter(e => e.type === 'group').map(e => e.id);
-  assert.ok(order3.indexOf('b2-cast-note') > order3.indexOf('b2-cast-d'), 'and keeps that depth across the cut');
+  assert.ok(
+    group(two, 1, 'a') && group(two, 1, 'c'),
+    'the quiet ring is still on screen while the note acts',
+  );
+  const b = end(group(two, 1, 'b')),
+    d = end(group(two, 1, 'd'));
+  assert.equal(b.opacity, 0);
+  assert.ok(
+    Math.abs(d.x - b.x) < 1e-6 && Math.abs(d.y - b.y) < 1e-6,
+    'the new object stands where the old one was',
+  );
+  const order = two.filter((e) => e.type === 'group').map((e) => e.id);
+  assert.ok(
+    order.indexOf('b1-cast-note') > order.indexOf('b1-cast-d'),
+    'what causes the change is drawn over it',
+  );
+  const order3 = three.filter((e) => e.type === 'group').map((e) => e.id);
+  assert.ok(
+    order3.indexOf('b2-cast-note') > order3.indexOf('b2-cast-d'),
+    'and keeps that depth across the cut',
+  );
   assert.ok(!group(three, 2, 'b'), 'a swapped-out object stays gone');
 });
 
-test('consecutive cast beats cut without moving the picture under the objects', async t => {
-  const fs = await import('node:fs'), os = await import('node:os'), path = await import('node:path');
-  const { computeTiming } = await import('../engine/lib/timing.mjs');
-  const { loadStoryboard } = await import('../engine/lib/project.mjs');
-  const { createJob } = await import('../film/job.mjs');
+test('consecutive cast beats cut without moving the picture under the objects', async (t) => {
+  const fs = await import('node:fs'),
+    os = await import('node:os'),
+    path = await import('node:path');
+  const { computeTiming } =
+    await import('../packages/engine/dist/engine/lib/timing.mjs');
+  const { loadStoryboard } =
+    await import('../packages/engine/dist/engine/lib/project.mjs');
+  const { createJob } = await import('../packages/engine/dist/film/job.mjs');
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-cast-'));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
-  fs.writeFileSync(path.join(dir, 'storyboard.json'), JSON.stringify({ version: 2, title: 'Cast', format: { preset: 'landscape' }, theme: 'paper', transition: 'fade',
-    beats: [{ id: 'pile', block: 'canvas', vo: 'A pile of material.', props: { cast: { objects, formations: [{ form: 'scatter', at: 0 }] } } },
-      { id: 'order', block: 'canvas', vo: 'So it falls into line.', props: { cast: { formations: [{ form: 'line', say: 'line' }] } } }] }));
-  const { job, errors } = createJob(loadStoryboard(dir), computeTiming(dir), { draft: true });
+  fs.writeFileSync(
+    path.join(dir, 'storyboard.json'),
+    JSON.stringify({
+      version: 2,
+      title: 'Cast',
+      format: { preset: 'landscape' },
+      theme: 'paper',
+      transition: 'fade',
+      beats: [
+        {
+          id: 'pile',
+          block: 'canvas',
+          vo: 'A pile of material.',
+          props: {
+            cast: { objects, formations: [{ form: 'scatter', at: 0 }] },
+          },
+        },
+        {
+          id: 'order',
+          block: 'canvas',
+          vo: 'So it falls into line.',
+          props: { cast: { formations: [{ form: 'line', say: 'line' }] } },
+        },
+      ],
+    }),
+  );
+  const { job, errors } = createJob(loadStoryboard(dir), computeTiming(dir), {
+    draft: true,
+  });
   assert.deepEqual(errors, []);
   const [pile, order] = job.beats;
-  assert.equal(order.transition, 'cut'); assert.equal(pile.exit, 'none');
-  assert.deepEqual([pile.camera, order.camera], [{ move: 'none' }, { move: 'none' }]);
-  assert.ok(order.props.elements.some(e => e.id === 'order-cast-a'), 'the carried objects are in the second beat');
+  assert.equal(order.transition, 'cut');
+  assert.equal(pile.exit, 'none');
+  assert.deepEqual(
+    [pile.camera, order.camera],
+    [{ move: 'none' }, { move: 'none' }],
+  );
+  assert.ok(
+    order.props.elements.some((e) => e.id === 'order-cast-a'),
+    'the carried objects are in the second beat',
+  );
 });
 
 test('a thread never appears before the pieces it joins; too late in the beat, it is left out with a note', () => {
-  const lineUp = at => ({ cast: { objects, formations: [{ form: 'scatter', at: 0 }, { form: 'line', ids: ['a', 'b', 'c'], at, stagger: 0.2, thread: true }] } });
-  const run = (at, duration) => { const notes = [], carry = {}; return { els: expandCastProps(lineUp(at), { ...wide, beatId: 'x', duration }, { notes, carry }).elements, notes, carry }; };
-  const early = run(1, 6), lines = early.els.filter(e => e.type === 'line');
+  const lineUp = (at) => ({
+    cast: {
+      objects,
+      formations: [
+        { form: 'scatter', at: 0 },
+        { form: 'line', ids: ['a', 'b', 'c'], at, stagger: 0.2, thread: true },
+      ],
+    },
+  });
+  const run = (at, duration) => {
+    const notes = [],
+      carry = {};
+    return {
+      els: expandCastProps(
+        lineUp(at),
+        { ...wide, beatId: 'x', duration },
+        { notes, carry },
+      ).elements,
+      notes,
+      carry,
+    };
+  };
+  const early = run(1, 6),
+    lines = early.els.filter((e) => e.type === 'line');
   assert.equal(lines.length, 2);
-  lines.forEach((l, j) => assert.ok(l.at >= 1 + (j + 1) * 0.2 + 1.1 - 1e-9, `segment ${j + 1} draws after its far end arrives (${l.at})`));
-  assert.equal(early.carry.threads.length, 2, 'a settled thread carries into the next beat');
+  lines.forEach((l, j) =>
+    assert.ok(
+      l.at >= 1 + (j + 1) * 0.2 + 1.1 - 1e-9,
+      `segment ${j + 1} draws after its far end arrives (${l.at})`,
+    ),
+  );
+  assert.equal(
+    early.carry.threads.length,
+    2,
+    'a settled thread carries into the next beat',
+  );
   const late = run(4.6, 6);
-  assert.equal(late.els.filter(e => e.type === 'line').length, 0, 'no connector shows before the line has formed');
-  assert.match(late.notes[0], /^x: the thread of formation 2 \(line\) would finish .* after the beat ends/);
-  assert.equal(late.carry.threads.length, 0, 'and none appears after the cut either');
+  assert.equal(
+    late.els.filter((e) => e.type === 'line').length,
+    0,
+    'no connector shows before the line has formed',
+  );
+  assert.match(
+    late.notes[0],
+    /^x: the thread of formation 2 \(line\) would finish .* after the beat ends/,
+  );
+  assert.equal(
+    late.carry.threads.length,
+    0,
+    'and none appears after the cut either',
+  );
 });
 
 test('objects stay inside the title-safe area, marks ride with their object, and the look carries', () => {
   const tall = { width: 1080, height: 1920 };
-  const edge = { look: 'drawn', objects: [{ id: 'a', icon: 'file' }, { id: 'b', icon: 'mail' }, { id: 'c', icon: 'star' }],
-    formations: [{ form: 'scatter', at: 0, center: [1000, 300] }, { form: 'cluster', ids: ['b', 'c'], beside: 'a', at: 1 }, { form: 'mark', mark: 'cross', ids: ['b'], at: 2 }, { form: 'exit', ids: ['b'], at: 3 }] };
-  const carry = {}, els = expandCastProps({ cast: edge }, { ...tall, beatId: 'x', duration: 5 }, { carry }).elements;
+  const edge = {
+    look: 'drawn',
+    objects: [
+      { id: 'a', icon: 'file' },
+      { id: 'b', icon: 'mail' },
+      { id: 'c', icon: 'star' },
+    ],
+    formations: [
+      { form: 'scatter', at: 0, center: [1000, 300] },
+      { form: 'cluster', ids: ['b', 'c'], beside: 'a', at: 1 },
+      { form: 'mark', mark: 'cross', ids: ['b'], at: 2 },
+      { form: 'exit', ids: ['b'], at: 3 },
+    ],
+  };
+  const carry = {},
+    els = expandCastProps(
+      { cast: edge },
+      { ...tall, beatId: 'x', duration: 5 },
+      { carry },
+    ).elements;
   for (const id of ['a', 'b', 'c']) {
-    const g = els.find(e => e.id === `x-cast-${id}`), keys = g.keys.filter(k => k.x != null && k.at < 3);
-    const at = keys.length ? { x: g.x + keys.at(-1).x, y: g.y + keys.at(-1).y } : g;
-    assert.ok(at.x >= 108 && at.x <= 972 && at.y >= 115 && at.y <= 1805, `${id} stays in the safe area (${at.x.toFixed(0)}, ${at.y.toFixed(0)})`);
+    const g = els.find((e) => e.id === `x-cast-${id}`),
+      keys = g.keys.filter((k) => k.x != null && k.at < 3);
+    const at = keys.length
+      ? { x: g.x + keys.at(-1).x, y: g.y + keys.at(-1).y }
+      : g;
+    assert.ok(
+      at.x >= 108 && at.x <= 972 && at.y >= 115 && at.y <= 1805,
+      `${id} stays in the safe area (${at.x.toFixed(0)}, ${at.y.toFixed(0)})`,
+    );
   }
-  const b = els.find(e => e.id === 'x-cast-b'), cross = b.children.find(c => c.type === 'path');
-  assert.ok(cross && cross.rough && cross.exitAt == null, 'the cross is drawn by hand inside the object, and leaves with it');
-  assert.ok(b.children.find(c => c.id.endsWith('-tile')).rough?.fill === 'hachure', 'the drawn look hatches the tile');
+  const b = els.find((e) => e.id === 'x-cast-b'),
+    cross = b.children.find((c) => c.type === 'path');
+  assert.ok(
+    cross && cross.rough && cross.exitAt == null,
+    'the cross is drawn by hand inside the object, and leaves with it',
+  );
+  assert.ok(
+    b.children.find((c) => c.id.endsWith('-tile')).rough?.fill === 'hachure',
+    'the drawn look hatches the tile',
+  );
   assert.equal(carry.look, 'drawn');
   // Under a heading the cast keeps below it.
-  const headed = expandCastProps({ title: 'Reports arrive', cast: { objects: [1, 2, 3, 4, 5, 6].map(i => ({ id: `o${i}`, icon: 'mail' })), formations: [{ form: 'scatter', at: 0 }, { form: 'ring', at: 1 }] } }, { ...tall, beatId: 'h', duration: 4 }, {}).elements;
-  for (const g of headed.filter(e => e.type === 'group'))
-    for (const y of [g.y, ...g.keys.filter(k => k.y != null).map(k => g.y + k.y)]) assert.ok(y - 0.58 * 162 >= 430, `${g.id} stays under the heading (${y.toFixed(0)})`);
-  assert.throws(() => expandCastProps({ cast: { look: 'print', formations: [{ form: 'wave', at: 0 }] } }, { ...tall, beatId: 'y' }, { objects: carry.objects, state: carry.state, look: carry.look }), /look is set once/);
+  const headed = expandCastProps(
+    {
+      title: 'Reports arrive',
+      cast: {
+        objects: [1, 2, 3, 4, 5, 6].map((i) => ({ id: `o${i}`, icon: 'mail' })),
+        formations: [
+          { form: 'scatter', at: 0 },
+          { form: 'ring', at: 1 },
+        ],
+      },
+    },
+    { ...tall, beatId: 'h', duration: 4 },
+    {},
+  ).elements;
+  for (const g of headed.filter((e) => e.type === 'group'))
+    for (const y of [
+      g.y,
+      ...g.keys.filter((k) => k.y != null).map((k) => g.y + k.y),
+    ])
+      assert.ok(
+        y - 0.58 * 162 >= 430,
+        `${g.id} stays under the heading (${y.toFixed(0)})`,
+      );
+  assert.throws(
+    () =>
+      expandCastProps(
+        { cast: { look: 'print', formations: [{ form: 'wave', at: 0 }] } },
+        { ...tall, beatId: 'y' },
+        { objects: carry.objects, state: carry.state, look: carry.look },
+      ),
+    /look is set once/,
+  );
 });
 
 test('the camera holds the whole cast, stands on frame one, and carries its zoom across the cut', () => {
-  const carry = {}, ctx = () => ({ state: carry.state, objects: carry.objects, threads: carry.threads, look: carry.look, camera: carry.camera, carry });
-  const one = expandCastProps({ cast: { objects, formations: [{ form: 'hero', hero: 'b', at: 0 }, { form: 'camera', zoom: 1.2, on: 'b', at: 0.5 }] } }, { ...wide, beatId: 'p' }, ctx()).elements;
-  assert.equal(one.length, 1); assert.equal(one[0].id, 'p-cast-stage'); assert.equal(one[0].enter, 'none');
+  const carry = {},
+    ctx = () => ({
+      state: carry.state,
+      objects: carry.objects,
+      threads: carry.threads,
+      look: carry.look,
+      camera: carry.camera,
+      carry,
+    });
+  const one = expandCastProps(
+    {
+      cast: {
+        objects,
+        formations: [
+          { form: 'hero', hero: 'b', at: 0 },
+          { form: 'camera', zoom: 1.2, on: 'b', at: 0.5 },
+        ],
+      },
+    },
+    { ...wide, beatId: 'p' },
+    ctx(),
+  ).elements;
+  assert.equal(one.length, 1);
+  assert.equal(one[0].id, 'p-cast-stage');
+  assert.equal(one[0].enter, 'none');
   assert.equal(one[0].keys.at(-1).scale, 1.2);
-  const two = expandCastProps({ cast: { formations: [{ form: 'wave', at: 0 }] } }, { ...wide, beatId: 'q' }, ctx()).elements;
-  assert.deepEqual([two[0].keys[0].at, two[0].keys[0].scale, two[0].keys[0].dur], [0, 1.2, 0], 'the next beat starts where the camera stopped');
-  const three = expandCastProps({ cast: { formations: [{ form: 'camera', zoom: 1, at: 0 }] } }, { ...wide, beatId: 'r' }, ctx()).elements;
+  const two = expandCastProps(
+    { cast: { formations: [{ form: 'wave', at: 0 }] } },
+    { ...wide, beatId: 'q' },
+    ctx(),
+  ).elements;
+  assert.deepEqual(
+    [two[0].keys[0].at, two[0].keys[0].scale, two[0].keys[0].dur],
+    [0, 1.2, 0],
+    'the next beat starts where the camera stopped',
+  );
+  const three = expandCastProps(
+    { cast: { formations: [{ form: 'camera', zoom: 1, at: 0 }] } },
+    { ...wide, beatId: 'r' },
+    ctx(),
+  ).elements;
   assert.equal(three[0].keys.at(-1).scale, 1);
-  assert.ok(expandCastProps({ cast: { formations: [{ form: 'wave', at: 0 }] } }, { ...wide, beatId: 's' }, ctx()).elements.length > 1, 'back at rest, no stage is needed');
+  assert.ok(
+    expandCastProps(
+      { cast: { formations: [{ form: 'wave', at: 0 }] } },
+      { ...wide, beatId: 's' },
+      ctx(),
+    ).elements.length > 1,
+    'back at rest, no stage is needed',
+  );
 });
 
-test('an object fills the frame and the next scene plays on its colour; it emerges back where it was', async t => {
-  const fs = await import('node:fs'), os = await import('node:os'), path = await import('node:path');
-  const { computeTiming } = await import('../engine/lib/timing.mjs');
-  const { loadStoryboard } = await import('../engine/lib/project.mjs');
-  const { createJob } = await import('../film/job.mjs');
+test('an object fills the frame and the next scene plays on its colour; it emerges back where it was', async (t) => {
+  const fs = await import('node:fs'),
+    os = await import('node:os'),
+    path = await import('node:path');
+  const { computeTiming } =
+    await import('../packages/engine/dist/engine/lib/timing.mjs');
+  const { loadStoryboard } =
+    await import('../packages/engine/dist/engine/lib/project.mjs');
+  const { createJob } = await import('../packages/engine/dist/film/job.mjs');
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-fill-'));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
-  fs.writeFileSync(path.join(dir, 'storyboard.json'), JSON.stringify({ version: 2, title: 'Fill', format: { preset: 'landscape' }, theme: 'paper', transition: 'fade',
-    beats: [{ id: 'one', block: 'canvas', vo: 'One piece becomes the whole screen.', props: { cast: { objects: [...objects, { id: 'd', icon: 'chart-bar', color: 'accent2' }],
-      formations: [{ form: 'hero', hero: 'd', at: 0 }, { form: 'fill', ids: ['d'], say: 'whole' }] } } },
-    { id: 'mid', block: 'statement', vo: 'This is the moment.', props: { text: 'The moment' } },
-    { id: 'two', block: 'canvas', vo: 'And then it goes back.', props: { cast: { formations: [{ form: 'emerge', ids: ['d'], at: 0 }] } } }] }));
-  const { job, errors } = createJob(loadStoryboard(dir), computeTiming(dir), { draft: true });
+  fs.writeFileSync(
+    path.join(dir, 'storyboard.json'),
+    JSON.stringify({
+      version: 2,
+      title: 'Fill',
+      format: { preset: 'landscape' },
+      theme: 'paper',
+      transition: 'fade',
+      beats: [
+        {
+          id: 'one',
+          block: 'canvas',
+          vo: 'One piece becomes the whole screen.',
+          props: {
+            cast: {
+              objects: [
+                ...objects,
+                { id: 'd', icon: 'chart-bar', color: 'accent2' },
+              ],
+              formations: [
+                { form: 'hero', hero: 'd', at: 0 },
+                { form: 'fill', ids: ['d'], say: 'whole' },
+              ],
+            },
+          },
+        },
+        {
+          id: 'mid',
+          block: 'statement',
+          vo: 'This is the moment.',
+          props: { text: 'The moment' },
+        },
+        {
+          id: 'two',
+          block: 'canvas',
+          vo: 'And then it goes back.',
+          props: {
+            cast: { formations: [{ form: 'emerge', ids: ['d'], at: 0 }] },
+          },
+        },
+      ],
+    }),
+  );
+  const { job, errors } = createJob(loadStoryboard(dir), computeTiming(dir), {
+    draft: true,
+  });
   assert.deepEqual(errors, []);
   const [one, mid, two] = job.beats;
-  assert.equal(mid.tone, 'accent2', 'the scene after the fill takes the object’s colour as its tone');
-  assert.deepEqual([one.exit, mid.transition, mid.exit, two.transition], ['none', 'cut', 'none', 'cut'], 'cuts on one colour, both ways');
-  const d = (els, id) => { for (const e of els) { if (e.id === id) return e; const c = e.children && d(e.children, id); if (c) return c; } };
-  const grown = d(one.props.elements, 'one-cast-d'), back = d(two.props.elements, 'two-cast-d');
+  assert.equal(
+    mid.tone,
+    'accent2',
+    'the scene after the fill takes the object’s colour as its tone',
+  );
+  assert.deepEqual(
+    [one.exit, mid.transition, mid.exit, two.transition],
+    ['none', 'cut', 'none', 'cut'],
+    'cuts on one colour, both ways',
+  );
+  const d = (els, id) => {
+    for (const e of els) {
+      if (e.id === id) return e;
+      const c = e.children && d(e.children, id);
+      if (c) return c;
+    }
+  };
+  const grown = d(one.props.elements, 'one-cast-d'),
+    back = d(two.props.elements, 'two-cast-d');
   assert.ok(grown.keys.at(-1).scale > 10, 'it grows past the frame');
-  assert.equal(back.keys[0].scale, grown.keys.at(-1).scale, 'and comes back from exactly there');
+  assert.equal(
+    back.keys[0].scale,
+    grown.keys.at(-1).scale,
+    'and comes back from exactly there',
+  );
   assert.equal(back.keys.at(-1).scale, 2.3, 'to the pose it had before');
-  const icon = back.children.find(c => c.type === 'icon');
-  assert.deepEqual([icon.keys[0].opacity, icon.keys.at(-1).opacity, icon.opacity], [0, 1, undefined], 'its face returns by keys, never a base opacity');
-  assert.throws(() => expandCastProps({ cast: { objects, formations: [{ form: 'fill', ids: ['a'], at: 0 }, { form: 'wave', at: 1 }] } }, { ...wide, beatId: 'z' }, {}), /fill is the last move/);
-  assert.throws(() => expandCastProps({ cast: { objects: [{ id: 'g', icon: 'file', color: 'positive' }], formations: [{ form: 'fill', ids: ['g'], at: 0 }] } }, { ...wide, beatId: 'z' }, {}), /accent, accent2, surface or ink/);
+  const icon = back.children.find((c) => c.type === 'icon');
+  assert.deepEqual(
+    [icon.keys[0].opacity, icon.keys.at(-1).opacity, icon.opacity],
+    [0, 1, undefined],
+    'its face returns by keys, never a base opacity',
+  );
+  assert.throws(
+    () =>
+      expandCastProps(
+        {
+          cast: {
+            objects,
+            formations: [
+              { form: 'fill', ids: ['a'], at: 0 },
+              { form: 'wave', at: 1 },
+            ],
+          },
+        },
+        { ...wide, beatId: 'z' },
+        {},
+      ),
+    /fill is the last move/,
+  );
+  assert.throws(
+    () =>
+      expandCastProps(
+        {
+          cast: {
+            objects: [{ id: 'g', icon: 'file', color: 'positive' }],
+            formations: [{ form: 'fill', ids: ['g'], at: 0 }],
+          },
+        },
+        { ...wide, beatId: 'z' },
+        {},
+      ),
+    /accent, accent2, surface or ink/,
+  );
 });
 
 test('word pills fit their words and stay whole in the frame; scenery sits under the cast; a bottom heading is kept clear', () => {
   // The free agent's first cast (live run 2): six pills, a panel drawn behind them, headings at the bottom.
-  const words = ['Login crash', 'Login crash', 'Blank screen', 'Blank screen', 'Slow search', 'Export fails'];
-  const cast = { objects: words.map((word, i) => ({ id: `b${i}`, word, color: i % 2 ? 'accent2' : 'accent' })), formations: [{ form: 'scatter', at: 0 }] };
-  const panel = { type: 'rect', x: 240, y: 110, w: 1440, h: 620, fill: 'surface', at: 0, enter: 'none' };
-  const els = expandCastProps({ title: 'Reports arrive', elements: [panel], cast }, { ...wide, beatId: 'r', duration: 6 }, { heading: 'bottom' }).elements;
-  assert.equal(els[0].type, 'rect', 'the author’s panel is drawn first, under the cast');
-  const pills = els.filter(e => e.type === 'group');
-  const boxes = pills.map(g => { const tile = g.children.find(c => c.id.endsWith('-tile')), s = g.keys[0].scale; return { x0: g.x + tile.x * s, x1: g.x + (tile.x + tile.w) * s, y1: g.y + (tile.y + tile.h) * s, w: tile.w }; });
+  const words = [
+    'Login crash',
+    'Login crash',
+    'Blank screen',
+    'Blank screen',
+    'Slow search',
+    'Export fails',
+  ];
+  const cast = {
+    objects: words.map((word, i) => ({
+      id: `b${i}`,
+      word,
+      color: i % 2 ? 'accent2' : 'accent',
+    })),
+    formations: [{ form: 'scatter', at: 0 }],
+  };
+  const panel = {
+    type: 'rect',
+    x: 240,
+    y: 110,
+    w: 1440,
+    h: 620,
+    fill: 'surface',
+    at: 0,
+    enter: 'none',
+  };
+  const els = expandCastProps(
+    { title: 'Reports arrive', elements: [panel], cast },
+    { ...wide, beatId: 'r', duration: 6 },
+    { heading: 'bottom' },
+  ).elements;
+  assert.equal(
+    els[0].type,
+    'rect',
+    'the author’s panel is drawn first, under the cast',
+  );
+  const pills = els.filter((e) => e.type === 'group');
+  const boxes = pills.map((g) => {
+    const tile = g.children.find((c) => c.id.endsWith('-tile')),
+      s = g.keys[0].scale;
+    return {
+      x0: g.x + tile.x * s,
+      x1: g.x + (tile.x + tile.w) * s,
+      y1: g.y + (tile.y + tile.h) * s,
+      w: tile.w,
+    };
+  });
   for (const b of boxes) {
-    assert.ok(b.w < 480, `a pill is about as long as its word (${b.w.toFixed(0)} px)`);
-    assert.ok(b.x0 >= 96 && b.x1 <= 1824, `a pill stays whole in the frame (${b.x0.toFixed(0)}–${b.x1.toFixed(0)})`);
-    assert.ok(b.y1 <= 1080 * 0.66, `and above the bottom heading (${b.y1.toFixed(0)})`);
+    assert.ok(
+      b.w < 480,
+      `a pill is about as long as its word (${b.w.toFixed(0)} px)`,
+    );
+    assert.ok(
+      b.x0 >= 96 && b.x1 <= 1824,
+      `a pill stays whole in the frame (${b.x0.toFixed(0)}–${b.x1.toFixed(0)})`,
+    );
+    assert.ok(
+      b.y1 <= 1080 * 0.66,
+      `and above the bottom heading (${b.y1.toFixed(0)})`,
+    );
   }
-  for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
-    const [a, b] = [pills[i], pills[j]];
-    assert.ok(Math.abs(a.x - b.x) > 40 || Math.abs(a.y - b.y) > 40, `${a.id} and ${b.id} do not land on each other`);
-  }
+  for (let i = 0; i < boxes.length; i++)
+    for (let j = i + 1; j < boxes.length; j++) {
+      const [a, b] = [pills[i], pills[j]];
+      assert.ok(
+        Math.abs(a.x - b.x) > 40 || Math.abs(a.y - b.y) > 40,
+        `${a.id} and ${b.id} do not land on each other`,
+      );
+    }
 });
 
 test('copies merge into one, and later split back out of it', () => {
-  const carry = {}, ctx = () => ({ state: carry.state, objects: carry.objects, threads: carry.threads, look: carry.look, camera: carry.camera, carry });
-  const one = expandCastProps({ cast: { objects, formations: [{ form: 'scatter', at: 0 }, { form: 'merge', ids: ['b', 'c'], into: 'a', at: 1 }] } }, { ...wide, beatId: 'm' }, ctx()).elements;
-  const a = one.find(e => e.id === 'm-cast-a'), b = one.find(e => e.id === 'm-cast-b');
+  const carry = {},
+    ctx = () => ({
+      state: carry.state,
+      objects: carry.objects,
+      threads: carry.threads,
+      look: carry.look,
+      camera: carry.camera,
+      carry,
+    });
+  const one = expandCastProps(
+    {
+      cast: {
+        objects,
+        formations: [
+          { form: 'scatter', at: 0 },
+          { form: 'merge', ids: ['b', 'c'], into: 'a', at: 1 },
+        ],
+      },
+    },
+    { ...wide, beatId: 'm' },
+    ctx(),
+  ).elements;
+  const a = one.find((e) => e.id === 'm-cast-a'),
+    b = one.find((e) => e.id === 'm-cast-b');
   assert.equal(b.keys.at(-1).opacity, 0, 'a copy is absorbed');
-  assert.ok(Math.abs(b.x + b.keys.at(-1).x - (a.x + (a.keys.filter(k => k.x != null).at(-1)?.x ?? 0))) < 1e-6, 'into the one it joins');
-  assert.ok(a.keys.some(k => k.scale > 1.1), 'which gives a pulse as each lands');
+  assert.ok(
+    Math.abs(
+      b.x +
+        b.keys.at(-1).x -
+        (a.x + (a.keys.filter((k) => k.x != null).at(-1)?.x ?? 0)),
+    ) < 1e-6,
+    'into the one it joins',
+  );
+  assert.ok(
+    a.keys.some((k) => k.scale > 1.1),
+    'which gives a pulse as each lands',
+  );
   assert.ok(carry.state.get('b').gone && carry.state.get('c').gone);
-  const two = expandCastProps({ cast: { objects: [{ id: 'n', icon: 'bell' }], formations: [{ form: 'split', from: 'a', ids: ['b', 'c', 'n'], at: 0.5 }] } }, { ...wide, beatId: 's' }, ctx()).elements;
+  const two = expandCastProps(
+    {
+      cast: {
+        objects: [{ id: 'n', icon: 'bell' }],
+        formations: [
+          { form: 'split', from: 'a', ids: ['b', 'c', 'n'], at: 0.5 },
+        ],
+      },
+    },
+    { ...wide, beatId: 's' },
+    ctx(),
+  ).elements;
   for (const id of ['b', 'c', 'n']) {
-    const g = two.find(e => e.id === `s-cast-${id}`), last = g.keys.at(-1);
+    const g = two.find((e) => e.id === `s-cast-${id}`),
+      last = g.keys.at(-1);
     assert.equal(last.opacity, 1, `${id} comes out`);
-    const p = carry.state.get(id), h = carry.state.get('a');
-    assert.ok(Math.hypot(p.x - h.x, p.y - h.y) > 162, `${id} stands clear of the one it came out of`);
+    const p = carry.state.get(id),
+      h = carry.state.get('a');
+    assert.ok(
+      Math.hypot(p.x - h.x, p.y - h.y) > 162,
+      `${id} stands clear of the one it came out of`,
+    );
   }
-  assert.throws(() => expandCastProps({ cast: { objects, formations: [{ form: 'merge', ids: ['a'], into: 'a', at: 0 }] } }, { ...wide, beatId: 'x' }, {}), /merge folds ids into one other object/);
+  assert.throws(
+    () =>
+      expandCastProps(
+        {
+          cast: {
+            objects,
+            formations: [{ form: 'merge', ids: ['a'], into: 'a', at: 0 }],
+          },
+        },
+        { ...wide, beatId: 'x' },
+        {},
+      ),
+    /merge folds ids into one other object/,
+  );
 });
 
 test('an object travels a curved route to another, drawing its trail beneath the cast', () => {
-  const els = expandCastProps({ cast: { look: 'drawn', objects: [{ id: 't', icon: 'mail', enter: 'none' }, { id: 'e', icon: 'user', color: 'surface', enter: 'none' }],
-    formations: [{ form: 'cluster', ids: ['t'], center: [300, 700], at: 0 }, { form: 'cluster', ids: ['e'], center: [1600, 400], at: 0 }, { form: 'travel', ids: ['t'], to: 'e', via: [[900, 250]], at: 1, dur: 2 }] } },
-    { ...wide, beatId: 'j', duration: 5 }, {}).elements;
-  const trail = els[0], t = els.find(e => e.id === 'j-cast-t'), moves = t.keys.filter(k => k.at >= 1);
-  assert.equal(trail.type, 'path'); assert.equal(trail.enter, 'draw'); assert.ok(trail.rough, 'the trail is drawn by hand, first, under the cast');
-  assert.ok(moves.length >= 10 && t.keys.length <= 24, 'the route is followed, not a straight slide, within the keyframe budget');
+  const els = expandCastProps(
+    {
+      cast: {
+        look: 'drawn',
+        objects: [
+          { id: 't', icon: 'mail', enter: 'none' },
+          { id: 'e', icon: 'user', color: 'surface', enter: 'none' },
+        ],
+        formations: [
+          { form: 'cluster', ids: ['t'], center: [300, 700], at: 0 },
+          { form: 'cluster', ids: ['e'], center: [1600, 400], at: 0 },
+          {
+            form: 'travel',
+            ids: ['t'],
+            to: 'e',
+            via: [[900, 250]],
+            at: 1,
+            dur: 2,
+          },
+        ],
+      },
+    },
+    { ...wide, beatId: 'j', duration: 5 },
+    {},
+  ).elements;
+  const trail = els[0],
+    t = els.find((e) => e.id === 'j-cast-t'),
+    moves = t.keys.filter((k) => k.at >= 1);
+  assert.equal(trail.type, 'path');
+  assert.equal(trail.enter, 'draw');
+  assert.ok(trail.rough, 'the trail is drawn by hand, first, under the cast');
+  assert.ok(
+    moves.length >= 10 && t.keys.length <= 24,
+    'the route is followed, not a straight slide, within the keyframe budget',
+  );
   const mid = moves[Math.floor(moves.length / 2)];
-  assert.ok(t.y + mid.y < 500, `it bows up through the waypoint (${(t.y + mid.y).toFixed(0)})`);
+  assert.ok(
+    t.y + mid.y < 500,
+    `it bows up through the waypoint (${(t.y + mid.y).toFixed(0)})`,
+  );
   const end = { x: t.x + moves.at(-1).x, y: t.y + moves.at(-1).y };
-  assert.ok(Math.hypot(end.x - 1600, end.y - 400) > 162, 'and stops beside where it was going, not on it');
-  assert.throws(() => expandCastProps({ cast: { objects, formations: [{ form: 'travel', ids: ['a'], at: 0 }] } }, { ...wide, beatId: 'x' }, {}), /travel\) moves ids to another object/);
+  assert.ok(
+    Math.hypot(end.x - 1600, end.y - 400) > 162,
+    'and stops beside where it was going, not on it',
+  );
+  assert.throws(
+    () =>
+      expandCastProps(
+        {
+          cast: {
+            objects,
+            formations: [{ form: 'travel', ids: ['a'], at: 0 }],
+          },
+        },
+        { ...wide, beatId: 'x' },
+        {},
+      ),
+    /travel\) moves ids to another object/,
+  );
 });
 
 test('composed objects are drawn things with their own extent, in every look', () => {
   for (const look of ['tiles', 'drawn', 'print']) {
-    const els = expandCastProps({ cast: { look, objects: ['doc', 'bubble', 'phone', 'card', 'person', 'ticket', 'box'].map(shape => ({ id: shape, shape, color: 'accent' })), formations: [{ form: 'row', at: 0 }] } }, { ...wide, beatId: 'g' }, {}).elements;
-    for (const g of els.filter(e => e.type === 'group')) {
-      const body = g.children.find(c => c.id.endsWith('-tile'));
-      assert.ok(body && g.children.length >= 3, `${g.id} has a body and its details`);
+    const els = expandCastProps(
+      {
+        cast: {
+          look,
+          objects: [
+            'doc',
+            'bubble',
+            'phone',
+            'card',
+            'person',
+            'ticket',
+            'box',
+          ].map((shape) => ({ id: shape, shape, color: 'accent' })),
+          formations: [{ form: 'row', at: 0 }],
+        },
+      },
+      { ...wide, beatId: 'g' },
+      {},
+    ).elements;
+    for (const g of els.filter((e) => e.type === 'group')) {
+      const body = g.children.find((c) => c.id.endsWith('-tile'));
+      assert.ok(
+        body && g.children.length >= 3,
+        `${g.id} has a body and its details`,
+      );
       if (look === 'drawn') assert.ok(body.rough, `${g.id} is drawn by hand`);
       if (look === 'print') assert.ok(body.print, `${g.id} is printed`);
     }
   }
-  assert.throws(() => expandCastProps({ cast: { objects: [{ id: 'q', shape: 'dragon' }], formations: [{ form: 'row', at: 0 }] } }, { ...wide, beatId: 'x' }, {}), /shape is doc, bubble/);
-  assert.throws(() => expandCastProps({ cast: { objects: [{ id: 'q', shape: 'doc', icon: 'file' }], formations: [{ form: 'row', at: 0 }] } }, { ...wide, beatId: 'x' }, {}), /one of an icon, a word or a shape/);
+  assert.throws(
+    () =>
+      expandCastProps(
+        {
+          cast: {
+            objects: [{ id: 'q', shape: 'dragon' }],
+            formations: [{ form: 'row', at: 0 }],
+          },
+        },
+        { ...wide, beatId: 'x' },
+        {},
+      ),
+    /shape is doc, bubble/,
+  );
+  assert.throws(
+    () =>
+      expandCastProps(
+        {
+          cast: {
+            objects: [{ id: 'q', shape: 'doc', icon: 'file' }],
+            formations: [{ form: 'row', at: 0 }],
+          },
+        },
+        { ...wide, beatId: 'x' },
+        {},
+      ),
+    /one of an icon, a word or a shape/,
+  );
 });
 
 test('a small cast gets room, a small spread is a multiple, and the rest return when the hero leaves', () => {
   // From the free agent's live run 3: three reports, spread 1 and 1.1, and the hero exiting.
-  const three = [{ id: 'r1', icon: 'file' }, { id: 'r2', icon: 'file', color: 'accent2' }, { id: 'r3', icon: 'file' }];
-  const carry = {}, ctx = () => ({ state: carry.state, objects: carry.objects, threads: carry.threads, look: carry.look, camera: carry.camera, unit: carry.unit, carry });
-  const one = expandCastProps({ cast: { objects: three, formations: [{ form: 'scatter', at: 0, spread: 1 }] } }, { ...wide, beatId: 'a' }, ctx()).elements;
-  const xs = one.map(g => g.x);
-  assert.ok(Math.max(...xs) - Math.min(...xs) > 300, 'spread 1 is the normal spread, not one pixel');
+  const three = [
+    { id: 'r1', icon: 'file' },
+    { id: 'r2', icon: 'file', color: 'accent2' },
+    { id: 'r3', icon: 'file' },
+  ];
+  const carry = {},
+    ctx = () => ({
+      state: carry.state,
+      objects: carry.objects,
+      threads: carry.threads,
+      look: carry.look,
+      camera: carry.camera,
+      unit: carry.unit,
+      carry,
+    });
+  const one = expandCastProps(
+    {
+      cast: {
+        objects: three,
+        formations: [{ form: 'scatter', at: 0, spread: 1 }],
+      },
+    },
+    { ...wide, beatId: 'a' },
+    ctx(),
+  ).elements;
+  const xs = one.map((g) => g.x);
+  assert.ok(
+    Math.max(...xs) - Math.min(...xs) > 300,
+    'spread 1 is the normal spread, not one pixel',
+  );
   assert.ok(carry.unit > 1080 * 0.18, 'three objects get larger tiles');
-  const two = expandCastProps({ cast: { objects: [{ id: 'r4', icon: 'file' }], formations: [{ form: 'hero', hero: 'r1', at: 0 }, { form: 'exit', ids: ['r1'], at: 2 }] } }, { ...wide, beatId: 'b' }, ctx()).elements;
-  assert.ok(carry.unit > 1080 * 0.18, 'and keep their size when the cast grows');
+  const two = expandCastProps(
+    {
+      cast: {
+        objects: [{ id: 'r4', icon: 'file' }],
+        formations: [
+          { form: 'hero', hero: 'r1', at: 0 },
+          { form: 'exit', ids: ['r1'], at: 2 },
+        ],
+      },
+    },
+    { ...wide, beatId: 'b' },
+    ctx(),
+  ).elements;
+  assert.ok(
+    carry.unit > 1080 * 0.18,
+    'and keep their size when the cast grows',
+  );
   for (const id of ['r2', 'r3']) {
-    const g = two.find(e => e.id === `b-cast-${id}`);
-    assert.equal(g.keys.at(-1).opacity, 1, `${id} comes back to full when the hero leaves`);
+    const g = two.find((e) => e.id === `b-cast-${id}`);
+    assert.equal(
+      g.keys.at(-1).opacity,
+      1,
+      `${id} comes back to full when the hero leaves`,
+    );
     assert.ok(g.keys.at(-1).at > 2, 'after it leaves');
   }
 });
 
 test('fill covers the whole frame for every object, through the camera, measured at its transformed corners', () => {
-  const find = (els, id) => { for (const e of els) { if (e.id === id) return e; const c = e.children && find(e.children, id); if (c) return c; } };
-  const kinds = ['doc', 'bubble', 'phone', 'card', 'person', 'ticket', 'box'].map(shape => ({ shape })).concat([{ word: 'Login crash' }, { icon: 'file' }]);
-  const cameras = [null, { form: 'camera', zoom: 0.7, on: 'side', at: 0.5 }, { form: 'camera', zoom: 1.35, on: 'x', at: 0.5 }];
+  const find = (els, id) => {
+    for (const e of els) {
+      if (e.id === id) return e;
+      const c = e.children && find(e.children, id);
+      if (c) return c;
+    }
+  };
+  const kinds = ['doc', 'bubble', 'phone', 'card', 'person', 'ticket', 'box']
+    .map((shape) => ({ shape }))
+    .concat([{ word: 'Login crash' }, { icon: 'file' }]);
+  const cameras = [
+    null,
+    { form: 'camera', zoom: 0.7, on: 'side', at: 0.5 },
+    { form: 'camera', zoom: 1.35, on: 'x', at: 0.5 },
+  ];
   for (const frame of [wide, { width: 1080, height: 1920 }])
     for (const kind of kinds)
       for (const camera of cameras) {
-        const cast = { objects: [{ id: 'x', color: 'accent2', size: 120, ...kind }, { id: 'side', icon: 'star' }],
-          formations: [{ form: 'row', at: 0 }, ...(camera ? [camera] : []), { form: 'fill', ids: ['x'], at: 2 }] };
-        const carry = {}, els = expandCastProps({ cast }, { ...frame, beatId: 'f' }, { carry }).elements;
-        const p = carry.state.get('x'), cam = carry.camera, solid = find(els, 'f-cast-x-solid');
+        const cast = {
+          objects: [
+            { id: 'x', color: 'accent2', size: 120, ...kind },
+            { id: 'side', icon: 'star' },
+          ],
+          formations: [
+            { form: 'row', at: 0 },
+            ...(camera ? [camera] : []),
+            { form: 'fill', ids: ['x'], at: 2 },
+          ],
+        };
+        const carry = {},
+          els = expandCastProps(
+            { cast },
+            { ...frame, beatId: 'f' },
+            { carry },
+          ).elements;
+        const p = carry.state.get('x'),
+          cam = carry.camera,
+          solid = find(els, 'f-cast-x-solid');
         // The flat colour where it ends: scaled about the object's position, then through the camera
         // (which scales about the frame's middle and pans).
-        const C = [frame.width / 2, frame.height / 2], k = p.scale * cam.zoom;
-        const screen = (sx, sy) => [C[0] + cam.zoom * (sx - C[0]) + cam.x, C[1] + cam.zoom * (sy - C[1]) + cam.y];
-        const [L, T] = screen(p.x + solid.x * p.scale, p.y + solid.y * p.scale), [R, B] = [L + solid.w * k, T + solid.h * k], rad = (solid.r ?? 0) * k;
+        const C = [frame.width / 2, frame.height / 2],
+          k = p.scale * cam.zoom;
+        const screen = (sx, sy) => [
+          C[0] + cam.zoom * (sx - C[0]) + cam.x,
+          C[1] + cam.zoom * (sy - C[1]) + cam.y,
+        ];
+        const [L, T] = screen(p.x + solid.x * p.scale, p.y + solid.y * p.scale),
+          [R, B] = [L + solid.w * k, T + solid.h * k],
+          rad = (solid.r ?? 0) * k;
         const inside = ([x, y]) => {
           if (x < L || x > R || y < T || y > B) return false;
-          const cx = Math.min(Math.max(x, L + rad), R - rad), cy = Math.min(Math.max(y, T + rad), B - rad);
+          const cx = Math.min(Math.max(x, L + rad), R - rad),
+            cy = Math.min(Math.max(y, T + rad), B - rad);
           return Math.hypot(x - cx, y - cy) <= rad;
         };
         const what = `${JSON.stringify(kind)} ${frame.width}x${frame.height}${camera ? ` camera ${camera.zoom}` : ''}`;
-        for (const corner of [[0, 0], [frame.width, 0], [0, frame.height], [frame.width, frame.height]])
-          assert.ok(inside(corner), `fill covers the frame corner ${corner}: ${what} (colour spans ${Math.round(L)},${Math.round(T)} to ${Math.round(R)},${Math.round(B)})`);
+        for (const corner of [
+          [0, 0],
+          [frame.width, 0],
+          [0, frame.height],
+          [frame.width, frame.height],
+        ])
+          assert.ok(
+            inside(corner),
+            `fill covers the frame corner ${corner}: ${what} (colour spans ${Math.round(L)},${Math.round(T)} to ${Math.round(R)},${Math.round(B)})`,
+          );
       }
 });
 
 test('emerge returns a filled object to where it stood, and a carried flood shows only its colour', () => {
   for (const shape of ['person', 'bubble']) {
     const carry = {};
-    const cast = { objects: [{ id: 'x', shape, color: 'accent2', size: 140 }], formations: [{ form: 'row', at: 0 }, { form: 'fill', ids: ['x'], at: 2 }] };
+    const cast = {
+      objects: [{ id: 'x', shape, color: 'accent2', size: 140 }],
+      formations: [
+        { form: 'row', at: 0 },
+        { form: 'fill', ids: ['x'], at: 2 },
+      ],
+    };
     expandCastProps({ cast }, { ...wide, beatId: 'a' }, { carry });
     const before = carry.state.get('x').filled;
     // The next cast beat starts from the filled pose: the body and its parts are hidden from its
     // first frame, then come back as it emerges, to the pose it had before it filled.
     const next = {};
-    const els = expandCastProps({ cast: { formations: [{ form: 'emerge', ids: ['x'], at: 0, dur: 1 }] } }, { ...wide, beatId: 'b' }, {
-      carry: next, state: carry.state, objects: carry.objects, threads: carry.threads, camera: carry.camera, unit: carry.unit }).elements;
-    const find = (list, id) => { for (const e of list) { if (e.id === id) return e; const c = e.children && find(e.children, id); if (c) return c; } };
+    const els = expandCastProps(
+      { cast: { formations: [{ form: 'emerge', ids: ['x'], at: 0, dur: 1 }] } },
+      { ...wide, beatId: 'b' },
+      {
+        carry: next,
+        state: carry.state,
+        objects: carry.objects,
+        threads: carry.threads,
+        camera: carry.camera,
+        unit: carry.unit,
+      },
+    ).elements;
+    const find = (list, id) => {
+      for (const e of list) {
+        if (e.id === id) return e;
+        const c = e.children && find(e.children, id);
+        if (c) return c;
+      }
+    };
     // A beat that carries the flood without emerging shows only its colour too.
-    const held = expandCastProps({ cast: { formations: [{ form: 'camera', zoom: 1, at: 0 }] } }, { ...wide, beatId: 'h' }, {
-      carry: {}, state: carry.state, objects: carry.objects, threads: carry.threads, camera: carry.camera, unit: carry.unit }).elements;
-    for (const c of find(held, 'h-cast-x').children.filter(c => /-(tile|part\d+)$/.test(c.id)))
-      assert.equal(c.keys?.[0]?.opacity, 0, `${shape}: ${c.id} stays hidden in a beat that holds the flood`);
+    const held = expandCastProps(
+      { cast: { formations: [{ form: 'camera', zoom: 1, at: 0 }] } },
+      { ...wide, beatId: 'h' },
+      {
+        carry: {},
+        state: carry.state,
+        objects: carry.objects,
+        threads: carry.threads,
+        camera: carry.camera,
+        unit: carry.unit,
+      },
+    ).elements;
+    for (const c of find(held, 'h-cast-x').children.filter((c) =>
+      /-(tile|part\d+)$/.test(c.id),
+    ))
+      assert.equal(
+        c.keys?.[0]?.opacity,
+        0,
+        `${shape}: ${c.id} stays hidden in a beat that holds the flood`,
+      );
     const g = find(els, 'b-cast-x');
-    for (const c of g.children.filter(c => /-(tile|part\d+)$/.test(c.id)))
-      assert.equal(c.keys?.[0]?.opacity, 0, `${shape}: ${c.id} is hidden on the first frame of a carried flood`);
+    for (const c of g.children.filter((c) => /-(tile|part\d+)$/.test(c.id)))
+      assert.equal(
+        c.keys?.[0]?.opacity,
+        0,
+        `${shape}: ${c.id} is hidden on the first frame of a carried flood`,
+      );
     const after = next.state.get('x');
-    for (const k of ['x', 'y', 'scale']) assert.ok(Math.abs((after[k] ?? 1) - (before[k] ?? 1)) < 1e-6, `${shape}: emerge returns ${k}`);
+    for (const k of ['x', 'y', 'scale'])
+      assert.ok(
+        Math.abs((after[k] ?? 1) - (before[k] ?? 1)) < 1e-6,
+        `${shape}: emerge returns ${k}`,
+      );
   }
 });
 
 test('several journeys in one beat share the keyframe budget, or are refused clearly', () => {
   const objects1 = [{ id: 'a', shape: 'ticket' }];
-  const route = n => [{ form: 'row', ids: ['a'], at: 0 }, ...Array.from({ length: n }, (_, i) => ({ form: 'travel', ids: ['a'], center: [500 + i * 300, 400 + i * 50], at: 2 + i * 2 }))];
-  const g = expandCastProps({ cast: { objects: objects1, formations: route(3) } }, { ...wide, beatId: 't', duration: 9 }, {}).elements.find(e => e.id === 't-cast-a');
-  assert.ok(g.keys.length <= 24, `three journeys fit the 24-keyframe budget (${g.keys.length})`);
-  assert.throws(() => expandCastProps({ cast: { objects: objects1, formations: route(6) } }, { ...wide, beatId: 't', duration: 15 }, {}), /more moves in this beat than one object can carry .* move some of it to the next beat/);
+  const route = (n) => [
+    { form: 'row', ids: ['a'], at: 0 },
+    ...Array.from({ length: n }, (_, i) => ({
+      form: 'travel',
+      ids: ['a'],
+      center: [500 + i * 300, 400 + i * 50],
+      at: 2 + i * 2,
+    })),
+  ];
+  const g = expandCastProps(
+    { cast: { objects: objects1, formations: route(3) } },
+    { ...wide, beatId: 't', duration: 9 },
+    {},
+  ).elements.find((e) => e.id === 't-cast-a');
+  assert.ok(
+    g.keys.length <= 24,
+    `three journeys fit the 24-keyframe budget (${g.keys.length})`,
+  );
+  assert.throws(
+    () =>
+      expandCastProps(
+        { cast: { objects: objects1, formations: route(6) } },
+        { ...wide, beatId: 't', duration: 15 },
+        {},
+      ),
+    /more moves in this beat than one object can carry .* move some of it to the next beat/,
+  );
   // Journeys leave room for the moves that come after them (director repro: three journeys, then a wave).
-  for (const after of [{ form: 'wave', ids: ['a'], at: 8 }, { form: 'exit', ids: ['a'], at: 8 }, { form: 'hero', hero: 'a', at: 8 }])
+  for (const after of [
+    { form: 'wave', ids: ['a'], at: 8 },
+    { form: 'exit', ids: ['a'], at: 8 },
+    { form: 'hero', hero: 'a', at: 8 },
+  ])
     for (const extra of [[], [{ form: 'wave', ids: ['a'], at: 9 }]]) {
-      const els = expandCastProps({ cast: { objects: objects1, formations: [...route(3), after, ...extra] } }, { ...wide, beatId: 't', duration: 11 }, {}).elements;
-      const a = els.find(e => e.id === 't-cast-a');
-      assert.ok(a.keys.length <= 24, `three journeys then ${after.form}${extra.length ? ' and a wave' : ''}: ${a.keys.length} keys`);
+      const els = expandCastProps(
+        {
+          cast: {
+            objects: objects1,
+            formations: [...route(3), after, ...extra],
+          },
+        },
+        { ...wide, beatId: 't', duration: 11 },
+        {},
+      ).elements;
+      const a = els.find((e) => e.id === 't-cast-a');
+      assert.ok(
+        a.keys.length <= 24,
+        `three journeys then ${after.form}${extra.length ? ' and a wave' : ''}: ${a.keys.length} keys`,
+      );
     }
   // A swap's cause, travelling first, keeps room for working at the object.
-  const swap = { objects: [{ id: 'a', shape: 'ticket' }, { id: 'b', shape: 'person' }, { id: 'c', icon: 'check' }],
-    formations: [{ form: 'row', ids: ['a', 'b'], at: 0 }, ...[1, 2, 3].map(i => ({ form: 'travel', ids: ['b'], to: 'a', at: i * 1.5 })), { form: 'swap', out: 'a', in: 'c', by: ['b'], at: 7 }] };
-  const b = expandCastProps({ cast: swap }, { ...wide, beatId: 's', duration: 9 }, {}).elements.find(e => e.id === 's-cast-b');
-  assert.ok(b.keys.length <= 24, `journeys then a swap's cause: ${b.keys.length} keys`);
+  const swap = {
+    objects: [
+      { id: 'a', shape: 'ticket' },
+      { id: 'b', shape: 'person' },
+      { id: 'c', icon: 'check' },
+    ],
+    formations: [
+      { form: 'row', ids: ['a', 'b'], at: 0 },
+      ...[1, 2, 3].map((i) => ({
+        form: 'travel',
+        ids: ['b'],
+        to: 'a',
+        at: i * 1.5,
+      })),
+      { form: 'swap', out: 'a', in: 'c', by: ['b'], at: 7 },
+    ],
+  };
+  const b = expandCastProps(
+    { cast: swap },
+    { ...wide, beatId: 's', duration: 9 },
+    {},
+  ).elements.find((e) => e.id === 's-cast-b');
+  assert.ok(
+    b.keys.length <= 24,
+    `journeys then a swap's cause: ${b.keys.length} keys`,
+  );
 });
 
 test('a new object can travel in from off the frame (live run 5: "regex" travels onto the edit)', () => {
-  const carry = {}, ctx = () => ({ state: carry.state, objects: carry.objects, threads: carry.threads, look: carry.look, camera: carry.camera, unit: carry.unit, carry });
-  expandCastProps({ cast: { look: 'drawn', objects: [{ id: 'edit', shape: 'doc' }], formations: [{ form: 'scatter', at: 0 }] } }, { ...wide, beatId: 'a' }, ctx());
-  const els = expandCastProps({ cast: { objects: [{ id: 'regex', word: 'regex', color: 'negative', enter: 'left' }], formations: [{ form: 'travel', ids: ['regex'], to: 'edit', at: 0.2, dur: 1 }] } }, { ...wide, beatId: 'b', duration: 3 }, ctx()).elements;
-  const r = els.find(e => e.id === 'b-cast-regex');
+  const carry = {},
+    ctx = () => ({
+      state: carry.state,
+      objects: carry.objects,
+      threads: carry.threads,
+      look: carry.look,
+      camera: carry.camera,
+      unit: carry.unit,
+      carry,
+    });
+  expandCastProps(
+    {
+      cast: {
+        look: 'drawn',
+        objects: [{ id: 'edit', shape: 'doc' }],
+        formations: [{ form: 'scatter', at: 0 }],
+      },
+    },
+    { ...wide, beatId: 'a' },
+    ctx(),
+  );
+  const els = expandCastProps(
+    {
+      cast: {
+        objects: [
+          { id: 'regex', word: 'regex', color: 'negative', enter: 'left' },
+        ],
+        formations: [
+          { form: 'travel', ids: ['regex'], to: 'edit', at: 0.2, dur: 1 },
+        ],
+      },
+    },
+    { ...wide, beatId: 'b', duration: 3 },
+    ctx(),
+  ).elements;
+  const r = els.find((e) => e.id === 'b-cast-regex');
   assert.ok(r && r.x < 0, 'it starts just past the left edge');
-  const end = r.x + r.keys.at(-1).x, edit = carry.state.get('edit');
-  assert.ok(end > 0 && Math.abs(end - edit.x) < 600, `and arrives beside the edit (${end.toFixed(0)} vs ${edit.x.toFixed(0)})`);
-  assert.ok(els.some(e => e.type === 'path' && e.id.includes('trail')), 'drawing its route');
+  const end = r.x + r.keys.at(-1).x,
+    edit = carry.state.get('edit');
+  assert.ok(
+    end > 0 && Math.abs(end - edit.x) < 600,
+    `and arrives beside the edit (${end.toFixed(0)} vs ${edit.x.toFixed(0)})`,
+  );
+  assert.ok(
+    els.some((e) => e.type === 'path' && e.id.includes('trail')),
+    'drawing its route',
+  );
 });
 
 test('travel to an object that is not on screen is refused by name, not a crash', () => {
   // Director repro (01:00): b is declared but never placed; a used to throw a TypeError.
-  const objectsAB = [{ id: 'a', shape: 'ticket' }, { id: 'b', shape: 'person' }];
-  assert.throws(() => expandCastProps({ cast: { objects: objectsAB, formations: [{ form: 'travel', ids: ['a'], to: 'b', at: 0 }] } }, { ...wide, beatId: 'x', duration: 3 }, {}),
-    /cast: b is not on screen when a travels to it; place it first/);
+  const objectsAB = [
+    { id: 'a', shape: 'ticket' },
+    { id: 'b', shape: 'person' },
+  ];
+  assert.throws(
+    () =>
+      expandCastProps(
+        {
+          cast: {
+            objects: objectsAB,
+            formations: [{ form: 'travel', ids: ['a'], to: 'b', at: 0 }],
+          },
+        },
+        { ...wide, beatId: 'x', duration: 3 },
+        {},
+      ),
+    /cast: b is not on screen when a travels to it; place it first/,
+  );
   // A departed destination is refused the same way.
-  assert.throws(() => expandCastProps({ cast: { objects: objectsAB, formations: [{ form: 'row', at: 0 }, { form: 'exit', ids: ['b'], at: 0.5 }, { form: 'travel', ids: ['a'], to: 'b', at: 2 }] } }, { ...wide, beatId: 'x', duration: 4 }, {}),
-    /b is not on screen/);
+  assert.throws(
+    () =>
+      expandCastProps(
+        {
+          cast: {
+            objects: objectsAB,
+            formations: [
+              { form: 'row', at: 0 },
+              { form: 'exit', ids: ['b'], at: 0.5 },
+              { form: 'travel', ids: ['a'], to: 'b', at: 2 },
+            ],
+          },
+        },
+        { ...wide, beatId: 'x', duration: 4 },
+        {},
+      ),
+    /b is not on screen/,
+  );
 });
 
 test('a cast names only objects it declared', () => {
-  assert.throws(() => film([{ objects, formations: [{ form: 'hero', hero: 'z', at: 0 }] }]), /hero/);
-  assert.throws(() => film([{ objects, formations: [{ form: 'line', ids: ['a'], by: ['b'], at: 0 }] }]), /by lists/);
+  assert.throws(
+    () => film([{ objects, formations: [{ form: 'hero', hero: 'z', at: 0 }] }]),
+    /hero/,
+  );
+  assert.throws(
+    () =>
+      film([
+        {
+          objects,
+          formations: [{ form: 'line', ids: ['a'], by: ['b'], at: 0 }],
+        },
+      ]),
+    /by lists/,
+  );
 });
 
 test('a new formation laid over objects carried from an earlier beat is named, and fresh clears it', () => {
-  const sb = { beats: [
-    { id: 'a', block: 'canvas', props: { cast: { objects: [{ id: 'lock', shape: 'lock', color: 'accent' }, { id: 'mail', shape: 'envelope', color: 'muted' }], formations: [{ form: 'row', at: 0, ids: ['lock', 'mail'] }, { form: 'hero', hero: 'lock', at: 0.5 }] } } },
-    { id: 'b', block: 'canvas', props: { cast: { objects: [{ id: 'usb', shape: 'box', color: 'muted' }, { id: 'app', shape: 'cloud', color: 'muted' }, { id: 'ss', shape: 'lock', color: 'accent' }], formations: [{ form: 'line', at: 0, ids: ['usb', 'app', 'ss'] }] } } },
-  ] };
+  const sb = {
+    beats: [
+      {
+        id: 'a',
+        block: 'canvas',
+        props: {
+          cast: {
+            objects: [
+              { id: 'lock', shape: 'lock', color: 'accent' },
+              { id: 'mail', shape: 'envelope', color: 'muted' },
+            ],
+            formations: [
+              { form: 'row', at: 0, ids: ['lock', 'mail'] },
+              { form: 'hero', hero: 'lock', at: 0.5 },
+            ],
+          },
+        },
+      },
+      {
+        id: 'b',
+        block: 'canvas',
+        props: {
+          cast: {
+            objects: [
+              { id: 'usb', shape: 'box', color: 'muted' },
+              { id: 'app', shape: 'cloud', color: 'muted' },
+              { id: 'ss', shape: 'lock', color: 'accent' },
+            ],
+            formations: [{ form: 'line', at: 0, ids: ['usb', 'app', 'ss'] }],
+          },
+        },
+      },
+    ],
+  };
   const notes = castOverlaps(sb);
   assert.equal(notes.length, 1);
-  assert.match(notes[0], /^b: overlap: .*lock.*carried from an earlier beat.*"fresh": true/);
+  assert.match(
+    notes[0],
+    /^b: overlap: .*lock.*carried from an earlier beat.*"fresh": true/,
+  );
   sb.beats[1].props.cast.fresh = true;
   assert.deepEqual(castOverlaps(sb), []);
 });

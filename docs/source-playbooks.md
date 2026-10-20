@@ -15,13 +15,13 @@ These playbooks and directions are examples of complete arcs. They are editable 
 ## Pick or invent a direction
 
 ```sh
-node engine/cli.mjs directions research
-node engine/cli.mjs directions podcast
-node engine/cli.mjs start /tmp/report-film --document report.md --direction research-evidence
-node engine/cli.mjs ingest /tmp/episode-film --audio episode.wav --direction podcast-picture
+pnpm cf directions research
+pnpm cf directions podcast
+pnpm cf start /tmp/report-film --document report.md --direction research-evidence
+pnpm cf ingest /tmp/episode-film --audio episode.wav --direction podcast-picture
 ```
 
-Directions combine a starting arc, treatment and story/picture/pace guidance. The defaults are independent: `--playbook`, `--treatment` and `--theme` can override them. Tags suggest suitable material; they do not limit which source can use a direction. Add a custom `library/directions/*.json` through `--library DIR`, or author directly without choosing a profile. See [the JSON contract](../library/README.md#directions).
+Directions combine a starting arc, treatment and story/picture/pace guidance. The defaults are independent: `--playbook`, `--treatment` and `--theme` can override them. Tags suggest suitable material; they do not limit which source can use a direction. Add a custom `library/directions/*.json` through `--library DIR`, or author directly without choosing a profile. See [the JSON contract](../packages/engine/src/library/README.md#directions).
 
 A recording import still starts with timed kinetic captions. It now honors the visual treatment and writes the direction brief, while preserving exact imported narration, speakers, cuts and word metadata. The agent uses that brief to draw source-specific pictures; the profile never replaces the audio with its illustrative playbook. The research importer likewise keeps the real evidence separate from sample starter claims until the agent authors the story.
 
@@ -44,8 +44,8 @@ Ingest the report before writing the film. Read the evidence brief alongside the
 A playbook's sample story is a hypothetical demonstration. It asserts no real study result. Replace its words, visible source lines and `sources` metadata together. A quantitative chart belongs in the film only when there is a real comparable dataset behind it.
 
 ```sh
-node engine/cli.mjs ingest /tmp/research-film --markdown report.md --direction research-evidence
-node engine/cli.mjs new /tmp/research-film-tall --playbook research-digest --treatment research-study --vertical
+pnpm cf ingest /tmp/research-film --markdown report.md --direction research-evidence
+pnpm cf new /tmp/research-film-tall --playbook research-digest --treatment research-study --vertical
 ```
 
 ## Preserve the conversation
@@ -55,7 +55,7 @@ For a real podcast, import the recording and measured word timestamps. The recor
 Select a moment whose own language has the intended arc. Keep speaker identity, word order, meaningful pauses and context intact. If the excerpt has a different shape, change the storyboard to fit it. A held picture can span several spoken ideas; a new scene is not required for every sentence. A held picture is an artistic choice, not an instruction to extend every imported recording.
 
 ```sh
-node engine/cli.mjs ingest /tmp/podcast-recording --audio episode.wav --from 120 --to 165 --vertical --direction podcast-picture
+pnpm cf ingest /tmp/podcast-recording --audio episode.wav --from 120 --to 165 --vertical --direction podcast-picture
 ```
 
 Use `examples/podcast-pictures` as a visual reference while editing the imported project's native storyboard. Review the actual audio and measured words at each change of thought. Inspect both frame shapes before rendering the final cut.

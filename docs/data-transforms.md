@@ -1,6 +1,6 @@
 # Auditable data transformations
 
-`engine/lib/data-transforms.mjs` exports `DATA_MODEL_VERSION = 1` and five deterministic helpers. They retain unrounded values for drawing and expose the assumptions a composition must label. These are algebraic contracts, not forecasts, causal models or a published investment-index methodology.
+`packages/engine/src/engine/lib/data-transforms.mts` exports `DATA_MODEL_VERSION = 1` and five deterministic helpers. They retain unrounded values for drawing and expose the assumptions a composition must label. These are algebraic contracts, not forecasts, causal models or a published investment-index methodology.
 
 ## Observed-anchor rebasing
 

@@ -25,7 +25,7 @@ The four primitives are canvas props (`docs/canvas.md`, "Explanation primitives"
 
 ## Motion
 
-- **Rate functions** adapted from Manim (MIT; `scene/native/THIRD_PARTY.md`) are available on any key: `thereAndBack` to point or nudge and return, `wiggle` to draw the eye, `runningStart` for anticipation, `overshoot` to settle, `smooth`, and `lingering`. Use them where the character fits, not everywhere.
+- **Rate functions** adapted from Manim (MIT; `packages/engine/src/scene/native/THIRD_PARTY.md`) are available on any key: `thereAndBack` to point or nudge and return, `wiggle` to draw the eye, `runningStart` for anticipation, `overshoot` to settle, `smooth`, and `lingering`. Use them where the character fits, not everywhere.
 - **Boards.** `place` makes any primitive a panel of a board, so the camera can hold close on each and then pull back to the whole (`docs/canvas.md`, "Worlds").
 
 ## Voice
