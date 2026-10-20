@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
+    "oxlint": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }

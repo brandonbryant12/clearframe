@@ -355,6 +355,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript
+      oxlint:
+        specifier: 'catalog:'
+        version: 1.85.0(oxlint-tsgolint@7.0.2004)
       typescript:
         specifier: 'catalog:'
         version: '@typescript/typescript6@6.0.2'
