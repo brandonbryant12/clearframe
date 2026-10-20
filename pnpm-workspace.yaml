@@ -5,6 +5,7 @@ packages:
 
 catalog:
   '@effect/platform-node': 4.0.1
+  '@effect/platform-node-shared': 4.0.1
   '@opencode/cli': 2.1.0
   '@opencode/client': 2.1.0
   '@opencode/plugin': 2.1.0

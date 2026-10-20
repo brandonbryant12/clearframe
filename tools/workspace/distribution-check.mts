@@ -8,7 +8,7 @@ import { workspace } from './shared.mjs';
 const evidence = path.join(workspace, 'build/package');
 fs.mkdirSync(evidence, { recursive: true });
 const temporary = fs.realpathSync(
-  fs.mkdtempSync(path.join(os.tmpdir(), 'clearframe package # ')),
+  fs.mkdtempSync(path.join(os.tmpdir(), 'clearframe-package-')),
 );
 // A consumer must load its installed JavaScript without a workspace loader.
 const { NODE_OPTIONS: _workspaceLoader, ...environment } = process.env;
@@ -96,7 +96,7 @@ try {
   assert.equal(archives.length, 1, 'Packing must produce one distribution.');
   const archive = path.join(packed, archives[0]);
   fs.copyFileSync(archive, path.join(evidence, archives[0]));
-  const consumer = path.join(temporary, 'consumer');
+  const consumer = path.join(temporary, 'consumer # %');
   fs.mkdirSync(consumer);
   fs.writeFileSync(
     path.join(consumer, 'package.json'),
@@ -104,7 +104,9 @@ try {
       name: 'clearframe-install-check',
       private: true,
       type: 'module',
-      dependencies: { clearframe: `file:${archive}` },
+      dependencies: {
+        clearframe: `file:${path.relative(consumer, archive)}`,
+      },
     }),
   );
   fs.writeFileSync(
