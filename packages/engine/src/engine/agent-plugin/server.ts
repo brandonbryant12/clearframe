@@ -6,7 +6,6 @@ import fs from 'node:fs';
 import { Plugin } from '@opencode/plugin';
 import * as Schema from 'effect/Schema';
 import { TOOLS } from './tool-definitions.js';
-import type { Content } from '@opencode/schema/tool';
 const bridgeSchema = Schema.Struct({
   url: Schema.NonEmptyString,
   token: Schema.NonEmptyString,
@@ -97,18 +96,17 @@ export default Plugin.define({
                     i && typeof i.data === 'string' && /^image\//.test(i.mime),
                 )
               : [];
-            const content: string | readonly Content[] | undefined =
-              images.length
-                ? [
-                    { type: 'text', text: String(j.content ?? '') },
-                    ...images.map((i) => ({
-                      type: 'file' as const,
-                      uri: `data:${i.mime};base64,${i.data}`,
-                      mime: i.mime,
-                      name: i.name,
-                    })),
-                  ]
-                : j.content;
+            const content = images.length
+              ? [
+                  { type: 'text' as const, text: String(j.content ?? '') },
+                  ...images.map((i) => ({
+                    type: 'file' as const,
+                    uri: `data:${i.mime};base64,${i.data}`,
+                    mime: i.mime,
+                    name: i.name,
+                  })),
+                ]
+              : j.content;
             return { content, metadata: j.metadata ?? {} };
           },
         });
