@@ -52,6 +52,17 @@ function agentFor(dirs, client, extra = {}) {
 
 // ------------------------------------------------------------------ one conversation per project
 
+test('a corrupt conversation link is refused and preserved instead of creating a new session', t => {
+  const d = project(t), file = path.join(d, 'review/agent.json');
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  for (const content of ['{"sessionID":', 'null', '{"submissions":{}}']) {
+    fs.writeFileSync(file, content);
+    assert.throws(() => readLink(d), /saved conversation/);
+    assert.throws(() => updateLink(d, l => ({ ...l, sessionID: 'replacement' })), /saved conversation/);
+    assert.equal(fs.readFileSync(file, 'utf8'), content);
+  }
+});
+
 test('concurrent first use of a project creates exactly one conversation, and projects stay separate', async t => {
   const a = project(t), b = project(t);
   let open; const gate = new Promise(r => { open = r; });
@@ -214,6 +225,18 @@ function bridged(t, ctx) {
 const user = (id, scope) => ({ id, type: 'user', text: 'x', metadata: { clearframe: { text: 'x', scope } } });
 const asst = id => ({ id, type: 'assistant', content: [] });
 const setText = (beat, text) => [{ command: 'set', target: 'beat', beat, path: 'props.text', value: text }];
+
+test('an edit rechecks the render pause after awaiting its request scope', async t => {
+  const dir = project(t), before = fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8');
+  let paused = null, release;
+  const scope = new Promise(resolve => { release = resolve; });
+  const tools = createTools({ base: dir, jobs: {}, filmOf: () => ({ id: 'film' }), pauseOf: () => paused, currentScope: () => scope });
+  const pending = tools.edit({ dir, input: { hash: studioState(dir).hash, label: 'Change', ops: setText('a', 'Changed') }, sessionID: 'session', messageID: 'message' });
+  paused = { label: 'Final render' };
+  release({ scope: { kind: 'film' }, run: 'request' });
+  await assert.rejects(pending, error => error.status === 409 && /Final render/.test(error.message));
+  assert.equal(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8'), before);
+});
 
 test('an edit is held to the scope of the request it answers, even after a later message is queued or steered in', async t => {
   const { d, edit } = bridged(t, [user('msg_A', { kind: 'scene', beats: ['a'], label: 'Scene: First' }), asst('msg_M1'), user('msg_B', { kind: 'film' }), asst('msg_M2')]);

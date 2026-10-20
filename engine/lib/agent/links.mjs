@@ -11,10 +11,24 @@ export const linkFile = dir => reviewPath(dir, 'agent.json');
 const atomic = (file, data) => { fs.mkdirSync(path.dirname(file), { recursive: true }); const tmp = `${file}.${crypto.randomUUID()}.tmp`; fs.writeFileSync(tmp, data); fs.renameSync(tmp, file); };
 
 export function readLink(dir) {
+  let text;
   try {
-    const l = JSON.parse(fs.readFileSync(linkFile(dir), 'utf8'));
-    return { sessionID: null, model: null, previous: [], submissions: [], ...l };
-  } catch { return { sessionID: null, model: null, previous: [], submissions: [] }; }
+    text = fs.readFileSync(linkFile(dir), 'utf8');
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+    return { sessionID: null, model: null, previous: [], submissions: [] };
+  }
+  let l;
+  try {
+    l = JSON.parse(text);
+    if (!l || typeof l !== 'object' || Array.isArray(l) ||
+        (l.sessionID != null && typeof l.sessionID !== 'string') ||
+        (Object.hasOwn(l, 'previous') && !Array.isArray(l.previous)) ||
+        (Object.hasOwn(l, 'submissions') && !Array.isArray(l.submissions))) throw new Error('invalid conversation link');
+  } catch (error) {
+    throw new Error(`Cannot read the saved conversation at ${linkFile(dir)}: ${error.message}. Restore or repair it before continuing; it has not been overwritten.`, { cause: error });
+  }
+  return { sessionID: null, model: null, previous: [], submissions: [], ...l };
 }
 /** Read, change and write the link in one synchronous step (the server is the only writer). */
 export function updateLink(dir, fn) {

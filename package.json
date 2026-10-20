@@ -12,10 +12,11 @@
     "test": "node --test --test-concurrency=2 test/*.test.mjs",
     "test:native": "node --test --test-concurrency=2 test/native.test.mjs test/scene-engine.test.mjs",
     "catalog:sync": "node scripts/sync-catalog.mjs",
-    "verify:pipeline": "node scripts/verify-pipeline.mjs"
+    "verify:pipeline": "node scripts/verify-pipeline.mjs",
+    "test:harness": "node --test --test-concurrency=2 test/job-store.test.mjs test/job-harness.test.mjs test/studio-jobs.test.mjs test/agent-studio.test.mjs"
   },
   "engines": {
-    "node": ">=20.10"
+    "node": "^22.13.0 || >=23.4.0"
   },
   "keywords": [
     "motion-graphics",
@@ -50,6 +51,10 @@
   "dependencies": {
     "@opencode/cli": "2.0.24",
     "@opencode/client": "2.0.24",
-    "@opencode/plugin": "2.0.24"
+    "@opencode/plugin": "2.0.24",
+    "effect": "4.0.0-rc.112"
+  },
+  "exports": {
+    "./harness": "./engine/harness.mjs"
   }
 }

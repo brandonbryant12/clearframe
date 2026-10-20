@@ -3,7 +3,7 @@
 ## Requirements
 
 You need:
-- Node 20.10 or newer.
+- Node 22.13 or newer (23.x requires 23.4+).
 - Rust 1.88 or newer (rustup recommended).
 - The Xcode command-line tools.
 - FFmpeg and ffprobe with libx264.
@@ -17,15 +17,16 @@ xcode-select --install
 brew install ffmpeg
 # Install Rust from https://rustup.rs if ~/.cargo/bin/rustc is unavailable.
 export PATH="$HOME/.cargo/bin:$PATH"
+npm ci
 node engine/cli.mjs doctor
 node engine/cli.mjs build
 ```
 
 The CLI prefers `~/.cargo/bin` ahead of an older Homebrew Rust. `build` compiles the renderer into `scene/.cache/target` (ignored) with one Cargo job. Builds are release builds against `Cargo.lock`, and nested workers are capped at two. Every render command rebuilds the renderer first when its sources changed. A warm build of the crate takes under a minute on this Mac.
 
-Before building, check free disk: allow **25 GiB for a cold build** (the prebuilt Skia download and the dependency graph) and keep **10 GiB free with a warm cache**. `scene/.cache` is reusable and ignored; deleting it forces a cold build. Project `build/` outputs can be regenerated; keep original recordings and source media.
+Before building, check free disk: allow **25 GiB for a cold build** (the prebuilt Skia download and the dependency graph) and keep **20 GiB free with a warm cache**. `scene/.cache` is reusable and ignored; deleting it forces a cold build. Project `build/` outputs can be regenerated; keep original recordings and source media.
 
-The active Node workflow needs no npm packages. `npm ci` can establish the empty dependency lock. For full tests:
+`npm ci` installs the pinned OpenCode and Effect packages. The job harness uses Node's built-in SQLite, without an additional native SQLite package. For full tests:
 
 ```sh
 npm test

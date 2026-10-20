@@ -36,7 +36,9 @@ Agent-directed motion graphics rendered natively by the **ClearFrame scene engin
 
 ## Start
 
-Requires Node 20.10+, Rust 1.88+ and FFmpeg/ffprobe with libx264. Follow [native setup](film/SETUP.md) before the first build. There are no npm runtime dependencies and no browser.
+Requires Node 22.13+ (23.x requires 23.4+), Rust 1.88+ and FFmpeg/ffprobe with libx264. Run `npm install` for the pinned OpenCode and Effect dependencies, and follow [native setup](film/SETUP.md) before the first build. The native renderer needs no browser.
+
+The [local agent harness](docs/agent-harness.md) is available through `clearframe/harness`. The studio uses the same SQLite-backed job queue: durable request keys, lifecycle events, cancellation and explicit interrupted history. Effect scopes can own its lifetime. This is a standalone execution boundary for future director adapters; hosted rendering remains a separate qualification.
 
 ```sh
 node engine/cli.mjs doctor

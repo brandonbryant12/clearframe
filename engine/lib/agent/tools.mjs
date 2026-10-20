@@ -304,6 +304,9 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       if (outside) throw fail(`Not saved: the person limited this request to ${scope.label ?? scope.kind}, and this change ${outside}. Make the change inside that scope; if the request needs more, describe the broader change in your reply and ask the person to widen the scope (they choose Whole film in the composer). Never apply it without them.`, 409);
       const t = touched(plan.before, plan.after);
       const label = clip(input.label.trim(), 100);
+      // Scope resolution crosses the runtime boundary. A render may have queued while we waited.
+      const nowPaused = pauseOf(dir);
+      if (nowPaused) throw fail(`${nowPaused.label} is using the working copy. Wait for it (clearframe_job) before editing.`, 409);
       const r = studioCommand(dir, { command: 'batch', ops: input.ops, hash: plan.hash, label }, { actor: { by: 'agent', run } });
       if (r.hash === plan.hash) return { content: 'Nothing changed: the storyboard already says that.', metadata: { summary: 'No change', hash: r.hash } };
       const where = t.beats.length ? `scenes ${t.beats.join(', ')}` : 'film settings';
@@ -316,20 +319,23 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
     render({ dir, input }) {
       if (!['still', 'section', 'check', 'draft', 'captions'].includes(input.kind)) throw fail('Render a still, section, check, draft or captions.');
       const body = { film: filmId(dir), kind: input.kind };
+      if (input.requestKey != null) body.requestKey = input.requestKey;
       if (input.kind === 'still') Object.assign(body, input.beat ? { beat: input.beat, pos: input.pos ?? 0.6 } : { at: input.at });
       if (input.kind === 'section') Object.assign(body, { beats: input.beats, handles: 0.5 });
       if (input.kind === 'captions') body.draft = true;
       // A rough cut is the first look: declared placeholders render as labelled slates (draft --rough).
       if (input.kind === 'draft') body.rough = true;
       const r = jobs.start(dir, body);
-      const j = jobs.list(body.film).find(x => x.id === r.id);
-      return { content: `${r.cached ? 'Already rendered for this exact version' : 'Queued'}: ${j?.label ?? input.kind} (job ${r.id}). The person can watch or cancel it in the studio; follow it with clearframe_job.`,
+      const j = r.job ?? jobs.list(body.film).find(x => x.id === r.id);
+      return { content: `${r.cached ? 'Already rendered for this exact version' : r.duplicate ? `Existing job (${j?.status ?? 'saved'})` : 'Queued'}: ${j?.label ?? input.kind} (job ${r.id}). The person can watch or cancel it in the studio; follow it with clearframe_job.`,
         metadata: { summary: `${j?.label ?? input.kind}${r.cached ? ' (cached)' : ''}`, job: r.id } };
     },
 
     async job({ dir, input }) {
       const film = filmId(dir), until = Date.now() + Math.min(90, Math.max(0, Number(input.wait) || 0)) * 1000;
-      const pick = () => (input.id ? jobs.list(film).filter(j => j.id === input.id) : jobs.list(film).slice(-5));
+      const pick = () => (input.id
+        ? (jobs.get ? [jobs.get(input.id)].filter(j => j && j.film === film) : jobs.list(film).filter(j => j.id === input.id))
+        : jobs.list(film).slice(-5));
       let list = pick();
       if (input.id && !list.length) throw fail('No such job for this film.');
       while (input.id && Date.now() < until && !TERMINAL.has(list[0].status)) { await new Promise(r => setTimeout(r, 1000)); list = pick(); }

@@ -49,9 +49,12 @@ export async function serveViewer({ root, out = 'build/viewer', port = 4317, ren
   const filmOf = dir => { const id = Object.keys(built.dirs).find(k => built.dirs[k] === dir); const f = id && built.data.films.find(x => x.id === id); return id ? { id, title: f?.title ?? path.basename(dir), folder: path.relative(base, dir) } : null; };
   const pauseOf = dir => { const j = jobs.pausing(dir); return j ? { id: j.id, kind: j.kind, label: j.label } : null; };
   // The agent runtime starts on demand: the first message, or opening a film that already has a conversation.
-  const runtime = agentOff ? null : injectedRuntime ?? createRuntime({ base });
-  const agent = runtime ? createAgent({ base, runtime, jobs, dirs: () => Object.values(built.dirs), filmOf, pauseOf }) : null;
-  agent?.reindex();
+  let agent, runtime;
+  try {
+    runtime = agentOff ? null : injectedRuntime ?? createRuntime({ base });
+    agent = runtime ? createAgent({ base, runtime, jobs, dirs: () => Object.values(built.dirs), filmOf, pauseOf }) : null;
+    agent?.reindex();
+  } catch (error) { await jobs.stopAll(); throw error; }
   // The plugin reaches this server with a token only it and this process know (file mode 600, dot folder).
   const token = crypto.randomBytes(32).toString('hex');
   const bridgeAuth = h => { const want = Buffer.from(`Bearer ${token}`), got = Buffer.from(String(h ?? '')); return got.length === want.length && crypto.timingSafeEqual(got, want); };
@@ -71,7 +74,12 @@ export async function serveViewer({ root, out = 'build/viewer', port = 4317, ren
     if (req.method === 'GET') {
       if (p === '/api/ping') return reply(200, { ok: true, studio: true });
       if (p === '/api/studio/schema') return reply(200, studioSchema());
-      if (p === '/api/studio/jobs') return reply(200, { jobs: jobs.list(url.searchParams.get('film')) });
+      if (p === '/api/studio/jobs') {
+        const harness = jobs.health();
+        try { return reply(200, { jobs: jobs.list(url.searchParams.get('film')), harness }); }
+        catch (error) { return reply(503, { error: error.message, harness }); }
+      }
+      if (p === '/api/studio/jobs/events') return reply(200, { events: jobs.events({ after: Number(url.searchParams.get('after') ?? 0), jobId: url.searchParams.get('jobId') ?? undefined }) });
       if (p === '/api/films') return reply(200, { generatedAt: built.data.generatedAt, roots: built.data.roots, films: built.data.films.map(freshNotes), projects: path.relative(base, projectRoot) || '.', agent: !!agent });
       if (p === '/api/agent/status') return reply(200, { enabled: !!agent, disabled: agentOff, runtime: runtime?.status() ?? null, projects: path.relative(base, projectRoot) || '.' });
       if (p === '/api/agent/catalog') return reply(200, await startCatalog());
@@ -218,14 +226,20 @@ export async function serveViewer({ root, out = 'build/viewer', port = 4317, ren
   await new Promise((resolve, reject) => {
     server.once('error', e => reject(e.code === 'EADDRINUSE' ? new Error(`Port ${port} is in use (another viewer may be running). Stop it or pass --port.`) : e));
     server.listen(port, '127.0.0.1', resolve);
-  });
+  }).catch(async error => { await jobs.stopAll(); throw error; });
   // The OpenCode plugin finds this server through a private file; a restart writes a new token.
   if (agent) fs.mkdirSync(paths.agent, { recursive: true });
   if (agent) fs.writeFileSync(paths.bridge, JSON.stringify({ url: `http://127.0.0.1:${server.address().port}`, token, pid: process.pid, startedAt: new Date().toISOString() }), { mode: 0o600 });
   // Render children belong to this server: stop them with it. The OpenCode service is shared and
   // keeps conversations running; `clearframe agent stop` stops it.
-  const stop = () => { jobs.stopAll(); try { if (JSON.parse(fs.readFileSync(paths.bridge, 'utf8')).token === token) fs.rmSync(paths.bridge, { force: true }); } catch {} };
-  server.on('close', stop);
-  for (const sig of ['SIGINT', 'SIGTERM']) process.once(sig, () => { stop(); process.exit(128 + (sig === 'SIGINT' ? 2 : 15)); });
+  const stop = async () => { await jobs.stopAll(); try { if (JSON.parse(fs.readFileSync(paths.bridge, 'utf8')).token === token) fs.rmSync(paths.bridge, { force: true }); } catch {} };
+  const signals = ['SIGINT', 'SIGTERM'].map(sig => {
+    const handler = () => { stop().catch(e => console.error(e.message)).finally(() => process.exit(128 + (sig === 'SIGINT' ? 2 : 15))); };
+    process.once(sig, handler); return [sig, handler];
+  });
+  server.on('close', () => {
+    for (const [sig, handler] of signals) process.removeListener(sig, handler);
+    stop().catch(e => console.error(e.message));
+  });
   return { server, jobs, runtime, agent, projects: projectRoot, url: `http://127.0.0.1:${port}/${rel(base, built.file)}`, ...built };
 }

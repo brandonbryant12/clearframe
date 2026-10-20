@@ -1,5 +1,13 @@
 # Changelog
 
+## A durable local agent harness
+
+- The browser studio now uses the public `clearframe/harness` execution boundary. SQLite records job state and lifecycle events transactionally, imports existing JSON history once without changing it, and refuses corrupted or newer stores. Durable request keys work across restarts and retain their original job after later storyboard edits.
+- Queue admission and the child supervisor's PID are committed before the CLI can start. Losing the owning process stops its renderer process group. One scheduler owns each ledger; recovery refuses a still-living child and records unfinished work as interrupted, with unknown outcomes for paid jobs. Recovery does not automatically repeat work or spend. Partial output remains evidence.
+- Effect supplies schema validation, tagged persistence errors and an optional scoped harness lifetime. The direct dependency matches OpenCode's exact `4.0.0-rc.112` peer. Node now requires 22.13+ (23.x: 23.4+) for built-in SQLite.
+- Agent edits recheck the render pause after waiting for conversation scope. Corrupt conversation links fail visibly instead of being overwritten with a new session.
+- Research entries 55–61 are assessed in the issue 9 adoption register. ADK is an architectural reference; provider replacement, pipeline checkpoint reuse and hosted rendering remain separate work. See `docs/agent-harness.md`.
+
 ## A creative kit for enterprise explanations
 
 - **Break down a whole, inspect a part, gather it again.** `props.breakdown` validates both the underlying quantities and their displayed rounding. Parent bars divide into exact proportional slices across cuts; tiny values keep their true width and get a separate marker. A missing share must be explicit, and a negative share is refused with guidance to use a bridge.

@@ -12,7 +12,7 @@ tab) is described in `docs/viewer.md`; review rounds in `docs/editing.md`.
 
 Requirements (macOS on Apple silicon is the tested platform; the native renderer is Skia on Metal):
 
-1. Node.js 20.10 or newer.
+1. Node.js 22.13 or newer (23.x requires 23.4+).
 2. `npm install` in the ClearFrame folder. This installs the exact OpenCode packages the studio is
    built against (`@opencode/cli`, `@opencode/client`, `@opencode/plugin`, all `2.0.24`), including
    the platform's native OpenCode binary (`@opencode/cli-darwin-arm64` here). No global OpenCode is
@@ -30,6 +30,12 @@ node engine/cli.mjs agent doctor              # runtime folders, binary, service
 
 The studio listens on 127.0.0.1 only. The agent runtime starts with the first conversation (or
 `clearframe agent start`), not when the page opens.
+
+Production jobs use the [durable local harness](agent-harness.md). Its SQLite ledger imports existing
+`jobs.json` history once, records transitions before acknowledging them, and prevents two studios
+from owning the same queue. A restarted studio records unfinished jobs as interrupted; it does not
+automatically repeat renders or paid generation. Corrupt conversation links are reported and left
+intact instead of silently starting a new conversation.
 
 ## The model: free by default
 

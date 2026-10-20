@@ -213,6 +213,10 @@ test('the studio server refuses malformed paths, dotfiles, bad ranges, unknown e
   const get = (p, headers) => fetch(base + p, { headers });
   assert.equal((await get('/%E0%A4%A')).status, 400);
   assert.equal((await get(`/${rel(film)}/.env`)).status, 404);
+  for (const hidden of ['.harness', '%2eharness'])
+    assert.equal((await get(`/${rel(path.join(root, 'viewer/studio'))}/${hidden}/jobs.sqlite`)).status, 404);
+  const events = await (await get('/api/studio/jobs/events?after=0')).json();
+  assert.deepEqual(events.events, []);
   assert.equal((await get(`/${rel(film)}/clip.txt`, { range: 'bytes=2-4' })).status, 206);
   assert.equal(await (await get(`/${rel(film)}/clip.txt`, { range: 'bytes=2-4' })).text(), '234');
   assert.equal((await get(`/${rel(film)}/clip.txt`, { range: 'bytes=50-60' })).status, 416);
