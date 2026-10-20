@@ -38,7 +38,9 @@ const HOUSE = {
 };
 
 function project(t, { text = 'A circle arrives' } = {}) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-evidence-'));
+  const root = fs.realpathSync(
+    fs.mkdtempSync(path.join(os.tmpdir(), 'cf-evidence-')),
+  );
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   fs.mkdirSync(path.join(root, 'library/palettes'), { recursive: true });
   fs.writeFileSync(

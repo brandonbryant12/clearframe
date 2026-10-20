@@ -1530,7 +1530,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
       <ul>
         <li><strong>For one film</strong>, put files in the project's own <code>library/palettes/</code>, <code>treatments/</code>, <code>sketches/</code>, <code>playbooks/</code>, <code>types/</code> or <code>directions/</code>. The same id overrides a built-in.</li>
         <li><strong>For a team or brand</strong>, keep a shared folder with the same layout and pass <code>--library DIR</code> (or set <code>CLEARFRAME_LIBRARY</code>). <code>new</code> copies any shared palette, treatment or art sketch it uses into the project, so the film still renders without the shared folder. A playbook's <code>art.sketch</code> stays as shorthand and is drawn when the job compiles, so <code>drift</code> spans each beat's final length.</li>
-        <li>Items outside the built-ins are JSON only, so templates stay data. <code>library/README.md</code> has every field.</li>
+        <li>Items outside the built-ins are JSON only, so templates stay data. They reload whenever the project is loaded; a palette or treatment edit makes an earlier render stale when it changes the prepared film. <code>library/README.md</code> has every field.</li>
         <li>Before adding a reusable piece, run <code>node scripts/library-bar.mjs FIXTURE.json --out NEW-DIR</code> for difficult variants, phone sheets, complete short films, native audits and checks that configurable fields change the picture. Review its visual meaning separately; a passing run leaves visual judgement open. See <a href="library-bar.md">the fixture and review method</a>.</li>
       </ul>
       <div class="table-wrap">

@@ -7,6 +7,7 @@
 - Shared lint rules enforce bounded file and function complexity, explicit type imports and the local type-safety constraints. Effect-aware diagnostics and schema generation checks run alongside the contract tests.
 - The studio browser code uses explicit modules bundled into one offline-capable viewer script. Native caches stay outside replaceable distributions, with bounded build and render workers.
 - Build caching includes bundled guides, examples and build tools. Sound cues and learned voice rates use a persistent user cache; library-bar evidence stays under the working directory. Receipts fingerprint the compiled runtime, so pre-migration receipts remain historical evidence and require a new render for current verification.
+- Shared and project JSON libraries reload when a project is loaded. Palette or treatment edits at the same project path now invalidate an older render receipt consistently across operating systems.
 
 ## A durable local agent harness
 

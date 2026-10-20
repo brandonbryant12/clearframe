@@ -580,7 +580,7 @@ test('jobs run one at a time, can be cancelled while queued or running, and mark
 });
 
 test('the studio server refuses malformed paths, dotfiles, bad ranges, unknown endpoints and cross-site writes', async (t) => {
-  const root = fs.mkdtempSync(path.join(process.cwd(), 'build', 'cf-serve-'));
+  const root = fs.mkdtempSync(path.join(process.cwd(), 'cf-serve-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const film = path.join(root, 'film');
   fs.mkdirSync(film);

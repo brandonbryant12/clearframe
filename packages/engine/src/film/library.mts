@@ -46,25 +46,20 @@ for (const kind of KINDS) {
 // Layers over the built-ins, lowest first: shared libraries named in CLEARFRAME_LIBRARY
 // (path-separated; a brand kit or a workspace's templates), then the open project's library/.
 let layers: Layer[] = [];
-let layersKey: string | undefined;
 const shared = (): string[] =>
   (process.env.CLEARFRAME_LIBRARY ?? '')
     .split(path.delimiter)
     .filter(Boolean)
     .map((d) => path.resolve(d));
 
-/** Layer shared libraries and a project's library/ over the built-ins (null: shared only). Validates each item. */
+/** Reload mutable JSON libraries at the project boundary; built-ins remain cached. */
 export function useProject(root: string | null | undefined): void {
   const dirs = [
     ...shared(),
     ...(root ? [path.join(path.resolve(root), 'library')] : []),
   ];
-  const key = dirs.join('\n');
-  if (layersKey === key) return;
   const previousLayers = layers;
-  const previousKey = layersKey;
   layers = [];
-  layersKey = undefined;
   try {
     for (const dir of dirs) {
       const layer = readLayer(dir);
@@ -74,10 +69,8 @@ export function useProject(root: string | null | undefined): void {
         for (const it of layer.items[kind].values())
           VALIDATE[kind](it, it.source);
     }
-    layersKey = key;
   } catch (error) {
     layers = previousLayers;
-    layersKey = previousKey;
     throw error;
   }
 }
