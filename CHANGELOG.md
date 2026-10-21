@@ -1,5 +1,22 @@
 # Changelog
 
+## A checked TypeScript workspace
+
+- Runtime orchestration, scene compilation, provider scripts, browser studio and built-in sketches now use strict TypeScript. Rust remains the native renderer. Effect codecs validate external inputs, and scoped services own process and harness resources.
+- A pnpm workspace and Turbo separate `apps/cli`, `packages/engine` and shared tools. The public CLI and `clearframe/harness` export ship a compiled runtime; builds write to `dist/` and preserve the previous successful output if compilation fails.
+- Shared lint rules enforce bounded file and function complexity, explicit type imports and the local type-safety constraints. Effect-aware diagnostics and schema generation checks run alongside the contract tests.
+- The studio browser code uses explicit modules bundled into one offline-capable viewer script. Native caches stay outside replaceable distributions, with bounded build and render workers.
+- Build caching includes bundled guides, examples and build tools. Sound cues and learned voice rates use a persistent user cache; library-bar evidence stays under the working directory. Receipts fingerprint the compiled runtime, so pre-migration receipts remain historical evidence and require a new render for current verification.
+- Shared and project JSON libraries reload when a project is loaded. Palette or treatment edits at the same project path now invalidate an older render receipt consistently across operating systems.
+
+## A durable local agent harness
+
+- The browser studio now uses the public `clearframe/harness` execution boundary. SQLite records job state and lifecycle events transactionally, imports existing JSON history once without changing it, and refuses corrupted or newer stores. Durable request keys work across restarts and retain their original job after later storyboard edits.
+- Queue admission and the child supervisor's PID are committed before the CLI can start. Losing the owning process stops its renderer process group. One scheduler owns each ledger; recovery refuses a still-living child and records unfinished work as interrupted, with unknown outcomes for paid jobs. Recovery does not automatically repeat work or spend. Partial output remains evidence.
+- Effect supplies schema validation, tagged persistence errors and an optional scoped harness lifetime. The direct dependency matches OpenCode's exact `4.0.1` peer. Node now requires 22.19+ (23.x: 23.4+) for the HTTP runtime dependencies and built-in SQLite.
+- Agent edits recheck the render pause after waiting for conversation scope. Corrupt conversation links fail visibly instead of being overwritten with a new session.
+- Research entries 55–61 are assessed in the issue 9 adoption register. ADK is an architectural reference; provider replacement, pipeline checkpoint reuse and hosted rendering remain separate work. See `docs/agent-harness.md`.
+
 ## A creative kit for enterprise explanations
 
 - **Break down a whole, inspect a part, gather it again.** `props.breakdown` validates both the underlying quantities and their displayed rounding. Parent bars divide into exact proportional slices across cuts; tiny values keep their true width and get a separate marker. A missing share must be explicit, and a negative share is refused with guidance to use a bridge.

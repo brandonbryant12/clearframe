@@ -27,16 +27,16 @@ The beat is one sketch with words:
   "sketchSay": { "UNTANGLE": "pulled", "FLOW": "flows" } } }
 ```
 
-It works on light and dark palettes. For different pieces, start from `node engine/cli.mjs sketch untangle` and change the icons.
+It works on light and dark palettes. For different pieces, start from `pnpm cf sketch untangle` and change the icons.
 
 ## Make it
 
 ```sh
 node examples/one-line/build.mjs     # writes storyboard-{landscape,vertical}.json
 mkdir -p build/line && cp examples/one-line/storyboard-vertical.json build/line/storyboard.json
-node engine/cli.mjs draft build/line    # free local draft voice
+pnpm cf draft build/line    # free local draft voice
 ```
 
 Each shape is 299 frames, about 3 s to render on this Mac, and `check` reports 0 errors and 0 warnings.
 
-Find it with `node engine/cli.mjs find "make a messy process simple"`.
+Find it with `pnpm cf find "make a messy process simple"`.

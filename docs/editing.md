@@ -1,6 +1,6 @@
 # Review and editing
 
-A person should be able to say what feels wrong, see the intended correction quickly, and trust that accepted work survives. This page is the contract behind that: what is saved, how a note keeps its place, what an edit may touch, how a change is previewed and how it is undone. Commands are `node engine/cli.mjs …`; everything is local files under the project's `review/` folder, with no server or service.
+A person should be able to say what feels wrong, see the intended correction quickly, and trust that accepted work survives. This page is the contract behind that: what is saved, how a note keeps its place, what an edit may touch, how a change is previewed and how it is undone. Commands are `pnpm cf …`; everything is local files under the project's `review/` folder, with no server or service.
 
 The journey (see `docs/collaboration.md`): **Plan** (the paper edit), **Rough cut** (full length, real renderer, placeholders marked), targeted edits from notes, then the fine cut and **Final**. Guided work pauses at those; one-shot work publishes the same artifacts and keeps going.
 
@@ -39,10 +39,10 @@ Identity is content, not a timestamp: two renders of the same inputs, renderer a
 `materialize` (used by `compare` and `revise` when a video was released or never made) rebuilds a revision's project from its objects, each checked against its hash; a damaged object stops the operation instead of rendering something else. A re-render uses today's renderer and fonts; its receipt says whether they match the revision's. Rendering is deterministic, but **an old revision is only bit-identical if the renderer, fonts and every input are unchanged**; ClearFrame never promises it from the storyboard alone.
 
 ```sh
-node engine/cli.mjs revisions film
-node engine/cli.mjs snapshot film --label "Plan"
-node engine/cli.mjs diff film r003            # r003 → the working copy
-node engine/cli.mjs diff film r003 r005
+pnpm cf revisions film
+pnpm cf snapshot film --label "Plan"
+pnpm cf diff film r003            # r003 → the working copy
+pnpm cf diff film r003 r005
 ```
 
 ## The impact report (diff)
@@ -66,10 +66,10 @@ Generated narration: a changed line re-records its **whole take** (one take per 
 A note is anchored to **the revision the person watched**, not to the working copy:
 
 ```sh
-node engine/cli.mjs note film "the diagram is confusing; keep the voice" --at 2:13 --rev r003 --keep voice --by Ana
-node engine/cli.mjs note film "[ClearFrame r003 @ 2:13.40 · s047 · “the queue backs up”] the diagram is confusing"
-node engine/cli.mjs notes film --import notes-r003.json     # downloaded from the review page
-node engine/cli.mjs notes film                               # where each note is now
+pnpm cf note film "the diagram is confusing; keep the voice" --at 2:13 --rev r003 --keep voice --by Ana
+pnpm cf note film "[ClearFrame r003 @ 2:13.40 · s047 · “the queue backs up”] the diagram is confusing"
+pnpm cf notes film --import notes-r003.json     # downloaded from the review page
+pnpm cf notes film                               # where each note is now
 ```
 
 Without `--rev`, the newest revision with a video is assumed and the command says so. The anchor records: the beat on screen at that frame (and beats near a cut, reported, never guessed), the time into the beat, the words spoken around the playhead, their time in the source recording (and in the original file), an `--element` id if named, and the beat's fingerprints. `--to` makes a range note; `--scope chapter|film` widens it (the person's words decide the scope; "this section" is not assumed to mean a chapter).
@@ -96,11 +96,11 @@ Workflow status is separate: `open` → `applied` (a candidate exists) → `acce
 A keep pins part of the film against edits. It records who asked, their words and the revision it refers to.
 
 ```sh
-node engine/cli.mjs keep film voice --by Ana --said "keep the voice"            # whole film
-node engine/cli.mjs keep film picture --beats s046,s047 --by Ana --said "that diagram is right"
-node engine/cli.mjs keep film words --at 2:10 --to 2:40 --by Ana --said "don't cut anything there"
-node engine/cli.mjs keeps film
-node engine/cli.mjs keep film --release k002 --by Ana --said "ok, tighten it"
+pnpm cf keep film voice --by Ana --said "keep the voice"            # whole film
+pnpm cf keep film picture --beats s046,s047 --by Ana --said "that diagram is right"
+pnpm cf keep film words --at 2:10 --to 2:40 --by Ana --said "don't cut anything there"
+pnpm cf keeps film
+pnpm cf keep film --release k002 --by Ana --said "ok, tighten it"
 ```
 
 | keep | holds | allows |
@@ -120,9 +120,9 @@ For beats of an imported recording, `voice` and `words` keeps protect **what the
 ## Decisions: applied is not accepted
 
 ```sh
-node engine/cli.mjs accept film r005 --note n012 --by Ana --said "yes, much clearer"
-node engine/cli.mjs reject film r005 --note n012 --by Ana --said "no, the old one read better"
-node engine/cli.mjs decide film r005 --checkpoint rough --reason "one-shot: notes applied, moving to the fine cut"
+pnpm cf accept film r005 --note n012 --by Ana --said "yes, much clearer"
+pnpm cf reject film r005 --note n012 --by Ana --said "no, the old one read better"
+pnpm cf decide film r005 --checkpoint rough --reason "one-shot: notes applied, moving to the fine cut"
 ```
 
 `accept` and `reject` record a person's verdict and require `--by` and `--said`; they refuse `--agent`. `decide` is the agent's own call in one-shot work and is always displayed as "agent decision, not a person's acceptance". Nothing is accepted because time passed or because nobody objected. An acceptance attaches to beat fingerprints: a beat that only moved stays accepted (`moved`); one whose neighbour or the film look changed is `looks-different` (a quick look); one whose own content changed is `changed` (review again). `checkpoints` closes Rough cut and Final on these decisions, never on a file's age:
@@ -133,10 +133,10 @@ node engine/cli.mjs decide film r005 --checkpoint rough --reason "one-shot: note
 ## Range previews
 
 ```sh
-node engine/cli.mjs preview film --beats s046,s048 --handles 2
-node engine/cli.mjs preview film --range 2:05-2:25 --rough
-node engine/cli.mjs preview film --note n012
-node engine/cli.mjs preview film --chapter "The explosion"
+pnpm cf preview film --beats s046,s048 --handles 2
+pnpm cf preview film --range 2:05-2:25 --rough
+pnpm cf preview film --note n012
+pnpm cf preview film --chapter "The explosion"
 ```
 
 A preview renders frames [a, b) of the **full prepared timeline** (the renderer's range render): every beat keeps its place, neighbours, world state, carried elements and transitions, so nothing is simulated by deleting surrounding scenes. Beats are widened by the transitions into and out of them (at least half a second, or the cover of a graphic transition) and by `--handles` seconds (default 2), clamped to the film. The receipt (`review/previews/NAME.mp4.json`) records:
@@ -150,10 +150,10 @@ A preview renders frames [a, b) of the **full prepared timeline** (the renderer'
 ## The edit loop
 
 ```sh
-node engine/cli.mjs note film "make this the drawing of the queue" --at 2:13 --rev r003 --by Ana
+pnpm cf note film "make this the drawing of the queue" --at 2:13 --rev r003 --by Ana
 #   … edit storyboard.json for that beat …
-node engine/cli.mjs revise film --note n012
-node engine/cli.mjs accept film r006 --note n012 --by Ana --said "yes"
+pnpm cf revise film --note n012
+pnpm cf accept film r006 --note n012 --by Ana --said "yes"
 ```
 
 `revise` checks that the working copy changed **only inside the note's beats** (found by content in the working copy; a recording cut made with `--note` declares the beats it touched), with `appearance` and `shifted` beats allowed and listed. To change more, widen with `--scope s046,s050 --reason "…"` or `--scope film`. It checks every keep, saves a **candidate revision**, renders before/after passages of each affected stretch (the "before" from the previous revision's stored video when kept, otherwise re-rendered from its stored inputs; the "after" from the full prepared timeline), writes `review/compare/A-B/index.html`, and marks the note `applied`. Asking happens only for material ambiguity, a keep conflict, missing authority or paid work beyond the budget.
@@ -165,8 +165,8 @@ node engine/cli.mjs accept film r006 --note n012 --by Ana --said "yes"
 `restore film rNNN --beats a,b` restores some beats. It refuses, changing nothing, when a media file those beats need differs now and other beats use it (`--shared` changes it for them too, and says so), when a beat was split or merged since (restore its successors or the whole revision), or when a recorded beat would replay recording another beat plays now.
 
 ```sh
-node engine/cli.mjs compare film r001 r007      # any two revisions (or one and the working copy)
-node engine/cli.mjs page film --rev r003        # the review page for an older cut
+pnpm cf compare film r001 r007      # any two revisions (or one and the working copy)
+pnpm cf page film --rev r003        # the review page for an older cut
 ```
 
 ## The review page
@@ -180,17 +180,17 @@ Pages open from disk with no server or dependency. Every string from a project o
 An imported recording (`ingest --audio`) keeps the master untouched in `source/recording.wav`, its transcript on the master's clock in `source/words.json`, and `source/recording.json` (original file, offset, sample rate, SHA-256). Each beat's metadata (`assets/vo/ID.json`) declares its `source.span` (frames on the master's clock), its share of the transcript, and `source.removed` (sample ranges cut out, each with who asked and why). A beat's WAV is **rebuilt from the master** after every edit; its `vo` text, words and captions follow. Recording edits refuse (changing nothing) when the master no longer matches the SHA-256 in `source/recording.json`; restore it from a revision. Never edit a recorded beat's `vo` by hand: its audio would no longer match and timing would fall back to estimates.
 
 ```sh
-node engine/cli.mjs paper film --suggest-cuts                         # mark ~~words~~ in review/paper-edit.md, then:
-node engine/cli.mjs cut film --paper review/paper-edit.md --by Ana
-node engine/cli.mjs cut film --words "which is a story for another day" --by Ana
-node engine/cli.mjs cut film --beat s012 --sentence 2 --by Ana
-node engine/cli.mjs cut film --at 2:13 --rev r003 --by Ana            # the sentence spoken there in r003, found again by its words
-node engine/cli.mjs cut film --note n014 --by Ana                     # the sentence the note points at; the note becomes `addressed`
-node engine/cli.mjs cut film --pauses-over 1.2 --keep-pause 0.5 --by Ana
-node engine/cli.mjs cut film --words "um" --dry-run
-node engine/cli.mjs uncut film --cut c004                             # exact: byte-identical audio
-node engine/cli.mjs split film --beat s012 --before "and the line"    # s012a + s012b, both `was: ["s012"]`
-node engine/cli.mjs merge film s012a s012b
+pnpm cf paper film --suggest-cuts                         # mark ~~words~~ in review/paper-edit.md, then:
+pnpm cf cut film --paper review/paper-edit.md --by Ana
+pnpm cf cut film --words "which is a story for another day" --by Ana
+pnpm cf cut film --beat s012 --sentence 2 --by Ana
+pnpm cf cut film --at 2:13 --rev r003 --by Ana            # the sentence spoken there in r003, found again by its words
+pnpm cf cut film --note n014 --by Ana                     # the sentence the note points at; the note becomes `addressed`
+pnpm cf cut film --pauses-over 1.2 --keep-pause 0.5 --by Ana
+pnpm cf cut film --words "um" --dry-run
+pnpm cf uncut film --cut c004                             # exact: byte-identical audio
+pnpm cf split film --beat s012 --before "and the line"    # s012a + s012b, both `was: ["s012"]`
+pnpm cf merge film s012a s012b
 ```
 
 **What `--note` and `--at` cut.** Every word of the recording has an identity: its index in `source/words.json`, which cuts, splits, merges, undo and restore never change and which two passages with the same wording never share. `cut --at 2:13 --rev r003` takes the sentence spoken at 2:13 in r003 and `cut --note n014` the sentence under the note's playhead in the revision it was made on, as identities; the film as it is now is then searched for exactly those words. If they no longer all play, together, nothing is cut and the cut that removed them is named. `--note` first finds where the note is now and refuses a stale, orphaned or already addressed note; with `--words`, only the beats the note is about are searched. A range note covers several sentences: name the words. Only an explicit `--words` without a note searches the whole film (and asks for `--beat` or `--nth` when the words occur more than once).

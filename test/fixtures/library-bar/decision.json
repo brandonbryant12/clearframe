@@ -1,735 +1,719 @@
 {
- "name": "decision",
- "reference": "Policy flowcharts in government service manuals (e.g. GOV.UK decision guidance): a few short questions, outcomes in plain words; compare reading hierarchy at phone size and whether the changed answer is obvious",
- "cases": [
-  {
-   "id": "wide",
-   "storyboard": "../../../examples/which-route/storyboard.json",
-   "at": [
-    2.6,
-    6.6,
-    9.6
-   ],
-   "takeaway": "A $120 taxi with a receipt is approved automatically; without the receipt the same claim is returned; the first route returns."
-  },
-  {
-   "id": "tall",
-   "storyboard": {
-    "version": 2,
-    "title": "Which route a claim takes",
-    "format": {
-     "preset": "vertical",
-     "fps": 30
+  "name": "decision",
+  "reference": "Policy flowcharts in government service manuals (e.g. GOV.UK decision guidance): a few short questions, outcomes in plain words; compare reading hierarchy at phone size and whether the changed answer is obvious",
+  "cases": [
+    {
+      "id": "wide",
+      "storyboard": "../../../examples/which-route/storyboard.json",
+      "at": [2.6, 6.6, 9.6],
+      "takeaway": "A $120 taxi with a receipt is approved automatically; without the receipt the same claim is returned; the first route returns."
     },
-    "theme": "ink",
-    "type": "inter",
-    "camera": "none",
-    "texture": "none",
-    "captions": false,
-    "music": false,
-    "sfx": false,
-    "sources": [
-     {
-      "claim": "The expense rule and its threshold are an example for illustration, not a real policy.",
-      "source": "Example expense rule for illustration"
-     }
-    ],
-    "beats": [
-     {
-      "id": "route",
-      "block": "canvas",
-      "duration": 11,
-      "props": {
-       "decision": {
-        "id": "claim",
+    {
+      "id": "tall",
+      "storyboard": {
+        "version": 2,
         "title": "Which route a claim takes",
-        "source": "Example expense rule for illustration",
-        "ask": [
-         {
-          "id": "amount",
-          "label": "Over $500?"
-         },
-         {
-          "id": "receipt",
-          "label": "Itemised receipt?"
-         }
-        ],
-        "tree": {
-         "ask": "amount",
-         "yes": "manager",
-         "no": {
-          "ask": "receipt",
-          "yes": "auto",
-          "no": "returned"
-         }
+        "format": {
+          "preset": "vertical",
+          "fps": 30
         },
-        "outcomes": [
-         {
-          "id": "manager",
-          "label": "Manager approves",
-          "tone": "accent"
-         },
-         {
-          "id": "auto",
-          "label": "Approved automatically",
-          "tone": "positive"
-         },
-         {
-          "id": "returned",
-          "label": "Returned to you",
-          "tone": "negative"
-         }
+        "theme": "ink",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "The expense rule and its threshold are an example for illustration, not a real policy.",
+            "source": "Example expense rule for illustration"
+          }
         ],
-        "cases": [
-         {
-          "label": "A $120 taxi",
-          "answers": {
-           "amount": "no",
-           "receipt": "yes"
-          },
-          "at": 1
-         },
-         {
-          "label": "Same taxi, no receipt",
-          "answers": {
-           "amount": "no",
-           "receipt": "no"
-          },
-          "at": 4.6
-         }
-        ],
-        "return": {
-         "at": 8.2
-        }
-       }
-      }
-     }
-    ]
-   },
-   "at": [
-    2.6,
-    6.6,
-    9.6
-   ],
-   "takeaway": "The same rule top to bottom on a phone, with the case and outcome readable above it."
-  },
-  {
-   "id": "changed",
-   "storyboard": {
-    "version": 2,
-    "title": "Which route a claim takes",
-    "format": {
-     "preset": "landscape",
-     "fps": 30
-    },
-    "theme": "paper",
-    "type": "inter",
-    "camera": "none",
-    "texture": "none",
-    "captions": false,
-    "music": false,
-    "sfx": false,
-    "sources": [
-     {
-      "claim": "The expense rule and its threshold are an example for illustration, not a real policy.",
-      "source": "Example expense rule for illustration"
-     }
-    ],
-    "beats": [
-     {
-      "id": "route",
-      "block": "canvas",
-      "duration": 11,
-      "props": {
-       "decision": {
-        "id": "claim",
-        "title": "Which route a claim takes",
-        "source": "Example expense rule for illustration",
-        "ask": [
-         {
-          "id": "amount",
-          "label": "Over $500?"
-         },
-         {
-          "id": "receipt",
-          "label": "Itemised receipt?"
-         }
-        ],
-        "tree": {
-         "ask": "amount",
-         "yes": "manager",
-         "no": {
-          "ask": "receipt",
-          "yes": "auto",
-          "no": "returned"
-         }
-        },
-        "outcomes": [
-         {
-          "id": "manager",
-          "label": "Manager approves",
-          "tone": "accent"
-         },
-         {
-          "id": "auto",
-          "label": "Approved automatically",
-          "tone": "positive"
-         },
-         {
-          "id": "returned",
-          "label": "Returned to you",
-          "tone": "negative"
-         }
-        ],
-        "cases": [
-         {
-          "label": "A $120 taxi",
-          "answers": {
-           "amount": "no",
-           "receipt": "yes"
-          },
-          "at": 1
-         },
-         {
-          "label": "A $900 hotel",
-          "answers": {
-           "amount": "yes"
-          },
-          "at": 4.6
-         }
-        ],
-        "return": {
-         "at": 8.2
-        }
-       }
-      }
-     }
-    ]
-   },
-   "at": [
-    6.6
-   ],
-   "takeaway": "A different counterfactual ($900 hotel) takes the manager route."
-  },
-  {
-   "id": "three-levels",
-   "storyboard": {
-    "version": 2,
-    "title": "Which route a claim takes",
-    "format": {
-     "preset": "landscape",
-     "fps": 30
-    },
-    "theme": "paper",
-    "type": "inter",
-    "camera": "none",
-    "texture": "none",
-    "captions": false,
-    "music": false,
-    "sfx": false,
-    "sources": [
-     {
-      "claim": "The expense rule and its threshold are an example for illustration, not a real policy.",
-      "source": "Example expense rule for illustration"
-     }
-    ],
-    "beats": [
-     {
-      "id": "route",
-      "block": "canvas",
-      "duration": 11,
-      "props": {
-       "decision": {
-        "id": "claim",
-        "title": "Which route a claim takes",
-        "source": "Example expense rule for illustration",
-        "ask": [
-         {
-          "id": "amount",
-          "label": "Over $500?"
-         },
-         {
-          "id": "receipt",
-          "label": "Itemised receipt?"
-         },
-         {
-          "id": "days",
-          "label": "Within 30 days?"
-         }
-        ],
-        "tree": {
-         "ask": "amount",
-         "yes": "manager",
-         "no": {
-          "ask": "receipt",
-          "yes": {
-           "ask": "days",
-           "yes": "auto",
-           "no": "returned"
-          },
-          "no": "returned"
-         }
-        },
-        "outcomes": [
-         {
-          "id": "manager",
-          "label": "Manager approves",
-          "tone": "accent"
-         },
-         {
-          "id": "auto",
-          "label": "Approved automatically",
-          "tone": "positive"
-         },
-         {
-          "id": "returned",
-          "label": "Returned to you",
-          "tone": "negative"
-         }
-        ],
-        "cases": [
-         {
-          "label": "A $120 taxi",
-          "answers": {
-           "amount": "no",
-           "receipt": "yes",
-           "days": "yes"
-          },
-          "at": 1
-         },
-         {
-          "label": "Same taxi, sent late",
-          "answers": {
-           "amount": "no",
-           "receipt": "yes",
-           "days": "no"
-          },
-          "at": 4.6
-         }
-        ],
-        "return": {
-         "at": 8.2
-        }
-       }
-      }
-     }
-    ]
-   },
-   "at": [
-    3.0,
-    6.9
-   ],
-   "takeaway": "Three questions deep stays readable; the late claim diverges at the last question."
-  },
-  {
-   "id": "captions",
-   "storyboard": {
-    "version": 2,
-    "title": "Which route a claim takes",
-    "format": {
-     "preset": "landscape",
-     "fps": 30
-    },
-    "theme": "paper",
-    "type": "inter",
-    "camera": "none",
-    "texture": "none",
-    "captions": true,
-    "music": false,
-    "sfx": false,
-    "sources": [
-     {
-      "claim": "The expense rule and its threshold are an example for illustration, not a real policy.",
-      "source": "Example expense rule for illustration"
-     }
-    ],
-    "beats": [
-     {
-      "id": "route",
-      "block": "canvas",
-      "props": {
-       "decision": {
-        "id": "claim",
-        "title": "Which route a claim takes",
-        "source": "Example expense rule for illustration",
-        "ask": [
-         {
-          "id": "amount",
-          "label": "Over $500?"
-         },
-         {
-          "id": "receipt",
-          "label": "Itemised receipt?"
-         }
-        ],
-        "tree": {
-         "ask": "amount",
-         "yes": "manager",
-         "no": {
-          "ask": "receipt",
-          "yes": "auto",
-          "no": "returned"
-         }
-        },
-        "outcomes": [
-         {
-          "id": "manager",
-          "label": "Manager approves",
-          "tone": "accent"
-         },
-         {
-          "id": "auto",
-          "label": "Approved automatically",
-          "tone": "positive"
-         },
-         {
-          "id": "returned",
-          "label": "Returned to you",
-          "tone": "negative"
-         }
-        ],
-        "cases": [
-         {
-          "label": "A $120 taxi",
-          "answers": {
-           "amount": "no",
-           "receipt": "yes"
-          },
-          "say": "taxi"
-         },
-         {
-          "label": "Same taxi, no receipt",
-          "answers": {
-           "amount": "no",
-           "receipt": "no"
-          },
-          "say": "Take"
-         }
-        ],
-        "return": {
-         "say": "Keep"
-        }
-       }
+        "beats": [
+          {
+            "id": "route",
+            "block": "canvas",
+            "duration": 11,
+            "props": {
+              "decision": {
+                "id": "claim",
+                "title": "Which route a claim takes",
+                "source": "Example expense rule for illustration",
+                "ask": [
+                  {
+                    "id": "amount",
+                    "label": "Over $500?"
+                  },
+                  {
+                    "id": "receipt",
+                    "label": "Itemised receipt?"
+                  }
+                ],
+                "tree": {
+                  "ask": "amount",
+                  "yes": "manager",
+                  "no": {
+                    "ask": "receipt",
+                    "yes": "auto",
+                    "no": "returned"
+                  }
+                },
+                "outcomes": [
+                  {
+                    "id": "manager",
+                    "label": "Manager approves",
+                    "tone": "accent"
+                  },
+                  {
+                    "id": "auto",
+                    "label": "Approved automatically",
+                    "tone": "positive"
+                  },
+                  {
+                    "id": "returned",
+                    "label": "Returned to you",
+                    "tone": "negative"
+                  }
+                ],
+                "cases": [
+                  {
+                    "label": "A $120 taxi",
+                    "answers": {
+                      "amount": "no",
+                      "receipt": "yes"
+                    },
+                    "at": 1
+                  },
+                  {
+                    "label": "Same taxi, no receipt",
+                    "answers": {
+                      "amount": "no",
+                      "receipt": "no"
+                    },
+                    "at": 4.6
+                  }
+                ],
+                "return": {
+                  "at": 8.2
+                }
+              }
+            }
+          }
+        ]
       },
-      "vo": "A taxi with an itemised receipt is approved automatically. Take away the receipt, and it comes back to you. Keep the receipt, and it goes straight through.",
-      "hold": 1.5
-     }
-    ]
-   },
-   "at": [
-    3.0,
-    8.0
-   ],
-   "takeaway": "Cases land on their words; captions stay clear (estimated draft timing)."
-  }
- ],
- "refusals": [
-  {
-   "id": "unreachable",
-   "storyboard": {
-    "version": 2,
-    "title": "Which route a claim takes",
-    "format": {
-     "preset": "landscape",
-     "fps": 30
+      "at": [2.6, 6.6, 9.6],
+      "takeaway": "The same rule top to bottom on a phone, with the case and outcome readable above it."
     },
-    "theme": "paper",
-    "type": "inter",
-    "camera": "none",
-    "texture": "none",
-    "captions": false,
-    "music": false,
-    "sfx": false,
-    "sources": [
-     {
-      "claim": "The expense rule and its threshold are an example for illustration, not a real policy.",
-      "source": "Example expense rule for illustration"
-     }
-    ],
-    "beats": [
-     {
-      "id": "route",
-      "block": "canvas",
-      "duration": 11,
-      "props": {
-       "decision": {
-        "id": "claim",
+    {
+      "id": "changed",
+      "storyboard": {
+        "version": 2,
         "title": "Which route a claim takes",
-        "source": "Example expense rule for illustration",
-        "ask": [
-         {
-          "id": "amount",
-          "label": "Over $500?"
-         },
-         {
-          "id": "receipt",
-          "label": "Itemised receipt?"
-         }
-        ],
-        "tree": {
-         "ask": "amount",
-         "yes": "manager",
-         "no": "auto"
+        "format": {
+          "preset": "landscape",
+          "fps": 30
         },
-        "outcomes": [
-         {
-          "id": "manager",
-          "label": "Manager approves",
-          "tone": "accent"
-         },
-         {
-          "id": "auto",
-          "label": "Approved automatically",
-          "tone": "positive"
-         },
-         {
-          "id": "returned",
-          "label": "Returned to you",
-          "tone": "negative"
-         }
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "The expense rule and its threshold are an example for illustration, not a real policy.",
+            "source": "Example expense rule for illustration"
+          }
         ],
-        "cases": [
-         {
-          "label": "A $120 taxi",
-          "answers": {
-           "amount": "no",
-           "receipt": "yes"
-          },
-          "at": 1
-         },
-         {
-          "label": "Same taxi, no receipt",
-          "answers": {
-           "amount": "no",
-           "receipt": "no"
-          },
-          "at": 4.6
-         }
-        ],
-        "return": {
-         "at": 8.2
-        }
-       }
-      }
-     }
-    ]
-   },
-   "match": "never (reached|asked) by the tree"
-  },
-  {
-   "id": "same-route",
-   "storyboard": {
-    "version": 2,
-    "title": "Which route a claim takes",
-    "format": {
-     "preset": "landscape",
-     "fps": 30
+        "beats": [
+          {
+            "id": "route",
+            "block": "canvas",
+            "duration": 11,
+            "props": {
+              "decision": {
+                "id": "claim",
+                "title": "Which route a claim takes",
+                "source": "Example expense rule for illustration",
+                "ask": [
+                  {
+                    "id": "amount",
+                    "label": "Over $500?"
+                  },
+                  {
+                    "id": "receipt",
+                    "label": "Itemised receipt?"
+                  }
+                ],
+                "tree": {
+                  "ask": "amount",
+                  "yes": "manager",
+                  "no": {
+                    "ask": "receipt",
+                    "yes": "auto",
+                    "no": "returned"
+                  }
+                },
+                "outcomes": [
+                  {
+                    "id": "manager",
+                    "label": "Manager approves",
+                    "tone": "accent"
+                  },
+                  {
+                    "id": "auto",
+                    "label": "Approved automatically",
+                    "tone": "positive"
+                  },
+                  {
+                    "id": "returned",
+                    "label": "Returned to you",
+                    "tone": "negative"
+                  }
+                ],
+                "cases": [
+                  {
+                    "label": "A $120 taxi",
+                    "answers": {
+                      "amount": "no",
+                      "receipt": "yes"
+                    },
+                    "at": 1
+                  },
+                  {
+                    "label": "A $900 hotel",
+                    "answers": {
+                      "amount": "yes"
+                    },
+                    "at": 4.6
+                  }
+                ],
+                "return": {
+                  "at": 8.2
+                }
+              }
+            }
+          }
+        ]
+      },
+      "at": [6.6],
+      "takeaway": "A different counterfactual ($900 hotel) takes the manager route."
     },
-    "theme": "paper",
-    "type": "inter",
-    "camera": "none",
-    "texture": "none",
-    "captions": false,
-    "music": false,
-    "sfx": false,
-    "sources": [
-     {
-      "claim": "The expense rule and its threshold are an example for illustration, not a real policy.",
-      "source": "Example expense rule for illustration"
-     }
-    ],
-    "beats": [
-     {
-      "id": "route",
-      "block": "canvas",
-      "duration": 11,
-      "props": {
-       "decision": {
-        "id": "claim",
+    {
+      "id": "three-levels",
+      "storyboard": {
+        "version": 2,
         "title": "Which route a claim takes",
-        "source": "Example expense rule for illustration",
-        "ask": [
-         {
-          "id": "amount",
-          "label": "Over $500?"
-         },
-         {
-          "id": "receipt",
-          "label": "Itemised receipt?"
-         }
-        ],
-        "tree": {
-         "ask": "amount",
-         "yes": "manager",
-         "no": {
-          "ask": "receipt",
-          "yes": "auto",
-          "no": "returned"
-         }
+        "format": {
+          "preset": "landscape",
+          "fps": 30
         },
-        "outcomes": [
-         {
-          "id": "manager",
-          "label": "Manager approves",
-          "tone": "accent"
-         },
-         {
-          "id": "auto",
-          "label": "Approved automatically",
-          "tone": "positive"
-         },
-         {
-          "id": "returned",
-          "label": "Returned to you",
-          "tone": "negative"
-         }
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "The expense rule and its threshold are an example for illustration, not a real policy.",
+            "source": "Example expense rule for illustration"
+          }
         ],
-        "cases": [
-         {
-          "label": "A $120 taxi",
-          "answers": {
-           "amount": "no",
-           "receipt": "yes"
-          },
-          "at": 1
-         },
-         {
-          "label": "Same taxi, no receipt",
-          "answers": {
-           "amount": "no",
-           "receipt": "yes"
-          },
-          "at": 4.6
-         }
-        ],
-        "return": {
-         "at": 8.2
-        }
-       }
-      }
-     }
-    ]
-   },
-   "match": "must change at least one answer"
-  },
-  {
-   "id": "too-broad",
-   "storyboard": {
-    "version": 2,
-    "title": "Which route a claim takes",
-    "format": {
-     "preset": "landscape",
-     "fps": 30
+        "beats": [
+          {
+            "id": "route",
+            "block": "canvas",
+            "duration": 11,
+            "props": {
+              "decision": {
+                "id": "claim",
+                "title": "Which route a claim takes",
+                "source": "Example expense rule for illustration",
+                "ask": [
+                  {
+                    "id": "amount",
+                    "label": "Over $500?"
+                  },
+                  {
+                    "id": "receipt",
+                    "label": "Itemised receipt?"
+                  },
+                  {
+                    "id": "days",
+                    "label": "Within 30 days?"
+                  }
+                ],
+                "tree": {
+                  "ask": "amount",
+                  "yes": "manager",
+                  "no": {
+                    "ask": "receipt",
+                    "yes": {
+                      "ask": "days",
+                      "yes": "auto",
+                      "no": "returned"
+                    },
+                    "no": "returned"
+                  }
+                },
+                "outcomes": [
+                  {
+                    "id": "manager",
+                    "label": "Manager approves",
+                    "tone": "accent"
+                  },
+                  {
+                    "id": "auto",
+                    "label": "Approved automatically",
+                    "tone": "positive"
+                  },
+                  {
+                    "id": "returned",
+                    "label": "Returned to you",
+                    "tone": "negative"
+                  }
+                ],
+                "cases": [
+                  {
+                    "label": "A $120 taxi",
+                    "answers": {
+                      "amount": "no",
+                      "receipt": "yes",
+                      "days": "yes"
+                    },
+                    "at": 1
+                  },
+                  {
+                    "label": "Same taxi, sent late",
+                    "answers": {
+                      "amount": "no",
+                      "receipt": "yes",
+                      "days": "no"
+                    },
+                    "at": 4.6
+                  }
+                ],
+                "return": {
+                  "at": 8.2
+                }
+              }
+            }
+          }
+        ]
+      },
+      "at": [3.0, 6.9],
+      "takeaway": "Three questions deep stays readable; the late claim diverges at the last question."
     },
-    "theme": "paper",
-    "type": "inter",
-    "camera": "none",
-    "texture": "none",
-    "captions": false,
-    "music": false,
-    "sfx": false,
-    "sources": [
-     {
-      "claim": "The expense rule and its threshold are an example for illustration, not a real policy.",
-      "source": "Example expense rule for illustration"
-     }
-    ],
-    "beats": [
-     {
-      "id": "route",
-      "block": "canvas",
-      "duration": 11,
-      "props": {
-       "decision": {
-        "id": "claim",
+    {
+      "id": "captions",
+      "storyboard": {
+        "version": 2,
         "title": "Which route a claim takes",
-        "source": "Example expense rule for illustration",
-        "ask": [
-         {
-          "id": "amount",
-          "label": "Over $500?"
-         },
-         {
-          "id": "receipt",
-          "label": "Itemised receipt?"
-         },
-         {
-          "id": "days",
-          "label": "Within 30 days?"
-         }
-        ],
-        "tree": {
-         "ask": "amount",
-         "yes": "manager",
-         "no": {
-          "ask": "receipt",
-          "yes": {
-           "ask": "days",
-           "yes": "auto",
-           "no": "finance"
-          },
-          "no": "returned"
-         }
+        "format": {
+          "preset": "landscape",
+          "fps": 30
         },
-        "outcomes": [
-         {
-          "id": "manager",
-          "label": "Manager approves",
-          "tone": "accent"
-         },
-         {
-          "id": "auto",
-          "label": "Approved automatically",
-          "tone": "positive"
-         },
-         {
-          "id": "returned",
-          "label": "Returned to you",
-          "tone": "negative"
-         },
-         {
-          "id": "finance",
-          "label": "Finance checks it"
-         }
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": true,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "The expense rule and its threshold are an example for illustration, not a real policy.",
+            "source": "Example expense rule for illustration"
+          }
         ],
-        "cases": [
-         {
-          "label": "A $120 taxi",
-          "answers": {
-           "amount": "no",
-           "receipt": "yes",
-           "days": "yes"
-          },
-          "at": 1
-         },
-         {
-          "label": "Same taxi, sent late",
-          "answers": {
-           "amount": "no",
-           "receipt": "yes",
-           "days": "no"
-          },
-          "at": 4.6
-         }
+        "beats": [
+          {
+            "id": "route",
+            "block": "canvas",
+            "props": {
+              "decision": {
+                "id": "claim",
+                "title": "Which route a claim takes",
+                "source": "Example expense rule for illustration",
+                "ask": [
+                  {
+                    "id": "amount",
+                    "label": "Over $500?"
+                  },
+                  {
+                    "id": "receipt",
+                    "label": "Itemised receipt?"
+                  }
+                ],
+                "tree": {
+                  "ask": "amount",
+                  "yes": "manager",
+                  "no": {
+                    "ask": "receipt",
+                    "yes": "auto",
+                    "no": "returned"
+                  }
+                },
+                "outcomes": [
+                  {
+                    "id": "manager",
+                    "label": "Manager approves",
+                    "tone": "accent"
+                  },
+                  {
+                    "id": "auto",
+                    "label": "Approved automatically",
+                    "tone": "positive"
+                  },
+                  {
+                    "id": "returned",
+                    "label": "Returned to you",
+                    "tone": "negative"
+                  }
+                ],
+                "cases": [
+                  {
+                    "label": "A $120 taxi",
+                    "answers": {
+                      "amount": "no",
+                      "receipt": "yes"
+                    },
+                    "say": "taxi"
+                  },
+                  {
+                    "label": "Same taxi, no receipt",
+                    "answers": {
+                      "amount": "no",
+                      "receipt": "no"
+                    },
+                    "say": "Take"
+                  }
+                ],
+                "return": {
+                  "say": "Keep"
+                }
+              }
+            },
+            "vo": "A taxi with an itemised receipt is approved automatically. Take away the receipt, and it comes back to you. Keep the receipt, and it goes straight through.",
+            "hold": 1.5
+          }
+        ]
+      },
+      "at": [3.0, 8.0],
+      "takeaway": "Cases land on their words; captions stay clear (estimated draft timing)."
+    }
+  ],
+  "refusals": [
+    {
+      "id": "unreachable",
+      "storyboard": {
+        "version": 2,
+        "title": "Which route a claim takes",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "The expense rule and its threshold are an example for illustration, not a real policy.",
+            "source": "Example expense rule for illustration"
+          }
         ],
-        "return": {
-         "at": 8.2
-        }
-       }
-      }
-     }
-    ]
-   },
-   "match": "outcomes; at most 3 stay readable"
-  }
- ],
- "sensitivities": [
-  {
-   "id": "route-is-computed",
-   "base": "wide",
-   "changed": "changed",
-   "at": 6.6,
-   "minChangedFraction": 0.001
-  }
- ]
+        "beats": [
+          {
+            "id": "route",
+            "block": "canvas",
+            "duration": 11,
+            "props": {
+              "decision": {
+                "id": "claim",
+                "title": "Which route a claim takes",
+                "source": "Example expense rule for illustration",
+                "ask": [
+                  {
+                    "id": "amount",
+                    "label": "Over $500?"
+                  },
+                  {
+                    "id": "receipt",
+                    "label": "Itemised receipt?"
+                  }
+                ],
+                "tree": {
+                  "ask": "amount",
+                  "yes": "manager",
+                  "no": "auto"
+                },
+                "outcomes": [
+                  {
+                    "id": "manager",
+                    "label": "Manager approves",
+                    "tone": "accent"
+                  },
+                  {
+                    "id": "auto",
+                    "label": "Approved automatically",
+                    "tone": "positive"
+                  },
+                  {
+                    "id": "returned",
+                    "label": "Returned to you",
+                    "tone": "negative"
+                  }
+                ],
+                "cases": [
+                  {
+                    "label": "A $120 taxi",
+                    "answers": {
+                      "amount": "no",
+                      "receipt": "yes"
+                    },
+                    "at": 1
+                  },
+                  {
+                    "label": "Same taxi, no receipt",
+                    "answers": {
+                      "amount": "no",
+                      "receipt": "no"
+                    },
+                    "at": 4.6
+                  }
+                ],
+                "return": {
+                  "at": 8.2
+                }
+              }
+            }
+          }
+        ]
+      },
+      "match": "never (reached|asked) by the tree"
+    },
+    {
+      "id": "same-route",
+      "storyboard": {
+        "version": 2,
+        "title": "Which route a claim takes",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "The expense rule and its threshold are an example for illustration, not a real policy.",
+            "source": "Example expense rule for illustration"
+          }
+        ],
+        "beats": [
+          {
+            "id": "route",
+            "block": "canvas",
+            "duration": 11,
+            "props": {
+              "decision": {
+                "id": "claim",
+                "title": "Which route a claim takes",
+                "source": "Example expense rule for illustration",
+                "ask": [
+                  {
+                    "id": "amount",
+                    "label": "Over $500?"
+                  },
+                  {
+                    "id": "receipt",
+                    "label": "Itemised receipt?"
+                  }
+                ],
+                "tree": {
+                  "ask": "amount",
+                  "yes": "manager",
+                  "no": {
+                    "ask": "receipt",
+                    "yes": "auto",
+                    "no": "returned"
+                  }
+                },
+                "outcomes": [
+                  {
+                    "id": "manager",
+                    "label": "Manager approves",
+                    "tone": "accent"
+                  },
+                  {
+                    "id": "auto",
+                    "label": "Approved automatically",
+                    "tone": "positive"
+                  },
+                  {
+                    "id": "returned",
+                    "label": "Returned to you",
+                    "tone": "negative"
+                  }
+                ],
+                "cases": [
+                  {
+                    "label": "A $120 taxi",
+                    "answers": {
+                      "amount": "no",
+                      "receipt": "yes"
+                    },
+                    "at": 1
+                  },
+                  {
+                    "label": "Same taxi, no receipt",
+                    "answers": {
+                      "amount": "no",
+                      "receipt": "yes"
+                    },
+                    "at": 4.6
+                  }
+                ],
+                "return": {
+                  "at": 8.2
+                }
+              }
+            }
+          }
+        ]
+      },
+      "match": "must change at least one answer"
+    },
+    {
+      "id": "too-broad",
+      "storyboard": {
+        "version": 2,
+        "title": "Which route a claim takes",
+        "format": {
+          "preset": "landscape",
+          "fps": 30
+        },
+        "theme": "paper",
+        "type": "inter",
+        "camera": "none",
+        "texture": "none",
+        "captions": false,
+        "music": false,
+        "sfx": false,
+        "sources": [
+          {
+            "claim": "The expense rule and its threshold are an example for illustration, not a real policy.",
+            "source": "Example expense rule for illustration"
+          }
+        ],
+        "beats": [
+          {
+            "id": "route",
+            "block": "canvas",
+            "duration": 11,
+            "props": {
+              "decision": {
+                "id": "claim",
+                "title": "Which route a claim takes",
+                "source": "Example expense rule for illustration",
+                "ask": [
+                  {
+                    "id": "amount",
+                    "label": "Over $500?"
+                  },
+                  {
+                    "id": "receipt",
+                    "label": "Itemised receipt?"
+                  },
+                  {
+                    "id": "days",
+                    "label": "Within 30 days?"
+                  }
+                ],
+                "tree": {
+                  "ask": "amount",
+                  "yes": "manager",
+                  "no": {
+                    "ask": "receipt",
+                    "yes": {
+                      "ask": "days",
+                      "yes": "auto",
+                      "no": "finance"
+                    },
+                    "no": "returned"
+                  }
+                },
+                "outcomes": [
+                  {
+                    "id": "manager",
+                    "label": "Manager approves",
+                    "tone": "accent"
+                  },
+                  {
+                    "id": "auto",
+                    "label": "Approved automatically",
+                    "tone": "positive"
+                  },
+                  {
+                    "id": "returned",
+                    "label": "Returned to you",
+                    "tone": "negative"
+                  },
+                  {
+                    "id": "finance",
+                    "label": "Finance checks it"
+                  }
+                ],
+                "cases": [
+                  {
+                    "label": "A $120 taxi",
+                    "answers": {
+                      "amount": "no",
+                      "receipt": "yes",
+                      "days": "yes"
+                    },
+                    "at": 1
+                  },
+                  {
+                    "label": "Same taxi, sent late",
+                    "answers": {
+                      "amount": "no",
+                      "receipt": "yes",
+                      "days": "no"
+                    },
+                    "at": 4.6
+                  }
+                ],
+                "return": {
+                  "at": 8.2
+                }
+              }
+            }
+          }
+        ]
+      },
+      "match": "outcomes; at most 3 stay readable"
+    }
+  ],
+  "sensitivities": [
+    {
+      "id": "route-is-computed",
+      "base": "wide",
+      "changed": "changed",
+      "at": 6.6,
+      "minChangedFraction": 0.001
+    }
+  ]
 }

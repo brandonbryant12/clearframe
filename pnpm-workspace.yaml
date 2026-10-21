@@ -1,0 +1,52 @@
+packages:
+  - apps/*
+  - packages/*
+  - tools/*
+
+catalog:
+  '@effect/platform-node': 4.0.1
+  '@effect/platform-node-shared': 4.0.1
+  '@opencode/cli': 2.1.0
+  '@opencode/client': 2.1.0
+  '@opencode/plugin': 2.1.0
+  '@oxlint/plugins': 1.85.0
+  '@types/node': 22.20.5
+  effect: 4.0.1
+  esbuild: 0.28.2
+  eslint-plugin-sonarjs: 4.2.1
+  oxfmt: 0.70.0
+  oxlint: 1.85.0
+  tsx: 4.23.15
+  turbo: 2.11.3
+  typescript: npm:@typescript/typescript6@6.0.2
+  typescript-7: npm:typescript@7.0.2
+  vitest: 4.1.2
+
+allowBuilds:
+  '@opencode/cli': true
+  '@effect/tsgo': true
+  esbuild: true
+
+minimumReleaseAgeExclude:
+  - '@opencode/ai@2.1.0'
+  - '@opencode/cli-darwin-arm64@2.1.0'
+  - '@opencode/cli-darwin-x64-baseline@2.1.0'
+  - '@opencode/cli-darwin-x64@2.1.0'
+  - '@opencode/cli-linux-arm64-musl@2.1.0'
+  - '@opencode/cli-linux-arm64@2.1.0'
+  - '@opencode/cli-linux-x64-baseline-musl@2.1.0'
+  - '@opencode/cli-linux-x64-baseline@2.1.0'
+  - '@opencode/cli-linux-x64-musl@2.1.0'
+  - '@opencode/cli-linux-x64@2.1.0'
+  - '@opencode/cli-windows-arm64@2.1.0'
+  - '@opencode/cli-windows-x64-baseline@2.1.0'
+  - '@opencode/cli-windows-x64@2.1.0'
+  - '@opencode/cli@2.1.0'
+  - '@opencode/client@2.1.0'
+  - '@opencode/plugin@2.1.0'
+  - '@opencode/protocol@2.1.0'
+  - '@opencode/schema@2.1.0'
+  - '@opencode/util@2.1.0'
+
+overrides:
+  '@effect/platform-node-shared': 4.0.1

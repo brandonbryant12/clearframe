@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": [],
+    "strict": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": true,
+    "noEmitOnError": true,
+    "sourceMap": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "moduleResolution": "Bundler",
+    "noEmit": true
+  },
+  "include": ["src/engine/ui/viewer/js/*.ts"]
+}

@@ -26,8 +26,8 @@ Compared with the earlier PR film (`examples/pr-film`), which is still a series 
 ```sh
 node examples/cast-study/build.mjs                 # writes storyboard-landscape.json and storyboard-vertical.json
 mkdir -p build/cast-study && cp examples/cast-study/storyboard-vertical.json build/cast-study/storyboard.json
-node engine/cli.mjs draft build/cast-study         # free local draft voice; renders go to build/
-node engine/cli.mjs qa build/cast-study            # build/cast-study/build/qa/phone.png
+pnpm cf draft build/cast-study         # free local draft voice; renders go to build/
+pnpm cf qa build/cast-study            # build/cast-study/build/qa/phone.png
 ```
 
 ## Measured

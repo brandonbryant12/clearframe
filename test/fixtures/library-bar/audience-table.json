@@ -84,10 +84,7 @@
                   {
                     "id": "contractor",
                     "label": "Contractors see claim status",
-                    "hide": [
-                      "person",
-                      "amount"
-                    ]
+                    "hide": ["person", "amount"]
                   }
                 ],
                 "show": [
@@ -105,11 +102,7 @@
           }
         ]
       },
-      "at": [
-        1,
-        4,
-        7
-      ],
+      "at": [1, 4, 7],
       "takeaway": "Managers see the claim amounts; contractors see status in the same rows."
     },
     {
@@ -194,10 +187,7 @@
                   {
                     "id": "contractor",
                     "label": "Contractors see claim status",
-                    "hide": [
-                      "person",
-                      "amount"
-                    ]
+                    "hide": ["person", "amount"]
                   }
                 ],
                 "show": [
@@ -215,11 +205,7 @@
           }
         ]
       },
-      "at": [
-        1,
-        4,
-        7
-      ],
+      "at": [1, 4, 7],
       "takeaway": "Switching audience hides names and amounts without moving the rows."
     },
     {
@@ -304,10 +290,7 @@
                   {
                     "id": "contractor",
                     "label": "Contractors see claim status",
-                    "hide": [
-                      "person",
-                      "amount"
-                    ]
+                    "hide": ["person", "amount"]
                   }
                 ],
                 "show": [
@@ -325,11 +308,7 @@
           }
         ]
       },
-      "at": [
-        1,
-        4,
-        7
-      ],
+      "at": [1, 4, 7],
       "takeaway": "Alex\u2019s amount is $2,400 in the manager view."
     },
     {
@@ -490,10 +469,7 @@
                   {
                     "id": "contractor",
                     "label": "Shared summary hides names",
-                    "hide": [
-                      "person",
-                      "owner"
-                    ]
+                    "hide": ["person", "owner"]
                   }
                 ],
                 "show": [
@@ -511,11 +487,7 @@
           }
         ]
       },
-      "at": [
-        1,
-        4,
-        7
-      ],
+      "at": [1, 4, 7],
       "takeaway": "Eight claims stay aligned while the first and last columns are hidden."
     },
     {
@@ -599,10 +571,7 @@
                   {
                     "id": "contractor",
                     "label": "Contractors see claim status",
-                    "hide": [
-                      "person",
-                      "amount"
-                    ]
+                    "hide": ["person", "amount"]
                   }
                 ],
                 "show": [
@@ -622,11 +591,7 @@
           }
         ]
       },
-      "at": [
-        1,
-        4,
-        7
-      ],
+      "at": [1, 4, 7],
       "takeaway": "Captioned narration leaves the table readable as the audience view changes."
     },
     {
@@ -787,10 +752,7 @@
                   {
                     "id": "contractor",
                     "label": "Shared summary hides names",
-                    "hide": [
-                      "person",
-                      "owner"
-                    ]
+                    "hide": ["person", "owner"]
                   }
                 ],
                 "show": [
@@ -805,10 +767,7 @@
                 ]
               },
               "reveal": {
-                "from": [
-                  "tbl-claims-r1-person",
-                  "tbl-claims-r1-amount"
-                ],
+                "from": ["tbl-claims-r1-person", "tbl-claims-r1-amount"],
                 "at": 2,
                 "dur": 1.2
               }
@@ -816,11 +775,7 @@
           }
         ]
       },
-      "at": [
-        1,
-        4,
-        7
-      ],
+      "at": [1, 4, 7],
       "takeaway": "The camera starts on Alex\u2019s $120 claim, then shows its place in the eight-row table."
     },
     {
@@ -905,10 +860,7 @@
                   {
                     "id": "contractor",
                     "label": "Contractors see claim status",
-                    "hide": [
-                      "person",
-                      "amount"
-                    ]
+                    "hide": ["person", "amount"]
                   }
                 ],
                 "show": [
@@ -923,10 +875,7 @@
                 ]
               },
               "reveal": {
-                "from": [
-                  "tbl-claims-r1-person",
-                  "tbl-claims-r1-amount"
-                ],
+                "from": ["tbl-claims-r1-person", "tbl-claims-r1-amount"],
                 "at": 2,
                 "dur": 1.2
               }
@@ -934,11 +883,7 @@
           }
         ]
       },
-      "at": [
-        1,
-        4,
-        7
-      ],
+      "at": [1, 4, 7],
       "takeaway": "The portrait shot starts on Alex and the amount, then returns to the full table."
     }
   ],
@@ -1101,10 +1046,7 @@
                   {
                     "id": "contractor",
                     "label": "Shared summary hides names",
-                    "hide": [
-                      "person",
-                      "owner"
-                    ]
+                    "hide": ["person", "owner"]
                   }
                 ],
                 "show": [

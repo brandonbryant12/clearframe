@@ -87,7 +87,7 @@ For conversational pieces, set `voice.cast: {"host": {"voice": "Puck", "style": 
 | Mature, grounded | Gacrux |
 | Lively (launches, internal hype, used sparingly) | Laomedeia, Puck, Sadachbia |
 
-Accent, age and gender are properties of the *voice*, not the style string: pick the voice that fits. List them all with `node skills/gemini-tts/scripts/tts.mjs --list-voices`.
+Accent, age and gender are properties of the *voice*, not the style string: pick the voice that fits. List them all with `node packages/engine/dist/skills/gemini-tts/scripts/tts.mjs --list-voices`.
 
 ## Language to avoid
 

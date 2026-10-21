@@ -50,4 +50,4 @@ The plot fills the frame's middle band: one-line title (two lines in vertical fr
 - `bands: [{from, to, label?}]` (1–8, increasing, non-overlapping x ranges) shade regimes such as recessions or rate cycles behind the line.
 - `area: true` adds a soft fill under the first series.
 
-Tests: `node --test test/plots.test.mjs`. Check a layout with `node engine/cli.mjs still DIR --at SECONDS --draft` in every format you will ship.
+Tests: `node --test test/plots.test.mjs`. Check a layout with `pnpm cf still DIR --at SECONDS --draft` in every format you will ship.

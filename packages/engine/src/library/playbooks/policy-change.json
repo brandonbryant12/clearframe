@@ -1,0 +1,324 @@
+{
+  "order": 3,
+  "title": "Explain a policy change and what to do now",
+  "audience": "Staff who skim policy documents and get caught by the change",
+  "inputs": "The policy before and after, the one rule people break most (with your own number), the deadline and where to act",
+  "theme": "briefing",
+  "type": "geometric",
+  "motion": "snappy",
+  "transition": "cut",
+  "sfx": "subtle",
+  "texture": {
+    "grain": 0.05
+  },
+  "sources": [
+    {
+      "id": "policy",
+      "claim": "31% of claims were returned for a missing or non-itemised receipt",
+      "source": "Example Co. expense policy and 2027 claims data (sample: replace with yours)"
+    }
+  ],
+  "note": "Policy arc: the cost of getting it wrong as your own number, the document people must get right with its parts marked, the new deadline on a calendar, the step done in the app, the line to repeat spoken over the finished step. Replace sketchText, sketchParams and sketchSay with the policy's words and figures (`clearframe sketch NAME`). See skills/clearframe-workplace/SKILL.md.",
+  "beats": [
+    {
+      "id": "hook",
+      "block": "canvas",
+      "vo": "Last year, almost a third of our expense claims came back.",
+      "props": {
+        "source": "Example Co. 2027 claims data",
+        "chart": {
+          "kind": "number",
+          "values": [
+            {
+              "label": "of claims came back",
+              "value": 31,
+              "highlight": true
+            }
+          ],
+          "suffix": "%",
+          "box": [360, 300, 1200, 520]
+        }
+      }
+    },
+    {
+      "id": "receipt",
+      "block": "canvas",
+      "vo": "Mostly for one reason. A receipt needs the place, every item, and the total. A card slip is not a receipt.",
+      "props": {
+        "source": "Example Co. expense policy",
+        "sketch": "inspect",
+        "sketchParams": {
+          "marks": ["sender", "body", "link"],
+          "color": "positive"
+        },
+        "sketchText": {
+          "FROM": "Harbor Grill, 14 Dock Street",
+          "SUBJECT": "Receipt #4471",
+          "LINE1": "2 × lunch special  $36.00",
+          "LINE2": "Tax $3.10 · Total $39.10",
+          "BUTTON": "Card ending 4417",
+          "MARKONE": "The place",
+          "MARKTWO": "Every item",
+          "MARKTHREE": "Not just the card slip"
+        },
+        "sketchSay": {
+          "ONE": "place",
+          "TWO": "item",
+          "THREE": "card"
+        }
+      }
+    },
+    {
+      "id": "deadline",
+      "block": "canvas",
+      "vo": "And the window is shorter now. From the day you spend, you have thirty days to claim, not sixty.",
+      "props": {
+        "source": "Example Co. expense policy",
+        "sketch": "deadline",
+        "sketchParams": {
+          "days": 31,
+          "firstWeekday": 3,
+          "start": 1,
+          "end": 30,
+          "today": 0
+        },
+        "sketchText": {
+          "MONTH": "March",
+          "OPENS": "You spend",
+          "CLOSES": "Last day to claim"
+        },
+        "sketchSay": {
+          "OPEN": "spend",
+          "CLOSE": "thirty"
+        }
+      },
+      "hold": 1.2
+    }
+  ],
+  "endings": [
+    {
+      "name": "app-then-object",
+      "about": "the step done in the app on a desktop, then the film’s own object changed (a cast close).",
+      "beats": [
+        {
+          "id": "step",
+          "block": "canvas",
+          "vo": "The app does the work. Open New claim, snap the receipt, check the amount, and submit.",
+          "props": {
+            "sketch": "portal",
+            "sketchText": {
+              "APP": "Example Co. Expenses",
+              "STEP1": "New claim",
+              "STEP2": "Snap a receipt",
+              "OTHER": "Mileage",
+              "FIELD": "Amount",
+              "OLD": "$0.00",
+              "NEW": "$39.10",
+              "DONE": "Submitted: paid in about 5 business days"
+            },
+            "sketchSay": {
+              "CLICK1": "New",
+              "CLICK2": "snap",
+              "CHANGE": "amount",
+              "SAVE": "submit"
+            }
+          },
+          "transition": "cut"
+        },
+        {
+          "id": "close",
+          "block": "canvas",
+          "vo": "Itemised. Within thirty days. In the app.",
+          "props": {
+            "cast": {
+              "look": "tiles",
+              "objects": [
+                {
+                  "id": "receipt",
+                  "shape": "receipt",
+                  "color": "surface",
+                  "label": "Itemised",
+                  "enter": "pop"
+                },
+                {
+                  "id": "cal",
+                  "shape": "calendar",
+                  "color": "accent",
+                  "label": "Within 30 days",
+                  "enter": "pop"
+                },
+                {
+                  "id": "phone",
+                  "shape": "phone",
+                  "color": "accent2",
+                  "label": "In the app",
+                  "enter": "pop"
+                }
+              ],
+              "formations": [
+                {
+                  "form": "line",
+                  "say": "Itemised",
+                  "ids": ["receipt"]
+                },
+                {
+                  "form": "line",
+                  "say": "Within",
+                  "ids": ["receipt", "cal"]
+                },
+                {
+                  "form": "line",
+                  "say": "app",
+                  "ids": ["receipt", "cal", "phone"]
+                },
+                {
+                  "form": "mark",
+                  "mark": "circle",
+                  "ids": ["phone"],
+                  "say": "app"
+                }
+              ]
+            }
+          },
+          "transition": "cut"
+        }
+      ]
+    },
+    {
+      "name": "slip-or-receipt",
+      "about": "the card slip and the itemised receipt side by side: the slip steps up with only its total, then the receipt steps forward as the one to snap, with where and by when said over it.",
+      "beats": [
+        {
+          "id": "which",
+          "block": "canvas",
+          "transition": "cut",
+          "vo": "A card slip only shows the total. The itemised receipt shows the place and every item. Snap that one, in the Expenses app, within 30 days.",
+          "props": {
+            "source": "Example Co. expense policy",
+            "cast": {
+              "objects": [
+                {
+                  "id": "slip",
+                  "shape": "ticket",
+                  "color": "muted",
+                  "label": "Card slip",
+                  "enter": "none",
+                  "size": 210
+                },
+                {
+                  "id": "itemised",
+                  "shape": "receipt",
+                  "color": "accent",
+                  "label": "Itemised receipt",
+                  "enter": "none",
+                  "size": 210
+                }
+              ],
+              "formations": [
+                {
+                  "form": "line",
+                  "at": 0,
+                  "ids": ["slip", "itemised"]
+                },
+                {
+                  "form": "hero",
+                  "hero": "slip",
+                  "say": "total",
+                  "word": "Only the total"
+                },
+                {
+                  "form": "hero",
+                  "hero": "itemised",
+                  "say": "place"
+                },
+                {
+                  "form": "exit",
+                  "ids": ["slip"],
+                  "say": "Snap"
+                },
+                {
+                  "form": "camera",
+                  "zoom": 0.95,
+                  "dur": 1.2,
+                  "ease": "out",
+                  "say": "Snap"
+                },
+                {
+                  "form": "camera",
+                  "zoom": 0.88,
+                  "dur": 1.6,
+                  "ease": "out",
+                  "say": "within"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "phone-then-window",
+      "about": "the claim done on a phone in one sentence, then the month’s calendar again with today marked and the last day circled, the action said over it.",
+      "beats": [
+        {
+          "id": "snap",
+          "block": "canvas",
+          "transition": "cut",
+          "hold": 0.6,
+          "vo": "In the Expenses app on your phone, tap New claim, snap the receipt, check the amount, and submit. Do it the day you spend.",
+          "props": {
+            "source": "Example Co. expense policy",
+            "sketch": "portal",
+            "sketchParams": {
+              "device": "phone"
+            },
+            "sketchText": {
+              "APP": "Example Co. Expenses",
+              "STEP1": "New claim",
+              "STEP2": "Snap a receipt",
+              "OTHER": "Mileage",
+              "FIELD": "Amount",
+              "OLD": "$0.00",
+              "NEW": "$39.10",
+              "DONE": "Submitted for approval"
+            },
+            "sketchSay": {
+              "CLICK1": "New",
+              "CLICK2": "snap",
+              "CHANGE": "amount",
+              "SAVE": "submit"
+            }
+          }
+        },
+        {
+          "id": "window",
+          "block": "canvas",
+          "transition": "cut",
+          "vo": "Spent on March 1st? The 30th is your last day. Today is the 12th, so claim it now.",
+          "props": {
+            "source": "Example Co. expense policy",
+            "sketch": "deadline",
+            "sketchParams": {
+              "days": 31,
+              "firstWeekday": 3,
+              "start": 1,
+              "end": 30,
+              "today": 12
+            },
+            "sketchText": {
+              "MONTH": "March",
+              "OPENS": "You spend",
+              "CLOSES": "Last day to claim",
+              "TODAY": "Today"
+            },
+            "sketchSay": {
+              "OPEN": "1st",
+              "CLOSE": "30th",
+              "TODAY": "Today"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

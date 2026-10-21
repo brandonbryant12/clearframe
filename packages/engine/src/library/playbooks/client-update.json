@@ -1,0 +1,1256 @@
+{
+  "order": 5,
+  "title": "Update clients calmly: the quarter, what held, what was done, how to talk",
+  "audience": "Existing clients, often watching from the quarterly email, who want to feel informed and calm",
+  "inputs": "The quarterly letter: returns as of the quarter end, the sharpest move and its recovery, the target mix, the committee's decision, how to book a review",
+  "theme": "meridian",
+  "type": "inter",
+  "motion": "gentle",
+  "transition": "cut",
+  "sfx": "subtle",
+  "texture": {
+    "grain": 0.05
+  },
+  "sources": [
+    {
+      "id": "letter",
+      "claim": "Equity sleeve index path through the quarter; target mix 60/35/5; rebalanced August 20",
+      "source": "Example Wealth quarterly letter, as of September 30 (sample: replace with your letter)"
+    }
+  ],
+  "note": "Client arc: the quarter as one calm line (the drop and the recovery), the mix that held, what the committee did, one sentence of outlook in the committee's words, and the way to talk to an adviser done in the app. No predictions. Every figure as of the quarter end, from the letter. Replace the series, sketchText, sketchParams and sketchSay with your letter's figures and words (`clearframe sketch NAME`). See skills/clearframe-workplace/SKILL.md.",
+  "beats": [
+    {
+      "id": "quarter",
+      "block": "canvas",
+      "vo": "It was a quarter with one sharp dip. Shares fell 6.4 percent from August 4 to August 19. We rebalanced the next day, and they were back by September 12.",
+      "props": {
+        "source": "Example Wealth quarterly letter · as of Sep 30",
+        "sketch": "drawdown",
+        "sketchParams": {
+          "start": "2027-08-04",
+          "low": "2027-08-19",
+          "drop": 6.4,
+          "act": "2027-08-20",
+          "back": "2027-09-12"
+        },
+        "sketchText": {
+          "TITLE": "Shares in your portfolio",
+          "SUBTITLE": "Change in value since August 4",
+          "ACTLABEL": "Rebalanced Aug 20",
+          "ACTNOTE": "bought shares",
+          "BACKLABEL": "Back by Sep 12"
+        },
+        "sketchSay": {
+          "OPEN": "quarter",
+          "FALL": "fell",
+          "LOW": "percent",
+          "ACT": "rebalanced",
+          "RECOVER": "back"
+        }
+      }
+    },
+    {
+      "id": "mix",
+      "block": "canvas",
+      "vo": "Through it, your mix stayed where we set it: shares, bonds, and a little cash.",
+      "props": {
+        "source": "Example Wealth quarterly letter · target mix · as of Sep 30",
+        "sketch": "split",
+        "sketchParams": {
+          "parts": [60, 35, 5],
+          "suffix": "%",
+          "total": false
+        },
+        "sketchText": {
+          "WHOLE": "Your balanced portfolio",
+          "PARTONE": "Shares",
+          "PARTTWO": "Bonds",
+          "PARTTHREE": "Cash"
+        },
+        "sketchSay": {
+          "SPLIT": "mix",
+          "ONE": "shares",
+          "TWO": "bonds",
+          "THREE": "cash"
+        }
+      },
+      "hold": 1.2
+    },
+    {
+      "id": "decision",
+      "block": "kinetic",
+      "vo": "After the dip, we rebalanced, buying shares at lower prices. The plan did not need to react to the noise.",
+      "props": {
+        "mode": "stack",
+        "align": "left",
+        "emphasis": ["rebalanced", "noise"],
+        "source": "Example Wealth Investment Committee, quarterly letter"
+      }
+    }
+  ],
+  "endings": [
+    {
+      "name": "app-then-object",
+      "about": "the step done in the app on a desktop, then the film’s own object changed (a cast close).",
+      "beats": [
+        {
+          "id": "talk",
+          "block": "canvas",
+          "vo": "If you would like to talk it through, open My adviser, choose Book a review, pick a time, and confirm.",
+          "props": {
+            "sketch": "portal",
+            "sketchText": {
+              "APP": "Example Wealth",
+              "STEP1": "My adviser",
+              "STEP2": "Book a review",
+              "OTHER": "Documents",
+              "FIELD": "Time",
+              "OLD": "Choose a time",
+              "NEW": "Tue 10:30",
+              "DONE": "Booked: your adviser will call on Tuesday"
+            },
+            "sketchSay": {
+              "CLICK1": "adviser",
+              "CLICK2": "review",
+              "CHANGE": "time",
+              "SAVE": "confirm"
+            }
+          }
+        },
+        {
+          "id": "close",
+          "block": "canvas",
+          "vo": "Your adviser is here when you want to talk it through.",
+          "props": {
+            "cast": {
+              "look": "tiles",
+              "objects": [
+                {
+                  "id": "you",
+                  "shape": "person",
+                  "color": "accent",
+                  "label": "You",
+                  "enter": "pop"
+                },
+                {
+                  "id": "adviser",
+                  "shape": "person",
+                  "color": "accent2",
+                  "label": "Your adviser",
+                  "enter": "pop"
+                },
+                {
+                  "id": "cal",
+                  "shape": "calendar",
+                  "color": "surface",
+                  "label": "A time for you",
+                  "enter": "pop"
+                }
+              ],
+              "formations": [
+                {
+                  "form": "line",
+                  "at": 0,
+                  "ids": ["you", "adviser"]
+                },
+                {
+                  "form": "line",
+                  "say": "talk",
+                  "ids": ["you", "cal", "adviser"]
+                }
+              ]
+            }
+          },
+          "transition": "cut"
+        }
+      ]
+    },
+    {
+      "name": "quarter-again",
+      "about": "the opening line comes back with its dip, the rebalance and the recovery marked, the plan unchanged beside it and the review as the next step. The line is drawn from the sample series in frame pixels (`tall` for vertical): redraw it from your own series and dates, or pick another ending.",
+      "beats": [
+        {
+          "id": "again",
+          "block": "canvas",
+          "transition": "cut",
+          "vo": "One dip, in August. We rebalanced on August 20, and by September 30 it had recovered. Your plan never changed. To talk it through, book a review in the Example Wealth app this month.",
+          "props": {
+            "source": "Example Wealth quarterly letter · index, July 1 = 100 · as of Sep 30",
+            "elements": [
+              {
+                "type": "text",
+                "text": "Your equity holdings through the quarter",
+                "x": 200,
+                "y": 228,
+                "size": 36,
+                "font": "bold",
+                "fill": "ink",
+                "fit": 1200,
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "line",
+                "x1": 200,
+                "y1": 280,
+                "x2": 1400,
+                "y2": 280,
+                "stroke": "line",
+                "width": 2,
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "105",
+                "x": 180,
+                "y": 289,
+                "size": 26,
+                "font": "regular",
+                "fill": "muted",
+                "anchor": "end",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "line",
+                "x1": 200,
+                "y1": 460,
+                "x2": 1400,
+                "y2": 460,
+                "stroke": "line",
+                "width": 2,
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "100",
+                "x": 180,
+                "y": 469,
+                "size": 26,
+                "font": "regular",
+                "fill": "muted",
+                "anchor": "end",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "line",
+                "x1": 200,
+                "y1": 640,
+                "x2": 1400,
+                "y2": 640,
+                "stroke": "line",
+                "width": 2,
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "95",
+                "x": 180,
+                "y": 649,
+                "size": 26,
+                "font": "regular",
+                "fill": "muted",
+                "anchor": "end",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "line",
+                "x1": 200,
+                "y1": 820,
+                "x2": 1400,
+                "y2": 820,
+                "stroke": "line",
+                "width": 2,
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "90",
+                "x": 180,
+                "y": 829,
+                "size": 26,
+                "font": "regular",
+                "fill": "muted",
+                "anchor": "end",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "Jul",
+                "x": 200,
+                "y": 864,
+                "size": 28,
+                "font": "regular",
+                "fill": "muted",
+                "anchor": "start",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "Aug",
+                "x": 636.4,
+                "y": 864,
+                "size": 28,
+                "font": "regular",
+                "fill": "muted",
+                "anchor": "middle",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "Sep",
+                "x": 1072.7,
+                "y": 864,
+                "size": 28,
+                "font": "regular",
+                "fill": "muted",
+                "anchor": "middle",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "Sep 30",
+                "x": 1400,
+                "y": 864,
+                "size": 28,
+                "font": "semibold",
+                "fill": "ink",
+                "anchor": "end",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "rect",
+                "x": 527.3,
+                "y": 280,
+                "w": 332,
+                "h": 540,
+                "fill": "negative",
+                "opacity": 0.18,
+                "enter": "fade",
+                "dur": 0.5,
+                "say": "dip"
+              },
+              {
+                "type": "rect",
+                "x": 859.3,
+                "y": 280,
+                "w": 540.7,
+                "h": 540,
+                "fill": "accent2",
+                "opacity": 0.18,
+                "enter": "fade",
+                "dur": 0.6,
+                "say": "September"
+              },
+              {
+                "type": "path",
+                "d": "M 200 460 L 309.1 416.8 L 418.2 388 L 527.3 420.4 L 636.4 553.6 L 745.5 618.4 L 854.5 571.6 L 963.6 496 L 1072.7 431.2 L 1181.8 391.6 L 1290.9 377.2 L 1400 384.4 L 1400 820 L 200 820 Z",
+                "fill": {
+                  "gradient": ["accent", "accent"],
+                  "angle": 90,
+                  "fade": true
+                },
+                "opacity": 0.3,
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "line",
+                "x1": 200,
+                "y1": 820,
+                "x2": 1400,
+                "y2": 820,
+                "stroke": "muted",
+                "width": 3,
+                "cap": "round",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "path",
+                "d": "M 200 460 L 309.1 416.8 L 418.2 388 L 527.3 420.4 L 636.4 553.6 L 745.5 618.4 L 854.5 571.6 L 963.6 496 L 1072.7 431.2 L 1181.8 391.6 L 1290.9 377.2 L 1400 384.4",
+                "fill": "none",
+                "stroke": "accent",
+                "width": 6,
+                "cap": "round",
+                "join": "round",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "circle",
+                "cx": 745.5,
+                "cy": 618.4,
+                "r": 15,
+                "fill": "accent",
+                "stroke": "bg",
+                "width": 4,
+                "enter": "pop",
+                "dur": 0.4,
+                "origin": [745.5, 618.4],
+                "say": "dip"
+              },
+              {
+                "type": "text",
+                "text": "The dip",
+                "x": 745.5,
+                "y": 680.4,
+                "size": 30,
+                "font": "semibold",
+                "fill": "ink",
+                "anchor": "middle",
+                "enter": "rise",
+                "dist": 12,
+                "dur": 0.4,
+                "say": "dip",
+                "after": 0.2
+              },
+              {
+                "type": "line",
+                "x1": 859.3,
+                "y1": 346,
+                "x2": 859.3,
+                "y2": 820,
+                "stroke": "accent2",
+                "width": 4,
+                "dash": [10, 8],
+                "enter": "draw",
+                "dur": 0.6,
+                "say": "rebalanced"
+              },
+              {
+                "type": "circle",
+                "cx": 859.3,
+                "cy": 568.3,
+                "r": 12,
+                "fill": "accent2",
+                "stroke": "bg",
+                "width": 4,
+                "enter": "pop",
+                "dur": 0.4,
+                "origin": [859.3, 568.3],
+                "say": "rebalanced",
+                "after": 0.3
+              },
+              {
+                "type": "group",
+                "enter": "pop",
+                "dur": 0.4,
+                "origin": [859.3, 320],
+                "say": "rebalanced",
+                "after": 0.2,
+                "children": [
+                  {
+                    "type": "rect",
+                    "x": 709.3,
+                    "y": 294,
+                    "w": 300,
+                    "h": 52,
+                    "r": 26,
+                    "fill": "accent2",
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  },
+                  {
+                    "type": "text",
+                    "text": "Rebalanced Aug 20",
+                    "x": 859.3,
+                    "y": 330.1,
+                    "size": 28,
+                    "font": "bold",
+                    "fill": "bg",
+                    "anchor": "middle",
+                    "fit": 272,
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  }
+                ],
+                "rough": false,
+                "print": false
+              },
+              {
+                "type": "path",
+                "d": "M 745.5 618.4 L 854.5 571.6 L 963.6 496 L 1072.7 431.2 L 1181.8 391.6 L 1290.9 377.2 L 1400 384.4",
+                "fill": "none",
+                "stroke": "accent2",
+                "width": 9,
+                "cap": "round",
+                "join": "round",
+                "enter": "draw",
+                "dur": 1,
+                "say": "recovered"
+              },
+              {
+                "type": "circle",
+                "cx": 1400,
+                "cy": 384.4,
+                "r": 15,
+                "fill": "accent",
+                "stroke": "bg",
+                "width": 4,
+                "enter": "pop",
+                "dur": 0.4,
+                "origin": [1400, 384.4],
+                "say": "September"
+              },
+              {
+                "type": "group",
+                "enter": "pop",
+                "dur": 0.4,
+                "origin": [1476, 384.4],
+                "say": "September",
+                "children": [
+                  {
+                    "type": "rect",
+                    "x": 1424,
+                    "y": 356.4,
+                    "w": 104,
+                    "h": 56,
+                    "r": 28,
+                    "fill": "accent",
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  },
+                  {
+                    "type": "text",
+                    "text": "102",
+                    "x": 1476,
+                    "y": 396.6,
+                    "size": 34,
+                    "font": "bold",
+                    "fill": "bg",
+                    "anchor": "middle",
+                    "fit": 76,
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  }
+                ],
+                "rough": false,
+                "print": false
+              },
+              {
+                "type": "group",
+                "enter": "rise",
+                "dist": 30,
+                "dur": 0.5,
+                "say": "plan",
+                "children": [
+                  {
+                    "type": "rect",
+                    "x": 1480,
+                    "y": 470,
+                    "w": 340,
+                    "h": 130,
+                    "r": 20,
+                    "fill": "ink",
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  },
+                  {
+                    "type": "text",
+                    "text": "Target mix, unchanged",
+                    "x": 1506,
+                    "y": 514,
+                    "size": 24,
+                    "font": "semibold",
+                    "fill": "bg",
+                    "fit": 288,
+                    "opacity": 0.8,
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  },
+                  {
+                    "type": "text",
+                    "text": "60 / 35 / 5",
+                    "x": 1506,
+                    "y": 570,
+                    "size": 44,
+                    "font": "bold",
+                    "fill": "bg",
+                    "fit": 288,
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  }
+                ],
+                "rough": false,
+                "print": false
+              },
+              {
+                "type": "group",
+                "enter": "rise",
+                "dist": 30,
+                "dur": 0.5,
+                "say": "book",
+                "children": [
+                  {
+                    "type": "rect",
+                    "x": 1480,
+                    "y": 620,
+                    "w": 340,
+                    "h": 100,
+                    "r": 20,
+                    "fill": "accent",
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  },
+                  {
+                    "type": "icon",
+                    "name": "calendar",
+                    "x": 1528,
+                    "y": 670,
+                    "size": 44,
+                    "stroke": "bg",
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  },
+                  {
+                    "type": "text",
+                    "text": "Book a review",
+                    "x": 1570,
+                    "y": 682,
+                    "size": 34,
+                    "font": "bold",
+                    "fill": "bg",
+                    "fit": 224,
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  }
+                ],
+                "rough": false,
+                "print": false
+              },
+              {
+                "type": "group",
+                "enter": "pop",
+                "dur": 0.4,
+                "origin": [1650, 766],
+                "say": "app",
+                "children": [
+                  {
+                    "type": "rect",
+                    "x": 1480,
+                    "y": 736,
+                    "w": 340,
+                    "h": 60,
+                    "r": 30,
+                    "fill": "accent2",
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  },
+                  {
+                    "type": "text",
+                    "text": "In the Example Wealth app",
+                    "x": 1650,
+                    "y": 774.6,
+                    "size": 24,
+                    "font": "bold",
+                    "fill": "bg",
+                    "anchor": "middle",
+                    "fit": 312,
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  }
+                ],
+                "rough": false,
+                "print": false
+              }
+            ]
+          },
+          "tall": {
+            "source": "Example Wealth quarterly letter · index, July 1 = 100 · as of Sep 30",
+            "view": "auto",
+            "elements": [
+              {
+                "type": "text",
+                "text": "Your equity holdings through the quarter",
+                "x": 130,
+                "y": 309,
+                "size": 42,
+                "font": "bold",
+                "fill": "ink",
+                "fit": 830,
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "line",
+                "x1": 130,
+                "y1": 370,
+                "x2": 960,
+                "y2": 370,
+                "stroke": "line",
+                "width": 2,
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "105",
+                "x": 110,
+                "y": 381,
+                "size": 31,
+                "font": "regular",
+                "fill": "muted",
+                "anchor": "end",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "line",
+                "x1": 130,
+                "y1": 680,
+                "x2": 960,
+                "y2": 680,
+                "stroke": "line",
+                "width": 2,
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "100",
+                "x": 110,
+                "y": 691,
+                "size": 31,
+                "font": "regular",
+                "fill": "muted",
+                "anchor": "end",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "line",
+                "x1": 130,
+                "y1": 990,
+                "x2": 960,
+                "y2": 990,
+                "stroke": "line",
+                "width": 2,
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "95",
+                "x": 110,
+                "y": 1001,
+                "size": 31,
+                "font": "regular",
+                "fill": "muted",
+                "anchor": "end",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "line",
+                "x1": 130,
+                "y1": 1300,
+                "x2": 960,
+                "y2": 1300,
+                "stroke": "line",
+                "width": 2,
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "90",
+                "x": 110,
+                "y": 1311,
+                "size": 31,
+                "font": "regular",
+                "fill": "muted",
+                "anchor": "end",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "Jul",
+                "x": 130,
+                "y": 1352,
+                "size": 33,
+                "font": "regular",
+                "fill": "muted",
+                "anchor": "start",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "Aug",
+                "x": 431.8,
+                "y": 1352,
+                "size": 33,
+                "font": "regular",
+                "fill": "muted",
+                "anchor": "middle",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "Sep",
+                "x": 733.6,
+                "y": 1352,
+                "size": 33,
+                "font": "regular",
+                "fill": "muted",
+                "anchor": "middle",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "text",
+                "text": "Sep 30",
+                "x": 960,
+                "y": 1352,
+                "size": 33,
+                "font": "semibold",
+                "fill": "ink",
+                "anchor": "end",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "rect",
+                "x": 356.4,
+                "y": 370,
+                "w": 229.6,
+                "h": 930,
+                "fill": "negative",
+                "opacity": 0.18,
+                "enter": "fade",
+                "dur": 0.5,
+                "say": "dip"
+              },
+              {
+                "type": "rect",
+                "x": 586,
+                "y": 370,
+                "w": 374,
+                "h": 930,
+                "fill": "accent2",
+                "opacity": 0.18,
+                "enter": "fade",
+                "dur": 0.6,
+                "say": "September"
+              },
+              {
+                "type": "path",
+                "d": "M 130 680 L 205.5 605.6 L 280.9 556 L 356.4 611.8 L 431.8 841.2 L 507.3 952.8 L 582.7 872.2 L 658.2 742 L 733.6 630.4 L 809.1 562.2 L 884.5 537.4 L 960 549.8 L 960 1300 L 130 1300 Z",
+                "fill": {
+                  "gradient": ["accent", "accent"],
+                  "angle": 90,
+                  "fade": true
+                },
+                "opacity": 0.3,
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "line",
+                "x1": 130,
+                "y1": 1300,
+                "x2": 960,
+                "y2": 1300,
+                "stroke": "muted",
+                "width": 3,
+                "cap": "round",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "path",
+                "d": "M 130 680 L 205.5 605.6 L 280.9 556 L 356.4 611.8 L 431.8 841.2 L 507.3 952.8 L 582.7 872.2 L 658.2 742 L 733.6 630.4 L 809.1 562.2 L 884.5 537.4 L 960 549.8",
+                "fill": "none",
+                "stroke": "accent",
+                "width": 6,
+                "cap": "round",
+                "join": "round",
+                "enter": "none",
+                "at": 0
+              },
+              {
+                "type": "circle",
+                "cx": 507.3,
+                "cy": 952.8,
+                "r": 15,
+                "fill": "accent",
+                "stroke": "bg",
+                "width": 4,
+                "enter": "pop",
+                "dur": 0.4,
+                "origin": [507.3, 952.8],
+                "say": "dip"
+              },
+              {
+                "type": "text",
+                "text": "The dip",
+                "x": 507.3,
+                "y": 1025.8,
+                "size": 35,
+                "font": "semibold",
+                "fill": "ink",
+                "anchor": "middle",
+                "enter": "rise",
+                "dist": 12,
+                "dur": 0.4,
+                "say": "dip",
+                "after": 0.2
+              },
+              {
+                "type": "line",
+                "x1": 586,
+                "y1": 448,
+                "x2": 586,
+                "y2": 1300,
+                "stroke": "accent2",
+                "width": 4,
+                "dash": [10, 8],
+                "enter": "draw",
+                "dur": 0.6,
+                "say": "rebalanced"
+              },
+              {
+                "type": "circle",
+                "cx": 586,
+                "cy": 866.5,
+                "r": 12,
+                "fill": "accent2",
+                "stroke": "bg",
+                "width": 4,
+                "enter": "pop",
+                "dur": 0.4,
+                "origin": [586, 866.5],
+                "say": "rebalanced",
+                "after": 0.3
+              },
+              {
+                "type": "group",
+                "enter": "pop",
+                "dur": 0.4,
+                "origin": [586, 417.5],
+                "say": "rebalanced",
+                "after": 0.2,
+                "children": [
+                  {
+                    "type": "rect",
+                    "x": 409,
+                    "y": 387,
+                    "w": 354,
+                    "h": 61,
+                    "r": 30.5,
+                    "fill": "accent2",
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  },
+                  {
+                    "type": "text",
+                    "text": "Rebalanced Aug 20",
+                    "x": 586,
+                    "y": 429.4,
+                    "size": 33,
+                    "font": "bold",
+                    "fill": "bg",
+                    "anchor": "middle",
+                    "fit": 326,
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  }
+                ],
+                "rough": false,
+                "print": false
+              },
+              {
+                "type": "path",
+                "d": "M 507.3 952.8 L 582.7 872.2 L 658.2 742 L 733.6 630.4 L 809.1 562.2 L 884.5 537.4 L 960 549.8",
+                "fill": "none",
+                "stroke": "accent2",
+                "width": 9,
+                "cap": "round",
+                "join": "round",
+                "enter": "draw",
+                "dur": 1,
+                "say": "recovered"
+              },
+              {
+                "type": "circle",
+                "cx": 960,
+                "cy": 549.8,
+                "r": 15,
+                "fill": "accent",
+                "stroke": "bg",
+                "width": 4,
+                "enter": "pop",
+                "dur": 0.4,
+                "origin": [960, 549.8],
+                "say": "September"
+              },
+              {
+                "type": "group",
+                "enter": "pop",
+                "dur": 0.4,
+                "origin": [960, 486.8],
+                "say": "September",
+                "children": [
+                  {
+                    "type": "rect",
+                    "x": 898.5,
+                    "y": 453.8,
+                    "w": 123,
+                    "h": 66,
+                    "r": 33,
+                    "fill": "accent",
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  },
+                  {
+                    "type": "text",
+                    "text": "102",
+                    "x": 960,
+                    "y": 501.2,
+                    "size": 40,
+                    "font": "bold",
+                    "fill": "bg",
+                    "anchor": "middle",
+                    "fit": 95,
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  }
+                ],
+                "rough": false,
+                "print": false
+              },
+              {
+                "type": "group",
+                "enter": "rise",
+                "dist": 30,
+                "dur": 0.5,
+                "say": "plan",
+                "children": [
+                  {
+                    "type": "rect",
+                    "x": 130,
+                    "y": 1420,
+                    "w": 830,
+                    "h": 153,
+                    "r": 20,
+                    "fill": "ink",
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  },
+                  {
+                    "type": "text",
+                    "text": "Target mix, unchanged",
+                    "x": 161,
+                    "y": 1472,
+                    "size": 28,
+                    "font": "semibold",
+                    "fill": "bg",
+                    "fit": 768,
+                    "opacity": 0.8,
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  },
+                  {
+                    "type": "text",
+                    "text": "60 / 35 / 5",
+                    "x": 161,
+                    "y": 1538,
+                    "size": 52,
+                    "font": "bold",
+                    "fill": "bg",
+                    "fit": 768,
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  }
+                ],
+                "rough": false,
+                "print": false
+              },
+              {
+                "type": "group",
+                "enter": "rise",
+                "dist": 30,
+                "dur": 0.5,
+                "say": "book",
+                "children": [
+                  {
+                    "type": "rect",
+                    "x": 130,
+                    "y": 1597,
+                    "w": 830,
+                    "h": 118,
+                    "r": 20,
+                    "fill": "accent",
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  },
+                  {
+                    "type": "icon",
+                    "name": "calendar",
+                    "x": 187,
+                    "y": 1656,
+                    "size": 52,
+                    "stroke": "bg",
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  },
+                  {
+                    "type": "text",
+                    "text": "Book a review",
+                    "x": 237,
+                    "y": 1670,
+                    "size": 40,
+                    "font": "bold",
+                    "fill": "bg",
+                    "fit": 692,
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  }
+                ],
+                "rough": false,
+                "print": false
+              },
+              {
+                "type": "group",
+                "enter": "pop",
+                "dur": 0.4,
+                "origin": [545, 1769.5],
+                "say": "app",
+                "children": [
+                  {
+                    "type": "rect",
+                    "x": 130,
+                    "y": 1734,
+                    "w": 830,
+                    "h": 71,
+                    "r": 35.5,
+                    "fill": "accent2",
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  },
+                  {
+                    "type": "text",
+                    "text": "In the Example Wealth app",
+                    "x": 545,
+                    "y": 1779.6,
+                    "size": 28,
+                    "font": "bold",
+                    "fill": "bg",
+                    "anchor": "middle",
+                    "fit": 802,
+                    "enter": "none",
+                    "rough": false,
+                    "print": false
+                  }
+                ],
+                "rough": false,
+                "print": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "phone-then-mix",
+      "about": "booking a review on a phone in one sentence, then the mix as it stands at the quarter end, where the plan set it.",
+      "beats": [
+        {
+          "id": "talk",
+          "block": "canvas",
+          "transition": "cut",
+          "hold": 0.6,
+          "vo": "In the app, tap My adviser, Book a review, pick a time this month, and confirm. Your adviser will call you.",
+          "props": {
+            "sketch": "portal",
+            "sketchParams": {
+              "device": "phone"
+            },
+            "sketchText": {
+              "APP": "Example Wealth",
+              "STEP1": "My adviser",
+              "STEP2": "Book a review",
+              "OTHER": "Documents",
+              "FIELD": "Time",
+              "OLD": "Choose a time",
+              "NEW": "Tuesday morning",
+              "DONE": "Booked: your adviser will call you"
+            },
+            "sketchSay": {
+              "CLICK1": "My adviser",
+              "CLICK2": "Book",
+              "CHANGE": "time",
+              "SAVE": "confirm"
+            }
+          }
+        },
+        {
+          "id": "held",
+          "block": "canvas",
+          "transition": "cut",
+          "vo": "Your mix is where we set it: 60% shares, 35% bonds, 5% cash.",
+          "props": {
+            "source": "Example Wealth quarterly letter · target mix · as of Sep 30",
+            "sketch": "split",
+            "sketchParams": {
+              "parts": [60, 35, 5],
+              "suffix": "%",
+              "total": false
+            },
+            "sketchText": {
+              "WHOLE": "Your portfolio on Sep 30",
+              "PARTONE": "Shares",
+              "PARTTWO": "Bonds",
+              "PARTTHREE": "Cash"
+            },
+            "sketchSay": {
+              "SPLIT": "mix",
+              "ONE": "shares",
+              "TWO": "bonds",
+              "THREE": "cash",
+              "REST": "cash"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -12,7 +12,7 @@ tab) is described in `docs/viewer.md`; review rounds in `docs/editing.md`.
 
 Requirements (macOS on Apple silicon is the tested platform; the native renderer is Skia on Metal):
 
-1. Node.js 20.10 or newer.
+1. Node.js 22.19 or newer (23.x requires 23.4+).
 2. `npm install` in the ClearFrame folder. This installs the exact OpenCode packages the studio is
    built against (`@opencode/cli`, `@opencode/client`, `@opencode/plugin`, all `2.0.24`), including
    the platform's native OpenCode binary (`@opencode/cli-darwin-arm64` here). No global OpenCode is
@@ -23,13 +23,19 @@ Requirements (macOS on Apple silicon is the tested platform; the native renderer
 Start the studio:
 
 ```sh
-node engine/cli.mjs viewer --serve            # http://127.0.0.1:4317/
-node engine/cli.mjs viewer --serve --port 4400 --projects projects   # another port; projects folder
-node engine/cli.mjs agent doctor              # runtime folders, binary, service, default model
+pnpm cf viewer --serve            # http://127.0.0.1:4317/
+pnpm cf viewer --serve --port 4400 --projects projects   # another port; projects folder
+pnpm cf agent doctor              # runtime folders, binary, service, default model
 ```
 
 The studio listens on 127.0.0.1 only. The agent runtime starts with the first conversation (or
 `clearframe agent start`), not when the page opens.
+
+Production jobs use the [durable local harness](agent-harness.md). Its SQLite ledger imports existing
+`jobs.json` history once, records transitions before acknowledging them, and prevents two studios
+from owning the same queue. A restarted studio records unfinished jobs as interrupted; it does not
+automatically repeat renders or paid generation. Corrupt conversation links are reported and left
+intact instead of silently starting a new conversation.
 
 ## The model: free by default
 
@@ -157,7 +163,7 @@ Everything lives under the working folder you started the studio in:
 | `.clearframe/opencode/{config,data,state,cache,xdg-config}` | the isolated OpenCode runtime: config ClearFrame writes, sessions database, saved provider credentials, service registration, logs | never |
 | `.clearframe/agent/bridge.json` | the private URL and token the OpenCode plugin uses to reach this studio (mode 600) | never |
 | `.clearframe/uploads/` | source documents added on the home page before their film exists | never |
-| `engine/agent-plugin/` | the OpenCode plugin (ClearFrame tools) and the agent's instructions | yes |
+| `packages/engine/src/engine/agent-plugin/` | the OpenCode plugin (ClearFrame tools) and the agent's instructions | yes |
 
 `CLEARFRAME_STATE` moves `.clearframe/`. The projects folder must be inside the working folder (the
 studio serves films' media from there). Dot folders are never served by the studio's web server.
@@ -250,7 +256,7 @@ uploaded page cannot act on the studio.
 | --- | --- |
 | "OpenCode did not start" | `clearframe agent doctor`; check `.clearframe/opencode/data/opencode/log/opencode.log`; `npm install` if the binary is missing |
 | "The model … is not in this runtime's catalog" | the catalog could not load (network) or the model was removed: retry, or choose another model in the Agent tab's Settings |
-| a 403 "free tier" error on a reply | someone changed the runtime's permissions to deny the shell; restore `engine/lib/agent/runtime.mjs` defaults and restart (`clearframe agent stop`) |
+| a 403 "free tier" error on a reply | someone changed the runtime's permissions to deny the shell; restore `packages/engine/src/engine/lib/agent/runtime.mts` defaults and restart (`clearframe agent stop`) |
 | "Another ClearFrame studio … runs this folder's agent" | use the studio already running, or stop it |
 | tool calls say the studio is not running | restart `clearframe viewer --serve`; the conversation continues |
 | "The earlier conversation … is not in this runtime" | the runtime database was removed or moved; your next message starts a new conversation |

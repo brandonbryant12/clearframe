@@ -10,24 +10,56 @@ import { spawnSync } from 'node:child_process';
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
 const OUT = path.join(ROOT, 'build', 'bench');
 const FILMS = [
-  { name: 'data-story', args: ['--playbook', 'data-story'], why: 'a data film from the default report arc' },
+  {
+    name: 'data-story',
+    args: ['--playbook', 'data-story'],
+    why: 'a data film from the default report arc',
+  },
   {
     name: 'digest-editorial',
     args: ['--playbook', 'research-digest', '--treatment', 'editorial'],
     why: 'what ingest starts from, in a report look',
   },
-  { name: 'concept-explainer', args: ['--playbook', 'concept-explainer'], why: 'what `new` starts from' },
-  { name: 'benefit-explainer', args: ['--treatment', 'workplace'], why: 'a workplace benefits film' },
-  { name: 'cash-flow', args: ['--playbook', 'cash-flow'], why: 'a financial mechanism' },
-  { name: 'product-reveal', args: ['--treatment', 'keynote'], why: 'a product film' },
-  { name: 'title-sequence', args: ['--treatment', 'cutpaper'], why: 'a motion-design opener' },
-  { name: 'journey', args: ['--playbook', 'journey'], why: 'one travelling camera through a drawing' },
-  { name: 'benefit-vertical', args: ['--treatment', 'workplace', '--vertical'], why: 'a vertical social cut' },
+  {
+    name: 'concept-explainer',
+    args: ['--playbook', 'concept-explainer'],
+    why: 'what `new` starts from',
+  },
+  {
+    name: 'benefit-explainer',
+    args: ['--treatment', 'workplace'],
+    why: 'a workplace benefits film',
+  },
+  {
+    name: 'cash-flow',
+    args: ['--playbook', 'cash-flow'],
+    why: 'a financial mechanism',
+  },
+  {
+    name: 'product-reveal',
+    args: ['--treatment', 'keynote'],
+    why: 'a product film',
+  },
+  {
+    name: 'title-sequence',
+    args: ['--treatment', 'cutpaper'],
+    why: 'a motion-design opener',
+  },
+  {
+    name: 'journey',
+    args: ['--playbook', 'journey'],
+    why: 'one travelling camera through a drawing',
+  },
+  {
+    name: 'benefit-vertical',
+    args: ['--treatment', 'workplace', '--vertical'],
+    why: 'a vertical social cut',
+  },
   // Generated imagery without new spend: a copy of a project whose depth plates are cached.
   {
     name: 'plates-harbor',
     copy: 'build/plates-demo',
-    edit: sb => {
+    edit: (sb) => {
       sb.assets[0].ground = 'water';
       sb.sfx = 'subtle';
       // The harbour heard: water at the hull under the line.
@@ -38,48 +70,83 @@ const FILMS = [
 ];
 
 const args = process.argv.slice(2);
-const only = args.includes('--only') ? args[args.indexOf('--only') + 1].split(',') : null;
+const only = args.includes('--only')
+  ? args[args.indexOf('--only') + 1].split(',')
+  : null;
 const strips = !args.includes('--no-strips');
 // Sound evidence: a free draft voice and bed, the mixed loudness and a waveform with the cuts
 // (grey) and sound cues (accent) marked, so a reviewer can judge the mix from an image.
 const sound = !args.includes('--no-sound');
 // --report-only rebuilds REPORT.md from the existing renders (after re-running a few films).
 const reportOnly = args.includes('--report-only');
-const latestStrip = dir => {
+const latestStrip = (dir) => {
   const b = path.join(dir, 'build');
   if (!fs.existsSync(b)) return null;
   const runs = fs
     .readdirSync(b)
-    .filter(d => d.startsWith('review-') && fs.existsSync(path.join(b, d, 'strip.png')))
-    .map(d => path.join(b, d, 'strip.png'))
+    .filter(
+      (d) =>
+        d.startsWith('review-') && fs.existsSync(path.join(b, d, 'strip.png')),
+    )
+    .map((d) => path.join(b, d, 'strip.png'))
     .sort((x, y) => fs.statSync(y).mtimeMs - fs.statSync(x).mtimeMs);
   return runs[0] ?? null;
 };
-const cli = (...a) => spawnSync('node', [path.join(ROOT, 'engine/cli.mjs'), ...a], { cwd: ROOT, encoding: 'utf8' });
+const cli = (...a) =>
+  spawnSync(
+    'node',
+    [path.join(ROOT, 'packages/engine/dist/engine/cli.mjs'), ...a],
+    { cwd: ROOT, encoding: 'utf8' },
+  );
 const run = (cmd, a) => spawnSync(cmd, a, { cwd: ROOT, encoding: 'utf8' });
 
 /** Integrated loudness, range and true peak of a rendered film. */
 function loudness(video) {
-  const out = run('ffmpeg', ['-hide_banner', '-i', video, '-af', 'ebur128=peak=true', '-f', 'null', '-']).stderr;
+  const out = run('ffmpeg', [
+    '-hide_banner',
+    '-i',
+    video,
+    '-af',
+    'ebur128=peak=true',
+    '-f',
+    'null',
+    '-',
+  ]).stderr;
   const tail = out.slice(out.lastIndexOf('Summary:'));
-  const num = re => Number(tail.match(re)?.[1]);
-  return { lufs: num(/I:\s+(-?[\d.]+) LUFS/), lra: num(/LRA:\s+(-?[\d.]+) LU/), peak: num(/Peak:\s+(-?[\d.]+) dBFS/) };
+  const num = (re) => Number(tail.match(re)?.[1]);
+  return {
+    lufs: num(/I:\s+(-?[\d.]+) LUFS/),
+    lra: num(/LRA:\s+(-?[\d.]+) LU/),
+    peak: num(/Peak:\s+(-?[\d.]+) dBFS/),
+  };
 }
 
 /** The mix as a waveform, cuts as grey lines and sound cues as accent ticks. */
 function waveform(dir, video) {
-  const timing = JSON.parse(fs.readFileSync(path.join(dir, 'build/timing.json'), 'utf8'));
+  const timing = JSON.parse(
+    fs.readFileSync(path.join(dir, 'build/timing.json'), 'utf8'),
+  );
   // The automatic sound design and each beat's own subject sounds (a brake, a drop).
   const cues = [
     ...JSON.parse(fs.readFileSync(path.join(dir, 'build/cues.json'), 'utf8')),
-    ...timing.beats.flatMap(b => (b.sfx ?? []).map(s => ({ name: s.src, t: s.t }))),
+    ...timing.beats.flatMap((b) =>
+      (b.sfx ?? []).map((s) => ({ name: s.src, t: s.t })),
+    ),
   ].sort((a, b) => a.t - b.t);
   const W = 1600,
     H = 260,
-    x = t => Math.round((t / timing.duration) * W);
+    x = (t) => Math.round((t / timing.duration) * W);
   const marks = [
-    ...timing.beats.slice(1).map(b => `drawbox=x=${x(b.start)}:y=0:w=2:h=${H}:color=0x8b949e@0.9:t=fill`),
-    ...cues.map(c => `drawbox=x=${x(c.t) - 2}:y=${H - 30}:w=5:h=30:color=orange@1.0:t=fill`),
+    ...timing.beats
+      .slice(1)
+      .map(
+        (b) =>
+          `drawbox=x=${x(b.start)}:y=0:w=2:h=${H}:color=0x8b949e@0.9:t=fill`,
+      ),
+    ...cues.map(
+      (c) =>
+        `drawbox=x=${x(c.t) - 2}:y=${H - 30}:w=5:h=30:color=orange@1.0:t=fill`,
+    ),
   ];
   const file = path.join(dir, 'build/waveform.png');
   run('ffmpeg', [
@@ -101,7 +168,12 @@ function motionOf(dir) {
   const r = cli('qa', dir, '--json');
   try {
     const q = JSON.parse(r.stdout);
-    return { ...q.summary, held: q.findings.filter(f => f.kind === 'held').map(f => `${f.t}–${f.end}s`) };
+    return {
+      ...q.summary,
+      held: q.findings
+        .filter((f) => f.kind === 'held')
+        .map((f) => `${f.t}–${f.end}s`),
+    };
   } catch {
     return null;
   }
@@ -109,7 +181,9 @@ function motionOf(dir) {
 
 fs.mkdirSync(OUT, { recursive: true });
 const rows = [];
-for (const f of FILMS.filter(f => reportOnly || !only || only.includes(f.name))) {
+for (const f of FILMS.filter(
+  (f) => reportOnly || !only || only.includes(f.name),
+)) {
   const dir = path.join(OUT, f.name);
   if (reportOnly) {
     const crit = cli('critique', dir).stdout;
@@ -139,10 +213,17 @@ for (const f of FILMS.filter(f => reportOnly || !only || only.includes(f.name)))
       continue;
     }
     fs.mkdirSync(dir, { recursive: true });
-    fs.cpSync(path.join(from, 'assets'), path.join(dir, 'assets'), { recursive: true });
-    const sb = JSON.parse(fs.readFileSync(path.join(from, 'storyboard.json'), 'utf8'));
+    fs.cpSync(path.join(from, 'assets'), path.join(dir, 'assets'), {
+      recursive: true,
+    });
+    const sb = JSON.parse(
+      fs.readFileSync(path.join(from, 'storyboard.json'), 'utf8'),
+    );
     f.edit?.(sb);
-    fs.writeFileSync(path.join(dir, 'storyboard.json'), JSON.stringify(sb, null, 2));
+    fs.writeFileSync(
+      path.join(dir, 'storyboard.json'),
+      JSON.stringify(sb, null, 2),
+    );
   } else {
     const made = cli('new', dir, ...f.args);
     if (made.status) {
@@ -184,7 +265,7 @@ for (const f of FILMS.filter(f => reportOnly || !only || only.includes(f.name)))
   );
 }
 
-const rel = p => (p ? path.relative(ROOT, p) : '—');
+const rel = (p) => (p ? path.relative(ROOT, p) : '—');
 fs.writeFileSync(
   path.join(OUT, 'REPORT.md'),
   `# Review benchmark
@@ -193,7 +274,7 @@ Scaffolded from scratch with \`clearframe new\` and drafted for free (local voic
 
 | Film | Why it's here | Cinema | Check | Change/s | Held | Sheet | Strip (frames around every cut) |
 |---|---|---|---|---|---|---|---|
-${rows.map(r => `| ${r.name} | ${r.why} | ${r.score ?? r.error ?? '?'} | ${r.errors?.length ? `${r.errors.length} errors` : 'passes'} | ${r.motion?.changePerSecond ?? '—'} | ${r.motion ? `${r.motion.heldSeconds}s${r.motion.held.length ? ` (${r.motion.held.join(', ')})` : ''}` : '—'} | ${rel(r.sheet)} | ${rel(r.strip)} |`).join('\n')}
+${rows.map((r) => `| ${r.name} | ${r.why} | ${r.score ?? r.error ?? '?'} | ${r.errors?.length ? `${r.errors.length} errors` : 'passes'} | ${r.motion?.changePerSecond ?? '—'} | ${r.motion ? `${r.motion.heldSeconds}s${r.motion.held.length ? ` (${r.motion.held.join(', ')})` : ''}` : '—'} | ${rel(r.sheet)} | ${rel(r.strip)} |`).join('\n')}
 
 Change/s is measured on the encoded film by \`qa\`: the mean grey difference to the frame a second earlier (the viral motion references measured 8–42; a held slide sits under 2). Held lists stretches of 2.5 s or more where the picture barely changes.
 
@@ -203,19 +284,24 @@ Sound is a draft: a local TTS voice in one take and a synthesised bed (the final
 |---|---|---|---|---|---|
 ${rows
   .map(
-    r =>
+    (r) =>
       `| ${r.name} | ${r.audio ? `${r.audio.lufs} LUFS` : '—'} | ${r.audio ? `${r.audio.lra} LU` : '—'} | ${r.audio ? `${r.audio.peak} dBFS` : '—'} | ${rel(r.audio?.wave?.file)} | ${
-        r.audio?.wave?.cues.map(c => `${c.name} ${c.t.toFixed(1)}s`).join(', ') || '—'
+        r.audio?.wave?.cues
+          .map((c) => `${c.name} ${c.t.toFixed(1)}s`)
+          .join(', ') || '—'
       } |`,
   )
   .join('\n')}
 
 ${rows
   .map(
-    r =>
+    (r) =>
       `## ${r.name}\n${
-        [...(r.errors ?? []).map(e => `✗ check: ${e}`), ...(r.findings ?? []).filter(Boolean)]
-          .map(l => `    ${l}`)
+        [
+          ...(r.errors ?? []).map((e) => `✗ check: ${e}`),
+          ...(r.findings ?? []).filter(Boolean),
+        ]
+          .map((l) => `    ${l}`)
           .join('\n') || '    (no critique findings)'
       }`,
   )

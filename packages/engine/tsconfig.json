@@ -1,0 +1,23 @@
+{
+  "extends": "@repo/typescript-config/base.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "noEmitOnError": true,
+    "declaration": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "types": ["node"],
+    "lib": ["ES2023", "DOM", "DOM.Iterable"]
+  },
+  "include": [
+    "src/engine/**/*.mts",
+    "src/engine/agent-plugin/**/*.ts",
+    "src/film/**/*.mts",
+    "src/scene/**/*.mts",
+    "src/skills/**/scripts/*.mts",
+    "src/library/**/*.mts"
+  ],
+  "exclude": ["node_modules", "dist", "src/scene/.cache", "src/scene/native"]
+}

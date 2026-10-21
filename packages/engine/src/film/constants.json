@@ -1,0 +1,16 @@
+{
+  "note": "Shared timing constants. Read by film/*.mjs and compiled into the renderer (motion.rs, canvas.rs). Change them here only.",
+  "entrance": { "gentle": 0.55, "snappy": 0.3, "spring": 0.72 },
+  "stagger": { "gentle": 0.09, "snappy": 0.05, "spring": 0.08 },
+  "cover": { "panel": [0.42, 0.5] },
+  "canvas": {
+    "draw": 1.2,
+    "grow": 0.8,
+    "key": 0.6,
+    "along": 1.5,
+    "count": 1.2,
+    "typePerChar": 0.035,
+    "typeMin": 0.4,
+    "typeMax": 2.5
+  }
+}

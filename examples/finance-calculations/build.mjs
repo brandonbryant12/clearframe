@@ -1,7 +1,7 @@
 // Regenerate illustrative output from its exact retained inputs. No network or rendering.
 import fs from 'node:fs';
 import crypto from 'node:crypto';
-import * as finance from '../../engine/lib/finance.mjs';
+import * as finance from '../../packages/engine/dist/engine/lib/finance.mjs';
 const inputFile = new URL('./inputs.json', import.meta.url);
 const bytes = fs.readFileSync(inputFile);
 const input = JSON.parse(bytes);

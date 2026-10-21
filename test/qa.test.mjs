@@ -5,11 +5,22 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { timeFindings, deliveryFindings, pictureDifference, qaProject, typedCanvas, stillFix } from '../engine/lib/qa.mjs';
-import { findDrop, findTempo, cutsOnGrid } from '../engine/lib/beatmap.mjs';
-import { computeTiming } from '../engine/lib/timing.mjs';
-import { ffmpeg } from '../engine/lib/util.mjs';
-import { validateVideo } from '../film/render.mjs';
+import {
+  timeFindings,
+  deliveryFindings,
+  pictureDifference,
+  qaProject,
+  typedCanvas,
+  stillFix,
+} from '../packages/engine/dist/engine/lib/qa.mjs';
+import {
+  findDrop,
+  findTempo,
+  cutsOnGrid,
+} from '../packages/engine/dist/engine/lib/beatmap.mjs';
+import { computeTiming } from '../packages/engine/dist/engine/lib/timing.mjs';
+import { ffmpeg } from '../packages/engine/dist/engine/lib/util.mjs';
+import { validateVideo } from '../packages/engine/dist/film/render.mjs';
 
 test('qa finds a one-frame pop, a jumping world seam and a held stretch under the voice', () => {
   const fps = 30,
@@ -29,16 +40,32 @@ test('qa finds a one-frame pop, a jumping world seam and a held stretch under th
     { id: 'a', start: 0, end: 5 },
     { id: 'b', start: 5, end: 10, vo: { start: 5.2, end: 9.8 } },
   ];
-  const f = timeFindings({ d, skip, second, fps, beats, worlds: { a: 'city', b: 'city' } });
-  assert.ok(f.some(x => x.kind === 'pop' && x.frame === 40 && x.level === 'error'));
-  assert.ok(f.some(x => x.kind === 'seam' && x.beat === 'b'));
-  const held = f.find(x => x.kind === 'held');
-  assert.ok(held && held.level === 'warn' && held.seconds >= 3, JSON.stringify(held));
+  const f = timeFindings({
+    d,
+    skip,
+    second,
+    fps,
+    beats,
+    worlds: { a: 'city', b: 'city' },
+  });
+  assert.ok(
+    f.some((x) => x.kind === 'pop' && x.frame === 40 && x.level === 'error'),
+  );
+  assert.ok(f.some((x) => x.kind === 'seam' && x.beat === 'b'));
+  const held = f.find((x) => x.kind === 'held');
+  assert.ok(
+    held && held.level === 'warn' && held.seconds >= 3,
+    JSON.stringify(held),
+  );
   // A flash transition is several frames long: not a pop.
   const d2 = Array(n).fill(3),
     skip2 = Array(n).fill(3);
   d2[40] = d2[44] = 60;
-  assert.ok(!timeFindings({ d: d2, skip: skip2, second, fps, beats }).some(x => x.kind === 'pop'));
+  assert.ok(
+    !timeFindings({ d: d2, skip: skip2, second, fps, beats }).some(
+      (x) => x.kind === 'pop',
+    ),
+  );
 });
 
 test('qa reads the export the way a platform does', () => {
@@ -53,11 +80,25 @@ test('qa reads the export the way a platform does', () => {
     color_space: 'smpte170m',
     sample_aspect_ratio: '496:495',
   };
-  const f = deliveryFindings({ streams: [v] }, { fps: 30, frames: 90, width: 1920, height: 1080 });
-  assert.ok(f.some(x => x.level === 'error' && /pixel aspect/.test(x.message)));
-  assert.ok(f.some(x => /primaries untagged/.test(x.message)));
+  const f = deliveryFindings(
+    { streams: [v] },
+    { fps: 30, frames: 90, width: 1920, height: 1080 },
+  );
+  assert.ok(
+    f.some((x) => x.level === 'error' && /pixel aspect/.test(x.message)),
+  );
+  assert.ok(f.some((x) => /primaries untagged/.test(x.message)));
   const ok = deliveryFindings(
-    { streams: [{ ...v, sample_aspect_ratio: '1:1', color_primaries: 'bt709', color_transfer: 'bt709' }] },
+    {
+      streams: [
+        {
+          ...v,
+          sample_aspect_ratio: '1:1',
+          color_primaries: 'bt709',
+          color_transfer: 'bt709',
+        },
+      ],
+    },
     { fps: 30, frames: 90, width: 1920, height: 1080 },
   );
   assert.deepEqual(ok, []);
@@ -73,16 +114,34 @@ test('held analysis compares the whole picture and stays advisory', () => {
   assert.equal(pictureDifference(a, a), 0);
   const fps = 30,
     n = 360;
-  const signal = { d: Array(n).fill(0), skip: Array(n).fill(0), second: Array(n).fill(0), fps };
-  const held = timeFindings({ ...signal, beats: [{ id: 'quiet', start: 0, end: 12, vo: { start: 0, end: 12 } }] });
-  assert.ok(held.some(f => f.kind === 'held' && f.level === 'warn' && f.seconds === 12));
+  const signal = {
+    d: Array(n).fill(0),
+    skip: Array(n).fill(0),
+    second: Array(n).fill(0),
+    fps,
+  };
+  const held = timeFindings({
+    ...signal,
+    beats: [{ id: 'quiet', start: 0, end: 12, vo: { start: 0, end: 12 } }],
+  });
+  assert.ok(
+    held.some(
+      (f) => f.kind === 'held' && f.level === 'warn' && f.seconds === 12,
+    ),
+  );
   assert.match(held[0].message, /declare a reading hold with pace: "hold"/);
   // Similar-looking quick cuts must not be joined into one long frozen scene.
-  const montage = Array.from({ length: 6 }, (_, i) => ({ id: String(i), start: i * 2, end: (i + 1) * 2 }));
-  assert.ok(!timeFindings({ ...signal, beats: montage }).some(f => f.kind === 'held'));
+  const montage = Array.from({ length: 6 }, (_, i) => ({
+    id: String(i),
+    start: i * 2,
+    end: (i + 1) * 2,
+  }));
+  assert.ok(
+    !timeFindings({ ...signal, beats: montage }).some((f) => f.kind === 'held'),
+  );
 });
 
-test('encoded QA writes per-shot held findings and analysis metadata', async t => {
+test('encoded QA writes per-shot held findings and analysis metadata', async (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-qa-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   fs.mkdirSync(path.join(root, 'build'));
@@ -91,8 +150,18 @@ test('encoded QA writes per-shot held findings and analysis metadata', async t =
     JSON.stringify({
       format: { width: 640, height: 360, fps: 30 },
       beats: [
-        { id: 'scope', block: 'statement', duration: 3, props: { text: 'A pause' } },
-        { id: 'open', block: 'statement', duration: 3, props: { text: 'Another pause' } },
+        {
+          id: 'scope',
+          block: 'statement',
+          duration: 3,
+          props: { text: 'A pause' },
+        },
+        {
+          id: 'open',
+          block: 'statement',
+          duration: 3,
+          props: { text: 'Another pause' },
+        },
       ],
     }),
   );
@@ -116,11 +185,17 @@ test('encoded QA writes per-shot held findings and analysis metadata', async t =
   const geometry = { width: 640, height: 360, fps: 30, frames: 180 };
   validateVideo(path.join(root, 'build/video.mp4'), geometry);
   assert.throws(
-    () => validateVideo(path.join(root, 'build/video.mp4'), { ...geometry, frames: 181 }),
+    () =>
+      validateVideo(path.join(root, 'build/video.mp4'), {
+        ...geometry,
+        frames: 181,
+      }),
     /decoded frame count differ/,
   );
   assert.deepEqual(
-    result.findings.filter(f => f.kind === 'held').map(f => [f.beat, f.seconds]),
+    result.findings
+      .filter((f) => f.kind === 'held')
+      .map((f) => [f.beat, f.seconds]),
     [
       ['scope', 3],
       ['open', 3],
@@ -132,22 +207,46 @@ test('encoded QA writes per-shot held findings and analysis metadata', async t =
   assert.ok(fs.statSync(path.join(result.dir, 'phone.png')).size > 0);
 });
 
-test('shared QA sheets preserve sampled pixels and partial rows in both orientations', async t => {
+test('shared QA sheets preserve sampled pixels and partial rows in both orientations', async (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-qa-sheets-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  for (const [width, height] of [[640, 360], [360, 640]]) {
+  for (const [width, height] of [
+    [640, 360],
+    [360, 640],
+  ]) {
     const portrait = height > width;
     const dir = path.join(root, portrait ? 'portrait' : 'landscape');
     fs.mkdirSync(path.join(dir, 'build'), { recursive: true });
-    const frames = 286, fps = 30, seconds = frames / fps;
-    fs.writeFileSync(path.join(dir, 'storyboard.json'), JSON.stringify({
-      format: { width, height, fps },
-      beats: [{ id: 'motion', block: 'statement', duration: seconds, props: { text: 'Moving picture' } }],
-    }));
+    const frames = 286,
+      fps = 30,
+      seconds = frames / fps;
+    fs.writeFileSync(
+      path.join(dir, 'storyboard.json'),
+      JSON.stringify({
+        format: { width, height, fps },
+        beats: [
+          {
+            id: 'motion',
+            block: 'statement',
+            duration: seconds,
+            props: { text: 'Moving picture' },
+          },
+        ],
+      }),
+    );
     const video = path.join(dir, 'build/video.mp4');
     await ffmpeg([
-      '-f', 'lavfi', '-i', `testsrc2=s=${width}x${height}:r=${fps}`,
-      '-frames:v', String(frames), '-c:v', 'libx264', '-threads', '2', video,
+      '-f',
+      'lavfi',
+      '-i',
+      `testsrc2=s=${width}x${height}:r=${fps}`,
+      '-frames:v',
+      String(frames),
+      '-c:v',
+      'libx264',
+      '-threads',
+      '2',
+      video,
     ]);
     const result = await qaProject(dir);
     assert.equal(result.summary.frames, frames);
@@ -158,22 +257,36 @@ test('shared QA sheets preserve sampled pixels and partial rows in both orientat
       const reference = path.join(dir, `${name}-reference.png`);
       // Independent single-output decode: catch shared-graph sampling, scaling and EOF regressions.
       await ffmpeg([
-        '-i', video, '-an', '-vf',
+        '-i',
+        video,
+        '-an',
+        '-vf',
         `fps=1,scale=${thumb}:-2,tile=${columns}x${Math.ceil(seconds / columns)}:padding=4:margin=4:color=0x161b22`,
-        '-frames:v', '1', '-threads', '1', reference,
+        '-frames:v',
+        '1',
+        '-threads',
+        '1',
+        reference,
       ]);
-      assert.deepEqual(fs.readFileSync(path.join(result.dir, `${name}.png`)), fs.readFileSync(reference));
+      assert.deepEqual(
+        fs.readFileSync(path.join(result.dir, `${name}.png`)),
+        fs.readFileSync(reference),
+      );
     }
   }
 });
 
 test('beat map: the drop where the bass jumps and stays, tempo from onsets, cuts against the grid', () => {
   // 20 ms windows: quiet bass for 8 s, then loud.
-  const bass = Float64Array.from({ length: 1000 }, (_, i) => (i < 400 ? 1e-5 : 1e-2));
+  const bass = Float64Array.from({ length: 1000 }, (_, i) =>
+    i < 400 ? 1e-5 : 1e-2,
+  );
   assert.deepEqual(findDrop(bass), { t: 8, jump: 30 });
   assert.equal(findDrop(Float64Array.from({ length: 1000 }, () => 1e-3)), null);
   // Onsets every 0.5 s (5 ms hop), with weaker off-beats: 120 BPM, not 240.
-  const on = Float64Array.from({ length: 4000 }, (_, i) => (i % 100 === 0 ? 10 : i % 100 === 50 ? 3 : 0));
+  const on = Float64Array.from({ length: 4000 }, (_, i) =>
+    i % 100 === 0 ? 10 : i % 100 === 50 ? 3 : 0,
+  );
   const t = findTempo(on);
   assert.equal(t.bpm, 120);
   assert.ok(t.alternatives.includes(60));
@@ -186,12 +299,12 @@ test('beat map: the drop where the bass jumps and stays, tempo from onsets, cuts
     { bpm: 120, phase: 0 },
   );
   assert.deepEqual(
-    cuts.map(c => c.ms),
+    cuts.map((c) => c.ms),
     [20, -200],
   );
 });
 
-test('music.drop starts the song so its measured drop plays on the chosen beat', t => {
+test('music.drop starts the song so its measured drop plays on the chosen beat', (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-drop-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   fs.mkdirSync(path.join(root, 'assets/music'), { recursive: true });
@@ -217,7 +330,10 @@ test('music.drop starts the song so its measured drop plays on the chosen beat',
   fs.writeFileSync(path.join(root, 'storyboard.json'), JSON.stringify(sb));
   const m = computeTiming(root).music;
   assert.equal(m.drop.film, 4.5);
-  assert.ok(Math.abs(m.drop.song - 6) < 0.05, `drop measured at ${m.drop.song}`);
+  assert.ok(
+    Math.abs(m.drop.song - 6) < 0.05,
+    `drop measured at ${m.drop.song}`,
+  );
   assert.ok(Math.abs(m.offset - 1.5) < 0.05);
   // A drop later in the film than in the song delays the song.
   sb.music.drop = { beat: 'title', song: 3 };
@@ -226,28 +342,79 @@ test('music.drop starts the song so its measured drop plays on the chosen beat',
 });
 
 test('pictureExtent measures where the picture sits, ignoring a line of small type', async () => {
-  const { pictureExtent } = await import('../engine/lib/qa.mjs');
-  const w = 128, h = 72, frame = new Uint8Array(w * h).fill(240);
-  for (let y = 10; y < 30; y++) for (let x = 10; x < 40; x++) frame[y * w + x] = 40; // a block, top left
+  const { pictureExtent } =
+    await import('../packages/engine/dist/engine/lib/qa.mjs');
+  const w = 128,
+    h = 72,
+    frame = new Uint8Array(w * h).fill(240);
+  for (let y = 10; y < 30; y++)
+    for (let x = 10; x < 40; x++) frame[y * w + x] = 40; // a block, top left
   for (let x = 4; x < 60; x++) frame[60 * w + x] = 90; // a one-pixel source line near the bottom
   const e = pictureExtent(frame, w, h, Math.round(h * 0.12));
-  assert.ok(e.w < 0.3 && e.h < 0.42 && e.cx < 0.35 && e.cy < 0.4, JSON.stringify(e));
+  assert.ok(
+    e.w < 0.3 && e.h < 0.42 && e.cx < 0.35 && e.cy < 0.4,
+    JSON.stringify(e),
+  );
 });
 
 test('a line that says figures becomes a chart ready to paste, each value on its word', async () => {
-  const { chartFor } = await import('../engine/lib/pictures.mjs');
-  const { spoken } = await import('../engine/lib/word-align.mjs');
-  const c = chartFor('For example: price starts at forty dollars, goes to fifty, you pay thirty-four.', spoken);
-  assert.deepEqual(c.values.map(v => [v.value, v.say]), [[40, 'forty'], [50, 'fifty'], [34, 'thirty-four']]);
+  const { chartFor } =
+    await import('../packages/engine/dist/engine/lib/pictures.mjs');
+  const { spoken } =
+    await import('../packages/engine/dist/engine/lib/word-align.mjs');
+  const c = chartFor(
+    'For example: price starts at forty dollars, goes to fifty, you pay thirty-four.',
+    spoken,
+  );
+  assert.deepEqual(
+    c.values.map((v) => [v.value, v.say]),
+    [
+      [40, 'forty'],
+      [50, 'fifty'],
+      [34, 'thirty-four'],
+    ],
+  );
   assert.equal(c.kind, 'bars');
   assert.equal(c.prefix, '$');
-  assert.equal(chartFor('Pick one of three plans.', spoken), null, 'small counts are not figures');
+  assert.equal(
+    chartFor('Pick one of three plans.', spoken),
+    null,
+    'small counts are not figures',
+  );
 });
 
 test('a canvas of lines of type counts as type on its own and is pointed at a picture', () => {
-  const typed = { block: 'canvas', vo: 'Click Report. Then Phishing. In Outlook it is one click.', props: { source: 'Q2 report', elements: [{ type: 'text', text: 'Click Report' }, { type: 'group', children: [{ type: 'rect' }, { type: 'text', text: 'Report' }] }] } };
+  const typed = {
+    block: 'canvas',
+    vo: 'Click Report. Then Phishing. In Outlook it is one click.',
+    props: {
+      source: 'Q2 report',
+      elements: [
+        { type: 'text', text: 'Click Report' },
+        {
+          type: 'group',
+          children: [{ type: 'rect' }, { type: 'text', text: 'Report' }],
+        },
+      ],
+    },
+  };
   assert.equal(typedCanvas(typed), true);
   assert.match(stillFix(typed), /type on its own.*`inspect`.*report: true/);
-  assert.equal(typedCanvas({ block: 'canvas', props: { chart: { kind: 'number', values: [] }, elements: [{ type: 'text', text: 'x' }] } }), false);
-  assert.equal(typedCanvas({ block: 'canvas', props: { elements: [{ type: 'text', text: 'x' }, { type: 'circle' }] } }), false);
+  assert.equal(
+    typedCanvas({
+      block: 'canvas',
+      props: {
+        chart: { kind: 'number', values: [] },
+        elements: [{ type: 'text', text: 'x' }],
+      },
+    }),
+    false,
+  );
+  assert.equal(
+    typedCanvas({
+      block: 'canvas',
+      props: { elements: [{ type: 'text', text: 'x' }, { type: 'circle' }] },
+    }),
+    false,
+  );
 });

@@ -9,30 +9,16 @@
       "x": {
         "label": "Monthly orders change (%)",
         "definition": "Supplied month-over-month order change in percent; zero separates increasing from decreasing orders.",
-        "domain": [
-          -4,
-          4
-        ],
-        "ticks": [
-          -4,
-          0,
-          4
-        ],
+        "domain": [-4, 4],
+        "ticks": [-4, 0, 4],
         "reference": 0,
         "decimals": 0
       },
       "y": {
         "label": "Inventory vs plan (%)",
         "definition": "Supplied inventory deviation from the same-month plan in percent; zero means on plan.",
-        "domain": [
-          -20,
-          20
-        ],
-        "ticks": [
-          -20,
-          0,
-          20
-        ],
+        "domain": [-20, 20],
+        "ticks": [-20, 0, 20],
         "reference": 0,
         "decimals": 0
       },
@@ -100,30 +86,16 @@
       "x": {
         "label": "Load (% rated)",
         "definition": "Supplied machine load as a percent of rated load. The authored comparison reference is 60 percent, not zero.",
-        "domain": [
-          20,
-          100
-        ],
-        "ticks": [
-          20,
-          60,
-          100
-        ],
+        "domain": [20, 100],
+        "ticks": [20, 60, 100],
         "reference": 60,
         "decimals": 0
       },
       "y": {
         "label": "Temperature (°C)",
         "definition": "Supplied measured-style temperature values; 70 degrees Celsius is an illustrative comparison reference, not a safety limit.",
-        "domain": [
-          30,
-          110
-        ],
-        "ticks": [
-          30,
-          70,
-          110
-        ],
+        "domain": [30, 110],
+        "ticks": [30, 70, 110],
         "reference": 70,
         "decimals": 0
       },

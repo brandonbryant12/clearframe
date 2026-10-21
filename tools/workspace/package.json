@@ -1,0 +1,23 @@
+{
+  "name": "@repo/workspace",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsx typecheck.mts",
+    "schemas:generate": "tsx schemas.mts",
+    "schemas:check": "tsx schemas.mts --check",
+    "test:package": "tsx distribution-check.mts",
+    "test": "node --import tsx --test --test-concurrency=2 *.test.mts schema/*.test.mts"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "effect": "catalog:",
+    "esbuild": "catalog:",
+    "oxfmt": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "typescript-7": "catalog:"
+  }
+}

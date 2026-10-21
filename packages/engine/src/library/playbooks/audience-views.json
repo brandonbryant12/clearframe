@@ -1,0 +1,91 @@
+{
+  "title": "One table, different audiences",
+  "audience": "Teams learning who receives which fields in a workflow",
+  "inputs": "The real table rows, columns, source and audience visibility policy",
+  "theme": "paper",
+  "type": "geometric",
+  "motion": "gentle",
+  "backdrop": "none",
+  "transition": "cut",
+  "format": "landscape",
+  "texture": "none",
+  "beats": [
+    {
+      "id": "views",
+      "block": "canvas",
+      "props": {
+        "table": {
+          "id": "claims",
+          "title": "Who sees a claim",
+          "source": "Illustrative expense records",
+          "columns": [
+            {
+              "id": "person",
+              "label": "Employee",
+              "weight": 1.2
+            },
+            {
+              "id": "amount",
+              "label": "Amount",
+              "align": "right",
+              "weight": 0.8
+            },
+            {
+              "id": "status",
+              "label": "Status"
+            }
+          ],
+          "rows": [
+            {
+              "id": "r1",
+              "cells": {
+                "person": "Alex Morgan",
+                "amount": "$120",
+                "status": "Approved"
+              }
+            },
+            {
+              "id": "r2",
+              "cells": {
+                "person": "Sam Patel",
+                "amount": "$850",
+                "status": "Review"
+              }
+            },
+            {
+              "id": "r3",
+              "cells": {
+                "person": "Jordan Lee",
+                "amount": "$45",
+                "status": "Returned"
+              }
+            }
+          ],
+          "views": [
+            {
+              "id": "manager",
+              "label": "Managers see the full claim"
+            },
+            {
+              "id": "contractor",
+              "label": "Contractors see claim status",
+              "hide": ["person", "amount"]
+            }
+          ],
+          "show": [
+            {
+              "view": "contractor",
+              "say": "Contractors"
+            },
+            {
+              "view": "manager",
+              "say": "full claim again"
+            }
+          ]
+        }
+      },
+      "min": 9,
+      "vo": "Managers see the full claim. Contractors see its status. The rows stay in place. Then managers see the full claim again."
+    }
+  ]
+}

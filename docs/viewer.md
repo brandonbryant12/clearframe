@@ -3,9 +3,9 @@
 `clearframe viewer --serve` opens the page people use to make and review films: say what you want made, watch it, leave sticky notes on the moments you want changed, and talk to the agent that edits it. The people it is for are not video editors, so the page has no editing panels. The agent does the editing; the page captures *what* and *where*, precisely enough for the agent to find the exact frame.
 
 ```sh
-node engine/cli.mjs viewer --serve                 # http://127.0.0.1:4317/: notes save into each film; the agent is one message away
-node engine/cli.mjs viewer                         # build/viewer/index.html, double-click to open: watch and take notes, no agent
-node engine/cli.mjs viewer ~/films --out ~/films/viewer
+pnpm cf viewer --serve                 # http://127.0.0.1:4317/: notes save into each film; the agent is one message away
+pnpm cf viewer                         # build/viewer/index.html, double-click to open: watch and take notes, no agent
+pnpm cf viewer ~/films --out ~/films/viewer
 ```
 
 Setup for the agent (OpenCode, the free default model, where things are kept) is in `docs/agent-studio.md`.
@@ -58,6 +58,6 @@ Posters and filmstrip stills live in `build/viewer/` (ignored by git); videos ar
 
 The page is a thin layer over the engine's review record and the studio server, which the agent and the command line use directly:
 
-- **Edits** go through one validated, hash-checked, undoable command path (`set`, `move`, `insert`, `duplicate`, `delete`, `treatment`, `batch`, `undo`, `redo`, `undoRun`), persisted in `review/studio-history.json`. Before anything is written the command builds the candidate film with the engine's own job builder; an edit that adds an engine error is refused. The agent's `clearframe_edit` uses it, held to the scope of the message (a note's scenes, or the whole film). From a terminal: `node engine/cli.mjs studio film [state|history|undo|redo|set PATH VALUE --beat ID|insert BLOCK|move|…]`. A recording's narration is edited by cutting words (`cut`, `uncut`), never by retyping.
+- **Edits** go through one validated, hash-checked, undoable command path (`set`, `move`, `insert`, `duplicate`, `delete`, `treatment`, `batch`, `undo`, `redo`, `undoRun`), persisted in `review/studio-history.json`. Before anything is written the command builds the candidate film with the engine's own job builder; an edit that adds an engine error is refused. The agent's `clearframe_edit` uses it, held to the scope of the message (a note's scenes, or the whole film). From a terminal: `pnpm cf studio film [state|history|undo|redo|set PATH VALUE --beat ID|insert BLOCK|move|…]`. A recording's narration is edited by cutting words (`cut`, `uncut`), never by retyping.
 - **Renders** (rough cut, final, stills, sections, check, captions) are jobs, one at a time behind the heavy-work gate; a rough cut saves a revision, which the page shows as a new version.
 - **Local API** under `/api/`: `films`, `notes` (and `notes/state`, `notes/reply`), `projects`, `upload`, `agent/*` (conversation, prompt, interrupt, queue, permission, form, spend, mode, model, models, status), and `studio/*` (state, film, jobs, command, accept, sound, review, schema). It answers only on 127.0.0.1 with a local Host header, and every write must be same-origin JSON.

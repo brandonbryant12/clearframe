@@ -38,7 +38,7 @@ landscape and 64.21 dB portrait on these fixtures. These are narrow compatibilit
 not a performance or whole-library quality claim. Keep the generated evidence outside git.
 
 Run it through `codex-heavy` on this machine. Builds now recognize an inherited heavy gate,
-including an outer `codex-heavy -- node engine/cli.mjs build`, instead of waiting on their
+including an outer `codex-heavy -- pnpm cf build`, instead of waiting on their
 own parent lock. A dependency upgrade should use an isolated build target so it does not
 replace another checkout's cached renderer.
 
@@ -57,9 +57,9 @@ ClearFrame goes back to [fframes](https://github.com/dmtrKovalenko/fframes) (MIT
   (FFT `visualize_audio_frame`, `Shader`, synced video frames, the native preview player,
   the CLI's `strip`/`onion`/`inspect`, and fframes-3d once it is released).
 - ClearFrame keeps drawing every pixel with its display list on a Skia canvas: the 31 blocks,
-  native stages, materials, motion blur and film compositing (`scene/native/src/`
+  native stages, materials, motion blur and film compositing (`packages/engine/src/scene/native/src/`
   `blocks/*`, `nodes.rs`, `draw.rs`, `text.rs`, `compose.rs`). fframes calls it through a custom
-  `FFramesRenderBackend` (`scene/native/src/runtime.rs`).
+  `FFramesRenderBackend` (`packages/engine/src/scene/native/src/runtime.rs`).
 
 ### Why this split, and not svgr trees again
 
@@ -82,7 +82,7 @@ adds what fframes does best: the render/encode/mux runtime.
 ### Format and rate are types in fframes
 
 `Video::FPS`, `WIDTH` and `HEIGHT` are associated constants. ClearFrame's canvases
-(`film/catalog.mjs` `CANVASES`: 1920×1080, 1080×1920, 1080×1080, 1080×1350, 640×360) and rates
+(`packages/engine/src/film/catalog.mts` `CANVASES`: 1920×1080, 1080×1920, 1080×1080, 1080×1350, 640×360) and rates
 (24, 25, 30, 50, 60) are dispatched at run time to `runtime::Film<W, H, FPS>` (25 small types,
 as the old integration did). Draft and `--scale` sizes use `RenderOptions::scale_resolution`;
 fframes' `VideoSize::new_scaled` rounds to even sizes exactly as `Engine::open` does, and every
@@ -90,7 +90,7 @@ worker checks that its engine draws at fframes' output size.
 
 ## Mapping: every scene-engine piece
 
-| Scene engine (`scene/native/src`) | After the return | Notes |
+| Scene engine (`packages/engine/src/scene/native/src`) | After the return | Notes |
 |---|---|---|
 | `main.rs` `render [A..B]` | **fframes** (`runtime::render` → `fframes::render` with `runtime::Backend`) | Range renders keep the film clock through `RenderOptions::frame_range` |
 | `main.rs` `frame`, `inspect`, `audit`, `bench`, `info`, `serve` | ClearFrame engine | Stills and diagnostics need no encoder; they draw with the same `Engine` the fframes workers use |
@@ -103,7 +103,7 @@ worker checks that its engine draws at fframes' output size.
 | `film.rs` (backdrop, grain, frame) | ClearFrame | |
 | `audit.rs`, `inspect.rs` | ClearFrame | fframes' `inspect` checks svgr trees, which ClearFrame does not build |
 | Node finisher: packet timeline, mix, loudness, mux, tags, frame-count check, receipt | Node, unchanged | The fframes MP4 has no audio stream; the finisher muxes the mix as before |
-| Audio mix (`engine/lib/audio.mjs`) | _planned:_ fframes `AudioMap` + `analyze_audio` | Needs bed looping, the silent-beat gate and two-pass loudness matched first |
+| Audio mix (`packages/engine/src/engine/lib/audio.mts`) | _planned:_ fframes `AudioMap` + `analyze_audio` | Needs bed looping, the silent-beat gate and two-pass loudness matched first |
 
 ## What is gained, what is at risk
 

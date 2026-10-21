@@ -5,7 +5,7 @@ description: Author native GPU stages for ClearFrame films (actors with stable i
 
 # Native stages and the scene engine
 
-Read `docs/scene-engine.md` (design and full reference) and `docs/scene-engine-coverage.md` (every block, sketch, treatment and playbook with its measured state). The scene engine is ClearFrame's only renderer: blocks, stages, compositing and footage. Renders run through fframes as the runtime (`scene/native/src/runtime.rs`; `docs/fframes-return.md`): change pictures in the engine, and scheduling, encoding or segment rules in `runtime.rs`.
+Read `docs/scene-engine.md` (design and full reference) and `docs/scene-engine-coverage.md` (every block, sketch, treatment and playbook with its measured state). The scene engine is ClearFrame's only renderer: blocks, stages, compositing and footage. Renders run through fframes as the runtime (`packages/engine/src/scene/native/src/runtime.rs`; `docs/fframes-return.md`): change pictures in the engine, and scheduling, encoding or segment rules in `runtime.rs`.
 
 ## When to use a stage
 
@@ -45,8 +45,8 @@ Example: `examples/stage-pr` (a film stage across beats, a callout riding a came
 
 ## Engine development
 
-- Sources: `scene/native/src` — `plan.rs` (contract), `compose.rs` (frame order, wipes, motion blur), `film.rs` (backdrop, texture, chrome, frame), `nodes.rs` (elements, recipes' targets, camera), `materials.rs` (SkSL), `media.rs` (footage/images, bounded), `fonts.rs` (glyph outlines from the rustybuzz shaping that measured them), `draw.rs` (the blocks' display list and painter), `fx.rs` (filter graphs), `blocks/` (the 31 blocks), `encode.rs` (FFmpeg pipe), `inspect.rs` (inspect + audit). JS: `scene/compile.mjs`, `scene/recipes.mjs`, `scene/code.mjs`, `scene/engine.mjs`.
+- Sources: `packages/engine/src/scene/native/src` — `plan.rs` (contract), `compose.rs` (frame order, wipes, motion blur), `film.rs` (backdrop, texture, chrome, frame), `nodes.rs` (elements, recipes' targets, camera), `materials.rs` (SkSL), `media.rs` (footage/images, bounded), `fonts.rs` (glyph outlines from the rustybuzz shaping that measured them), `draw.rs` (the blocks' display list and painter), `fx.rs` (filter graphs), `blocks/` (the 31 blocks), `encode.rs` (FFmpeg pipe), `inspect.rs` (inspect + audit). JS: `packages/engine/src/scene/compile.mts`, `packages/engine/src/scene/recipes.mts`, `packages/engine/src/scene/code.mts`, `packages/engine/src/scene/engine.mts`.
 - Frame output is a pure function of the frame and prepared inputs. Anything random is hash-derived from a seed; no wall clock.
 - Measure a change in the picture against earlier stills: `scripts/engine-parity.mjs OUT --reference DIR` (library) and `scripts/engine-effects.mjs OUT --reference DIR` (film-level effects). The retained FFFrames-era stills in `build/parity` and `build/engine-effects` are such references.
-- Build: `node engine/cli.mjs build` (one Cargo job). Tests: `node --test test/scene-engine.test.mjs`; Rust: `env CARGO_TARGET_DIR=scene/.cache/target cargo test --manifest-path scene/native/Cargo.toml --release --locked --jobs 1 -- --test-threads=2`.
+- Build: `pnpm cf build` (one Cargo job). Tests: `node --test test/scene-engine.test.mjs`; Rust: `env CARGO_TARGET_DIR=scene/.cache/target cargo test --manifest-path packages/engine/src/scene/native/Cargo.toml --release --locked --jobs 1 -- --test-threads=2`.
 - Measure before claiming speed: `scripts/engine-bench.mjs OUT PROJECT…` (cold, warm, range, full, peak memory, temp disk).

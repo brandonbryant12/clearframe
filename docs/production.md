@@ -15,9 +15,9 @@ An early complete draft is a milestone. A finished film is a separate milestone.
 ## Production command
 
 ```sh
-node engine/cli.mjs pipeline film --draft --scale 0.5
-node engine/cli.mjs pipeline film --draft --no-render
-node engine/cli.mjs pipeline film --json
+pnpm cf pipeline film --draft --scale 0.5
+pnpm cf pipeline film --draft --no-render
+pnpm cf pipeline film --json
 ```
 
 Resource caps in native rendering remain unchanged. Keep 20 GiB free before expensive work; preserve earlier evidence.
@@ -49,8 +49,8 @@ Statuses have deliberately narrow meanings:
 ## Reusable regression harness
 
 ```sh
-npm run verify:pipeline -- /path/to/new-evidence --quick
-npm run verify:pipeline -- /path/to/new-evidence
+pnpm verify:pipeline /path/to/new-evidence --quick
+pnpm verify:pipeline /path/to/new-evidence
 ```
 
 The quick run exercises the cash-flow fixture. The full run also exercises the scenario-lab, benefit-explainer, research-digest and podcast-clip films in landscape and vertical. Both run the actual CLI and verify:

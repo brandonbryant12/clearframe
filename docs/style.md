@@ -32,7 +32,7 @@ Every face is shipped with the renderer and measured with the same shaper that d
 | `geometric` | Space Grotesk Light headline, Bold emphasis | weight contrast | Workplace films, keynotes, product, friendly explainers |
 | `bookish` | DM Serif Display | its own italic | Histories, lessons, editorial stories |
 
-Voices are files in `library/types/` (see `library/README.md`): a face set, an emphasis kind, `case`, `tracking` and `leading`. A beat can set its own `type`; `inter` opts back out of the film voice. The renderer receives the resolved voice in the job, so a project renders without the library that defined it.
+Voices are files in `packages/engine/src/library/types/` (see `packages/engine/src/library/README.md`): a face set, an emphasis kind, `case`, `tracking` and `leading`. A beat can set its own `type`; `inter` opts back out of the film voice. The renderer receives the resolved voice in the job, so a project renders without the library that defined it.
 
 | Role | Face | Used for |
 |---|---|---|

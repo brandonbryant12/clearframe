@@ -9,7 +9,7 @@ A 45-second benefits film made only from the workplace kit (`skills/clearframe-w
 | `keep` | "A third of the match is yours after the **first** year, two thirds after the **second**, and **all** of it after the third." | A timeline whose locks open as the column grows to each share | `vesting` |
 | `step` | "It takes two minutes. Open **Benefits**, then **Retirement**. Set your rate to **five** percent, and **save**. Free money, every paycheck after." | The portal: the cursor opens Benefits, picks Retirement, changes 3% to 5%, saves; the window leans in on the new value | `portal`, arriving with a `push` (the next step) |
 
-`node examples/workplace-401k/build.mjs` writes `storyboard-landscape.json` and `storyboard-vertical.json` (pop captions on the tall frame). Copy one into a project directory as `storyboard.json` and run `node engine/cli.mjs draft DIR`.
+`node examples/workplace-401k/build.mjs` writes `storyboard-landscape.json` and `storyboard-vertical.json` (pop captions on the tall frame). Copy one into a project directory as `storyboard.json` and run `pnpm cf draft DIR`.
 
 ## Checks and limits
 

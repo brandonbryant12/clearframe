@@ -3,21 +3,43 @@
 // Writes docs/media/{blocks.jpg, blocks-vertical.jpg, looks.png, data-story.jpg}.
 import fs from 'node:fs';
 import path from 'node:path';
-import { writeGallery, scaffold } from '../film/playbooks.mjs';
-import { sheetProject, lookbookProject } from '../film/production.mjs';
-import { ffmpeg } from '../engine/lib/util.mjs';
+import {
+  writeGallery,
+  scaffold,
+} from '../packages/engine/dist/film/playbooks.mjs';
+import {
+  sheetProject,
+  lookbookProject,
+} from '../packages/engine/dist/film/production.mjs';
+import { ffmpeg } from '../packages/engine/dist/engine/lib/util.mjs';
 
 const work = path.resolve('build/docs-media');
 const media = path.resolve('docs/media');
 fs.rmSync(work, { recursive: true, force: true });
 fs.mkdirSync(media, { recursive: true });
 const jpeg = (from, to, width) =>
-  ffmpeg(['-y', '-i', from, '-vf', `scale=${width}:-2`, '-q:v', '3', '-frames:v', '1', to]);
+  ffmpeg([
+    '-y',
+    '-i',
+    from,
+    '-vf',
+    `scale=${width}:-2`,
+    '-q:v',
+    '3',
+    '-frames:v',
+    '1',
+    to,
+  ]);
 
 const landscape = path.join(work, 'landscape');
 await writeGallery(landscape, { theme: 'paper' });
 await jpeg(
-  await sheetProject(landscape, { draft: true, per: 1, columns: 4, thumb: 480 }),
+  await sheetProject(landscape, {
+    draft: true,
+    per: 1,
+    columns: 4,
+    thumb: 480,
+  }),
   path.join(media, 'blocks.jpg'),
   1800,
 );

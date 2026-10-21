@@ -1,6 +1,6 @@
 # Ideas: pictures for narrative moves
 
-To search everything in plain words, run `node engine/cli.mjs find "what you want to show"`. The sketches below that take `sketchSay` land their moments on your narration's words.
+To search everything in plain words, run `pnpm cf find "what you want to show"`. The sketches below that take `sketchSay` land their moments on your narration's words.
 
 A film is a sequence of moves: a hook, a tension, a mechanism, a turn, a payoff. Each move has pictures that make it land. Pick by what the sentence *does*, not what it is about. Every idea below is buildable with native blocks, `canvas` (start from `clearframe sketch`), beat layers (`plate`, `tone`, `camera`, `art`) and transitions.
 

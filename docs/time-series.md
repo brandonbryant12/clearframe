@@ -1,6 +1,6 @@
 # Dated series: price basis, growth and observed risk
 
-`engine/lib/time-series.mjs` provides versioned, pure transformations of observed records. These are prototypes; continuous subjective playback and final master acceptance remain pending.
+`packages/engine/src/engine/lib/time-series.mts` provides versioned, pure transformations of observed records. These are prototypes; continuous subjective playback and final master acceptance remain pending.
 
 ```js
 import {deflateSeries,growthSeries,rollingStatistics,drawdownSeries} from '../engine/lib/time-series.mjs';

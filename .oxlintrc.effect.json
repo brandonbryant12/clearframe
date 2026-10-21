@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/@effect/tsgo/oxlint-schema.json",
+  "plugins": [
+    "effecttsgo"
+  ],
+  "categories": {
+    "correctness": "off"
+  },
+  "options": {
+    "typeAware": true,
+    "typeCheck": true
+  },
+  "ignorePatterns": [
+    "**/.cache/**",
+    "**/.output/**",
+    "**/.turbo/**",
+    "**/build/**",
+    "**/coverage/**",
+    "**/dist/**",
+    "vendor/**"
+  ],
+  "rules": {
+    "effecttsgo/class-self-mismatch": "error",
+    "effecttsgo/effect-fn-implicit-any": "error",
+    "effecttsgo/floating-effect": "error",
+    "effecttsgo/floating-effect-in-vitest": "error",
+    "effecttsgo/missing-effect-context": "error",
+    "effecttsgo/missing-effect-error": "error",
+    "effecttsgo/missing-layer-context": "error",
+    "effecttsgo/missing-return-yield-star": "error",
+    "effecttsgo/missing-star-in-yield-effect-gen": "error",
+    "effecttsgo/non-object-effect-service-type": "error",
+    "effecttsgo/overridden-schema-constructor": "error",
+    "effecttsgo/schema-literal-non-finite": "error",
+    "effecttsgo/schema-opaque-instance-member": "error"
+  }
+}

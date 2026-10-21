@@ -16,22 +16,22 @@ import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '../..');
-const out = path.resolve(root, process.argv[2] ?? 'build/podcast-pictures');
-const rel = p => path.relative(root, p) || '.';
-const cli = (...args) => execFileSync(process.execPath, [path.join(root, 'engine/cli.mjs'), ...args], { cwd: root, stdio: 'inherit' });
+const out = path.resolve(process.argv[2] ?? 'build/podcast-pictures');
+const rel = p => path.relative(process.cwd(), p) || '.';
+const cli = (...args) => execFileSync(process.execPath, [path.join(root, 'apps/cli/dist/main.mjs'), ...args], { stdio: 'inherit' });
 
 // ------------------------------------------------------------------ 1. the episode and its import
 
-const episode = path.join(root, 'bench/enterprise/podcast/episode.wav');
+const episode = path.join(path.dirname(out), 'podcast-fixture/episode.wav');
 if (!fs.existsSync(episode)) {
   console.log('making the mock episode with the macOS say voice…');
-  execFileSync(process.execPath, [path.join(root, 'bench/enterprise/podcast/make-episode.mjs')], { cwd: root, stdio: 'inherit' });
+  execFileSync(process.execPath, [path.join(root, 'bench/enterprise/podcast/make-episode.mjs'), episode], { stdio: 'inherit' });
 }
 const board = path.join(out, 'storyboard.json');
 if (!fs.existsSync(board)) {
   if (fs.existsSync(out) && fs.readdirSync(out).length)
     throw new Error(`${rel(out)} exists but holds no storyboard; ingest needs a new folder. Remove it or pass another.`);
-  cli('ingest', rel(out), '--audio', rel(episode), '--script', 'bench/enterprise/podcast/turns.txt',
+  cli('ingest', rel(out), '--audio', rel(episode), '--script', path.join(root, 'bench/enterprise/podcast/turns.txt'),
     '--speakers', 'host=Maya:Host,guest=Sam:Guest', '--vertical', '--direction', 'podcast-picture');
 } else console.log(`reusing the import in ${rel(out)} (delete the folder to import the recording again)`);
 
@@ -603,5 +603,5 @@ const drawn = Object.values(PICTURES).filter(p => (p.block ?? 'canvas') === 'can
 console.log(`gave ${drawn} of ${sb.beats.length} beats a picture (${Object.keys(PICTURES).length - drawn} kinetic line) in ${rel(board)}
 
 next:
-  node engine/cli.mjs draft ${rel(out)}        critique, check, sheet, draft MP4 and the motion verdict
+  clearframe draft ${rel(out)}        critique, check, sheet, draft MP4 and the motion verdict
   open ${rel(out)}/build/sheet.png ${rel(out)}/build/qa/phone.png`);

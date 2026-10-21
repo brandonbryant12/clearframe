@@ -1,10 +1,21 @@
 // Regenerate public authoring references from the native vocabulary.
 import fs from 'node:fs';
-import { BLOCKS, THEMES, MOTIONS, TRANSITIONS, BACKDROPS, FRAME_RATES, markdownCatalog } from '../film/catalog.mjs';
-import { wireframePNG } from '../film/wireframe.mjs';
-import { playbooks, storyboardFor } from '../film/playbooks.mjs';
-import { types } from '../film/library.mjs';
-import { EXITS } from '../film/constants.mjs';
+import {
+  BLOCKS,
+  THEMES,
+  MOTIONS,
+  TRANSITIONS,
+  BACKDROPS,
+  FRAME_RATES,
+  markdownCatalog,
+} from '../packages/engine/dist/film/catalog.mjs';
+import { wireframePNG } from '../packages/engine/dist/film/wireframe.mjs';
+import {
+  playbooks,
+  storyboardFor,
+} from '../packages/engine/dist/film/playbooks.mjs';
+import { types } from '../packages/engine/dist/film/library.mjs';
+import { EXITS } from '../packages/engine/dist/film/constants.mjs';
 const text = { type: 'string' },
   number = { type: 'number' },
   bool = { type: 'boolean' },
@@ -12,14 +23,22 @@ const text = { type: 'string' },
 const motion = {
   type: 'object',
   additionalProperties: false,
-  properties: { preset: { enum: MOTIONS }, intensity: { type: 'number', minimum: 0, maximum: 1 } },
+  properties: {
+    preset: { enum: MOTIONS },
+    intensity: { type: 'number', minimum: 0, maximum: 1 },
+  },
 };
 const palette = {
   type: 'object',
   additionalProperties: false,
   properties: {
     base: { enum: Object.keys(THEMES) },
-    ...Object.fromEntries(Object.keys(THEMES.paper).map(k => [k, { type: 'string', pattern: '^#[0-9a-fA-F]{6}$' }])),
+    ...Object.fromEntries(
+      Object.keys(THEMES.paper).map((k) => [
+        k,
+        { type: 'string', pattern: '^#[0-9a-fA-F]{6}$' },
+      ]),
+    ),
   },
 };
 const schema = {
@@ -54,20 +73,36 @@ const schema = {
     sfx: { enum: [true, false, 'off', 'subtle', 'normal', 'punchy'] },
     treatment: text,
     camera: {
-      description: 'Film default camera for beats without their own: "none" makes a steady film (no automatic push; plates hold still unless a beat asks)',
+      description:
+        'Film default camera for beats without their own: "none" makes a steady film (no automatic push; plates hold still unless a beat asks)',
       oneOf: [
         { enum: ['auto', 'none', 'in', 'out', 'left', 'right', 'up', 'down'] },
         {
           type: 'object',
           additionalProperties: false,
-          properties: { move: { enum: ['auto', 'none', 'in', 'out', 'left', 'right', 'up', 'down'] }, amount: { type: 'number', minimum: 0, maximum: 1 } },
+          properties: {
+            move: {
+              enum: [
+                'auto',
+                'none',
+                'in',
+                'out',
+                'left',
+                'right',
+                'up',
+                'down',
+              ],
+            },
+            amount: { type: 'number', minimum: 0, maximum: 1 },
+          },
         },
       ],
     },
     lens: {
       type: 'object',
       additionalProperties: false,
-      description: 'Film lens: blur, the shutter for motion blur on fast moves (the film looks letterbox, grade, gradeAmount, bloom, aberration, leak and handheld were retired)',
+      description:
+        'Film lens: blur, the shutter for motion blur on fast moves (the film looks letterbox, grade, gradeAmount, bloom, aberration, leak and handheld were retired)',
       properties: { blur: { type: 'number', minimum: 0, maximum: 1 } },
     },
     speakers: object,
@@ -77,19 +112,31 @@ const schema = {
         {
           type: 'object',
           additionalProperties: false,
-          description: 'Editorial frame: brand (serif italic), section label, mono footers, progress rail',
-          properties: { brand: text, left: text, right: text, label: bool, progress: bool },
+          description:
+            'Editorial frame: brand (serif italic), section label, mono footers, progress rail',
+          properties: {
+            brand: text,
+            left: text,
+            right: text,
+            label: bool,
+            progress: bool,
+          },
         },
       ],
     },
-    heading: { enum: ['top', 'bottom'], description: 'Where scene titles sit: top, or bottom as a lower third' },
+    heading: {
+      enum: ['top', 'bottom'],
+      description: 'Where scene titles sit: top, or bottom as a lower third',
+    },
     textMotion: {
       enum: ['lines', 'words', 'letters', 'cascade'],
-      description: 'Default type reveal: whole lines, word by word, letter by letter or a tilted cascade',
+      description:
+        'Default type reveal: whole lines, word by word, letter by letter or a tilted cascade',
     },
     type: {
-      enum: types().map(t => t.id),
-      description: 'Type voice: the display family and emphasis for titles, statements, chapters, endcards and kinetic text (clearframe types)',
+      enum: types().map((t) => t.id),
+      description:
+        'Type voice: the display family and emphasis for titles, statements, chapters, endcards and kinetic text (clearframe types)',
     },
     texture: {
       oneOf: [
@@ -112,7 +159,10 @@ const schema = {
       type: 'object',
       additionalProperties: false,
       properties: Object.fromEntries(
-        ['lead', 'tail', 'minBeat', 'silentBeat', 'outro'].map(k => [k, { type: 'number', minimum: 0 }]),
+        ['lead', 'tail', 'minBeat', 'silentBeat', 'outro'].map((k) => [
+          k,
+          { type: 'number', minimum: 0 },
+        ]),
       ),
     },
     sources: { type: 'array', items: { oneOf: [text, object] } },
@@ -157,7 +207,7 @@ const schema = {
         additionalProperties: false,
         properties: {
           id: { type: 'string', pattern: '^[a-zA-Z0-9][a-zA-Z0-9_-]*$' },
-          block: { enum: BLOCKS.map(b => b.name) },
+          block: { enum: BLOCKS.map((b) => b.name) },
           vo: text,
           style: text,
           chapter: text,
@@ -167,36 +217,86 @@ const schema = {
           hold: { type: 'number', minimum: 0 },
           min: { type: 'number', minimum: 0 },
           transition: { enum: [...TRANSITIONS, 'auto'] },
-          into: { type: 'string', description: 'Go through this element of the previous canvas beat (its id) into this scene' },
+          into: {
+            type: 'string',
+            description:
+              'Go through this element of the previous canvas beat (its id) into this scene',
+          },
           exit: { enum: EXITS },
           motion,
           props: object,
           sfx: { type: 'array', items: object },
-          tone: { enum: ['none', 'accent', 'accent2', 'invert', 'surface'], description: 'Colour-blocked scene' },
-          textMotion: { enum: ['lines', 'words', 'letters', 'cascade'], description: 'Type reveal for this scene' },
-          type: { enum: types().map(t => t.id), description: 'Type voice for this scene (inter opts out of the film voice)' },
+          tone: {
+            enum: ['none', 'accent', 'accent2', 'invert', 'surface'],
+            description: 'Colour-blocked scene',
+          },
+          textMotion: {
+            enum: ['lines', 'words', 'letters', 'cascade'],
+            description: 'Type reveal for this scene',
+          },
+          type: {
+            enum: types().map((t) => t.id),
+            description:
+              'Type voice for this scene (inter opts out of the film voice)',
+          },
           pace: {
             enum: ['hold'],
-            description: 'Keep a deliberate wait: skip the pull-forward when the voice starts before the picture',
+            description:
+              'Keep a deliberate wait: skip the pull-forward when the voice starts before the picture',
           },
-          heading: { enum: ['top', 'bottom'], description: 'Title at the top, or as a lower third' },
+          heading: {
+            enum: ['top', 'bottom'],
+            description: 'Title at the top, or as a lower third',
+          },
           label: {
             type: 'string',
             maxLength: 40,
-            description: 'Section label for the film frame (defaults to chapter)',
+            description:
+              'Section label for the film frame (defaults to chapter)',
           },
           note: text,
-          transitionColor: { enum: ['accent', 'accent2', 'ink', 'bg', 'surface'] },
+          transitionColor: {
+            enum: ['accent', 'accent2', 'ink', 'bg', 'surface'],
+          },
           camera: {
             oneOf: [
-              { enum: ['auto', 'none', 'in', 'out', 'left', 'right', 'up', 'down'] },
+              {
+                enum: [
+                  'auto',
+                  'none',
+                  'in',
+                  'out',
+                  'left',
+                  'right',
+                  'up',
+                  'down',
+                ],
+              },
               {
                 type: 'object',
                 additionalProperties: false,
                 properties: {
-                  move: { enum: ['auto', 'none', 'in', 'out', 'left', 'right', 'up', 'down'] },
+                  move: {
+                    enum: [
+                      'auto',
+                      'none',
+                      'in',
+                      'out',
+                      'left',
+                      'right',
+                      'up',
+                      'down',
+                    ],
+                  },
                   amount: { type: 'number', minimum: 0, maximum: 1 },
-                  to: { type: 'array', minItems: 4, maxItems: 4, items: { type: 'number' }, description: 'Push to a detail: frame-pixel rect [x, y, w, h]' },
+                  to: {
+                    type: 'array',
+                    minItems: 4,
+                    maxItems: 4,
+                    items: { type: 'number' },
+                    description:
+                      'Push to a detail: frame-pixel rect [x, y, w, h]',
+                  },
                   at: { type: 'number', minimum: 0 },
                   say: text,
                   dur: { type: 'number', minimum: 0.2, maximum: 8 },
@@ -207,27 +307,59 @@ const schema = {
           plate: {
             type: 'object',
             additionalProperties: false,
-            description: 'Image or clip behind or beside the block (docs/canvas.md)',
+            description:
+              'Image or clip behind or beside the block (docs/canvas.md)',
             properties: {
               asset: text,
               file: text,
               side: { enum: ['full', 'left', 'right', 'top', 'bottom'] },
-              treatment: { enum: ['none', 'mono', 'duotone', 'tint', 'blur', 'soft', 'halftone', 'engraving'] },
-              drift: { enum: ['none', 'in', 'out', 'left', 'right', 'up', 'down'] },
+              treatment: {
+                enum: [
+                  'none',
+                  'mono',
+                  'duotone',
+                  'tint',
+                  'blur',
+                  'soft',
+                  'halftone',
+                  'engraving',
+                ],
+              },
+              drift: {
+                enum: ['none', 'in', 'out', 'left', 'right', 'up', 'down'],
+              },
               scrim: { type: 'number', minimum: 0, maximum: 1 },
-              focus: { type: 'array', minItems: 2, maxItems: 2, items: { type: 'number', minimum: 0, maximum: 1 } },
+              focus: {
+                type: 'array',
+                minItems: 2,
+                maxItems: 2,
+                items: { type: 'number', minimum: 0, maximum: 1 },
+              },
               offset: { type: 'number', minimum: 0 },
-              loop: { const: false, description: 'B-roll never loops; provide sufficient source coverage or shorten the beat.' },
+              loop: {
+                const: false,
+                description:
+                  'B-roll never loops; provide sufficient source coverage or shorten the beat.',
+              },
             },
           },
           art: {
             type: 'object',
             additionalProperties: false,
-            description: 'Canvas elements under/over the block (docs/canvas.md)',
-            properties: { sketch: text, seed: { type: 'integer' }, opacity: { type: 'number', minimum: 0, maximum: 1 }, drift: { type: 'number', minimum: 0, maximum: 1 }, rough: { oneOf: [bool, number, object] }, under: { type: 'array', items: object }, over: { type: 'array', items: object } },
+            description:
+              'Canvas elements under/over the block (docs/canvas.md)',
+            properties: {
+              sketch: text,
+              seed: { type: 'integer' },
+              opacity: { type: 'number', minimum: 0, maximum: 1 },
+              drift: { type: 'number', minimum: 0, maximum: 1 },
+              rough: { oneOf: [bool, number, object] },
+              under: { type: 'array', items: object },
+              over: { type: 'array', items: object },
+            },
           },
         },
-        allOf: BLOCKS.map(b => ({
+        allOf: BLOCKS.map((b) => ({
           if: { properties: { block: { const: b.name } } },
           then: {
             properties: {
@@ -235,7 +367,10 @@ const schema = {
                 type: 'object',
                 additionalProperties: false,
                 properties: Object.fromEntries(
-                  Object.entries(b.props).map(([key, description]) => [key, { description }]),
+                  Object.entries(b.props).map(([key, description]) => [
+                    key,
+                    { description },
+                  ]),
                 ),
               },
             },
@@ -245,17 +380,29 @@ const schema = {
     },
   },
 };
-fs.writeFileSync('schema/storyboard.schema.json', JSON.stringify(schema, null, 2) + '\n');
-fs.writeFileSync('skills/clearframe-library/references/blocks.md', markdownCatalog());
+fs.writeFileSync(
+  'packages/engine/src/schema/storyboard.schema.json',
+  JSON.stringify(schema, null, 2) + '\n',
+);
+fs.writeFileSync(
+  'skills/clearframe-library/references/blocks.md',
+  markdownCatalog(),
+);
 // Reference-only refresh avoids rewriting unrelated recipe assets.
 if (process.argv.includes('--references-only')) process.exit(0);
 for (const b of playbooks()) {
   fs.mkdirSync(`recipes/${b.id}`, { recursive: true });
   const sb = storyboardFor(b.id);
-  fs.writeFileSync(`recipes/${b.id}/storyboard.json`, JSON.stringify(sb, null, 2) + '\n');
-  if (sb.beats.some(x => x.props?.file === 'assets/screen.png')) {
+  fs.writeFileSync(
+    `recipes/${b.id}/storyboard.json`,
+    JSON.stringify(sb, null, 2) + '\n',
+  );
+  if (sb.beats.some((x) => x.props?.file === 'assets/screen.png')) {
     fs.mkdirSync(`recipes/${b.id}/assets`, { recursive: true });
-    fs.writeFileSync(`recipes/${b.id}/assets/screen.png`, wireframePNG(THEMES[sb.theme]));
+    fs.writeFileSync(
+      `recipes/${b.id}/assets/screen.png`,
+      wireframePNG(THEMES[sb.theme]),
+    );
   }
   fs.writeFileSync(
     `recipes/${b.id}/BRIEF.md`,
@@ -266,7 +413,7 @@ fs.writeFileSync(
   'recipes/README.md',
   '# Narrative playbooks\n\nGenerated from film/playbooks.mjs. These are adaptable starting structures with illustrative content; replace claims and sources before publishing. Use `clearframe new DIR --playbook NAME`.\n\n' +
     playbooks()
-      .map(b => `- **${b.id}**: ${b.title}. Inputs: ${b.inputs}.`)
+      .map((b) => `- **${b.id}**: ${b.title}. Inputs: ${b.inputs}.`)
       .join('\n') +
     '\n',
 );

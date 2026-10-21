@@ -22,7 +22,7 @@ Budget rule: ≤ 20% of runtime, clips of 4 s, and one or two per film. `clearfr
 ```
 ```bash
 clearframe images <dir> && clearframe clips <dir>     # still first, then animate it (style consistency)
-node skills/veo-video/scripts/veo.mjs --prompt "…" --image still.jpg --seconds 4 --out clip.mp4 [--dry-run]
+node packages/engine/dist/skills/veo-video/scripts/veo.mjs --prompt "…" --image still.jpg --seconds 4 --out clip.mp4 [--dry-run]
 ```
 In a scene: `<video src="assets/clips/atrium-move.mp4" data-start="hook" muted playsinline></video>`. The runtime seeks it frame-accurately, and its audio is ignored because ClearFrame mixes sound separately.
 

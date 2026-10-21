@@ -20,8 +20,8 @@ A 14-second study of a cast travelling through a drawn world. The cast is compos
 ```sh
 node examples/cast-journey/build.mjs        # station positions per shape: landscape left-to-right, vertical up a zig-zag
 mkdir -p build/cast-journey && cp examples/cast-journey/storyboard-vertical.json build/cast-journey/storyboard.json
-node engine/cli.mjs draft build/cast-journey
-node engine/cli.mjs qa build/cast-journey
+pnpm cf draft build/cast-journey
+pnpm cf qa build/cast-journey
 ```
 
 ## Measured

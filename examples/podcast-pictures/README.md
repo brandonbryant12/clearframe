@@ -2,7 +2,7 @@
 
 An 89-second vertical clip of a recorded conversation (Money at Work: host Maya asks, guest Sam explains how much cash to keep) in which every idea Sam explains gets its own small picture, and readable pop captions carry the words underneath. It is the worked answer to "last time it was just text on a background": the recording is imported exactly as recorded, and then the beats that carry an idea have their kinetic captions replaced with drawings of Sam's own objects and numbers. Only one line stays as type, the one the host repeats. Everything in it is fictional: the episode is a local text-to-speech mock (`bench/enterprise/podcast/`).
 
-The direction is `podcast-picture` (`library/directions/podcast-picture.json`): pictures carry the idea, captions carry the words, host lines stay short poster type, and one or two objects come back across the clip. Here those objects are a glass jar (the cash) and a set of calendar pages (the months).
+The direction is `podcast-picture` (`packages/engine/src/library/directions/podcast-picture.json`): pictures carry the idea, captions carry the words, host lines stay short poster type, and one or two objects come back across the clip. Here those objects are a glass jar (the cash) and a set of calendar pages (the months).
 
 ## The picture for each idea
 
@@ -42,7 +42,7 @@ Every figure Sam says carries one short line, "Sam, on air", and the storyboard'
 1. makes the mock episode if it is missing (`bench/enterprise/podcast/make-episode.mjs`, the macOS `say` voice; the `.wav` is git-ignored);
 2. imports it with `ingest --audio … --script bench/enterprise/podcast/turns.txt --speakers host=Maya:Host,guest=Sam:Guest --vertical --direction podcast-picture` (local Whisper measures the words; an existing import in OUT is reused);
 3. checks that each beat still says the words its picture was made for, and stops with a list of the beats that moved if any did, changing nothing. Then it replaces each beat's `block` and `props` (plus `tone`, `transition`, `pace` and `hold` where a beat needs them), and never touches `vo`, `speaker`, `note`, the recording or its timing;
-4. prints the next command: `node engine/cli.mjs draft OUT`.
+4. prints the next command: `pnpm cf draft OUT`.
 
 Then open `OUT/build/sheet.png` and `OUT/build/qa/phone.png`.
 

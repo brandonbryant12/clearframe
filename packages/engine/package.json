@@ -1,0 +1,33 @@
+{
+  "name": "@repo/engine",
+  "version": "0.4.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./cli": "./dist/engine/cli.mjs",
+    "./harness": {
+      "types": "./dist/engine/harness.d.mts",
+      "import": "./dist/engine/harness.mjs"
+    }
+  },
+  "scripts": {
+    "build": "tsx ../../tools/workspace/engine.mts",
+    "typecheck": "tsx ../../tools/workspace/typecheck.mts tsconfig.json tsconfig.browser.json"
+  },
+  "dependencies": {
+    "@effect/platform-node": "catalog:",
+    "@effect/platform-node-shared": "catalog:",
+    "@opencode/cli": "catalog:",
+    "@opencode/client": "catalog:",
+    "@opencode/plugin": "catalog:",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/workspace": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "typescript-7": "catalog:"
+  }
+}

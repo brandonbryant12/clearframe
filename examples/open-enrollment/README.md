@@ -10,7 +10,7 @@ A 40-second open-enrollment film made only from library pieces, and the worked e
 | `step` | "So in Northwind Hub, open **Benefits**, then **Enroll**. Tap Health **FSA**, choose your **amount**, and press **Save**." | The pointer presses Benefits, then Enroll for 2028, each screen sliding in on its word; the elections screen says what the board said (three "Carries over", the FSA "Not elected"); the pointer taps it, the amount types in and Save becomes "Saved for 2028" | `app` with `pages` and row badges, `pointer` |
 | `close` | "Make your FSA **election** by the nineteenth, and all **four** come with you." | The opening board where it was left; the $0 clears, and the FSA card crosses and is ticked with the others | `carryover` with `bookend: true` |
 
-`node examples/open-enrollment/build.mjs` writes `storyboard-landscape.json` and `storyboard-vertical.json` from one storyboard. Copy one into a project directory as `storyboard.json` and run `node engine/cli.mjs draft DIR`.
+`node examples/open-enrollment/build.mjs` writes `storyboard-landscape.json` and `storyboard-vertical.json` from one storyboard. Copy one into a project directory as `storyboard.json` and run `pnpm cf draft DIR`.
 
 ## What to copy
 

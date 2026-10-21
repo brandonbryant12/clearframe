@@ -2,7 +2,7 @@
 
 For storyboards, use `canvas.props.multiples`: `{title, unit, x, y, series: [2–9 {id, label, values}], highlight?, asOf, source}`. Every panel is validated as a one-series plot on the shared axes, ticks sit on the outer edges, and a `highlight` panel takes `accent2` while the others recede. Template beat: `asset-classes` in [`examples/finance-charts`](../examples/finance-charts/README.md); tests: `node --test test/multiples.test.mjs`. The ranked builder below remains for scripted scenes.
 
-`rankSeries` in `film/multiple-data.mjs` orders two to four comparable series by their value on one explicit common date. `multipleScene` in `film/small-multiples.mjs` composes those records as equal-size native panels and can enlarge one named panel through a uniform transform. No new renderer or chart rasterization is involved.
+`rankSeries` in `packages/engine/src/film/multiple-data.mts` orders two to four comparable series by their value on one explicit common date. `multipleScene` in `packages/engine/src/film/small-multiples.mts` composes those records as equal-size native panels and can enlarge one named panel through a uniform transform. No new renderer or chart rasterization is involved.
 
 ```js
 import { multipleScene } from '../film/small-multiples.mjs';

@@ -21,4 +21,4 @@ The final files from both pipeline runs match both baseline exports byte for byt
 
 Prepare a fresh project, then run `pipeline PROJECT --json` against the same prepared input on each revision. Keep each run directory and compare stage times, input IDs, output SHA-256 values, QA reports and sheets. For the longer QA case, use a retained finished film with `qa PROJECT --video VIDEO`; the original source assets need not be fetched again. Keep expensive jobs serialized and the native cache warm.
 
-Run `npm test` through the local heavy-job gate. The existing `scripts/verify-native.mjs` includes the 451-frame mux regression. Exact artifact equality establishes that these changes preserve the tested outputs; it does not substitute for reviewing a newly authored film.
+Run `pnpm test` through the local heavy-job gate. The existing `scripts/verify-native.mjs` includes the 451-frame mux regression. Exact artifact equality establishes that these changes preserve the tested outputs; it does not substitute for reviewing a newly authored film.

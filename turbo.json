@@ -1,0 +1,44 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["tools/workspace/**", "tools/typescript/**"],
+  "tasks": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/docs/**",
+        "$TURBO_ROOT$/examples/**",
+        "$TURBO_ROOT$/recipes/**",
+        "$TURBO_ROOT$/templates/**",
+        "$TURBO_ROOT$/skills/**",
+        "$TURBO_ROOT$/bench/enterprise/podcast/make-episode.mjs",
+        "$TURBO_ROOT$/bench/enterprise/podcast/turns.txt",
+        "$TURBO_ROOT$/README.md",
+        "$TURBO_ROOT$/CHANGELOG.md",
+        "$TURBO_ROOT$/LICENSE",
+        "$TURBO_ROOT$/archive/fframes/upstream.json"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
+    },
+    "typecheck": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": []
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

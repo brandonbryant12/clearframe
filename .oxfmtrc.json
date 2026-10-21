@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 80,
+  "singleQuote": true,
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    "**/.cache/**",
+    "**/dist/**",
+    "**/build/**",
+    "pnpm-lock.yaml",
+    "archive/**"
+  ]
+}

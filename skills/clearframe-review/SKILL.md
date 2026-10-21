@@ -5,7 +5,7 @@ description: Turn a person's feedback on a ClearFrame cut into bounded, previewe
 
 # Review and edit a ClearFrame film
 
-The contract is `docs/editing.md`; the conversation rules are in `docs/collaboration.md`. Everything lives in the project's `review/` folder. Commands are `node engine/cli.mjs …`.
+The contract is `docs/editing.md`; the conversation rules are in `docs/collaboration.md`. Everything lives in the project's `review/` folder. Commands are `pnpm cf …`.
 
 ## Before the first look
 
@@ -20,9 +20,9 @@ The contract is `docs/editing.md`; the conversation rules are in `docs/collabora
 For each note in the reply:
 
 ```sh
-node engine/cli.mjs note DIR "the diagram is confusing" --at 2:13 --rev r003 --by NAME [--keep voice]
-node engine/cli.mjs note DIR "[ClearFrame r003 @ 2:13.40 · s047 · “…”] the diagram is confusing"   # pasted from the page
-node engine/cli.mjs notes DIR --import notes-r003.json                                            # downloaded from the page
+pnpm cf note DIR "the diagram is confusing" --at 2:13 --rev r003 --by NAME [--keep voice]
+pnpm cf note DIR "[ClearFrame r003 @ 2:13.40 · s047 · “…”] the diagram is confusing"   # pasted from the page
+pnpm cf notes DIR --import notes-r003.json                                            # downloaded from the page
 ```
 
 - `--rev` is the cut they watched (without it, the newest cut with a video is assumed: say so if unsure).
@@ -34,10 +34,10 @@ node engine/cli.mjs notes DIR --import notes-r003.json                          
 
 1. Edit only the note's beats (`notes DIR` shows where each note is now). Picture notes: edit `storyboard.json`. Recording cuts: never edit `vo` or a beat's WAV (a voice keep compares every slice, sample for sample, with the master); use `cut`:
    ```sh
-   node engine/cli.mjs cut DIR --note n014 --by NAME                     # the sentence the note points at
-   node engine/cli.mjs cut DIR --words "which is a story for another day" --by NAME
-   node engine/cli.mjs cut DIR --pauses-over 1.2 --keep-pause 0.5 --by NAME
-   node engine/cli.mjs cut DIR --paper review/paper-edit.md --by NAME    # words they struck with ~~…~~
+   pnpm cf cut DIR --note n014 --by NAME                     # the sentence the note points at
+   pnpm cf cut DIR --words "which is a story for another day" --by NAME
+   pnpm cf cut DIR --pauses-over 1.2 --keep-pause 0.5 --by NAME
+   pnpm cf cut DIR --paper review/paper-edit.md --by NAME    # words they struck with ~~…~~
    ```
    `--by NAME` means the person asked for the cut; `--agent` means you decided it (a voice keep refuses agent cuts). `--dry-run` shows what would go. `--note` and `--at --rev` find the exact words they pointed at by identity, not by text: if those words were already cut or the note is stale, nothing is cut and you should ask the person again.
 2. `revise DIR --note n014` checks the edit stayed inside the note's beats and broke no keep, saves a candidate revision, renders before/after passages and writes `review/compare/A-B/index.html`. If it reports changes outside the scope, revert them or widen with `--scope ID,ID --reason "…"` (say why to the person).
@@ -48,10 +48,10 @@ Ask only for material ambiguity, a keep conflict (`override DIR --keep k002 --by
 ## Recording their answer
 
 ```sh
-node engine/cli.mjs accept DIR r006 --note n014 --by NAME --said "yes, much clearer"
-node engine/cli.mjs reject DIR r006 --note n014 --by NAME --said "no, the old one read better"
-node engine/cli.mjs restore DIR r003 --by NAME --said "go back to Tuesday's cut"
-node engine/cli.mjs decide DIR r006 --checkpoint rough --reason "one-shot: all notes applied"
+pnpm cf accept DIR r006 --note n014 --by NAME --said "yes, much clearer"
+pnpm cf reject DIR r006 --note n014 --by NAME --said "no, the old one read better"
+pnpm cf restore DIR r003 --by NAME --said "go back to Tuesday's cut"
+pnpm cf decide DIR r006 --checkpoint rough --reason "one-shot: all notes applied"
 ```
 
 - `accept`/`reject`/`restore --by` are only for what the person actually said; quote them. Silence, elapsed time or "looks fine I guess" about something else is not acceptance.

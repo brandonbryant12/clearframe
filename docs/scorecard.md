@@ -16,7 +16,7 @@ Cinematic capability exists: worlds, a travelling camera, canvas, mosaic, morphs
 
 ## Scores
 
-"Base" is 2026-09-30 before the cinema loop; "Now" is after it. Scores are for what the defaults and the library produce, not what an expert could hand-build. On 2026-10-14 the library was cut to what meets [the bar](../library/README.md#the-bar): the film looks, flash cuts, set pieces and trailer sound that earned some of these points were removed, so the evidence below describes what remains and the numbers have not been re-judged since.
+"Base" is 2026-09-30 before the cinema loop; "Now" is after it. Scores are for what the defaults and the library produce, not what an expert could hand-build. On 2026-10-14 the library was cut to what meets [the bar](../packages/engine/src/library/README.md#the-bar): the film looks, flash cuts, set pieces and trailer sound that earned some of these points were removed, so the evidence below describes what remains and the numbers have not been re-judged since.
 
 | # | Dimension | Base | Now | Evidence now | Next |
 |---|---|---|---|---|---|

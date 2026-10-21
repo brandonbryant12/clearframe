@@ -1,6 +1,6 @@
 # Native valuation sensitivities
 
-`valuationGrid` in `film/valuation-data.mjs` computes explicit annual growing cash-flow cases. `valuationScene` in `film/valuations.mjs` prepares a flat native heatmap and a controlled cross-section using the same cells.
+`valuationGrid` in `packages/engine/src/film/valuation-data.mts` computes explicit annual growing cash-flow cases. `valuationScene` in `packages/engine/src/film/valuations.mts` prepares a flat native heatmap and a controlled cross-section using the same cells.
 
 ```js
 import { valuationScene } from '../film/valuations.mjs';
