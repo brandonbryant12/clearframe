@@ -5,6 +5,7 @@ import { spawnSync } from 'node:child_process';
 import * as Schema from 'effect/Schema';
 
 import type {
+  HeardWord,
   WhisperTranscript,
   HeardTranscript,
   TranscribeWordsOptions,
@@ -71,68 +72,65 @@ export const WhisperSchema: Schema.Codec<WhisperTranscript> =
 
 export const decodeWhisper = Schema.decodeUnknownSync(WhisperSchema);
 
-/** whisper.cpp, one word per segment (`-ml 1 -sow`); null when it fails, so the Python CLI is tried. */
-export function cppWords(
-  cpp: string,
-  wav: string,
-  language: string,
-  dir: string,
-): HeardTranscript | null {
-  const out = path.join(dir, 'cpp');
-  const r = spawnSync(
-    'whisper-cli',
-    [
-      '-m',
-      cpp,
-      '-f',
-      wav,
-      '-l',
-      language,
-      '-ml',
-      '1',
-      '-sow',
-      '-oj',
-      '-of',
-      out,
-      '-np',
-    ],
-    {
-      encoding: 'utf8',
-    },
-  );
-  if (r.status !== 0 || !fs.existsSync(`${out}.json`)) return null;
-  const segments =
-    decodeCpp(JSON.parse(fs.readFileSync(`${out}.json`, 'utf8')))
-      .transcription ?? [];
-  const words = segments
+const cppWordList = (file: string): HeardWord[] =>
+  (decodeCpp(JSON.parse(fs.readFileSync(file, 'utf8'))).transcription ?? [])
     .map((s) => ({
       word: String(s.text ?? '').trim(),
       start: s.offsets.from / 1000,
       end: s.offsets.to / 1000,
     }))
     .filter((w) => w.word && !/^\[.*\]$/.test(w.word));
-  return {
-    words,
-    provider: `whisper.cpp-${path.basename(cpp).replace(/^ggml-|\.bin$/g, '')}`,
-  };
+
+/**
+ * whisper.cpp, one word per segment (`-ml 1 -sow`), for each WAV in one run (the model loads
+ * once); each file's words are on its own clock, written beside it as FILE.json. Null when it
+ * fails, so the Python CLI is tried.
+ */
+export function cppWordsEach(
+  cpp: string,
+  wavs: readonly string[],
+  language: string,
+): HeardTranscript[] | null {
+  const r = spawnSync(
+    'whisper-cli',
+    [
+      '-m',
+      cpp,
+      '-l',
+      language,
+      '-ml',
+      '1',
+      '-sow',
+      '-oj',
+      '-np',
+      ...wavs.flatMap((wav) => ['-f', wav]),
+    ],
+    { encoding: 'utf8' },
+  );
+  if (r.status !== 0 || !wavs.every((wav) => fs.existsSync(`${wav}.json`)))
+    return null;
+  const provider = `whisper.cpp-${path.basename(cpp).replace(/^ggml-|\.bin$/g, '')}`;
+  return wavs.map((wav) => ({ words: cppWordList(`${wav}.json`), provider }));
 }
 
 /**
- * Words heard in a 16 kHz mono WAV, with their times, as `timedWords` reads them, plus which
- * recognizer measured them. whisper.cpp splits its output one word per segment (`-ml 1 -sow`);
- * the Python CLI reports words inside segments.
+ * Words heard in each of several 16 kHz mono WAVs, in one recognizer run, each on its own clock,
+ * as `timedWords` reads them, plus which recognizer measured them. Takes are transcribed apart,
+ * never joined: across a silence inserted between takes, whisper.cpp collapsed each take's
+ * first words onto one zero-length instant, which left them unmeasured.
  */
-export function transcribeWords(
-  wav: string,
+export function transcribeEach(
+  wavs: readonly string[],
   { model = 'base', language = 'en', dir }: TranscribeWordsOptions,
-): HeardTranscript {
+): HeardTranscript[] {
+  if (!wavs.length) return [];
   const cpp = model === 'base' ? whisperCpp(language) : null;
-  const fromCpp = cpp ? cppWords(cpp, wav, language, dir) : null;
+  const fromCpp = cpp ? cppWordsEach(cpp, wavs, language) : null;
   if (fromCpp) return fromCpp;
   const r = spawnSync(
     'whisper',
     [
-      wav,
+      ...wavs,
       '--model',
       model,
       '--word_timestamps',
@@ -150,12 +148,25 @@ export function transcribeWords(
   );
   if (r.status !== 0)
     throw new Error(`whisper failed: ${(r.stderr || r.stdout).slice(-800)}`);
-  const json = path.join(
-    dir,
-    `${path.basename(wav).replace(/\.[^.]+$/, '')}.json`,
-  );
-  return {
-    words: decodeWhisper(JSON.parse(fs.readFileSync(json, 'utf8'))),
+  return wavs.map((wav) => ({
+    words: decodeWhisper(
+      JSON.parse(
+        fs.readFileSync(
+          path.join(dir, `${path.basename(wav).replace(/\.[^.]+$/, '')}.json`),
+          'utf8',
+        ),
+      ),
+    ),
     provider: `whisper-${model}`,
-  };
+  }));
+}
+
+/** Words heard in one 16 kHz mono WAV (see `transcribeEach`). */
+export function transcribeWords(
+  wav: string,
+  options: TranscribeWordsOptions,
+): HeardTranscript {
+  const [heard] = transcribeEach([wav], options);
+  if (!heard) throw new Error(`whisper heard nothing in ${wav}`);
+  return heard;
 }

@@ -4,7 +4,7 @@ import path from 'node:path';
 
 import type { Beat, ResolvedStoryboard } from '../../domain.mjs';
 
-import { ffmpeg, hashOf, wavDuration } from '../util.mjs';
+import { ffmpeg, hashOf } from '../util.mjs';
 
 import { readNarration } from '../speech-meta.mjs';
 import type { Take } from './contracts.mjs';
@@ -74,39 +74,8 @@ export function nothingToAlign(
   );
 }
 
-export const GAP = 1.0;
-
-/** One pass: the takes joined at 16 kHz with a second of silence after each, so no word straddles two. */
-export async function joinTakes(
-  takes: readonly Take[],
-  joined: string,
-): Promise<number[]> {
-  const offsets: number[] = [];
-  let cursor = 0;
-  for (const x of takes) {
-    offsets.push(cursor);
-    cursor += (wavDuration(x.wav) ?? 0) + GAP;
-  }
-  const inputs = takes.flatMap((x) => ['-i', x.wav]);
-  const filter =
-    takes
-      .map((_, i) => `[${i}:a]aresample=16000,apad=pad_dur=${GAP}[a${i}]`)
-      .join(';') +
-    ';' +
-    takes.map((_, i) => `[a${i}]`).join('') +
-    `concat=n=${takes.length}:v=0:a=1[out]`;
-  await ffmpeg([
-    '-y',
-    ...inputs,
-    '-filter_complex',
-    filter,
-    '-map',
-    '[out]',
-    '-ac',
-    '1',
-    '-ar',
-    '16000',
-    joined,
-  ]);
-  return offsets;
+/** A 16 kHz mono copy of a take, the form the recognizers read; each take keeps its own clock. */
+export async function whisperWav(source: string, out: string): Promise<string> {
+  await ffmpeg(['-y', '-i', source, '-ac', '1', '-ar', '16000', out]);
+  return out;
 }

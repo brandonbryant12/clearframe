@@ -79,7 +79,8 @@ class SpokenNumber {
   }
 
   consume(raw: string): void {
-    const word = raw.replace(/[^a-z0-9.$%]/g, '');
+    // A sentence's final period is punctuation ("twenty-four hundred." is 2400), not a decimal point.
+    const word = raw.replace(/[^a-z0-9.$%]/g, '').replace(/\.+$/, '');
     if (!word) return;
     const digits = word.replace(/[$,%]/g, '');
     if (/^\d+(\.\d+)?$/.test(digits)) {
