@@ -81,6 +81,51 @@ try {
 console.log('Installed harness completed, persisted and deduplicated a real job.');
 `;
 
+// An agent adapter in another framework reads the contracts without the renderer or a ledger.
+const contractsProbe = `
+import assert from 'node:assert/strict';
+import {
+  capabilities,
+  decodeJobRequest,
+  HarnessRequestError,
+  JOB_KINDS,
+} from 'clearframe/contracts';
+const c = capabilities();
+assert.equal(c.name, 'clearframe');
+assert.ok(c.schemas.JobRequest && c.schemas.JobView && c.schemas.VerdictOutcome);
+assert.deepEqual(c.jobs.kinds, [...JOB_KINDS]);
+const op = (name) => c.operations.find((o) => o.name === name);
+assert.deepEqual(
+  ['get', 'list', 'events', 'qa'].map((name) => op(name).result),
+  ['JobLookup', 'JobList', 'JobEventList', 'QaReport'],
+);
+assert.equal(op('qa').effect, 'write');
+assert.ok(c.schemas.QaReport.properties.motion);
+assert.deepEqual(decodeJobRequest({ kind: 'check', film: 'film' }), { kind: 'check', film: 'film' });
+assert.throws(
+  () => decodeJobRequest({ kind: 'section', beats: 'a' }),
+  (e) => e instanceof HarnessRequestError && e.reason === 'invalid-request' && e.status === 400,
+);
+console.log('Installed contracts decode requests and describe every operation.');
+`;
+// Published declarations resolve for a TypeScript consumer of both public subpaths.
+const declarationsProbe = `
+import { createJobHarness, type JobView, type StartResult } from 'clearframe/harness';
+import {
+  capabilities,
+  type JobRequest,
+  type QaReport,
+  type VerdictOutcome,
+} from 'clearframe/contracts';
+const request: JobRequest = { kind: 'check', film: 'film' };
+const harness = createJobHarness({ base: '.' });
+const started: StartResult = harness.start('film', request);
+const view: JobView | null = harness.get(started.id);
+const outcome: VerdictOutcome = { status: 'unavailable', reason: 'not rendered' };
+const report = (r: QaReport): VerdictOutcome => r.motion;
+export const probe = [view, outcome, report, capabilities().contractVersion];
+`;
+
 try {
   const packed = path.join(temporary, 'packed');
   fs.mkdirSync(packed);
@@ -140,8 +185,47 @@ try {
   );
   fs.writeFileSync(path.join(consumer, 'probe.mjs'), harnessProbe);
   run('harness', process.execPath, ['probe.mjs'], consumer);
+  fs.writeFileSync(path.join(consumer, 'contracts.mjs'), contractsProbe);
+  run('contracts', process.execPath, ['contracts.mjs'], consumer);
+  const manifest = JSON.parse(
+    run(
+      'capabilities',
+      process.execPath,
+      [cli, 'capabilities', '--json'],
+      consumer,
+    ),
+  );
+  assert.equal(manifest.contractVersion, 1);
+  fs.writeFileSync(path.join(consumer, 'declarations.mts'), declarationsProbe);
+  fs.writeFileSync(
+    path.join(consumer, 'tsconfig.json'),
+    JSON.stringify({
+      compilerOptions: {
+        module: 'nodenext',
+        moduleResolution: 'nodenext',
+        target: 'es2022',
+        strict: true,
+        noEmit: true,
+        skipLibCheck: true,
+        types: [],
+      },
+      files: ['declarations.mts'],
+    }),
+  );
+  run(
+    'declarations',
+    process.execPath,
+    [
+      path.join(workspace, 'node_modules/typescript/bin/tsc6'),
+      '-p',
+      'tsconfig.json',
+    ],
+    consumer,
+  );
   writeReport('passed');
-  console.log('Packed CLI and public harness pass a fresh external install.');
+  console.log(
+    'Packed CLI, public harness and contracts pass a fresh external install.',
+  );
 } catch (error) {
   writeReport('failed', error instanceof Error ? error.message : String(error));
   throw error;

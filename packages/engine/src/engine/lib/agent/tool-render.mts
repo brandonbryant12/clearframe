@@ -1,3 +1,4 @@
+import type * as Types from 'effect/Types';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import * as Schema from 'effect/Schema';
@@ -152,7 +153,10 @@ export function createRenderTools({
         )
       )
         throw fail('Render a still, section, check, draft or captions.');
-      const body: JobRequest = { film: filmId(dir), kind: input.kind };
+      const body: Types.Mutable<JobRequest> = {
+        film: filmId(dir),
+        kind: input.kind,
+      };
       if (input.requestKey != null) body.requestKey = input.requestKey;
       if (input.kind === 'still')
         Object.assign(

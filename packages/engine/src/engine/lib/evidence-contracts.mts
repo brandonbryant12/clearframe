@@ -1,4 +1,5 @@
 import * as Schema from 'effect/Schema';
+import type * as Types from 'effect/Types';
 import type { Timing } from '../domain.mjs';
 export interface EvidenceProbeStream {
   codec_type?: string;
@@ -10,21 +11,36 @@ export interface EvidenceOptions {
   timing?: Pick<Timing, 'frames' | 'fps'>;
   probe?: { streams?: readonly EvidenceProbeStream[] };
 }
-export interface VideoEvidence {
-  scope: 'bound' | 'unbound' | 'stale' | 'invalid';
-  coverage?: 'none' | 'partial' | 'full';
-  video: string;
-  videoSha256: string;
-  receipt: string | null;
-  receiptSha256?: string;
-  profile?: string;
-  inputId?: string | null;
-  revision?: string | null;
-  outputSha256?: string | null;
-  checked: string[];
-  unchecked: string[];
-  problems: string[];
-}
+export const EvidenceScopeSchema = Schema.Literals([
+  'bound',
+  'unbound',
+  'stale',
+  'invalid',
+]);
+/** Which receipt identity checks ran; not a measure of picture, sound or meaning. */
+export const IdentityCoverageSchema = Schema.Literals([
+  'none',
+  'partial',
+  'full',
+]);
+const textList = Schema.mutable(Schema.Array(Schema.String));
+/** What a QA or review measurement is bound to, and what that binding checked. */
+export const VideoEvidenceSchema = Schema.Struct({
+  scope: EvidenceScopeSchema,
+  coverage: Schema.optionalKey(IdentityCoverageSchema),
+  video: Schema.String,
+  videoSha256: Schema.String,
+  receipt: Schema.NullOr(Schema.String),
+  receiptSha256: Schema.optionalKey(Schema.String),
+  profile: Schema.optionalKey(Schema.String),
+  inputId: Schema.optionalKey(Schema.NullOr(Schema.String)),
+  revision: Schema.optionalKey(Schema.NullOr(Schema.String)),
+  outputSha256: Schema.optionalKey(Schema.NullOr(Schema.String)),
+  checked: textList,
+  unchecked: textList,
+  problems: textList,
+});
+export type VideoEvidence = Types.Mutable<typeof VideoEvidenceSchema.Type>;
 export interface IdentityFinding {
   level: 'warn' | 'error';
   kind: 'identity';

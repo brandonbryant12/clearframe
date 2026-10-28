@@ -50,3 +50,11 @@ export function probeDuration(file: string): number {
     throw new Error(`Cannot determine duration of ${file}`);
   return duration;
 }
+
+/**
+ * The duration of footage the native decoder draws. The decoder reads the sample aspect ratio
+ * itself and draws every clip at its display shape, anamorphic footage included.
+ */
+export function probeFootage(file: string): number {
+  return probeDuration(file);
+}

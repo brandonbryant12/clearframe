@@ -8,6 +8,10 @@
     "./harness": {
       "types": "./dist/engine/harness.d.mts",
       "import": "./dist/engine/harness.mjs"
+    },
+    "./contracts": {
+      "types": "./dist/engine/public-contracts.d.mts",
+      "import": "./dist/engine/public-contracts.mjs"
     }
   },
   "scripts": {

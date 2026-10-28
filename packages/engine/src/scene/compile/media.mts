@@ -1,34 +1,10 @@
-import { spawnSync } from 'node:child_process';
-import * as Schema from 'effect/Schema';
-
 import { fail, numberOr, optNumber } from '../fields.mjs';
 
 import { heldTail } from '../../film/constants.mjs';
+import { probeFootage } from '../../film/probes.mjs';
 
 import type { AssetRef, PlanElement } from '../types.mjs';
 import type { PlanBuild, LayerInput } from './contracts.mjs';
-
-/** The part of ffprobe's JSON a duration probe reads (ffprobe prints the duration as text). */
-export const ProbeOutput = Schema.Struct({
-  format: Schema.optionalKey(
-    Schema.Struct({
-      duration: Schema.optionalKey(
-        Schema.Union([Schema.String, Schema.Number]),
-      ),
-    }),
-  ),
-});
-
-export function probeDuration(file: string): number {
-  const r = spawnSync(
-    'ffprobe',
-    ['-v', 'error', '-show_entries', 'format=duration', '-of', 'json', file],
-    { encoding: 'utf8' },
-  );
-  if (r.status !== 0) throw new Error(`Cannot probe ${file}`);
-  const raw: unknown = JSON.parse(r.stdout);
-  return Number(Schema.decodeUnknownSync(ProbeOutput)(raw).format?.duration);
-}
 
 /**
  * Footage is shown from its entrance to its exit (or the stage's end). A wipe into the next beat
@@ -44,7 +20,7 @@ export function stageFootage(
   const { job } = b.ctx,
     { where, beat } = layer;
   const end = layer.frames / b.fps;
-  const duration = probeDuration(file);
+  const duration = probeFootage(file);
   const index = beat ? job.beats.findIndex((x) => x.id === beat) : -1;
   const tail = beat ? heldTail(job, index) : 0;
   const offset = numberOr(el.offset, 0, where, 'offset');

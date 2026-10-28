@@ -60,13 +60,195 @@
           "MATCH": "four",
           "TOTAL": "nine",
           "AGAIN": "every"
-        }
+        },
+        "elements": [
+          {
+            "type": "group",
+            "enter": "fade",
+            "at": 0.5,
+            "dur": 0.35,
+            "exit": "fade",
+            "exitSay": "adds",
+            "exitAfter": 0,
+            "exitDur": 0.3,
+            "children": [
+              {
+                "type": "ellipse",
+                "cx": 1220,
+                "cy": 792,
+                "rx": 150,
+                "ry": 40,
+                "fill": "accent2",
+                "opacity": 0.14
+              },
+              {
+                "type": "rect",
+                "x": 1070,
+                "y": 760,
+                "w": 300,
+                "h": 32,
+                "fill": "accent2",
+                "opacity": 0.14
+              },
+              {
+                "type": "ellipse",
+                "cx": 1220,
+                "cy": 760,
+                "rx": 150,
+                "ry": 40,
+                "fill": "none",
+                "stroke": "accent2",
+                "width": 3,
+                "dash": [
+                  10,
+                  8
+                ],
+                "opacity": 0.75
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "enter": "fade",
+            "at": 0.62,
+            "dur": 0.35,
+            "exit": "fade",
+            "exitSay": "adds",
+            "exitAfter": 0.14,
+            "exitDur": 0.3,
+            "children": [
+              {
+                "type": "ellipse",
+                "cx": 1220,
+                "cy": 750,
+                "rx": 150,
+                "ry": 40,
+                "fill": "accent2",
+                "opacity": 0.14
+              },
+              {
+                "type": "rect",
+                "x": 1070,
+                "y": 718,
+                "w": 300,
+                "h": 32,
+                "fill": "accent2",
+                "opacity": 0.14
+              },
+              {
+                "type": "ellipse",
+                "cx": 1220,
+                "cy": 718,
+                "rx": 150,
+                "ry": 40,
+                "fill": "none",
+                "stroke": "accent2",
+                "width": 3,
+                "dash": [
+                  10,
+                  8
+                ],
+                "opacity": 0.75
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "enter": "fade",
+            "at": 0.74,
+            "dur": 0.35,
+            "exit": "fade",
+            "exitSay": "adds",
+            "exitAfter": 0.28,
+            "exitDur": 0.3,
+            "children": [
+              {
+                "type": "ellipse",
+                "cx": 1220,
+                "cy": 708,
+                "rx": 150,
+                "ry": 40,
+                "fill": "accent2",
+                "opacity": 0.14
+              },
+              {
+                "type": "rect",
+                "x": 1070,
+                "y": 676,
+                "w": 300,
+                "h": 32,
+                "fill": "accent2",
+                "opacity": 0.14
+              },
+              {
+                "type": "ellipse",
+                "cx": 1220,
+                "cy": 676,
+                "rx": 150,
+                "ry": 40,
+                "fill": "none",
+                "stroke": "accent2",
+                "width": 3,
+                "dash": [
+                  10,
+                  8
+                ],
+                "opacity": 0.75
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "enter": "fade",
+            "at": 0.86,
+            "dur": 0.35,
+            "exit": "fade",
+            "exitSay": "four",
+            "exitAfter": 0,
+            "exitDur": 0.3,
+            "children": [
+              {
+                "type": "ellipse",
+                "cx": 1220,
+                "cy": 666,
+                "rx": 150,
+                "ry": 40,
+                "fill": "accent2",
+                "opacity": 0.14
+              },
+              {
+                "type": "rect",
+                "x": 1070,
+                "y": 634,
+                "w": 300,
+                "h": 32,
+                "fill": "accent2",
+                "opacity": 0.14
+              },
+              {
+                "type": "ellipse",
+                "cx": 1220,
+                "cy": 634,
+                "rx": 150,
+                "ry": 40,
+                "fill": "none",
+                "stroke": "accent2",
+                "width": 3,
+                "dash": [
+                  10,
+                  8
+                ],
+                "opacity": 0.75
+              }
+            ]
+          }
+        ]
       }
     },
     {
       "id": "dollars",
       "block": "canvas",
-      "into": "match-theirs",
+      "transition": "push",
       "vo": "On a sixty thousand dollar salary, the match goes from eighteen hundred dollars a year to twenty-four hundred. Six hundred more, for two points.",
       "props": {
         "source": "Alder Street Retirement Plan summary, 2027 plan year · example: a $60,000 salary",

@@ -6,20 +6,23 @@ import type { CommandContext } from './options.mjs';
 
 export async function qaCommand({ o, dir }: CommandContext) {
   const { qaProject } = await import('../lib/qa.mjs');
+  const { verdictOutcome } = await import('../lib/qa.mjs');
   const r = await qaProject(dir, { video: o.video, loop: o.loop });
   // An error (a broken receipt, a one-frame pop) fails the command in either output mode:
   // automation reads --json and the exit status, not the printed lines.
   if (r.findings.some((f) => f.level === 'error')) process.exitCode = 1;
-  if (o.json) return console.log(JSON.stringify(r, null, 2));
+  // The motion verdict and what it assessed, or the reason it could not be measured.
+  const motion = verdictOutcome(dir, r);
+  if (o.json) return console.log(JSON.stringify({ ...r, motion }, null, 2));
   const s = r.summary,
     rel = (f: string) => path.relative(process.cwd(), f);
   // The verdict first: agents quote the first line ("held 4%") as the result.
-  let verdict = null;
-  try {
-    const { motionVerdict } = await import('../lib/qa.mjs');
-    verdict = motionVerdict(dir, r);
-    console.log(verdict.lines[0]);
-  } catch {}
+  const verdict = motion.status === 'measured' ? motion.verdict : null;
+  if (motion.status === 'unavailable')
+    console.log(
+      `motion: NOT MEASURED (${motion.reason}): no readiness verdict for this film.`,
+    );
+  else console.log(motion.verdict.lines[0]);
   const audioFallback = s.audio ? 'sound NOT MEASURED' : 'no audio';
   const audioSummary = s.loudness
     ? `${s.loudness.integrated} LUFS, peak ${s.loudness.peak}`

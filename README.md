@@ -38,7 +38,7 @@ Agent-directed motion graphics rendered natively by the **ClearFrame scene engin
 
 Requires Node 22.19+ (23.x requires 23.4+), Rust 1.88+ and FFmpeg/ffprobe with libx264. Run `pnpm install --frozen-lockfile` and `pnpm build` for the checked TypeScript runtime, pinned OpenCode and Effect dependencies, and follow [native setup](packages/engine/src/film/SETUP.md) before the first build. The native renderer needs no browser.
 
-The [local agent harness](docs/agent-harness.md) is available through `clearframe/harness`. The studio uses the same SQLite-backed job queue: durable request keys, lifecycle events, cancellation and explicit interrupted history. Effect scopes can own its lifetime. This is a standalone execution boundary for future director adapters; hosted rendering remains a separate qualification.
+The [local agent harness](docs/agent-harness.md) is available through `clearframe/harness`. Its contracts are Effect schemas, published with only `effect` as a dependency through `clearframe/contracts`; `clearframe capabilities --json` describes every operation for an agent framework in any language. The studio uses the same SQLite-backed job queue: durable request keys, lifecycle events, cancellation and explicit interrupted history. Effect scopes can own its lifetime. This is a standalone execution boundary for future director adapters; hosted rendering remains a separate qualification.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -119,7 +119,7 @@ pnpm cf gallery build/gallery-ink --vertical --theme ink
 node scripts/verify-native.mjs build/native-verification-new
 ```
 
-The workspace uses pnpm, Turbo, strict TypeScript and Effect. `packages/engine/src/engine/` owns orchestration, the SQLite harness, provider boundaries, timing, audio and the browser studio; `packages/engine/src/film/` owns authoring contracts, schemas, native jobs and finishing; `packages/engine/src/scene/` owns scene compilation and the Rust renderer. `apps/cli` packages a self-contained runtime and exports `clearframe/harness`. Shared compiler configuration, lint rules and build/schema tools live under `tools/`.
+The workspace uses pnpm, Turbo, strict TypeScript and Effect. `packages/engine/src/engine/` owns orchestration, the SQLite harness, provider boundaries, timing, audio and the browser studio; `packages/engine/src/film/` owns authoring contracts, schemas, native jobs and finishing; `packages/engine/src/scene/` owns scene compilation and the Rust renderer. `apps/cli` packages a self-contained runtime and exports `clearframe/harness` and the dependency-light `clearframe/contracts`. Shared compiler configuration, lint rules and build/schema tools live under `tools/`.
 
 Run `pnpm guardrails` for lint, type checks, Effect diagnostics, the distributable build and contract tests. `pnpm test:lint` exercises the local lint rules. `pnpm catalog:sync` regenerates the authoring JSON schema, block reference and recipes after a build. Runtime JavaScript, declarations and the bundled browser app are generated into `dist/`; source is never overwritten by a build. The native cache lives at `~/.cache/clearframe/scene` (override with `CLEARFRAME_SCENE_CACHE`), outside replaceable distributions. Native compilation uses one Cargo job and at most two workers. Serialize expensive work on memory-constrained machines.
 

@@ -2,7 +2,9 @@ export {
   whisperCpp,
   whisperAvailable,
   transcribeWords,
+  transcribeEach,
 } from './whisper/provider.mjs';
+export { whisperWavs } from './whisper/takes.mjs';
 export type {
   HeardWord,
   WhisperTranscript,

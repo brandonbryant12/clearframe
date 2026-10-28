@@ -8,14 +8,18 @@
 //   full   the whole film, encoded (picture only: audio finishing is shared and identical)
 //   peak   summed RSS of the engine process and its children (sampled every 50 ms)
 //   disk   peak bytes in the render's temporary directory
-// Each command runs `--repeat` times (default 2) and every run is reported. The numbers describe
-// this machine and these projects; they are not a general speed claim.
+// Each command runs `--repeat` times (default 2) and every run is reported, failures included.
+// The summary gives medians and ranges; the warm per-still cost pairs the cold and ten-still runs
+// of the same index, and a pair at or below zero makes it inconclusive (engine-bench-summary.mjs).
+// The numbers describe this machine and these projects, picture only; they are not a general
+// speed claim or the time to an accepted film.
 //
 //   node scripts/engine-bench.mjs OUT PROJECT… [--repeat N]
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
 import { parseArgs } from 'node:util';
+import { summarize } from './engine-bench-summary.mjs';
 import { prepareProject } from '../packages/engine/dist/film/prepare.mjs';
 import {
   buildScene,
@@ -112,11 +116,17 @@ for (const root of projects) {
       for (let r = 0; r < repeat; r++) {
         fs.rmSync(tmp, { recursive: true, force: true });
         fs.mkdirSync(tmp, { recursive: true });
+        // A failed run stays in the record: dropping it would flatter the median.
         const m = await measure(bin, argv(cmd, args), {
           cwd: ctx.dir,
           env,
           temp: temp ? tmp : null,
-        });
+        }).catch((error) => ({
+          ms: null,
+          peakBytes: 0,
+          diskBytes: 0,
+          error: String(error.message ?? error).slice(0, 2000),
+        }));
         rows.push({
           project: path.basename(root),
           engine,
@@ -129,7 +139,7 @@ for (const root of projects) {
           fps,
         });
         console.log(
-          `${path.basename(root).padEnd(22)} ${engine.padEnd(8)} ${name.padEnd(6)} run ${r + 1}: ${m.ms} ms, peak ${(m.peakBytes / 2 ** 20).toFixed(0)} MiB${temp ? `, temp ${(m.diskBytes / 2 ** 20).toFixed(1)} MiB` : ''}`,
+          `${path.basename(root).padEnd(22)} ${engine.padEnd(8)} ${name.padEnd(6)} run ${r + 1}: ${m.error ? `FAILED ${m.error.split('\n')[0]}` : `${m.ms} ms, peak ${(m.peakBytes / 2 ** 20).toFixed(0)} MiB${temp ? `, temp ${(m.diskBytes / 2 ** 20).toFixed(1)} MiB` : ''}`}`,
         );
       }
     };
@@ -156,37 +166,7 @@ for (const root of projects) {
   }
 }
 fs.rmSync(path.join(OUT, 'tmp'), { recursive: true, force: true });
-// Warm per-still: (ten stills − one still) / 9, from the same run index.
-const summary = [];
-for (const p of new Set(rows.map((r) => r.project)))
-  for (const engine of ['scene']) {
-    const of = (m) =>
-      rows.filter(
-        (r) => r.project === p && r.engine === engine && r.measure === m,
-      );
-    const best = (m) => Math.min(...of(m).map((r) => r.ms));
-    const full = of('full');
-    if (!full.length) continue;
-    summary.push({
-      project: p,
-      engine,
-      format: `${full[0].width}x${full[0].height}@${full[0].fps}`,
-      frames: full[0].frames,
-      coldStillMs: best('cold'),
-      warmStillMs: Math.round((best('ten') - best('cold')) / 9),
-      rangeMs: best('range'),
-      fullMs: best('full'),
-      fullFps: +(full[0].frames / (best('full') / 1000)).toFixed(1),
-      peakMiB: Math.round(
-        Math.max(...[...of('full'), ...of('range')].map((r) => r.peakBytes)) /
-          2 ** 20,
-      ),
-      tempMiB: +(
-        Math.max(...[...of('full'), ...of('range')].map((r) => r.diskBytes)) /
-        2 ** 20
-      ).toFixed(1),
-    });
-  }
+const summary = summarize(rows);
 fs.writeFileSync(
   path.join(OUT, 'bench.json'),
   JSON.stringify(
@@ -207,4 +187,14 @@ fs.writeFileSync(
     2,
   ),
 );
-console.table(summary);
+console.table(
+  summary.map((s) => ({
+    project: s.project,
+    format: s.format,
+    coldStillMs: s.coldStillMs?.median ?? null,
+    warmStillMs: s.warmStillMs.median ?? s.warmStillMs.status,
+    rangeMs: s.rangeMs?.median ?? null,
+    fullMs: s.fullMs?.median ?? null,
+    failures: Object.values(s.failures).reduce((a, b) => a + b, 0),
+  })),
+);

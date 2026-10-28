@@ -121,8 +121,9 @@ Footage (stage `video` elements, plates and the `video` block) is decoded by the
 - **Exact timing.** `ffprobe` lists the clip's presentation timestamps once. Film time *t* shows the latest source frame at or before *t*. The clip ends at the end of its last sample: the end is exclusive and rounded up to the film's frame grid, so 49 frames at 24 fps still show their final sample at frame 61 of a 30 fps film.
 - **Any order.** Small forward steps read on through the pipe. A backward step or a far jump restarts the decoder with an accurate seek just before the wanted frame, so every frame comes out the same in any order.
 - **Colour.** FFmpeg's `scale` filter converts with the source's tagged matrix and range. Untagged sources are BT.601 limited range.
+- **Pixel shape.** `ffprobe` also reports the sample aspect ratio: a clip's display size is its stored width stretched by that ratio (FFmpeg's `iw*sar:ih`, to an even width), then rotated, and that is the size it is laid out and decoded at. Frames are scaled to the drawn size whenever it differs from the stored frame, so anamorphic footage keeps its picture's proportions. Unknown ratios (`0:1`, `N/A`) are square, as players treat them.
 
-The decoder's regression tests (a delayed final B-frame, a higher film rate, a non-integral end, and backward seeks) use the fixtures in `packages/engine/src/scene/native/tests/fixtures`.
+The decoder's regression tests (a delayed final B-frame, a higher film rate, a non-integral end, backward seeks, and anamorphic footage with and without rotation, measured against a disc drawn round) use the fixtures in `packages/engine/src/scene/native/tests/fixtures`.
 
 ## Commands and the serve protocol
 

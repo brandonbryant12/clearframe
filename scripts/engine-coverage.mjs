@@ -8,6 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
+import { cell } from './engine-bench-summary.mjs';
 import { BLOCKS } from '../packages/engine/dist/film/catalog.mjs';
 import { sketches } from '../packages/engine/dist/film/sketches.mjs';
 import { treatments } from '../packages/engine/dist/film/treatments.mjs';
@@ -268,7 +269,7 @@ out.push('');
 if (bench) {
   out.push('## Measurements', '');
   out.push(
-    `From \`scripts/engine-bench.mjs\` (${bench.when}), ${bench.host[0]} with ${Math.round(Number(bench.host[1]) / 2 ** 30)} GB, each command run ${bench.repeat}× (best shown), at each project's resolution and frame rate: final libx264 CRF 16 medium; range libx264 CRF 21 veryfast at full scale. Picture only (audio finishing is separate). "Peak" sums the renderer process and its children (the FFmpeg encoder and footage decoders included). These describe this machine and these projects only.`,
+    `From \`scripts/engine-bench.mjs\` (${bench.when}), ${bench.host[0]} with ${Math.round(Number(bench.host[1]) / 2 ** 30)} GB, each command run ${bench.repeat}× (median, with the range of runs; warm stills pair the one- and ten-still runs of the same index, and are inconclusive when any pair is not positive), at each project's resolution and frame rate: final libx264 CRF 16 medium; range libx264 CRF 21 veryfast at full scale. Picture only (audio finishing is separate). "Peak" sums the renderer process and its children (the FFmpeg encoder and footage decoders included). These describe this machine and these projects only.`,
     '',
   );
   if (before)
@@ -294,8 +295,9 @@ if (bench) {
     row(Array(12).fill('---')),
   );
   const was = (p, e) =>
-    before?.summary.find((r) => r.project === p && r.engine === e)?.fullMs ??
-    '—';
+    cell(
+      before?.summary.find((r) => r.project === p && r.engine === e)?.fullMs,
+    );
   const label = (p) =>
     ({
       film: 'long-form recording (7.6 min, synthetic voices)',
@@ -308,10 +310,10 @@ if (bench) {
         label(s.project),
         s.format,
         s.frames,
-        s.coldStillMs,
-        s.warmStillMs,
-        s.rangeMs,
-        s.fullMs,
+        cell(s.coldStillMs),
+        cell(s.warmStillMs),
+        cell(s.rangeMs),
+        cell(s.fullMs),
         s.fullFps,
         s.peakMiB,
         s.tempMiB,

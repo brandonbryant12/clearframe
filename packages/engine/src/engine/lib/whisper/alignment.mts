@@ -11,15 +11,25 @@ import { audioHash } from '../word-timing.mjs';
 import { readJSON, writeJSON, wavDuration } from '../util.mjs';
 import { timedWords } from '../ingest.mjs';
 
-import type { Take, AlignReport, WhisperAlignOptions } from './contracts.mjs';
+import type {
+  Take,
+  AlignReport,
+  HeardTranscript,
+  WhisperAlignOptions,
+} from './contracts.mjs';
 import {
-  GAP,
   currentTakes,
   measuredAtImport,
   nothingToAlign,
-  joinTakes,
+  whisperWavs,
 } from './takes.mjs';
-import { whisperAvailable, transcribeWords } from './provider.mjs';
+import { whisperAvailable, transcribeEach } from './provider.mjs';
+
+/** Whether a recognizer result holds any word (timedWords refuses an empty transcript). */
+export const wordsHeard = (words: HeardTranscript['words']): boolean =>
+  Array.isArray(words)
+    ? words.length > 0
+    : (words.segments ?? []).some((s) => (s.words ?? []).length > 0);
 
 /** Script words on the take's clock: inside it, ordered, each starting after the last ends. */
 export function fitToTake(
@@ -49,23 +59,17 @@ export const interpolatedStatus = (
       ', ',
     )}. Whisper heard something else there; reword the line so it is said as written (spell a figure the way it is spoken, or the reverse) and record it again`;
 
-/** Map one take's script onto the words heard in its window, and record them. */
+/** Map one take's script onto the words heard in it (on its own clock), and record them. */
 export function alignTake(
   x: Take,
   heard: readonly AlignedWord[],
-  start: number,
-  end: number,
   provider: string,
 ): AlignReport {
   const duration = wavDuration(x.wav) ?? 0;
-  // Whisper's word times can lead the audio by a few hundred ms: assign by the silent gaps' midpoints.
-  const mine = heard
-    .filter((w) => w.t0 >= start - GAP / 2 && w.t0 < end - GAP / 2)
-    .map((w) => ({
-      ...w,
-      t0: Math.max(0, w.t0 - start),
-      t1: Math.max(0.02, Math.min(duration, w.t1 - start)),
-    }));
+  const mine = heard.map((w) => ({
+    ...w,
+    t1: Math.max(0.02, Math.min(duration, w.t1)),
+  }));
   if (!mine.length) return { id: x.id, status: 'nothing heard' };
   const { words, interpolated } = alignScript(
     tokenize(x.vo).map((t) => t.w),
@@ -120,23 +124,23 @@ export async function whisperAlign(
   if (!todo.length) throw nothingToAlign(root, sb, P.vo, beat);
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-whisper-'));
   try {
-    const joined = path.join(tmp, 'narration.wav');
-    const offsets = await joinTakes(todo, joined);
-    const result = transcribeWords(joined, {
+    // Each take is heard on its own clock in one recognizer run: takes joined with silence lost
+    // the first words after every gap.
+    const wavs = await whisperWavs(
+      todo.map((x) => x.wav),
+      tmp,
+    );
+    const heardEach = transcribeEach(wavs, {
       model,
       language: language ?? sb.voice.language ?? 'en',
       dir: tmp,
     });
-    const heard = timedWords(result.words);
-    const report = todo.map((x, i) =>
-      alignTake(
-        x,
-        heard,
-        offsets[i],
-        i + 1 < offsets.length ? offsets[i + 1] : Infinity,
-        result.provider,
-      ),
-    );
+    const report = todo.map((x, i) => {
+      const heard = heardEach[i];
+      return heard && wordsHeard(heard.words)
+        ? alignTake(x, timedWords(heard.words), heard.provider)
+        : { id: x.id, status: 'nothing heard' };
+    });
     return [
       ...kept.map((x) => ({
         id: x.id,

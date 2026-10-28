@@ -23,14 +23,14 @@ function joined(
     .join('');
 }
 
-function matchingNumber(
+/** The shortest script and heard spans that say the same figure, compared after `form`. */
+function numberSpan(
   script: readonly ScriptToken[],
   heard: readonly HeardToken[],
   i: number,
   j: number,
+  form: (said: string) => string,
 ): [number, number] | null {
-  if (!/\d/.test(spoken([script[i].w])) && !/\d/.test(spoken([heard[j].w])))
-    return null;
   for (let n = 3; n <= 8; n++)
     for (let a = 1; a < n; a++) {
       const b = n - a;
@@ -39,11 +39,31 @@ function matchingNumber(
       const said = spoken(script.slice(i, i + a).map((token) => token.w));
       if (
         /\d/.test(said) &&
-        said === spoken(heard.slice(j, j + b).map((token) => token.w))
+        form(said) ===
+          form(spoken(heard.slice(j, j + b).map((token) => token.w)))
       )
         return [a, b];
     }
   return null;
+}
+
+const withoutCurrency = (said: string): string => said.replaceAll('$', '');
+
+function matchingNumber(
+  script: readonly ScriptToken[],
+  heard: readonly HeardToken[],
+  i: number,
+  j: number,
+): [number, number] | null {
+  if (!/\d/.test(spoken([script[i].w])) && !/\d/.test(spoken([heard[j].w])))
+    return null;
+  // Exactly the same figure first ("sixty thousand dollar" is "$60,000"); then the same figure
+  // with a currency mark only one side wrote, as Whisper adds "$" from context ("twenty-four
+  // hundred" heard as "$2,400").
+  return (
+    numberSpan(script, heard, i, j, (said) => said) ??
+    numberSpan(script, heard, i, j, withoutCurrency)
+  );
 }
 
 function nearestPair(

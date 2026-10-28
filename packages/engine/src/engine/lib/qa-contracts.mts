@@ -1,26 +1,38 @@
+import * as Schema from 'effect/Schema';
+import type * as Types from 'effect/Types';
 import type { Beat, TimedBeat, Storyboard } from '../domain.mjs';
-import type { VideoEvidence } from './evidence-contracts.mjs';
+import { VideoEvidenceSchema } from './evidence-contracts.mjs';
+import { VerdictOutcomeSchema } from './qa-assessment.mjs';
 
-export interface QaFinding {
-  level: 'error' | 'warn' | 'note';
-  kind: string;
-  message: string;
-  t?: number;
-  frame?: number;
-  beat?: string | null;
-  local?: number | null;
-  end?: number;
-  seconds?: number;
-  faint?: number;
-  deliberate?: boolean;
-  said?: string;
-  fix?: string;
-  fill?: { w: number; h: number };
-}
-export interface Loudness {
-  integrated: number;
-  peak: number | null;
-}
+const number = Schema.optionalKey(Schema.Number);
+const text = Schema.optionalKey(Schema.String);
+
+/** One thing QA found in the decoded film, at a time and beat when it has one. */
+export const QaFindingSchema = Schema.Struct({
+  level: Schema.Literals(['error', 'warn', 'note']),
+  kind: Schema.String,
+  message: Schema.String,
+  t: number,
+  frame: number,
+  beat: Schema.optionalKey(Schema.NullOr(Schema.String)),
+  local: Schema.optionalKey(Schema.NullOr(Schema.Number)),
+  end: number,
+  seconds: number,
+  faint: number,
+  deliberate: Schema.optionalKey(Schema.Boolean),
+  said: text,
+  fix: text,
+  fill: Schema.optionalKey(
+    Schema.Struct({ w: Schema.Number, h: Schema.Number }),
+  ),
+});
+export type QaFinding = Types.Mutable<typeof QaFindingSchema.Type>;
+
+export const LoudnessSchema = Schema.Struct({
+  integrated: Schema.Number,
+  peak: Schema.NullOr(Schema.Number),
+});
+export type Loudness = typeof LoudnessSchema.Type;
 export interface ProbeStream {
   codec_type?: string;
   width?: number;
@@ -43,26 +55,43 @@ export interface DecodedFrames {
   at: (index: number) => Uint8Array;
   size: number;
 }
-export interface QaSummary {
-  seconds: number;
-  changePerSecond: number;
-  frames?: number;
-  heldSeconds?: number;
-  deliberateSeconds?: number;
-  pops?: number;
-  loudness?: Loudness | null;
-  audio?: boolean;
-  color?: string;
-  evidence?: string;
-}
-export interface QaResult {
-  dir?: string;
-  summary: QaSummary;
-  findings: QaFinding[];
-  evidence?: VideoEvidence;
-  width?: number;
-  height?: number;
-}
+export const QaSummarySchema = Schema.Struct({
+  seconds: Schema.Number,
+  changePerSecond: Schema.Number,
+  frames: number,
+  heldSeconds: number,
+  deliberateSeconds: number,
+  pops: number,
+  loudness: Schema.optionalKey(Schema.NullOr(LoudnessSchema)),
+  audio: Schema.optionalKey(Schema.Boolean),
+  color: text,
+  /** The evidence scope, repeated for a one-line summary. */
+  evidence: text,
+});
+export type QaSummary = typeof QaSummarySchema.Type;
+
+/** What `qaProject` returns: the measurements and the evidence they are bound to. */
+export const QaResultSchema = Schema.Struct({
+  /** The project's build/qa directory, where qa.json and the sheets are written. */
+  dir: text,
+  summary: QaSummarySchema,
+  findings: Schema.mutable(Schema.Array(QaFindingSchema)),
+  evidence: Schema.optionalKey(VideoEvidenceSchema),
+  width: number,
+  height: number,
+  /** The grid every decoded frame was analysed at. */
+  analysis: Schema.optionalKey(
+    Schema.Struct({ width: Schema.Int, height: Schema.Int }),
+  ),
+});
+export type QaResult = Types.Mutable<typeof QaResultSchema.Type>;
+
+/** The whole `qa --json` response: the result, and the motion verdict or why it is unavailable. */
+export const QaReportSchema = Schema.Struct({
+  ...QaResultSchema.fields,
+  motion: VerdictOutcomeSchema,
+});
+export type QaReport = typeof QaReportSchema.Type;
 export interface TimeAnalysis {
   d: number[];
   skip: number[];

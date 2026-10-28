@@ -12,12 +12,17 @@ import os from 'node:os';
 import * as Effect from 'effect/Effect';
 import * as Data from 'effect/Data';
 import {
+  decodeJobRequest,
   errorMessage,
+  HarnessRequestError,
   hydrateJob,
+  type EventOptions,
+  type HarnessHealth,
   type HarnessJob,
   type JobRequest,
+  type JobView,
   type SoundGrant,
-  type EventOptions,
+  type StartResult,
 } from './contracts.mjs';
 import { fileURLToPath } from 'node:url';
 
@@ -85,7 +90,7 @@ export function createJobHarness({
       const j = jobs.get(id) ?? ledger.get(id);
       return j ? freshView(hydrateJob(j)) : null;
     },
-    health: () => {
+    health: (): HarnessHealth => {
       const status = state.stopped ? 'stopped' : 'ready';
       return {
         state: state.storageError ? 'failed' : status,
@@ -99,8 +104,14 @@ export function createJobHarness({
         .filter((j) => !film || j.film === film)
         .map((j) => freshView(j, prints));
     },
-    start(dir: string, body: JobRequest, grant: SoundGrant | null = null) {
+    /** `body` is decoded here: callers in other runtimes may pass parsed JSON as it came. */
+    start(
+      dir: string,
+      body: JobRequest,
+      grant: SoundGrant | null = null,
+    ): StartResult {
       healthy();
+      body = decodeJobRequest(body);
       dir = fs.realpathSync(dir);
       const { requestKey, requestFingerprint } = requestIdentity(body, grant);
       if (requestKey != null) {
@@ -108,16 +119,20 @@ export function createJobHarness({
           typeof requestKey !== 'string' ||
           !/^[\w:.-]{1,160}$/.test(requestKey)
         )
-          throw new Error(
-            'Use a request key of 1–160 letters, numbers, dots, colons, underscores or hyphens.',
-          );
+          throw new HarnessRequestError({
+            reason: 'invalid-request',
+            message:
+              'Use a request key of 1–160 letters, numbers, dots, colons, underscores or hyphens.',
+            status: 400,
+          });
         const old = ledger.findByKey(dir, requestKey);
         if (old) {
           if (old.requestFingerprint !== requestFingerprint)
-            throw Object.assign(
-              new Error('That request key belongs to a different job request.'),
-              { status: 409 },
-            );
+            throw new HarnessRequestError({
+              reason: 'request-key-conflict',
+              message: 'That request key belongs to a different job request.',
+              status: 409,
+            });
           return {
             id: old.id,
             duplicate: true,
@@ -151,10 +166,20 @@ export function createJobHarness({
       next();
       return { id };
     },
-    cancel(id: string) {
-      if (state.stopped) throw new Error('The job harness is stopped.');
+    cancel(id: string): JobView {
+      if (state.stopped)
+        throw new HarnessRequestError({
+          reason: 'unavailable',
+          message: 'The job harness is stopped.',
+          status: 503,
+        });
       const j = jobs.get(id);
-      if (!j) throw new Error('No such job.');
+      if (!j)
+        throw new HarnessRequestError({
+          reason: 'unknown-job',
+          message: 'No such job.',
+          status: 404,
+        });
       const q = queue.indexOf(j);
       const cancellation = () => {
         try {
@@ -171,7 +196,11 @@ export function createJobHarness({
         return cancellation();
       }
       if (!j.child || !['running', 'waiting'].includes(j.status))
-        throw new Error('That job is not running.');
+        throw new HarnessRequestError({
+          reason: 'not-running',
+          message: 'That job is not running.',
+          status: 409,
+        });
       j.cancelled = true;
       const result = cancellation();
       signalChild(j.child, 'SIGTERM');
@@ -228,13 +257,23 @@ export class HarnessError extends Data.TaggedError('HarnessError')<{
   message: string;
   cause: unknown;
 }> {}
-/** Effect-native operations preserve cancellation and the durable ledger's ownership scope. */
+/**
+ * Effect-native operations preserve cancellation and the durable ledger's ownership scope. A
+ * refused request fails with its `HarnessRequestError` (reason and status); anything else, such
+ * as a ledger failure, with `HarnessError`.
+ */
 export const harnessEffects = (harness: JobHarness) => {
   const attempt = <A,>(operation: string, body: () => A) =>
     Effect.try({
       try: body,
-      catch: (cause) =>
-        new HarnessError({ operation, message: errorMessage(cause), cause }),
+      catch: (cause): HarnessRequestError | HarnessError =>
+        cause instanceof HarnessRequestError
+          ? cause
+          : new HarnessError({
+              operation,
+              message: errorMessage(cause),
+              cause,
+            }),
     });
   return {
     list: (film?: string) => attempt('list', () => harness.list(film)),

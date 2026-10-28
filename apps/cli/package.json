@@ -11,6 +11,10 @@
     "./harness": {
       "types": "./dist/runtime/engine/harness.d.mts",
       "import": "./dist/runtime/engine/harness.mjs"
+    },
+    "./contracts": {
+      "types": "./dist/runtime/engine/public-contracts.d.mts",
+      "import": "./dist/runtime/engine/public-contracts.mjs"
     }
   },
   "files": [

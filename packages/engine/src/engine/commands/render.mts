@@ -3,10 +3,20 @@ import { reviewCommand as executeReview } from '../lib/review-cli.mjs';
 import * as native from '../../film/production.mjs';
 import type { CommandContext } from './options.mjs';
 import type { RenderReport } from '../../film/rendering/contracts.mjs';
+import type { Assessment } from '../lib/qa-assessment.mjs';
+import { errorMessage } from '../lib/errors.mjs';
 
 interface ReviewedRenderReport extends RenderReport {
   reviewPage?: string | null;
-  motion?: { ready: boolean; still: number; words: number };
+  motion?:
+    | {
+        status: 'measured';
+        ready: boolean;
+        still: number;
+        words: number;
+        assessment: Assessment;
+      }
+    | { status: 'unavailable'; reason: string };
 }
 
 export async function doctorCommand() {
@@ -82,20 +92,34 @@ export async function renderCommand({ cmd, o, opts, dir }: CommandContext) {
   // films that were all words. Stdout stays the JSON report; the verdict goes to stderr.
   let verdict = null;
   try {
-    const { qaProject, motionVerdict } = await import('../lib/qa.mjs');
-    verdict = motionVerdict(dir, await qaProject(dir, {}), {
+    const { qaProject, verdictOutcome } = await import('../lib/qa.mjs');
+    const motion = verdictOutcome(dir, await qaProject(dir, {}), {
       warnings: report.warnings ?? [],
     });
+    if (motion.status === 'measured') {
+      verdict = motion.verdict;
+      report.motion = {
+        status: 'measured',
+        ready: verdict.ready,
+        still: verdict.share,
+        words: verdict.typeShare,
+        assessment: verdict.assessment,
+      };
+    } else report.motion = { status: 'unavailable', reason: motion.reason };
+  } catch (e) {
     report.motion = {
-      ready: verdict.ready,
-      still: verdict.share,
-      words: verdict.typeShare,
+      status: 'unavailable',
+      reason: errorMessage(e).split('\n')[0] ?? 'qa did not run',
     };
-  } catch {}
+  }
   console.log(JSON.stringify(report, null, 2));
   if (verdict)
     console.error(
       `${verdict.lines.join('\n')}\n${verdict.ready ? 'READY' : 'NOT READY to hand over: fix what the motion verdict names, then render again.'}`,
+    );
+  else if (report.motion?.status === 'unavailable')
+    console.error(
+      `motion: NOT MEASURED (${report.motion.reason}): no readiness verdict for this render.`,
     );
   return;
 }
