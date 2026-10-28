@@ -115,8 +115,8 @@ function renderResult(job: HarnessJob, base: string) {
   );
   const video = receipt.videos?.at(-1);
   if (!video?.object) return;
-  job.media = probeMedia(path.join(job.dir, video.object));
-  if (job.media) job.media.authored = receipt.duration ?? null;
+  const media = probeMedia(path.join(job.dir, video.object));
+  job.media = media && { ...media, authored: receipt.duration ?? null };
   job.url ??= mediaUrl(base, path.join(job.dir, video.object));
 }
 

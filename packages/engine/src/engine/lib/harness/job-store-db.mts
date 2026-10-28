@@ -18,6 +18,7 @@ import {
   isRecord,
   type JobRecord,
   type JobEvent,
+  JobStatusSchema,
 } from './contracts.mjs';
 
 export const SCHEMA_VERSION = 1;
@@ -150,11 +151,15 @@ export const sqlText = (value: unknown): string => {
   return value;
 };
 
+type DistributiveOmit<T, K extends PropertyKey> = T extends unknown
+  ? Omit<T, K>
+  : never;
+
 export const writeJob = (
   s: Statements,
   job: JobRecord,
   at: string,
-  created?: string,
+  created?: 'created' | 'migrated',
 ): JobEvent[] => {
   const prior = s.job.get(job.id);
   const key = job.requestKey ?? null;
@@ -177,24 +182,29 @@ export const writeJob = (
     JSON.stringify(job),
   ];
   const events: JobEvent[] = [];
-  const add = (type: string, data: unknown) => {
-    const row = s.event.get(job.id, type, at, JSON.stringify(data));
+  const add = (event: DistributiveOmit<JobEvent, 'seq' | 'jobId' | 'at'>) => {
+    const row = s.event.get(job.id, event.type, at, JSON.stringify(event.data));
     if (!row) throw fail('sqlite', 'Event insertion returned no sequence.');
-    const { seq } = row;
-    events.push({ seq: Number(seq), jobId: job.id, type, at, data });
+    events.push({ ...event, seq: Number(row.seq), jobId: job.id, at });
   };
   if (!prior) {
     s.insert.run(job.id, ...row);
-    add(created ?? 'created', {
-      status: job.status,
-      cancelled: cancelled === 1,
+    add({
+      type: created ?? 'created',
+      data: { status: job.status, cancelled: cancelled === 1 },
     });
   } else {
     s.update.run(...row, job.id);
     if (prior.status !== job.status || prior.cancelled !== cancelled)
-      add('transition', {
-        from: { status: prior.status, cancelled: prior.cancelled === 1 },
-        to: { status: job.status, cancelled: cancelled === 1 },
+      add({
+        type: 'transition',
+        data: {
+          from: {
+            status: Schema.decodeUnknownSync(JobStatusSchema)(prior.status),
+            cancelled: prior.cancelled === 1,
+          },
+          to: { status: job.status, cancelled: cancelled === 1 },
+        },
       });
   }
   return events;

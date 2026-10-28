@@ -156,3 +156,20 @@ export async function motionsCommand() {
     ),
   );
 }
+
+/** The machine-readable contract an agent framework reads before calling ClearFrame. */
+export async function capabilitiesCommand({ o }: CommandContext) {
+  const { capabilities } = await import('../lib/capabilities.mjs');
+  const c = capabilities();
+  if (o.json) return console.log(JSON.stringify(c, null, 2));
+  return console.log(
+    [
+      `ClearFrame contracts v${c.contractVersion} (JSON with --json; schemas also from clearframe/contracts)`,
+      ...c.operations.map(
+        (op) => `  ${op.call.padEnd(36)} ${op.effect.padEnd(5)} ${op.summary}`,
+      ),
+      `  job kinds: ${c.jobs.kinds.join(', ')}`,
+      `  terminal statuses: ${c.jobs.terminal.join(', ')}`,
+    ].join('\n'),
+  );
+}

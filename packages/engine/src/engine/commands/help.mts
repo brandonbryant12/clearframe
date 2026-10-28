@@ -23,6 +23,7 @@ export const HELP = `ClearFrame — motion graphics
   sketch [name] [--vertical]          canvas starting compositions (route, pipeline, balance…) as JSON
   find "idea" [--kind k] | --id k:name | --index   search the whole library: a shortlist, then exact authoring
   doctor | build                      tools and disk headroom; compile the renderer
+  capabilities [--json]               operations, request/result/event JSON Schemas and lifecycle semantics for any agent framework
   gallery <new-dir> [--vertical] [--theme ink] [--only bars,kinetic] [--sketches]
   viewer [folders…] [--serve] [--port 4317] [--out build/viewer] [--no-render] [--projects projects] [--no-agent]
                                       one page: films, versions and sticky notes; with --serve, the studio: new films from an

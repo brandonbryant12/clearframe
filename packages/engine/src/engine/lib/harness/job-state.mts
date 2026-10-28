@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {
   errorMessage,
+  HarnessRequestError,
   hydrateJob,
   type HarnessJob,
   type JobView,
@@ -56,7 +57,12 @@ export function createHarnessState(
   };
   const healthy = () => {
     if (state.storageError) throw state.storageError;
-    if (state.stopped) throw new Error('The job harness is stopped.');
+    if (state.stopped)
+      throw new HarnessRequestError({
+        reason: 'unavailable',
+        message: 'The job harness is stopped.',
+        status: 503,
+      });
   };
   const persist = () => {
     try {

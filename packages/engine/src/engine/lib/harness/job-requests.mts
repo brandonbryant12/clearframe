@@ -4,6 +4,7 @@ import crypto from 'node:crypto';
 import * as Schema from 'effect/Schema';
 import { checkId } from '../store.mjs';
 import {
+  HarnessRequestError,
   SOUND_GRANT,
   isJobKind,
   type HarnessJob,
@@ -25,19 +26,27 @@ const jobStoryboard = Schema.Struct({
     }),
   ),
 });
+const approvalRequired = () =>
+  new HarnessRequestError({
+    reason: 'approval-required',
+    message:
+      'Narration and music are made through the sound endpoint, which checks approvals.',
+    status: 403,
+  });
+
 export function requestIdentity(body: JobRequest, grant: SoundGrant | null) {
   const { film, kind } = body;
-  if (!isJobKind(kind)) throw new Error('Unknown studio job.');
+  if (!isJobKind(kind))
+    throw new HarnessRequestError({
+      reason: 'invalid-request',
+      message: 'Unknown studio job.',
+      status: 400,
+    });
   if (
     ['voice', 'music'].includes(kind) &&
     (!grant?.[SOUND_GRANT] || grant.kind !== kind)
   )
-    throw Object.assign(
-      new Error(
-        'Narration and music are made through the sound endpoint, which checks approvals.',
-      ),
-      { status: 403 },
-    );
+    throw approvalRequired();
   const requestKey =
     body.requestKey ?? (grant?.paid ? `sound:${grant.approval?.intent}` : null);
   // Derive retry identity from the caller's request before validating today's working copy.
@@ -103,13 +112,7 @@ function prepareSection(
 }
 
 function prepareSound(j: HarnessJob, grant: SoundGrant | null) {
-  if (!grant?.[SOUND_GRANT] || grant.kind !== j.kind)
-    throw Object.assign(
-      new Error(
-        'Narration and music are made through the sound endpoint, which checks approvals.',
-      ),
-      { status: 403 },
-    );
+  if (!grant?.[SOUND_GRANT] || grant.kind !== j.kind) throw approvalRequired();
   j.paid = grant.paid === true;
   j.force = grant.force === true;
   if (j.paid) {

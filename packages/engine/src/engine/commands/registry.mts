@@ -17,6 +17,7 @@ import {
   treatmentsCommand,
   typesCommand,
   motionsCommand,
+  capabilitiesCommand,
 } from './catalog.mjs';
 import {
   referenceCommand,
@@ -74,6 +75,7 @@ export const standaloneCommands: readonly Command[] = [
   { matches: ({ cmd }) => cmd === 'find', run: findCommand },
   { matches: ({ cmd }) => cmd === 'sketch', run: sketchCommand },
   { matches: ({ cmd }) => cmd === 'motions', run: motionsCommand },
+  { matches: ({ cmd }) => cmd === 'capabilities', run: capabilitiesCommand },
   { matches: ({ cmd }) => cmd === 'doctor', run: doctorCommand },
   { matches: ({ cmd }) => cmd === 'build', run: buildCommand },
   { matches: ({ cmd }) => cmd === 'viewer', run: viewerCommand },
