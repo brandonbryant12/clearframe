@@ -58,8 +58,9 @@ const film = vertical => ({
         chart: {
           kind: 'bars',
           prefix: '$',
-          // Clear of the lead-in above and the captions below, with room for the top value.
-          ...(vertical ? {} : { box: [192, 250, 1536, 430] }),
+          // Clear of the lead-in above and the captions below, with room for the top value. The tall
+          // frame's default box put the $2,400 label against the lead-in, so it is set there too.
+          box: vertical ? [108, 560, 864, 707] : [192, 250, 1536, 430],
           values: [
             { label: 'Match at 3%', value: 1800, say: 'eighteen' },
             { label: 'Match at 5%', value: 2400, say: 'twenty-four', highlight: true },

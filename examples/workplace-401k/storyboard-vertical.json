@@ -85,6 +85,12 @@
         "chart": {
           "kind": "bars",
           "prefix": "$",
+          "box": [
+            108,
+            560,
+            864,
+            707
+          ],
           "values": [
             {
               "label": "Match at 3%",
