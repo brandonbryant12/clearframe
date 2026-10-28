@@ -51,6 +51,37 @@ Requests still pin their inputs when execution starts. ClearFrame's receipt and 
 
 Paid narration and music keep their content-bound approval and budget checks. Recovery never grants new spending authority or automatically repeats a potentially completed provider call. The person can inspect the existing take or artifact before submitting another request.
 
+## Contracts for any agent framework
+
+The harness's data contracts are Effect schemas, and every public type is inferred from its schema rather than written beside it: job kinds and statuses, `JobRequest`, the stored job record, `JobView` (what `get`, `list` and `cancel` return), `JobEvent` (`created`, `migrated` or `transition`, each with its states), `StartResult` and `HarnessHealth`. The SQLite codec reuses the record's fields and keeps extension data from older ledgers; stored statuses are decoded, not trusted.
+
+`start` decodes its request at the boundary, so a caller in another runtime may pass parsed JSON as it came. A refused operation throws `HarnessRequestError`, a schema-backed tagged error with a `reason` and the HTTP `status` the studio replies with:
+
+| Reason | Status | When |
+| --- | --- | --- |
+| `invalid-request` | 400 | The request does not decode, names an unknown kind or has a malformed request key |
+| `approval-required` | 403 | Voice or music without the sound endpoint's grant |
+| `request-key-conflict` | 409 | A request key already belongs to a different request |
+| `unknown-job` | 404 | `cancel` names no job |
+| `not-running` | 409 | `cancel` names a job that is not queued or running |
+| `unavailable` | 503 | The harness is stopped |
+
+`harnessEffects` keeps a `HarnessRequestError` in its error channel and wraps anything else (a ledger failure) in `HarnessError`; `jobHarness` fails acquisition with `HarnessError` as well.
+
+`clearframe/contracts` exports the schemas, their types, `decodeJobRequest`, the motion verdict's `VerdictOutcomeSchema` and `AssessmentSchema`, and `capabilities()`. That entry imports nothing but `effect`, so an adapter can validate and describe calls without loading the renderer, the studio or an agent runtime. `capabilities()` (and `clearframe capabilities --json`) lists each operation, where it is called (a harness method or a CLI command), the JSON Schema (draft 2020-12, generated from the same schemas) of its request and result, its failure reasons, and the lifecycle rules this page describes. `contractVersion` changes only when a contract changes incompatibly.
+
+```js
+import { capabilities, decodeJobRequest } from 'clearframe/contracts';
+import { createJobHarness } from 'clearframe/harness';
+
+const tools = capabilities().operations; // describe these to any agent framework
+const request = decodeJobRequest(JSON.parse(toolCallArguments)); // refuses with a reason
+const harness = createJobHarness({ base: process.cwd() });
+const { id } = harness.start('./film', request);
+```
+
+Tests decode real views and events strictly (no undeclared field) against these schemas, so the contract cannot drift from the data, and the fresh-install check imports `clearframe/contracts`, reads the CLI manifest and type-checks both public subpaths.
+
 ## Runtime and Effect scope
 
 The harness requires Node.js 22.19 or newer (23.x requires 23.4+) to satisfy the HTTP runtime dependencies, and uses the built-in `node:sqlite` `DatabaseSync` API. No separate SQLite native add-on is needed. The [Node 22.19 SQLite documentation](https://nodejs.org/download/release/v22.19.0/docs/api/sqlite.html) describes the synchronous connection and prepared-statement APIs used at this boundary.

@@ -43,4 +43,6 @@ try {
 }
 ```
 
+Requests are decoded at `start`; a refusal is a `HarnessRequestError` with a `reason` and `status`. `clearframe/contracts` exports the same request, view, event and verdict schemas (and their types) with only `effect` as a dependency, and `clearframe capabilities --json` prints every operation with its JSON Schema and lifecycle rules for an agent framework in any language.
+
 SQLite retains job history and durable request keys. Recovery records unfinished work as interrupted and requires a new deliberate request to execute it again. Paid media generation requires content-bound approval. See the bundled [harness contract](dist/runtime/docs/agent-harness.md) and [native setup](dist/runtime/film/SETUP.md).

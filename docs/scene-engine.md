@@ -121,6 +121,7 @@ Footage (stage `video` elements, plates and the `video` block) is decoded by the
 - **Exact timing.** `ffprobe` lists the clip's presentation timestamps once. Film time *t* shows the latest source frame at or before *t*. The clip ends at the end of its last sample: the end is exclusive and rounded up to the film's frame grid, so 49 frames at 24 fps still show their final sample at frame 61 of a 30 fps film.
 - **Any order.** Small forward steps read on through the pipe. A backward step or a far jump restarts the decoder with an accurate seek just before the wanted frame, so every frame comes out the same in any order.
 - **Colour.** FFmpeg's `scale` filter converts with the source's tagged matrix and range. Untagged sources are BT.601 limited range.
+- **Pixel shape.** The decoder draws a clip's stored pixels and lays it out by its stored size, so footage with non-square pixels (a sample aspect ratio other than 1:1) is refused at prepare time, naming its stored and shown sizes and the one-line conversion (`scale=trunc(iw*sar/2)*2:ih,setsar=1`). Unknown ratios (`0:1`, `N/A`) count as square, as players treat them. Decoding to display shape in the native decoder is the follow-up that would lift this refusal.
 
 The decoder's regression tests (a delayed final B-frame, a higher film rate, a non-integral end, and backward seeks) use the fixtures in `packages/engine/src/scene/native/tests/fixtures`.
 
