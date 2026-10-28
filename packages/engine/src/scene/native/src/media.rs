@@ -12,6 +12,10 @@
 //! the open pipe; a backward step or a far jump restarts the decoder at an accurate seek just
 //! before the wanted frame, so any frame can be drawn in any order and comes out the same.
 //!
+//! Shape: the probe reads the sample aspect ratio, and frames are decoded at display shape (the
+//! stored pixels stretched by that ratio, then rotated), so anamorphic footage keeps the
+//! proportions of its picture.
+//!
 //! Colour: FFmpeg's `scale` filter converts with the source's tagged matrix and range;
 //! untagged sources are treated as BT.601 limited range, as FFmpeg's converter does by default.
 use skia_safe::{self as sk, AlphaType, ColorType, Data, Image, ImageInfo};
@@ -30,9 +34,11 @@ const READ_AHEAD: usize = 90;
 /// What `ffprobe` reports about a clip's first video stream.
 #[derive(Debug)]
 pub struct Probe {
-    /// Display size (after the stream's rotation).
+    /// Display size: the stored size stretched by the sample aspect ratio, then rotated.
     pub width: u32,
     pub height: u32,
+    /// Size of the frames FFmpeg delivers before any scaling (stored pixels, after rotation).
+    stored: (u32, u32),
     /// Presentation times of every frame, seconds from the clip's first frame, ascending.
     pub pts: Vec<f64>,
     /// End of the last sample, seconds from the first frame.
@@ -61,7 +67,7 @@ fn probe(path: &Path) -> Result<Probe, String> {
     };
     let meta: serde_json::Value = serde_json::from_str(&run(&[
         "-show_entries",
-        "stream=width,height:stream_side_data=rotation:format=start_time",
+        "stream=width,height,sample_aspect_ratio:stream_side_data=rotation:format=start_time",
         "-of",
         "json",
     ])?)
@@ -74,6 +80,10 @@ fn probe(path: &Path) -> Result<Probe, String> {
     let rotation =
         stream["side_data_list"].as_array().and_then(|l| l.iter().find_map(|d| d["rotation"].as_f64())).unwrap_or(0.0);
     let quarter = (rotation / 90.0).round().rem_euclid(2.0) == 1.0;
+    // Non-square pixels: the picture is the stored width stretched by the ratio (FFmpeg's
+    // `iw*sar:ih`, to an even width); an unknown ratio (0:1, N/A) is square, as players treat it.
+    let aspect = stream["sample_aspect_ratio"].as_str().and_then(pixel_aspect).unwrap_or(1.0);
+    let shown = if (aspect - 1.0).abs() > 1e-6 { (((w as f64 * aspect) / 2.0).round() as u32 * 2).max(2) } else { w };
     let format_start = meta["format"]["start_time"].as_str().and_then(|s| s.parse::<f64>().ok()).unwrap_or(0.0);
     let mut samples: Vec<(f64, f64)> = run(&["-show_entries", "packet=pts_time,duration_time", "-of", "csv=p=0"])?
         .lines()
@@ -96,8 +106,16 @@ fn probe(path: &Path) -> Result<Probe, String> {
     let gap = if n > 1 { (pts[n - 1] - pts[0]) / (n - 1) as f64 } else { 1.0 / 30.0 };
     let last = samples[n - 1].1;
     let duration = pts[n - 1] + if last > 0.0 { last } else { gap };
-    let (width, height) = if quarter { (h, w) } else { (w, h) };
-    Ok(Probe { width, height, pts, duration, start: first - format_start })
+    let (width, height) = if quarter { (h, shown) } else { (shown, h) };
+    let stored = if quarter { (h, w) } else { (w, h) };
+    Ok(Probe { width, height, stored, pts, duration, start: first - format_start })
+}
+
+/// A sample aspect ratio such as "4:3"; `None` when unknown or malformed.
+fn pixel_aspect(sar: &str) -> Option<f64> {
+    let (num, den) = sar.split_once(':')?;
+    let (num, den) = (num.trim().parse::<f64>().ok()?, den.trim().parse::<f64>().ok()?);
+    (num > 0.0 && den > 0.0).then(|| num / den)
 }
 
 struct Stream {
@@ -134,10 +152,12 @@ impl Clip {
         let before = if index > 0 { (pts[index] - pts[index - 1]) * 0.25 } else { 0.0 };
         let at = (self.probe.start + pts[index] - before.min(0.002)).max(0.0);
         let (w, h) = self.size;
-        let filter = if (w, h) == (self.probe.width, self.probe.height) {
+        // Stored frames already at the drawn size pass through; anything else (a smaller drawing,
+        // or non-square pixels at any size) is scaled to exactly the size drawn.
+        let filter = if (w, h) == self.probe.stored {
             "format=rgba".to_owned()
         } else {
-            format!("scale={w}:{h}:flags=bicubic,format=rgba")
+            format!("scale={w}:{h}:flags=bicubic,setsar=1,format=rgba")
         };
         let mut child = Command::new("ffmpeg")
             .args(["-nostdin", "-hide_banner", "-v", "error", "-threads", "1", "-ss", &format!("{at:.6}"), "-i"])
@@ -418,5 +438,77 @@ mod tests {
         assert!(back.is_some(), "a backward seek after the end still works");
         assert_eq!(at(&mut media, "bframes-49-at-24fps.mp4", 61, 30.0).unwrap(), last);
         assert_eq!(at(&mut media, "bframes-49-at-24fps.mp4", 60, 30.0).unwrap(), last);
+    }
+
+    /// Writes a clip whose picture is a disc drawn round at 640×360 display geometry by `geq`
+    /// (no scaler involved), stored as 480×360 pixels with a 4:3 sample aspect ratio, and
+    /// optionally rotated a quarter turn by its display matrix.
+    fn anamorphic(dir: &Path, name: &str, rotation: Option<i32>) {
+        let stored = dir.join(format!("stored-{name}"));
+        let ok = Command::new("ffmpeg")
+            .args(["-v", "error", "-y", "-f", "lavfi", "-i"])
+            .arg("color=c=black:s=640x360:d=0.5:r=24,format=gray,geq=lum='if(lte(hypot(X-320,Y-180),120),255,0)'")
+            .args([
+                "-vf",
+                "scale=480:360:flags=bicubic,setsar=4/3",
+                "-c:v",
+                "libx264",
+                "-qp",
+                "0",
+                "-pix_fmt",
+                "yuv420p",
+            ])
+            .arg(&stored)
+            .status()
+            .unwrap()
+            .success();
+        assert!(ok, "ffmpeg could not write the anamorphic fixture");
+        let mut copy = Command::new("ffmpeg");
+        copy.args(["-v", "error", "-y"]);
+        if let Some(r) = rotation {
+            copy.args(["-display_rotation:v:0", &r.to_string()]);
+        }
+        let ok = copy.arg("-i").arg(&stored).args(["-c", "copy"]).arg(dir.join(name)).status().unwrap().success();
+        assert!(ok, "ffmpeg could not tag the fixture's rotation");
+    }
+    /// Width over height of the bright disc in a decoded frame.
+    fn disc_ratio(image: &Image) -> (f64, u32, u32) {
+        let px = pixels(image);
+        let (w, h) = (image.width() as usize, image.height() as usize);
+        let (mut x0, mut x1, mut y0, mut y1) = (w, 0, h, 0);
+        for y in 0..h {
+            for x in 0..w {
+                if px[(y * w + x) * 4] > 127 {
+                    (x0, x1, y0, y1) = (x0.min(x), x1.max(x), y0.min(y), y1.max(y));
+                }
+            }
+        }
+        let (dw, dh) = ((x1 + 1 - x0) as u32, (y1 + 1 - y0) as u32);
+        (dw as f64 / dh as f64, dw, dh)
+    }
+    #[test]
+    fn anamorphic_footage_decodes_at_its_display_shape() {
+        let dir = std::env::temp_dir().join(format!("cf-anamorphic-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        anamorphic(&dir, "wide.mp4", None);
+        anamorphic(&dir, "turned.mp4", Some(90));
+        let mut media = Media::new(&dir, 24);
+        let wide = media.probe("wide.mp4").unwrap();
+        assert_eq!((wide.width, wide.height), (640, 360), "display size, not the 480×360 stored");
+        let turned = media.probe("turned.mp4").unwrap();
+        assert_eq!((turned.width, turned.height), (360, 640), "rotated after the pixel aspect");
+        // Full size and a reduced drawn size both keep the disc round (stored pixels give 0.75).
+        for (key, w, h) in [("wide.mp4", 640, 360), ("wide.mp4", 320, 180), ("turned.mp4", 360, 640)] {
+            let image = media.frame(key, 0.1, w, h).unwrap().unwrap();
+            assert_eq!((image.width() as u32, image.height() as u32), (w, h), "{key} at {w}×{h}");
+            let (ratio, dw, dh) = disc_ratio(&image);
+            assert!((ratio - 1.0).abs() <= 0.03, "{key} at {w}×{h}: disc {dw}×{dh} (ratio {ratio:.3})");
+            let diameter = 241.0 * w.max(h) as f64 / 640.0;
+            assert!(
+                (dh as f64 - diameter).abs() <= 3.0 + diameter * 0.02,
+                "{key}: disc height {dh}, want about {diameter:.0}"
+            );
+        }
+        std::fs::remove_dir_all(&dir).ok();
     }
 }

@@ -98,7 +98,7 @@ function stagePlate(
     b.plate.video = video;
     delete b.plate.asset;
     if (video) {
-      const duration = probeFootage(file, `${b.id} plate`, rel);
+      const duration = probeFootage(file);
       // A wipe into the next beat holds this one on screen ahead of its edge.
       const shown = b.frames / job.fps + heldTail(job, job.beats.indexOf(b));
       if (!(duration - (b.plate.offset ?? 0) + 1 / job.fps >= shown))
@@ -136,7 +136,7 @@ function stageBlock(
   const { file, key } = stage(rel, b.id);
   prop.file = key;
   if (b.block === 'video') {
-    const duration = probeFootage(file, b.id, rel);
+    const duration = probeFootage(file);
     const shown = b.frames / timing.fps + heldTail(job, job.beats.indexOf(b));
     if (
       !Number.isFinite(duration) ||

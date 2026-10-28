@@ -1,6 +1,6 @@
-// Footage with non-square pixels: the native decoder draws stored pixels, so an anamorphic clip
-// would be laid out at its stored shape (a 480x360 SAR 4:3 clip shown as 4:3, not 16:9).
-// Preparation refuses it with the conversion that fixes it; square footage is unchanged.
+// Footage with non-square pixels prepares like any other: the native decoder reads the sample
+// aspect ratio and draws each clip at its display shape (its geometry is tested in the scene
+// crate, `anamorphic_footage_decodes_at_its_display_shape`). Preparation only measures duration.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -8,16 +8,14 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { prepareProjectSync } from '../packages/engine/dist/film/prepare.mjs';
-import {
-  pixelAspect,
-  probeFootage,
-} from '../packages/engine/dist/film/probes.mjs';
+import { probeFootage } from '../packages/engine/dist/film/probes.mjs';
 
 const ffmpeg = (args) => execFileSync('ffmpeg', ['-v', 'error', '-y', ...args]);
 
-/** A 2 s clip whose stored size and sample aspect ratio are chosen, with an optional rotation. */
-function clip(file, { size = '640x360', sar = '1/1', rotate = null } = {}) {
+/** A 2 s clip with a chosen stored size and sample aspect ratio, optionally rotated. */
+function clip(file, { size = '640x360', sar = '1/1', rotation = null } = {}) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
+  const stored = `${file}.stored.mp4`;
   ffmpeg([
     '-f',
     'lavfi',
@@ -31,11 +29,35 @@ function clip(file, { size = '640x360', sar = '1/1', rotate = null } = {}) {
     '2',
     '-pix_fmt',
     'yuv420p',
-    ...(rotate == null ? [] : ['-metadata:s:v:0', `rotate=${rotate}`]),
+    stored,
+  ]);
+  // A display matrix is the rotation players honour (`-metadata rotate=` writes none in FFmpeg 8).
+  ffmpeg([
+    ...(rotation == null ? [] : ['-display_rotation:v:0', String(rotation)]),
+    '-i',
+    stored,
+    '-c',
+    'copy',
     file,
   ]);
+  fs.rmSync(stored);
   return file;
 }
+
+const rotationOf = (file) =>
+  execFileSync('ffprobe', [
+    '-v',
+    'error',
+    '-select_streams',
+    'v:0',
+    '-show_entries',
+    'stream_side_data=rotation',
+    '-of',
+    'csv=p=0',
+    file,
+  ])
+    .toString()
+    .trim();
 
 function project(t, beat) {
   const root = fs.realpathSync(
@@ -66,81 +88,29 @@ const plateBeat = {
   props: { text: 'Every morning' },
 };
 
-test('the pixel aspect reads ffprobe ratios; unknown ratios count as square', () => {
-  assert.equal(pixelAspect('1:1'), 1);
-  assert.equal(pixelAspect('4:3'), 4 / 3);
-  assert.equal(pixelAspect('8:9'), 8 / 9);
-  for (const unknown of ['0:1', 'N/A', undefined, ''])
-    assert.equal(pixelAspect(unknown), 1);
+test('square, anamorphic and rotated footage prepare in blocks and plates', (t) => {
+  const shapes = [
+    {},
+    { sar: '1/1' },
+    { size: '480x360', sar: '4/3' },
+    { size: '640x360', sar: '8/9' },
+    { size: '480x360', sar: '4/3', rotation: 90 },
+  ];
+  for (const beat of [videoBeat, plateBeat])
+    for (const shape of shapes) {
+      const root = project(t, beat);
+      const file = clip(path.join(root, 'clips/shot.mp4'), shape);
+      if (shape.rotation)
+        assert.equal(rotationOf(file), '90', 'the fixture really is rotated');
+      const ctx = prepareProjectSync(root, { draft: true });
+      assert.ok(ctx.job.frames > 0, `${beat.id} ${JSON.stringify(shape)}`);
+    }
 });
 
-test('anamorphic footage is refused with its shape and the conversion, in blocks and plates', (t) => {
-  for (const beat of [videoBeat, plateBeat]) {
-    const root = project(t, beat);
-    clip(path.join(root, 'clips/shot.mp4'), { size: '480x360', sar: '4/3' });
-    assert.throws(
-      () => prepareProjectSync(root, { draft: true }),
-      (e) =>
-        /non-square pixels \(sample aspect ratio 4:3: 480×360 stored, 640×360 shown\)/.test(
-          e.message,
-        ) &&
-        /squeezed/.test(e.message) &&
-        /scale=trunc\(iw\*sar\/2\)\*2:ih,setsar=1/.test(e.message) &&
-        e.message.startsWith(beat.id),
-      `${beat.id} refuses anamorphic footage`,
-    );
-  }
-});
-
-test('the suggested conversion yields footage that prepares, at its display shape', (t) => {
+test('the footage probe measures duration', (t) => {
   const root = project(t, videoBeat);
-  const source = clip(path.join(root, 'clips/source.mp4'), {
-    size: '480x360',
-    sar: '4/3',
-  });
-  ffmpeg([
-    '-i',
-    source,
-    '-vf',
-    'scale=trunc(iw*sar/2)*2:ih,setsar=1',
-    '-c:a',
-    'copy',
-    path.join(root, 'clips/shot.mp4'),
-  ]);
-  const ctx = prepareProjectSync(root, { draft: true });
-  assert.ok(ctx.job.frames > 0);
-  const probe = JSON.parse(
-    execFileSync('ffprobe', [
-      '-v',
-      'error',
-      '-select_streams',
-      'v:0',
-      '-show_entries',
-      'stream=width,height,sample_aspect_ratio',
-      '-of',
-      'json',
-      path.join(root, 'clips/shot.mp4'),
-    ]).toString(),
-  ).streams[0];
-  assert.deepEqual([probe.width, probe.height], [640, 360]);
-});
-
-test('square footage, tagged or rotated, prepares as before', (t) => {
-  for (const options of [{}, { sar: '1/1' }, { rotate: 90 }]) {
-    const root = project(t, videoBeat);
-    clip(path.join(root, 'clips/shot.mp4'), options);
-    const ctx = prepareProjectSync(root, { draft: true });
-    assert.ok(ctx.job.frames > 0, JSON.stringify(options));
-  }
-  // The stage path calls the same probe: a non-square clip fails there with its element name.
-  const root = project(t, videoBeat);
-  const file = clip(path.join(root, 'clips/narrow.mp4'), {
-    size: '640x360',
-    sar: '8/9',
-  });
-  assert.throws(
-    () => probeFootage(file, 'stage layer a', 'clips/narrow.mp4'),
-    /^Error: stage layer a: footage clips\/narrow\.mp4 has non-square pixels .*stretched/,
+  const duration = probeFootage(
+    clip(path.join(root, 'clips/a.mp4'), { size: '480x360', sar: '4/3' }),
   );
-  assert.ok(probeFootage(clip(path.join(root, 'clips/ok.mp4')), 'x') > 1.9);
+  assert.ok(Math.abs(duration - 2) < 0.1, String(duration));
 });

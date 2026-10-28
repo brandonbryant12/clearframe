@@ -20,7 +20,7 @@ export function stageFootage(
   const { job } = b.ctx,
     { where, beat } = layer;
   const end = layer.frames / b.fps;
-  const duration = probeFootage(file, where, rel);
+  const duration = probeFootage(file);
   const index = beat ? job.beats.findIndex((x) => x.id === beat) : -1;
   const tail = beat ? heldTail(job, index) : 0;
   const offset = numberOr(el.offset, 0, where, 'offset');
