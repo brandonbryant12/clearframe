@@ -275,6 +275,12 @@ export class HarnessRequestError extends Schema.TaggedError<HarnessRequestError>
 
 /** Decodes a request from any caller (JSON, CLI, another runtime); refuses it with its first issue. */
 export function decodeJobRequest(body: unknown): JobRequest {
+  if (isRecord(body) && typeof body.kind === 'string' && !isJobKind(body.kind))
+    throw new HarnessRequestError({
+      reason: 'invalid-request',
+      message: `Unknown studio job "${body.kind}" (one of ${JOB_KINDS.join(', ')}).`,
+      status: 400,
+    });
   try {
     return Schema.decodeUnknownSync(JobRequestSchema)(body);
   } catch (error) {
