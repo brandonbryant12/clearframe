@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { pipeline } from 'node:stream';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { rel } from './media.mjs';
 const TYPES = {
@@ -104,10 +105,7 @@ export function createStaticServer(
         'content-length': end - start + 1,
         ...guard(file, type),
       });
-      return fs
-        .createReadStream(file, { start, end })
-        .on('error', () => res.destroy())
-        .pipe(res);
+      return send(fs.createReadStream(file, { start, end }), res);
     }
     res.writeHead(200, {
       'content-type': type,
@@ -116,10 +114,17 @@ export function createStaticServer(
       ...guard(file, type),
       ...(type.startsWith('text/html') ? { 'cache-control': 'no-store' } : {}),
     });
-    fs.createReadStream(file)
-      .on('error', () => res.destroy())
-      .pipe(res);
+    send(fs.createReadStream(file), res);
   }
 
   return serveStatic;
+}
+
+/**
+ * A viewer scrubbing a film aborts responses mid-read. `pipe` only unpipes the file on an
+ * aborted response and leaves it open, one descriptor per abort; `pipeline` destroys both
+ * ends when either closes or fails.
+ */
+function send(source: fs.ReadStream, res: ServerResponse): void {
+  pipeline(source, res, () => {});
 }
