@@ -7,8 +7,8 @@ import path from 'node:path';
 const here = path.dirname(new URL(import.meta.url).pathname);
 const PLAN = 'Alder Street Retirement Plan summary, 2027 plan year';
 
-// The company's four coins on offer, as faint outlines on its plate from the first frame: the free
-// money on the table. Three fill on "adds" (today's match); the fourth, the money a 3% saver
+// The company's four coins on offer fade in as faint outlines on its plate during the opening
+// line (from 0.5 s): the free money on the table. Three fill on "adds" (today's match); the fourth, the money a 3% saver
 // leaves, fills on "four". They are canvas elements, drawn in the sketch's own space with the
 // geometry of its company stack (an art layer is placed in frame space and missed the plate).
 const round2 = n => Math.round(n * 100) / 100;
@@ -59,8 +59,8 @@ const film = vertical => ({
   ],
   beats: [
     {
-      // The film opens on its picture: the company's coins on offer are on the table from the first
-      // frame, and today's coins drop into place as they are named.
+      // The opening line has its picture: the company's coins on offer fade in on the table as it is
+      // said, and today's coins drop into place as they are named.
       id: 'raise',
       block: 'canvas',
       vo: 'Most new hires leave free money on the table. Right now you save three percent, and Alder Street adds three. Raise it to five, and they add four. That is nine percent of your pay, every paycheck.',
