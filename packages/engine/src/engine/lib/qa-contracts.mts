@@ -62,6 +62,8 @@ export interface QaResult {
   evidence?: VideoEvidence;
   width?: number;
   height?: number;
+  /** The grid every decoded frame was analysed at. */
+  analysis?: { width: number; height: number };
 }
 export interface TimeAnalysis {
   d: number[];

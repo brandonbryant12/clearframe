@@ -17,6 +17,14 @@ import { castOverlaps } from '../../film/cast.mjs';
 import { droppedFacts } from './figures.mjs';
 import { figuresIn } from './pictures.mjs';
 import { spoken } from './word-align.mjs';
+import {
+  UNASSESSED,
+  findingsOf,
+  measure,
+  type Assessment,
+  type Measured,
+} from './qa-assessment.mjs';
+import { assessmentChecks } from './qa-verdict-checks.mjs';
 
 export function figureCard(b: ReviewedBeat): boolean {
   if (b.plate || b.stage || b.art?.under?.length) return false;
@@ -91,18 +99,22 @@ function sourceOmissions(
   dir: string,
   sb: Storyboard,
   seconds: number,
-): string[] {
-  if (!sb.length || seconds >= 0.75 * sb.length) return [];
-  try {
-    return (
+): Measured<string[]> {
+  if (!sb.length)
+    return { status: 'skipped', reason: 'the storyboard asks for no length' };
+  if (seconds >= 0.75 * sb.length)
+    return {
+      status: 'skipped',
+      reason: 'the film is at least 75% of the length asked for',
+    };
+  return measure(
+    () =>
       droppedFacts(dir, sb, {
         spokenNumbers: (vo: string) =>
           figuresIn(vo, spoken).map((f) => f.value),
-      }) ?? []
-    );
-  } catch {
-    return [];
-  }
+      }),
+    { skipped: 'no source documents in source/' },
+  );
 }
 function placeholdersIn(sb: Storyboard): [string, string[]][] {
   return sb.beats.flatMap((b) => {
@@ -113,15 +125,19 @@ function placeholdersIn(sb: Storyboard): [string, string[]][] {
     return left.length ? [[b.id, left]] : [];
   });
 }
-function castWarnings(sb: Storyboard, q: QaResult, timing: Timing): string[] {
-  try {
-    return castOverlaps(sb, {
-      width: q.width ?? timing.width ?? 1920,
-      height: q.height ?? timing.height ?? 1080,
-    });
-  } catch {
-    return [];
-  }
+function castWarnings(
+  sb: Storyboard,
+  q: QaResult,
+  timing: Timing,
+): Measured<string[]> {
+  return measure(
+    () =>
+      castOverlaps(sb, {
+        width: q.width ?? timing.width ?? 1920,
+        height: q.height ?? timing.height ?? 1080,
+      }),
+    { skipped: 'no cast' },
+  );
 }
 export function verdictState(dir: string, q: QaResult, warnings: string[]) {
   const s = q.summary;
@@ -148,7 +164,8 @@ export function verdictState(dir: string, q: QaResult, warnings: string[]) {
       ? 'the picture moves, but as words: type over a background reads as narrated slides too'
       : verdict(stats.share);
   const short = Boolean(sb.length && s.seconds < 0.6 * sb.length);
-  const dropped = sourceOmissions(dir, sb, s.seconds);
+  const omissions = sourceOmissions(dir, sb, s.seconds);
+  const dropped = findingsOf(omissions);
   const narrated = timed.filter((tb) => tb.vo?.text),
     unvoiced = narrated.filter((tb) => !tb.vo?.src);
   const mute = narrated.length > 0 && unvoiced.length > narrated.length / 2;
@@ -160,7 +177,8 @@ export function verdictState(dir: string, q: QaResult, warnings: string[]) {
       ),
     )
     .map((b) => b.id);
-  const overlaps = [...new Set([...warnings, ...castWarnings(sb, q, timing0)])]
+  const cast = castWarnings(sb, q, timing0);
+  const overlaps = [...new Set([...warnings, ...findingsOf(cast)])]
     .map((w) => w.match(/^([^:]+): overlap: (.*)$/))
     .filter((m): m is RegExpMatchArray => m != null);
   const evidence = q.evidence ?? { scope: 'unbound', problems: [] };
@@ -168,21 +186,55 @@ export function verdictState(dir: string, q: QaResult, warnings: string[]) {
   const broken = q.findings.filter(
     (f) => f.level === 'error' && f.kind !== 'identity',
   );
-  const ready = ![
-    unbound,
-    stats.share >= 40,
-    typeShare >= 60 && stats.share < 40,
-    blank.length,
-    short,
-    mute,
-    placeholders.length,
-    fileSources.length,
-    overlaps.length,
-    broken.length,
-  ].some(Boolean);
   const typed = timed
     .map((tb, i) => sb.beats[tb.index ?? i])
     .filter((b): b is Beat => Boolean(b && typeOnly(b)));
+  const checks = assessmentChecks({
+    evidence,
+    unbound,
+    stats,
+    typeShare,
+    typed: typed.length,
+    blank,
+    short,
+    requested: sb.length,
+    omissions,
+    narrated: narrated.length,
+    unvoiced: unvoiced.length,
+    mute,
+    placeholders: placeholders.length,
+    fileSources: fileSources.length,
+    overlaps: overlaps.length,
+    cast,
+    broken: broken.length,
+    summary: s,
+  });
+  // Readiness is the absence of a blocking check: the record and the READY line cannot disagree.
+  const ready = !checks.some((c) => c.blocking);
+  const assessment: Assessment = {
+    version: 1,
+    identity: {
+      scope: evidence.scope,
+      coverage: q.evidence?.coverage ?? 'none',
+      unchecked: q.evidence?.unchecked ?? [],
+    },
+    sampling: {
+      frames: s.frames ?? Math.round(s.seconds * (timing0.fps ?? 30)),
+      fps: timing0.fps ?? 30,
+      ...(q.analysis
+        ? { width: q.analysis.width, height: q.analysis.height }
+        : {}),
+    },
+    checks,
+    unassessed: [
+      ...UNASSESSED,
+      ...(q.analysis
+        ? [
+            `text legibility at delivery size (frames were analysed at ${q.analysis.width}×${q.analysis.height})`,
+          ]
+        : []),
+    ],
+  };
   const pictures = typed.map((b): [Beat, string | null] => [
     b,
     pictureLine(b.vo),
@@ -210,6 +262,7 @@ export function verdictState(dir: string, q: QaResult, warnings: string[]) {
     broken,
     ready,
     pictures,
+    assessment,
   };
 }
 export type VerdictState = ReturnType<typeof verdictState>;

@@ -80,18 +80,7 @@ export async function draftCommand({ o, opts, dir }: CommandContext) {
     appendReviewPage(lines, writeReviewPage(dir));
     // The picture in motion, measured on the encoded film: the honest test of "narrated slides".
     // critique reads the storyboard's structure; this reads what the viewer actually sees.
-    try {
-      const { qaProject, motionVerdict } = await import('../lib/qa.mjs');
-      const q = await qaProject(dir, {});
-      const v = motionVerdict(dir, q, { warnings: r.warnings });
-      notReady = !v.ready;
-      lines.push(
-        ...v.lines,
-        `  qa: ${rel(path.join(q.dir, 'phone.png'))} (read it as a phone would)`,
-      );
-    } catch (e) {
-      lines.push(`motion: qa did not run (${errorMessage(e).split('\n')[0]})`);
-    }
+    notReady = !(await measureMotion(dir, r.warnings, lines));
   }
   lines.push(
     `done in ${((performance.now() - t0) / 1000).toFixed(1)} s. ${notReady ? 'NOT READY to hand over: fix what the motion verdict names, then draft again.' : 'Open the sheet before anything else.'}`,
@@ -100,6 +89,31 @@ export async function draftCommand({ o, opts, dir }: CommandContext) {
   // A rough cut is a first look and may be unfinished.
   if (notReady && !rough) process.exitCode = 2;
   return console.log(lines.join('\n'));
+}
+
+/** Appends the motion verdict; true only when it was measured and says READY. */
+async function measureMotion(
+  dir: string,
+  warnings: string[],
+  lines: string[],
+): Promise<boolean> {
+  // A verdict that could not be measured is not a pass: the draft stays NOT READY.
+  try {
+    const { qaProject, verdictOutcome } = await import('../lib/qa.mjs');
+    const q = await qaProject(dir, {});
+    const motion = verdictOutcome(dir, q, { warnings });
+    if (motion.status === 'measured') lines.push(...motion.verdict.lines);
+    else lines.push(`motion: NOT MEASURED (${motion.reason})`);
+    lines.push(
+      `  qa: ${path.relative(process.cwd(), path.join(q.dir, 'phone.png'))} (read it as a phone would)`,
+    );
+    return motion.status === 'measured' && motion.verdict.ready;
+  } catch (e) {
+    lines.push(
+      `motion: NOT MEASURED, qa did not run (${errorMessage(e).split('\n')[0]})`,
+    );
+    return false;
+  }
 }
 
 function appendReviewPage(lines: string[], file: string | null): void {

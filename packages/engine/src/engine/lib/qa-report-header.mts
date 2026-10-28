@@ -1,6 +1,7 @@
 import type { VerdictState } from './qa-verdict-state.mjs';
 
 import { evidenceLine } from './evidence.mjs';
+import { unavailableLine } from './qa-assessment.mjs';
 export function reportHeader(state: VerdictState): string[] {
   const { q, s, voicedHeld, overflow, share, said } = state;
   return [
@@ -8,6 +9,7 @@ export function reportHeader(state: VerdictState): string[] {
     ...(q.evidence
       ? [`  ${evidenceLine(q.evidence)}`]
       : ['  evidence: not recorded (this QA result predates bound evidence)']),
+    ...unavailableLine(state.assessment),
     ...(overflow
       ? [
           `  holds: ${s.deliberateSeconds} s are declared as reading holds (pace: "hold"), more than a fifth of the film; ${overflow} s of them count as still. A reading hold is for a figure or a step that must be read, not a way past this check.`,

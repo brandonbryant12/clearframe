@@ -17,9 +17,15 @@ import {
 import {
   qaProject,
   motionVerdict,
+  verdictOutcome,
   moovFirst,
   deliveryFindings,
 } from '../packages/engine/dist/engine/lib/qa.mjs';
+import * as Schema from 'effect/Schema';
+import {
+  MotionVerdictSchema,
+  VerdictOutcomeSchema,
+} from '../packages/engine/dist/engine/lib/qa-assessment.mjs';
 import { reviewProject } from '../packages/engine/dist/engine/lib/review.mjs';
 import { computeTiming } from '../packages/engine/dist/engine/lib/timing.mjs';
 import { sha256File } from '../packages/engine/dist/engine/lib/store.mjs';
@@ -468,4 +474,107 @@ test('finishing identity includes the authored sound implementation and audio mi
       `${file} must affect render identity`,
     );
   }
+});
+
+/** The film asks for 3 s and runs 2 s: long enough to be ready, short enough to compare facts. */
+function shortOfRequest(t) {
+  const root = project(t);
+  fs.writeFileSync(
+    path.join(root, 'storyboard.json'),
+    JSON.stringify({ ...storyboard('A circle arrives'), length: 3 }),
+  );
+  fs.mkdirSync(path.join(root, 'source'));
+  return root;
+}
+const checkOf = (verdict, id) =>
+  verdict.assessment.checks.find((c) => c.id === id);
+
+test('the verdict records what it assessed; a check that could not run is reported, not passed', async (t) => {
+  const root = shortOfRequest(t);
+  encode(film(root));
+  receipt(root, film(root));
+  let v = motionVerdict(root, await qaProject(root));
+  // Contract: the verdict is its schema, and readiness is the absence of a blocking check.
+  assert.deepEqual(Schema.decodeUnknownSync(MotionVerdictSchema)(v), v);
+  assert.equal(v.ready, !v.assessment.checks.some((c) => c.blocking));
+  assert.deepEqual(v.assessment.identity, {
+    scope: 'bound',
+    coverage: 'full',
+    unchecked: [],
+  });
+  assert.equal(v.assessment.sampling.frames, 60);
+  assert.ok(
+    v.assessment.sampling.width > 0 && v.assessment.sampling.height > 0,
+  );
+  assert.ok(v.assessment.unassessed.some((c) => /acceptance/.test(c)));
+  assert.ok(v.assessment.unassessed.some((c) => /legibility/.test(c)));
+  assert.deepEqual(checkOf(v, 'source-omissions'), {
+    id: 'source-omissions',
+    question: checkOf(v, 'source-omissions').question,
+    status: 'skipped',
+    blocking: false,
+    reason: 'no source documents in source/',
+  });
+  const readyWithoutSource = v.ready;
+
+  // A source document that cannot be read (a moved file behind a link) used to read as
+  // "nothing dropped". It is now unavailable, named in the verdict, and changes no readiness.
+  fs.symlinkSync(
+    path.join(root, 'moved-away.md'),
+    path.join(root, 'source/brief.md'),
+  );
+  v = motionVerdict(root, await qaProject(root));
+  const omissions = checkOf(v, 'source-omissions');
+  assert.equal(omissions.status, 'unavailable');
+  assert.match(omissions.reason, /ENOENT/);
+  assert.equal(v.ready, readyWithoutSource);
+  assert.ok(
+    v.lines.some((l) => /not assessed: source-omissions/.test(l)),
+    v.lines.join('\n'),
+  );
+
+  // Readable sources are compared: a sourced figure the film never says is a finding.
+  fs.rmSync(path.join(root, 'source/brief.md'));
+  fs.writeFileSync(
+    path.join(root, 'source/brief.md'),
+    '# Source\n\n- Enrollment closes after 45 days for 3,200 employees.\n',
+  );
+  v = motionVerdict(root, await qaProject(root));
+  assert.equal(checkOf(v, 'source-omissions').status, 'findings');
+  assert.equal(checkOf(v, 'source-omissions').blocking, false);
+  assert.equal(checkOf(v, 'delivered-audio').status, 'skipped');
+});
+
+test('a verdict that cannot be measured is an explicit outcome in qa --json, never a silent omission', async (t) => {
+  const root = shortOfRequest(t);
+  encode(film(root));
+  receipt(root, film(root));
+  const cli = path.resolve('packages/engine/dist/engine/cli.mjs');
+  const qa = () =>
+    spawnSync(process.execPath, [cli, 'qa', root, '--json'], {
+      encoding: 'utf8',
+    });
+  let r = qa();
+  assert.equal(r.status, 0, r.stderr);
+  let motion = JSON.parse(r.stdout).motion;
+  assert.equal(motion.status, 'measured');
+  assert.deepEqual(
+    Schema.decodeUnknownSync(VerdictOutcomeSchema)(motion),
+    motion,
+  );
+  assert.equal(typeof motion.verdict.ready, 'boolean');
+
+  // The timeline the verdict reads is gone: QA still measures the file, the verdict says why not.
+  const q = await qaProject(root);
+  fs.rmSync(path.join(root, 'build/timing.json'));
+  const outcome = verdictOutcome(root, q);
+  assert.equal(outcome.status, 'unavailable');
+  assert.match(outcome.reason, /timing\.json/);
+  r = qa();
+  motion = JSON.parse(r.stdout).motion;
+  assert.equal(motion.status, 'unavailable');
+  const text = spawnSync(process.execPath, [cli, 'qa', root], {
+    encoding: 'utf8',
+  });
+  assert.match(text.stdout.split('\n')[0], /^motion: NOT MEASURED/);
 });

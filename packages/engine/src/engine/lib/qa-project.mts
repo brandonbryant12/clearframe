@@ -177,6 +177,7 @@ export async function qaProject(
     },
     summary,
     findings,
+    analysis: { width: w, height: h },
     change: change.map(r2),
     heldAnalysis: {
       ...HELD,
@@ -186,5 +187,11 @@ export async function qaProject(
       advisory: true,
     },
   });
-  return { dir, summary, findings, evidence };
+  return {
+    dir,
+    summary,
+    findings,
+    evidence,
+    analysis: { width: w, height: h },
+  };
 }
