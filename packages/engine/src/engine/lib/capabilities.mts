@@ -9,13 +9,17 @@ import {
   HarnessHealthSchema,
   JOB_KINDS,
   JOB_STATUSES,
+  JobEventListSchema,
   JobEventSchema,
+  JobListSchema,
+  JobLookupSchema,
   JobRequestSchema,
   JobViewSchema,
   StartResultSchema,
   TERMINAL_STATUSES,
 } from './harness/contracts.mjs';
 import { AssessmentSchema, VerdictOutcomeSchema } from './qa-assessment.mjs';
+import { QaReportSchema } from './qa-contracts.mjs';
 
 /** Raised when a contract changes incompatibly; additive fields keep the version. */
 export const CONTRACT_VERSION = 1;
@@ -27,34 +31,25 @@ export const HarnessRequestErrorSchema = Schema.Struct({
   status: Schema.Int,
 });
 
+/** Every contract an operation names. A result contract describes the whole value returned. */
 const contractNames = [
   'JobRequest',
   'StartResult',
   'JobView',
+  'JobLookup',
+  'JobList',
   'JobEvent',
+  'JobEventList',
   'EventOptions',
   'HarnessHealth',
   'HarnessRequestError',
+  'QaReport',
   'VerdictOutcome',
   'Assessment',
+  'Capabilities',
 ] as const;
 export type ContractName = (typeof contractNames)[number];
 const ContractNameSchema = Schema.Literals(contractNames);
-const CONTRACTS: {
-  readonly [K in ContractName]: Parameters<
-    typeof Schema.toJsonSchemaDocument
-  >[0];
-} = {
-  JobRequest: JobRequestSchema,
-  StartResult: StartResultSchema,
-  JobView: JobViewSchema,
-  JobEvent: JobEventSchema,
-  EventOptions: EventOptionsSchema,
-  HarnessHealth: HarnessHealthSchema,
-  HarnessRequestError: HarnessRequestErrorSchema,
-  VerdictOutcome: VerdictOutcomeSchema,
-  Assessment: AssessmentSchema,
-};
 
 export const OperationSchema = Schema.Struct({
   name: Schema.String,
@@ -62,12 +57,15 @@ export const OperationSchema = Schema.Struct({
   /** `harness`: a method of `createJobHarness()`; `cli`: a command of the `clearframe` binary. */
   surface: Schema.Literals(['harness', 'cli']),
   call: Schema.String,
+  /** The contract of the whole request value. */
   request: Schema.optionalKey(ContractNameSchema),
+  /** The contract of the whole result value (for the CLI, its `--json` output). */
   result: Schema.optionalKey(ContractNameSchema),
   /** Contracts a failure follows, with the reasons it can carry. */
   errors: Schema.optionalKey(Schema.Array(Schema.String)),
-  /** `read` has no effect on the project; `write` changes project or ledger state. */
+  /** `read` changes no file, artifact or ledger row; `write` changes at least one, named in `writes`. */
   effect: Schema.Literals(['read', 'write']),
+  writes: Schema.optionalKey(Schema.Array(Schema.String)),
 });
 export type Operation = typeof OperationSchema.Type;
 
@@ -85,6 +83,30 @@ export const CapabilitiesSchema = Schema.Struct({
 });
 export type Capabilities = typeof CapabilitiesSchema.Type;
 
+const CONTRACTS: {
+  readonly [K in ContractName]: Parameters<
+    typeof Schema.toJsonSchemaDocument
+  >[0];
+} = {
+  JobRequest: JobRequestSchema,
+  StartResult: StartResultSchema,
+  JobView: JobViewSchema,
+  JobLookup: JobLookupSchema,
+  JobList: JobListSchema,
+  JobEvent: JobEventSchema,
+  JobEventList: JobEventListSchema,
+  EventOptions: EventOptionsSchema,
+  HarnessHealth: HarnessHealthSchema,
+  HarnessRequestError: HarnessRequestErrorSchema,
+  QaReport: QaReportSchema,
+  VerdictOutcome: VerdictOutcomeSchema,
+  Assessment: AssessmentSchema,
+  Capabilities: CapabilitiesSchema,
+};
+
+/** The Effect schema behind a contract name, for adapters that decode with Effect directly. */
+export const contractSchema = (name: ContractName) => CONTRACTS[name];
+
 const OPERATIONS: readonly Operation[] = [
   {
     name: 'start',
@@ -98,6 +120,10 @@ const OPERATIONS: readonly Operation[] = [
       'HarnessRequestError: invalid-request, approval-required, request-key-conflict, unavailable',
     ],
     effect: 'write',
+    writes: [
+      'the job ledger (job and lifecycle events)',
+      "the job's outputs once it runs (renders, previews, review records, narration or music)",
+    ],
   },
   {
     name: 'get',
@@ -105,26 +131,24 @@ const OPERATIONS: readonly Operation[] = [
       'Read one job, including history outside the recent view; null when unknown.',
     surface: 'harness',
     call: 'harness.get(id)',
-    result: 'JobView',
+    result: 'JobLookup',
     effect: 'read',
   },
   {
     name: 'list',
-    summary:
-      'Read the recent jobs (an array of JobView), optionally for one film.',
+    summary: 'Read the recent jobs, optionally for one film.',
     surface: 'harness',
     call: 'harness.list(film?)',
-    result: 'JobView',
+    result: 'JobList',
     effect: 'read',
   },
   {
     name: 'events',
-    summary:
-      'Read lifecycle events (an array of JobEvent) after a cursor, optionally for one job.',
+    summary: 'Read lifecycle events after a cursor, optionally for one job.',
     surface: 'harness',
     call: 'harness.events(options)',
     request: 'EventOptions',
-    result: 'JobEvent',
+    result: 'JobEventList',
     effect: 'read',
   },
   {
@@ -135,6 +159,7 @@ const OPERATIONS: readonly Operation[] = [
     result: 'JobView',
     errors: ['HarnessRequestError: unknown-job, not-running, unavailable'],
     effect: 'write',
+    writes: ['the job ledger (cancellation intent and final status)'],
   },
   {
     name: 'health',
@@ -151,6 +176,7 @@ const OPERATIONS: readonly Operation[] = [
     surface: 'harness',
     call: 'await harness.stopAll()',
     effect: 'write',
+    writes: ['the job ledger (unfinished jobs become interrupted)'],
   },
   {
     name: 'qa',
@@ -158,14 +184,19 @@ const OPERATIONS: readonly Operation[] = [
       'Decode a rendered film, bind it to its receipt and measure it; `motion` is the readiness verdict with what it assessed, or why it could not be measured.',
     surface: 'cli',
     call: 'clearframe qa DIR --json',
-    result: 'VerdictOutcome',
-    effect: 'read',
+    result: 'QaReport',
+    effect: 'write',
+    writes: [
+      'DIR/build/qa/qa.json, timeline.png and phone.png, replacing the previous QA of the project',
+      'DIR/review/runlog.jsonl (appends one record of the command)',
+    ],
   },
   {
     name: 'capabilities',
     summary: 'This document.',
     surface: 'cli',
     call: 'clearframe capabilities --json',
+    result: 'Capabilities',
     effect: 'read',
   },
 ];
@@ -183,6 +214,8 @@ const SEMANTICS = {
     'Jobs unfinished when their owner stopped become interrupted and are never re-run automatically; a paid job’s outcome is recorded as unknown, and no new spending authority is granted.',
   evidence:
     'A video is evidence about the film only when bound to its render receipt (evidence.scope). evidence.coverage names which identity checks ran, not picture, sound or meaning. The motion verdict’s assessment lists each check (passed, findings, skipped, unavailable) and the claims no check answers.',
+  effects:
+    'An operation marked read changes no file, artifact or ledger row. One marked write names what it changes in `writes`: qa replaces the project’s QA artifacts each time it runs, and every project command appends a record to its run log.',
   acceptance:
     'A completed job, a READY verdict or an agent decision is not acceptance. Only `accept` records it, with the person and their words.',
   determinism:

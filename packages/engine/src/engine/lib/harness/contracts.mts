@@ -186,6 +186,10 @@ export const JobViewSchema = Schema.Struct({
   persistenceError: text,
 });
 export type JobView = Types.Mutable<typeof JobViewSchema.Type>;
+/** `get`: the job, or null when no job has that id. */
+export const JobLookupSchema = Schema.NullOr(JobViewSchema);
+/** `list`: the recent jobs, possibly none. */
+export const JobListSchema = Schema.Array(JobViewSchema);
 
 export const JobRequestSchema = Schema.Struct({
   kind: JobKindSchema,
@@ -247,6 +251,8 @@ export const JobEventSchema = Schema.Union([
   }),
 ]);
 export type JobEvent = typeof JobEventSchema.Type;
+/** `events`: the events after the cursor, possibly none. */
+export const JobEventListSchema = Schema.Array(JobEventSchema);
 
 export const EventOptionsSchema = Schema.Struct({
   after: Schema.optionalKey(Schema.Int),

@@ -94,6 +94,13 @@ const c = capabilities();
 assert.equal(c.name, 'clearframe');
 assert.ok(c.schemas.JobRequest && c.schemas.JobView && c.schemas.VerdictOutcome);
 assert.deepEqual(c.jobs.kinds, [...JOB_KINDS]);
+const op = (name) => c.operations.find((o) => o.name === name);
+assert.deepEqual(
+  ['get', 'list', 'events', 'qa'].map((name) => op(name).result),
+  ['JobLookup', 'JobList', 'JobEventList', 'QaReport'],
+);
+assert.equal(op('qa').effect, 'write');
+assert.ok(c.schemas.QaReport.properties.motion);
 assert.deepEqual(decodeJobRequest({ kind: 'check', film: 'film' }), { kind: 'check', film: 'film' });
 assert.throws(
   () => decodeJobRequest({ kind: 'section', beats: 'a' }),
@@ -104,13 +111,19 @@ console.log('Installed contracts decode requests and describe every operation.')
 // Published declarations resolve for a TypeScript consumer of both public subpaths.
 const declarationsProbe = `
 import { createJobHarness, type JobView, type StartResult } from 'clearframe/harness';
-import { capabilities, type JobRequest, type VerdictOutcome } from 'clearframe/contracts';
+import {
+  capabilities,
+  type JobRequest,
+  type QaReport,
+  type VerdictOutcome,
+} from 'clearframe/contracts';
 const request: JobRequest = { kind: 'check', film: 'film' };
 const harness = createJobHarness({ base: '.' });
 const started: StartResult = harness.start('film', request);
 const view: JobView | null = harness.get(started.id);
 const outcome: VerdictOutcome = { status: 'unavailable', reason: 'not rendered' };
-export const probe = [view, outcome, capabilities().contractVersion];
+const report = (r: QaReport): VerdictOutcome => r.motion;
+export const probe = [view, outcome, report, capabilities().contractVersion];
 `;
 
 try {

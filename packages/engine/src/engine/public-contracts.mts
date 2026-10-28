@@ -10,8 +10,11 @@ export {
   HarnessRequestError,
   JOB_KINDS,
   JOB_STATUSES,
+  JobEventListSchema,
   JobEventSchema,
   JobKindSchema,
+  JobListSchema,
+  JobLookupSchema,
   JobRequestSchema,
   JobResultSchema,
   JobStatusSchema,
@@ -47,9 +50,25 @@ export type {
   VerdictOutcome,
 } from './lib/qa-assessment.mjs';
 export {
+  LoudnessSchema,
+  QaFindingSchema,
+  QaReportSchema,
+  QaResultSchema,
+  QaSummarySchema,
+} from './lib/qa-contracts.mjs';
+export type {
+  QaFinding,
+  QaReport,
+  QaResult,
+  QaSummary,
+} from './lib/qa-contracts.mjs';
+export { VideoEvidenceSchema } from './lib/evidence-contracts.mjs';
+export type { VideoEvidence } from './lib/evidence-contracts.mjs';
+export {
   capabilities,
   CapabilitiesSchema,
   CONTRACT_VERSION,
+  contractSchema,
   HarnessRequestErrorSchema,
   jsonSchema,
   OperationSchema,

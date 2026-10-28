@@ -5,6 +5,10 @@
 // ran; it is not a judgement of picture, sound or meaning, and `unassessed` names the claims no
 // automated check here answers. Human acceptance is recorded only by `accept`.
 import * as Schema from 'effect/Schema';
+import {
+  EvidenceScopeSchema,
+  IdentityCoverageSchema,
+} from './evidence-contracts.mjs';
 
 export const AssessmentCheckStatusSchema = Schema.Literals([
   'passed',
@@ -25,17 +29,10 @@ export const AssessmentCheckSchema = Schema.Struct({
 });
 export type AssessmentCheck = typeof AssessmentCheckSchema.Type;
 
-export const EvidenceScopeSchema = Schema.Literals([
-  'bound',
-  'unbound',
-  'stale',
-  'invalid',
-]);
-export const IdentityCoverageSchema = Schema.Literals([
-  'none',
-  'partial',
-  'full',
-]);
+export {
+  EvidenceScopeSchema,
+  IdentityCoverageSchema,
+} from './evidence-contracts.mjs';
 
 export const AssessmentSchema = Schema.Struct({
   version: Schema.Literal(1),

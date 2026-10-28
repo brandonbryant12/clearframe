@@ -26,6 +26,11 @@ import {
   MotionVerdictSchema,
   VerdictOutcomeSchema,
 } from '../packages/engine/dist/engine/lib/qa-assessment.mjs';
+import {
+  capabilities,
+  contractSchema,
+} from '../packages/engine/dist/engine/public-contracts.mjs';
+import crypto from 'node:crypto';
 import { reviewProject } from '../packages/engine/dist/engine/lib/review.mjs';
 import { computeTiming } from '../packages/engine/dist/engine/lib/timing.mjs';
 import { sha256File } from '../packages/engine/dist/engine/lib/store.mjs';
@@ -577,4 +582,70 @@ test('a verdict that cannot be measured is an explicit outcome in qa --json, nev
     encoding: 'utf8',
   });
   assert.match(text.stdout.split('\n')[0], /^motion: NOT MEASURED/);
+});
+
+/** Decodes `qa --json` output whole, strictly, as the contract the manifest advertises for qa. */
+function advertisedQa(stdout) {
+  const op = capabilities().operations.find((o) => o.name === 'qa');
+  const report = JSON.parse(stdout);
+  assert.deepEqual(
+    Schema.decodeUnknownSync(contractSchema(op.result))(report, {
+      onExcessProperty: 'error',
+    }),
+    report,
+  );
+  return report;
+}
+const hashes = (root) =>
+  Object.fromEntries(
+    fs
+      .readdirSync(root, { recursive: true })
+      .map(String)
+      .filter((f) => fs.statSync(path.join(root, f)).isFile())
+      .map((f) => [
+        f,
+        crypto
+          .createHash('sha256')
+          .update(fs.readFileSync(path.join(root, f)))
+          .digest('hex'),
+      ]),
+  );
+
+test('qa --json is exactly its advertised whole report, and writes only what the manifest declares', async (t) => {
+  const root = shortOfRequest(t);
+  encode(film(root));
+  receipt(root, film(root));
+  const cli = path.resolve('packages/engine/dist/engine/cli.mjs');
+  const qa = (...args) =>
+    spawnSync(process.execPath, [cli, 'qa', root, '--json', ...args], {
+      encoding: 'utf8',
+    });
+  const before = hashes(root);
+  const bound = advertisedQa(qa().stdout);
+  assert.equal(bound.evidence.scope, 'bound');
+  assert.equal(bound.motion.status, 'measured');
+  // qa replaces the project's QA artifacts: a write, and only under build/qa.
+  const after = hashes(root);
+  const changed = Object.keys(after).filter((f) => after[f] !== before[f]);
+  const op = capabilities().operations.find((o) => o.name === 'qa');
+  assert.equal(op.effect, 'write');
+  assert.ok(op.writes.some((w) => w.includes('build/qa/qa.json')));
+  assert.ok(op.writes.some((w) => w.includes('review/runlog.jsonl')));
+  for (const name of ['qa.json', 'timeline.png', 'phone.png'])
+    assert.ok(changed.includes(path.join('build/qa', name)), name);
+  // Nothing else: every changed file is one the manifest names.
+  assert.deepEqual(
+    changed.filter(
+      (f) =>
+        !f.startsWith(`build${path.sep}qa${path.sep}`) &&
+        f !== path.join('review', 'runlog.jsonl'),
+    ),
+    [],
+  );
+  // The same contract holds for a file with no receipt and for an unmeasurable verdict.
+  fs.renameSync(`${film(root)}.json`, path.join(root, 'kept.json'));
+  assert.equal(advertisedQa(qa().stdout).evidence.scope, 'unbound');
+  fs.renameSync(path.join(root, 'kept.json'), `${film(root)}.json`);
+  fs.rmSync(path.join(root, 'build/timing.json'));
+  assert.equal(advertisedQa(qa().stdout).motion.status, 'unavailable');
 });

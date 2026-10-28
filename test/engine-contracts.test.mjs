@@ -10,6 +10,7 @@ import { spawnSync } from 'node:child_process';
 import * as Effect from 'effect/Effect';
 import * as Exit from 'effect/Exit';
 import * as Schema from 'effect/Schema';
+import crypto from 'node:crypto';
 import * as contracts from '../packages/engine/dist/engine/public-contracts.mjs';
 import {
   createJobHarness,
@@ -48,7 +49,7 @@ function graph(entry) {
 test('the contracts entry loads only effect, not the renderer, studio or an agent runtime', () => {
   const { local, external } = graph(ENTRY);
   assert.deepEqual([...external], ['effect']);
-  assert.ok(local.size <= 5, `${local.size} modules: ${[...local].join(', ')}`);
+  assert.ok(local.size <= 8, `${local.size} modules: ${[...local].join(', ')}`);
 });
 
 test('capabilities decode as their own schema and name only published contracts', () => {
@@ -70,6 +71,13 @@ test('capabilities decode as their own schema and name only published contracts'
     assert.ok(schema.type || schema.anyOf, `${name} describes a value`);
   }
   assert.deepEqual(c.jobs.kinds, [...contracts.JOB_KINDS]);
+  // A write names what it changes; a read changes nothing, so it names nothing.
+  for (const op of c.operations)
+    assert.equal(
+      op.effect === 'write',
+      Boolean(op.writes?.length),
+      `${op.name}: effect ${op.effect}, writes ${op.writes}`,
+    );
   for (const key of [
     'cancellation',
     'progress',
@@ -94,7 +102,7 @@ test('the CLI prints the same capabilities for callers in any language', () => {
   assert.deepEqual(JSON.parse(r.stdout), contracts.capabilities());
 });
 
-function fixture(t) {
+function fixture(t, { delay = 0 } = {}) {
   const base = fs.realpathSync(
     fs.mkdtempSync(path.join(os.tmpdir(), 'cf-contracts-')),
   );
@@ -110,7 +118,10 @@ function fixture(t) {
     }),
   );
   const cli = path.join(base, 'fixture.mjs');
-  fs.writeFileSync(cli, "console.log('done');\n");
+  fs.writeFileSync(
+    cli,
+    `await new Promise((r) => setTimeout(r, ${delay}));\nconsole.log('done');\n`,
+  );
   const harness = createJobHarness({
     base,
     out: path.join(base, 'build/viewer'),
@@ -121,8 +132,121 @@ function fixture(t) {
     await harness.stopAll();
     fs.rmSync(base, { recursive: true, force: true });
   });
-  return { dir, harness };
+  return { base, dir, harness };
 }
+
+const operation = (name) =>
+  contracts.capabilities().operations.find((op) => op.name === name);
+/** Decodes an operation's whole result with the contract the manifest names for it. */
+function advertised(name, value) {
+  const op = operation(name);
+  assert.ok(op?.result, `${name} names a result contract`);
+  const decoded = Schema.decodeUnknownSync(contracts.contractSchema(op.result))(
+    value,
+    { onExcessProperty: 'error' },
+  );
+  assert.deepEqual(decoded, value, `${name} round-trips as ${op.result}`);
+  return value;
+}
+const settle = async (harness, id) => {
+  for (let i = 0; i < 400; i++) {
+    const job = harness.get(id);
+    if (contracts.TERMINAL_STATUSES.includes(job.status)) return job;
+    await wait(25);
+  }
+  throw new Error('job did not finish');
+};
+
+test('each harness operation returns exactly what its advertised result contract describes', async (t) => {
+  // Empty: an unknown id, no jobs, no events.
+  const empty = fixture(t);
+  assert.equal(advertised('get', empty.harness.get('missing')), null);
+  assert.deepEqual(advertised('list', empty.harness.list()), []);
+  assert.deepEqual(advertised('events', empty.harness.events()), []);
+  advertised('health', empty.harness.health());
+  // The item schemas alone do not describe these whole results (the defect this guards).
+  assert.equal(Schema.is(contracts.JobViewSchema)(null), false);
+  assert.equal(Schema.is(contracts.JobEventSchema)([]), false);
+
+  // Populated: a finished job, a duplicate, a queued job cancelled behind a running one.
+  const { dir, harness } = fixture(t, { delay: 400 });
+  const first = advertised(
+    'start',
+    harness.start(dir, { film: 'film', kind: 'check', requestKey: 'whole:1' }),
+  );
+  const queued = advertised(
+    'start',
+    harness.start(dir, {
+      film: 'film',
+      kind: 'captions',
+      requestKey: 'whole:2',
+    }),
+  );
+  const cancelled = advertised('cancel', harness.cancel(queued.id));
+  assert.equal(cancelled.status, 'cancelled');
+  await settle(harness, first.id);
+  advertised(
+    'start',
+    harness.start(dir, { film: 'film', kind: 'check', requestKey: 'whole:1' }),
+  );
+  assert.equal(advertised('get', harness.get(first.id)).status, 'complete');
+  assert.equal(advertised('list', harness.list()).length, 2);
+  assert.equal(advertised('list', harness.list('no-such-film')).length, 0);
+  const all = advertised('events', harness.events());
+  assert.ok(all.length >= 4);
+  assert.deepEqual(
+    advertised('events', harness.events({ after: all.at(-1).seq })),
+    [],
+  );
+  advertised('events', harness.events({ jobId: first.id, limit: 1 }));
+  advertised('health', harness.health());
+});
+
+/**
+ * Every file under a directory with its bytes' hash. SQLite's `-shm` file is its shared-memory
+ * index of the write-ahead log, rewritten by readers and rebuilt on open; it holds no rows, so
+ * it is left out. The database and its log are compared byte for byte.
+ */
+function snapshot(root) {
+  const files = {};
+  for (const name of fs.readdirSync(root, { recursive: true })) {
+    const file = path.join(root, String(name));
+    if (fs.statSync(file).isFile() && !file.endsWith('.sqlite-shm'))
+      files[String(name)] = crypto
+        .createHash('sha256')
+        .update(fs.readFileSync(file))
+        .digest('hex');
+  }
+  return files;
+}
+
+test('operations advertised as read change no file, artifact or ledger row', async (t) => {
+  const { base, dir, harness } = fixture(t);
+  const { id } = harness.start(dir, {
+    film: 'film',
+    kind: 'check',
+    requestKey: 'read:1',
+  });
+  await settle(harness, id);
+  await wait(100);
+  const before = snapshot(base);
+  const reads = {
+    get: () => harness.get(id),
+    list: () => harness.list(),
+    events: () => harness.events({ jobId: id }),
+    health: () => harness.health(),
+  };
+  for (const op of contracts.capabilities().operations)
+    if (op.surface === 'harness' && op.effect === 'read') {
+      assert.ok(reads[op.name], `${op.name} is exercised here`);
+      reads[op.name]();
+    }
+  assert.ok(
+    Object.keys(before).some((f) => f.endsWith('jobs.sqlite-wal')),
+    'the ledger and its log are compared',
+  );
+  assert.deepEqual(snapshot(base), before);
+});
 
 test('views, events, health and start results the harness returns decode as their contracts', async (t) => {
   const { dir, harness } = fixture(t);
