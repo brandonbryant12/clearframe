@@ -1636,7 +1636,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
           <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
           <tbody>
             <tr class="group"><td colspan="2">Set up</td></tr>
-            <tr><td><code>capabilities [--json]</code></td><td class="wrap">What an agent framework needs before calling ClearFrame: operations (harness method or CLI), JSON Schema for each request, result and event, and the rules for admission, request keys, progress, cancellation, recovery, evidence and acceptance. Same data as <code>clearframe/contracts</code>.</td></tr>
+            <tr><td><code>capabilities [--json]</code></td><td class="wrap">What an agent framework needs before calling ClearFrame: operations (harness method or CLI), JSON Schema for each whole request and result (<code>qa --json</code> included), whether each reads or writes and what it writes, and the rules for admission, request keys, progress, cancellation, recovery, evidence and acceptance. Same data as <code>clearframe/contracts</code>.</td></tr>
             <tr><td><code>doctor</code></td><td class="wrap">Checks Rust, Cargo, FFmpeg with libx264, ffprobe, disk headroom, and that every bundled font matches its recorded hash (type is measured with those files, so a changed one moves every line break).</td></tr>
             <tr><td><code>build</code></td><td class="wrap">Compiles the scene engine (warm cache, one Cargo job). Render commands do this themselves when its sources changed.<span class="badge heavy">heavy lock</span></td></tr>
             <tr><td><code>gallery DIR [--sketches]</code></td><td class="wrap">Renders every block (or sketch) in a theme and aspect, to review the vocabulary.</td></tr>

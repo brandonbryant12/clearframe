@@ -68,7 +68,7 @@ The harness's data contracts are Effect schemas, and every public type is inferr
 
 `harnessEffects` keeps a `HarnessRequestError` in its error channel and wraps anything else (a ledger failure) in `HarnessError`; `jobHarness` fails acquisition with `HarnessError` as well.
 
-`clearframe/contracts` exports the schemas, their types, `decodeJobRequest`, the motion verdict's `VerdictOutcomeSchema` and `AssessmentSchema`, and `capabilities()`. That entry imports nothing but `effect`, so an adapter can validate and describe calls without loading the renderer, the studio or an agent runtime. `capabilities()` (and `clearframe capabilities --json`) lists each operation, where it is called (a harness method or a CLI command), the JSON Schema (draft 2020-12, generated from the same schemas) of its request and result, its failure reasons, and the lifecycle rules this page describes. `contractVersion` changes only when a contract changes incompatibly.
+`clearframe/contracts` exports the schemas, their types, `decodeJobRequest`, the motion verdict's `VerdictOutcomeSchema` and `AssessmentSchema`, and `capabilities()`. That entry imports nothing but `effect`, so an adapter can validate and describe calls without loading the renderer, the studio or an agent runtime. `capabilities()` (and `clearframe capabilities --json`) lists each operation, where it is called (a harness method or a CLI command), the JSON Schema (draft 2020-12, generated from the same schemas) of its whole request and whole result, its failure reasons, whether it reads or writes, and the lifecycle rules this page describes. A result contract describes exactly the value returned: `get` returns `JobLookup` (a `JobView` or `null`), `list` returns `JobList`, `events` returns `JobEventList` (each possibly empty), and `qa DIR --json` prints a `QaReport` (the QA result with `motion`, the verdict outcome). `contractSchema(name)` returns the Effect schema behind a name. An operation marked `read` changes no file, artifact or ledger row; one marked `write` lists what it changes in `writes`. `qa` is a write: it replaces the project's `build/qa` artifacts and, like every project command, appends to `review/runlog.jsonl`. `contractVersion` changes only when a contract changes incompatibly.
 
 ```js
 import { capabilities, decodeJobRequest } from 'clearframe/contracts';
@@ -80,7 +80,7 @@ const harness = createJobHarness({ base: process.cwd() });
 const { id } = harness.start('./film', request);
 ```
 
-Tests decode real views and events strictly (no undeclared field) against these schemas, so the contract cannot drift from the data, and the fresh-install check imports `clearframe/contracts`, reads the CLI manifest and type-checks both public subpaths.
+Tests decode every operation's real whole result strictly (no undeclared field) with the contract the manifest names, empty and populated, including `qa --json`; they check that read operations leave every file and ledger row unchanged and that `qa` changes only what it declares. The fresh-install check imports `clearframe/contracts`, reads the CLI manifest and type-checks both public subpaths.
 
 ## Runtime and Effect scope
 
