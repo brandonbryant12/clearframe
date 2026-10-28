@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { eachElement } from '../canvas.mjs';
 import { heldTail } from '../constants.mjs';
-import { probeDuration } from '../probes.mjs';
+import { probeFootage } from '../probes.mjs';
 import { sha256 } from '../../scene/engine.mjs';
 import { assetSrc } from '../../engine/lib/timing.mjs';
 import type { ResolvedStoryboard, Timing } from '../../engine/domain.mjs';
@@ -98,7 +98,7 @@ function stagePlate(
     b.plate.video = video;
     delete b.plate.asset;
     if (video) {
-      const duration = probeDuration(file);
+      const duration = probeFootage(file, `${b.id} plate`, rel);
       // A wipe into the next beat holds this one on screen ahead of its edge.
       const shown = b.frames / job.fps + heldTail(job, job.beats.indexOf(b));
       if (!(duration - (b.plate.offset ?? 0) + 1 / job.fps >= shown))
@@ -136,7 +136,7 @@ function stageBlock(
   const { file, key } = stage(rel, b.id);
   prop.file = key;
   if (b.block === 'video') {
-    const duration = probeDuration(file);
+    const duration = probeFootage(file, b.id, rel);
     const shown = b.frames / timing.fps + heldTail(job, job.beats.indexOf(b));
     if (
       !Number.isFinite(duration) ||
