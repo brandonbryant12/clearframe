@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { timedWords } from './ingest.mjs';
-import { transcribeEach, whisperAvailable, whisperWav } from './whisper.mjs';
+import { transcribeEach, whisperAvailable, whisperWavs } from './whisper.mjs';
 import { wordsHeard } from './whisper/alignment.mjs';
 import { alignScript } from './word-align.mjs';
 import type { ScriptAlignment } from './word-align.mjs';
@@ -31,9 +31,7 @@ export async function heardWordsMany(
   if (!files.length || !whisperAvailable()) return unheard;
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-takew-'));
   try {
-    const wavs = await Promise.all(
-      files.map((f, i) => whisperWav(f, path.join(tmp, `take-${i}.wav`))),
-    );
+    const wavs = await whisperWavs(files, tmp);
     process.stderr.write(
       `  measuring words with local Whisper (about a minute per minute of speech without whisper.cpp; longer while other work runs)…\n`,
     );

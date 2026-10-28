@@ -4,7 +4,7 @@ export {
   transcribeWords,
   transcribeEach,
 } from './whisper/provider.mjs';
-export { whisperWav } from './whisper/takes.mjs';
+export { whisperWavs } from './whisper/takes.mjs';
 export type {
   HeardWord,
   WhisperTranscript,

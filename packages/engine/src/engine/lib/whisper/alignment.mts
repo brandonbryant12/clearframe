@@ -21,7 +21,7 @@ import {
   currentTakes,
   measuredAtImport,
   nothingToAlign,
-  whisperWav,
+  whisperWavs,
 } from './takes.mjs';
 import { whisperAvailable, transcribeEach } from './provider.mjs';
 
@@ -126,8 +126,9 @@ export async function whisperAlign(
   try {
     // Each take is heard on its own clock in one recognizer run: takes joined with silence lost
     // the first words after every gap.
-    const wavs = await Promise.all(
-      todo.map((x, i) => whisperWav(x.wav, path.join(tmp, `take-${i}.wav`))),
+    const wavs = await whisperWavs(
+      todo.map((x) => x.wav),
+      tmp,
     );
     const heardEach = transcribeEach(wavs, {
       model,
