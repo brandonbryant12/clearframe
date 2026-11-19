@@ -64,17 +64,20 @@ export async function adviseShot(
   const preview = shotRequest(brief, candidates);
   if (dryRun) return preview;
   guardBudget(preview.estimatedUsd, budget);
+  // A studio can reload another project's library while the provider is answering.
+  const examples = new Map(
+    await Promise.all(
+      candidates.map(async ({ id }) => [id, await detail(id)] as const),
+    ),
+  );
   const response = await post('/interactions', preview.request, { retries: 0 });
   const advice = Schema.decodeUnknownSync(Decision)(
     JSON.parse(outputText(response)),
   );
-  if (
-    !candidates.some((entry) => entry.id === advice.libraryId) ||
-    !advice.direction.trim() ||
-    !advice.check.trim()
-  )
+  const authoring = examples.get(advice.libraryId);
+  if (!authoring || !advice.direction.trim() || !advice.check.trim())
     throw new Error(
       'Neon returned an incomplete direction or an entry outside the shortlist',
     );
-  return { model: MODEL, ...advice, authoring: await detail(advice.libraryId) };
+  return { model: MODEL, ...advice, authoring };
 }

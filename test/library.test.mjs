@@ -785,3 +785,42 @@ test('agents can adapt a built-in diagram as a project JSON sketch in both aspec
     'Request',
   );
 });
+
+test('CLI search sees a film’s JSON diagram and enforces its zero Neon budget', async (t) => {
+  const { spawnSync } = await import('node:child_process');
+  const { fileURLToPath } = await import('node:url');
+  const cli = fileURLToPath(
+    new URL('../apps/cli/dist/main.mjs', import.meta.url),
+  );
+  const root = fs.mkdtempSync(
+    path.join(os.tmpdir(), 'clearframe-local-search-'),
+  );
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  write(root, 'storyboard.json', {
+    budget: 0,
+    music: false,
+    beats: [
+      { id: 'one', block: 'statement', duration: 3, props: { text: 'Review' } },
+    ],
+  });
+  write(root, 'library/sketches/desk-review.json', {
+    summary: 'A review desk',
+    use: 'Review a request',
+    diagram: { nodes: [{ id: 'desk', label: 'Review desk' }] },
+  });
+  const cmd = (...args) =>
+    spawnSync(process.execPath, [cli, ...args], {
+      cwd: root,
+      encoding: 'utf8',
+      env: { ...process.env, GEMINI_API_KEY: '' },
+    });
+  const result = cmd('find', '--id', 'sketch:desk-review');
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(
+    JSON.parse(result.stdout).example.props.diagram.nodes[0].label,
+    'Review desk',
+  );
+  const refused = cmd('find', 'review', '--neon', '--budget', '99');
+  assert.notEqual(refused.status, 0);
+  assert.match(refused.stderr, /exceeds the budget/);
+});

@@ -25,8 +25,10 @@
   "latestRelease": "v1.4.1 (tag, 2026-11-02)",
   "incorporated": [
     "#251: validated timed-word JSON and WebVTT caption tracks with end-exclusive cue lookup",
-    "#241: exact internal workspace dependency versions",
-    "#244: corrected display dimensions for upstream decoded non-square pixels"
+    "#241: exact internal workspace dependency versions"
   ],
-  "capabilityBoundary": "ClearFrame uses fframes scheduling, encoding, concatenation and cue and word state in rendered films and exported subtitle tracks. ClearFrame owns frame painting, footage decoding and audio finishing."
+  "capabilityBoundary": "ClearFrame uses fframes scheduling, encoding, concatenation and cue and word state in rendered films and exported subtitle tracks. ClearFrame owns frame painting, footage decoding and audio finishing.",
+  "evaluated": [
+    "#244 and #250: sample-aspect correction and Clip ranges reviewed. ClearFrame still uses its frame-accurate, rotation-aware footage adapter."
+  ]
 }

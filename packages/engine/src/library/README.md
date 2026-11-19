@@ -218,7 +218,6 @@ If an idea needs code only to arrange existing elements, write a built-in sketch
 
 The `business` treatment sets the film camera to `none` (a default for every beat without its own) while preserving authored moves. `pr-walkthrough` carries editable `props.diagram` sources whose shared node ids morph from beat to beat; the `architecture`, `component-change` and `state-machine` sketches expose their `diagram` so `clearframe sketch NAME` prints it, and a playbook beat that names one keeps the diagram declarative. See [system diagrams](../../../../docs/system-diagrams.md).
 
-
 ### Reusable diagram sketches
 
 Run `clearframe find --id sketch:parallel-checks` or `clearframe find --id sketch:exception-route`. Copy the returned `example` as a canvas beat and edit its node labels and timed steps. To make the adaptation searchable across a project, save an object with `summary`, `use`, and that `diagram` in `library/sketches/your-name.json`. The existing diagram compiler handles both frame shapes and validates connections. See the built-ins in [sketches](sketches/).

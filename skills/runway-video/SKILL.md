@@ -1,6 +1,6 @@
 ---
 name: runway-video
-description: Generate footage through Runway Dev — Seedance 2.5/2.0 (best motion, first/last keyframes, 480p–1080p) and Gen-4.5 (cheapest, first frame only). Exact request contract, task polling, image upload, credit pricing, moderation behaviour and when to route a shot to Veo instead. Use for footage-led films (sizzle, trailer, brand spot) or a hero insert native graphics cannot draw.
+description: Generate footage through Runway Dev — Seedance 2.5/2.0 (best motion, first/last keyframes, 480p–1080p) and Gen-4.5 (cheapest, first frame only). Exact request contract, task polling, image upload, credit pricing, moderation behaviour and fallback footage. Use for footage-led films (sizzle, trailer, brand spot) or a hero insert native graphics cannot draw.
 ---
 
 # Runway footage
@@ -42,6 +42,6 @@ One reference is the opening frame; two are the opening and closing keyframes (S
 
 ## Moderation
 
-Moderated outputs fail with `failureCode: SAFETY.*` and cost nothing, but **repeated moderation can suspend the account**. In practice, recognisable characters and faces seen close and front-on are blocked far more often than the same subject from behind, in profile or at distance. After one block, reframe (wider, from behind, less face-forward) or move that shot to Veo (`veo-video` skill) rather than retrying. Acceptance by a model is never a licence to use a character or likeness.
+Moderated outputs fail with `failureCode: SAFETY.*` and cost nothing, but **repeated moderation can suspend the account**. In practice, recognisable characters and faces seen close and front-on are blocked far more often than the same subject from behind, in profile or at distance. After a refusal, use a licensed source clip or an authored native scene. Acceptance by a model is never a licence to use a character or likeness.
 
 See [docs/hero-footage.md](../../docs/hero-footage.md) for the whole footage-led workflow.

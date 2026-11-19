@@ -1,7 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { LIBRARY } from '../library.mjs';
-export const ROOT = path.dirname(LIBRARY);
+const runtime = path.dirname(LIBRARY);
+const workspace = path.resolve(runtime, '../../..');
+// The workspace keeps reference documents at its root. A built distribution bundles them next to the library.
+export const ROOT =
+  path.basename(runtime) === 'src' &&
+  fs.existsSync(path.join(workspace, 'pnpm-workspace.yaml'))
+    ? workspace
+    : runtime;
 export const read = (rel: string): string => {
   try {
     return fs.readFileSync(path.join(ROOT, rel), 'utf8');

@@ -43,7 +43,7 @@ Professional audiences forgive plain design. They don't forgive a wrong number. 
 ## 5. AI transparency
 
 - **Voice:** Gemini TTS is synthetic. Say so in the delivery notes and, where the audience would care, in the end card or description ("Narration: AI-generated voice").
-- **Imagery and footage** from Gemini image, Lyria and Veo carry SynthID watermarks. Don't strip or obscure them, and label generated imagery when it could be mistaken for real documentation.
+- **Imagery and footage** from Gemini image, Lyria and Omni carry SynthID watermarks. Don't strip or obscure them, and label generated imagery when it could be mistaken for real documentation.
 - **Never** generate or imitate real people (faces or voices), real logos, real documents, receipts, screenshots or data "evidence". Never clone a real person's voice without explicit consent.
 - Generated visuals are **illustration, never evidence**.
 

@@ -14,7 +14,7 @@ The sections below record the October migration and its measurements on an M1 iM
 
 On October 18 the runtime was pinned to upstream main
 [`28356c5b5473`](https://github.com/dmtrKovalenko/fframes/commit/28356c5b5473fc3281167e3b2baff12a0d204a67),
-25 commits after the previous `62f6673` pin. The latest tagged release is still `v1.2.0`
+25 commits after the previous `62f6673` pin. At the time the latest tagged release was `v1.2.0`
 (October 3); using that tag would move backwards. The MIT notice was checked at the new
 revision and its hash is unchanged. `Cargo.lock` pins the resolved dependencies.
 
@@ -98,7 +98,7 @@ worker checks that its engine draws at fframes' output size.
 |---|---|---|
 | `main.rs` `render [A..B]` | **fframes** (`runtime::render` → `fframes::render` with `runtime::Backend`) | Range renders keep the film clock through `RenderOptions::frame_range` |
 | `main.rs` `frame`, `inspect`, `audit`, `bench`, `info`, `serve` | ClearFrame engine | Stills and diagnostics need no encoder; they draw with the same `Engine` the fframes workers use |
-| `encode.rs` (FFmpeg child, RGBA pipe, BT.601 limited, libx264 2 threads) | **fframes** `SegmentWriter` (in-process libav, libx264, two codec threads per segment, two segments at once) | Same CRF/preset/aq-mode/250-frame keyframe interval; `encode.rs` stays as the `CLEARFRAME_RUNTIME=scene` path until it is deleted |
+| `encode.rs` (FFmpeg child, RGBA pipe, BT.601 limited, libx264 2 threads) | **fframes** `SegmentWriter` (in-process libav, libx264, two codec threads per segment, two segments at once) | Same CRF, preset, aq-mode and 250-frame keyframe interval. The comparison pipe was removed on November 18. |
 | RGBA → YUV (FFmpeg's `scale` filter in the child) | ClearFrame `yuv.rs`, on the GPU | fframes' own converter point-samples chroma (measured ~3 dB worse) |
 | `gpu.rs` (Metal context, surfaces, readback) | ClearFrame | One Metal context per fframes worker; readback is three one-channel planes |
 | `compose.rs` (beats, wipes, stages, motion blur, chrome, grain) | ClearFrame | Unchanged |
@@ -210,8 +210,7 @@ With the mix running beside the render, moving it into fframes' `AudioMap` (stag
 ## Staged migration
 
 1. **Runtime for `render`** — done: `runtime.rs`, parity above.
-2. **Default runtime** — done: fframes renders every film; `CLEARFRAME_RUNTIME=scene` keeps the old
-   pipe (`encode.rs`) for comparison until it is deleted.
+2. **Default runtime** — FFrames renders every film. The November upgrade removed the comparison pipe.
 3. _Planned:_ audio through `AudioMap` (bed looping, ducking, gate, room tone, loudness target),
    compared against the Node mix with `analyze_audio` and the existing `qa` loudness checks.
 4. _Planned:_ fframes interfaces for authors: audio features for audio-reactive canvases, svgr/

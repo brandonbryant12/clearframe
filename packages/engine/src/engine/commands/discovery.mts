@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import { loadStoryboard } from '../lib/project.mjs';
 import { sketches, sketch, sketchByName } from '../../film/sketches.mjs';
 
 import type { CommandContext } from './options.mjs';
@@ -19,14 +21,16 @@ export async function findCommand({ positionals, o, opts }: CommandContext) {
   });
   if (o.neon) {
     const { adviseShot } = await import('../lib/shot-advice.mjs');
+    const projectBudget = fs.existsSync('storyboard.json')
+      ? loadStoryboard(process.cwd()).budget
+      : undefined;
+    const budget =
+      projectBudget == null
+        ? opts.budget
+        : Math.min(opts.budget ?? projectBudget, projectBudget);
     return console.log(
       JSON.stringify(
-        await adviseShot(
-          positionals.join(' '),
-          hits,
-          opts.budget,
-          o['dry-run'],
-        ),
+        await adviseShot(positionals.join(' '), hits, budget, o['dry-run']),
         null,
         2,
       ),

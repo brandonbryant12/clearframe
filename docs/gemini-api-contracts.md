@@ -64,7 +64,7 @@ MP3 request path corrected on 2026-09-28; tests use mocked responses, not paid g
 
 ## Gemini 4 Neon shot direction
 
-`clearframe find "explain an approval exception" --neon --dry-run` prints the shortlist, the serialized request and an estimated ceiling. Omit `--dry-run` to make one request, optionally setting `--budget USD`. Local search remains available without an account. The response schema admits only candidate IDs. ClearFrame resolves the ID into editable catalog data and returns the proposed movement and a visible review check. The model uses low thinking, a 1,024-token output limit, and no stored interaction. The published standard rates are $3 per million input tokens and $15 per million output tokens. [Neon model](https://aistudio.google.com/docs/models/gemini-4-neon)
+`clearframe find "explain an approval exception" --neon --dry-run` prints the shortlist, the serialized request and an estimated ceiling. Omit `--dry-run` to make one request, optionally setting `--budget USD`. Inside a film, the lower of the command and storyboard budgets applies. Local search remains available without an account. The response schema admits only candidate IDs. ClearFrame resolves the ID into editable catalog data and returns the proposed movement and a visible review check. The model uses low thinking, a 1,024-token output limit, and no stored interaction. The published standard rates are $3 per million input tokens and $15 per million output tokens. [Neon model](https://aistudio.google.com/docs/models/gemini-4-neon)
 
 ## Generated video
 

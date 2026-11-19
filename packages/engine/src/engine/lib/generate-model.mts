@@ -27,7 +27,7 @@ export function guardBudget(
 ): void {
   if (budget != null && total > budget) {
     throw new Error(
-      `Estimated spend ${money(total)} exceeds the budget ${money(budget)}. Raise it with --budget or storyboard.budget.`,
+      `Estimated spend ${money(total)} exceeds the budget ${money(budget)}. Review the applicable command and project budgets before retrying.`,
     );
   }
 }
