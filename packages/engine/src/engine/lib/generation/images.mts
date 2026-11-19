@@ -5,6 +5,7 @@ import {
   money,
   guardBudget,
   assetMeta,
+  nonempty,
   frameAspect,
 } from '../generate-model.mjs';
 
@@ -15,11 +16,39 @@ import path from 'node:path';
 
 import { loadStoryboard, paths } from '../project.mjs';
 
+import { audioHash } from '../word-timing.mjs';
 import { hashOf, log, writeJSON } from '../util.mjs';
 
 import * as image from '../../../skills/gemini-image/scripts/image.mjs';
 
 import { palette } from '../../../film/catalog.mjs';
+
+function referenceFiles(root: string, img: string, a: Asset) {
+  return (a.refs ?? []).map((ref) => {
+    const full = path.resolve(root, ref);
+    if (!full.startsWith(path.resolve(root) + path.sep))
+      throw new Error(`Image reference must be inside the project: ${ref}`);
+    return fs.existsSync(full) ? full : path.join(img, `${ref}.jpg`);
+  });
+}
+
+/** What an image's cache depends on: how it is drawn, not how it is staged (bounds, ground). */
+export function imageHash(root: string, sb: ResolvedStoryboard, a: Asset) {
+  const { bounds: _bounds, ground: _ground, ...drawn } = a;
+  return hashOf({
+    ...drawn,
+    model: a.model ?? image.MODEL,
+    aspect: a.aspect ?? frameAspect(sb.format),
+    prompt: imagePrompt(sb, drawn),
+    ...(a.refs?.length
+      ? {
+          referenceBytes: referenceFiles(root, paths(root).img, a).map(
+            (file) => (fs.existsSync(file) ? audioHash(file) : null),
+          ),
+        }
+      : {}),
+  });
+}
 
 /**
  * The prompt actually sent for a generated still: the author's subject, then the film's palette
@@ -27,17 +56,6 @@ import { palette } from '../../../film/catalog.mjs';
  * needs its subject away from the seam; a full plate needs calm space where text sits).
  * `raw: true` sends the author's prompt unchanged.
  */
-/** What an image's cache depends on: how it is drawn, not how it is staged (bounds, ground). */
-export function imageHash(sb: ResolvedStoryboard, a: Asset) {
-  const { bounds: _bounds, ground: _ground, ...drawn } = a;
-  return hashOf({
-    ...drawn,
-    model: a.model ?? image.MODEL,
-    aspect: a.aspect ?? frameAspect(sb.format),
-    prompt: imagePrompt(sb, drawn),
-  });
-}
-
 export function imagePrompt(sb: ResolvedStoryboard, a: Asset): string {
   if (typeof a.prompt !== 'string')
     throw new Error(`Image ${a.id} requires a prompt`);
@@ -84,12 +102,12 @@ export async function images(
   const list = sb.assets.filter(
     (a) => a.kind === 'image' && !a.file && (!only || only.includes(a.id)),
   );
-  const specHash = (a: Asset) => imageHash(sb, a);
+  const specHash = (a: Asset) => imageHash(root, sb, a);
   const todo = list.filter(
     (a) =>
       force ||
       assetMeta(P.img, a.id)?.hash !== specHash(a) ||
-      !fs.existsSync(path.join(P.img, `${a.id}.${a.cutout ? 'png' : 'jpg'}`)),
+      !nonempty(path.join(P.img, `${a.id}.${a.cutout ? 'png' : 'jpg'}`)),
   );
   if (!todo.length) {
     log.ok('Images are up to date.');
@@ -103,11 +121,8 @@ export async function images(
   guardBudget(cost, budget ?? sb.budget);
   fs.mkdirSync(P.img, { recursive: true });
   for (const a of todo) {
-    const refs = (a.refs ?? []).map((r) =>
-      fs.existsSync(path.join(root, r))
-        ? path.join(root, r)
-        : path.join(P.img, `${r}.jpg`),
-    );
+    const refs = referenceFiles(root, P.img, a);
+    const hash = specHash(a);
     const aspect = a.aspect ?? frameAspect(sb.format);
     const prompt = imagePrompt(sb, a);
     const r = await image.generateImage({
@@ -125,7 +140,7 @@ export async function images(
       fs.rmSync(path.join(P.img, `${a.id}.jpg`), { force: true });
     } else fs.writeFileSync(path.join(P.img, `${a.id}.jpg`), r.data);
     writeJSON(path.join(P.img, `${a.id}.json`), {
-      hash: specHash(a),
+      hash,
       model: a.model ?? image.MODEL,
       prompt,
       note: r.text,

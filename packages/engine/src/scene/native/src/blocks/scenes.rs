@@ -1,6 +1,7 @@
 //! Scene composition: the shared layout grid, typographic helpers, entrances/exits and
 //! the story blocks. Charts, diagrams and media plates live in sibling modules.
-use super::{Beat, Caption, Ctx, Frame};
+use super::{Beat, Ctx, Frame};
+use fframes::media::subtitles::{CaptionWord, WordState};
 use crate::design::Palette;
 use crate::draw::{self, Node, empty};
 use crate::motion::{self, Enter, ExitKind, MotionStyle};
@@ -98,12 +99,12 @@ fn phrases(v: &Value, key: &str) -> Vec<String> {
         .collect()
 }
 
-pub(crate) fn active_word(words: &[Caption], time: f32) -> Option<usize> {
-    words.iter().position(|word| time >= word.start && time < word.end)
+pub(crate) fn active_word(words: &[CaptionWord], time: f32) -> Option<usize> {
+    words.iter().position(|word| word.state_at(f64::from(time)) == WordState::Active)
 }
 /// Phrase membership is derived from prepared timestamps, never estimated from text.
 pub(crate) fn word_window(
-    words: &[Caption],
+    words: &[CaptionWord],
     time: f32,
     max_words: usize,
     max_gap: f32,
@@ -114,7 +115,7 @@ pub(crate) fn word_window(
 /// As `word_window`; with `sentences`, a phrase also ends after . ! or ? so poster type
 /// never strands the start of the next sentence.
 pub(crate) fn phrase_window(
-    words: &[Caption],
+    words: &[CaptionWord],
     time: f32,
     max_words: usize,
     max_gap: f32,
@@ -124,7 +125,7 @@ pub(crate) fn phrase_window(
     if words.is_empty() {
         return 0..0;
     }
-    let latest = words.iter().rposition(|word| time >= word.start).unwrap_or(0);
+    let latest = words.iter().rposition(|word| word.state_at(f64::from(time)) != WordState::Upcoming).unwrap_or(0);
     let mut start = 0;
     for index in 1..words.len() {
         let ends_sentence =
@@ -143,8 +144,8 @@ pub(crate) fn phrase_window(
         let boundary = full
             || ends_sentence
             || ends_clause
-            || words[index].start - words[index - 1].end > max_gap
-            || words[index].end - words[start].start > max_duration;
+            || words[index].start as f32 - words[index - 1].end as f32 > max_gap
+            || words[index].end as f32 - words[start].start as f32 > max_duration;
         if boundary {
             if latest < index {
                 return start..index;
@@ -862,8 +863,8 @@ mod tests {
     #[test]
     fn words_follow_half_open_timestamps_and_seek_backwards() {
         let words = vec![
-            Caption { text: "one".into(), start: 0.1, end: 0.5, lines: vec![] },
-            Caption { text: "two".into(), start: 0.6, end: 1.0, lines: vec![] },
+            CaptionWord::new("one", f64::from(0.1_f32), f64::from(0.5_f32)),
+            CaptionWord::new("two", f64::from(0.6_f32), f64::from(1.0_f32)),
         ];
         assert_eq!(active_word(&words, 0.0), None);
         assert_eq!(active_word(&words, 0.1), Some(0));
@@ -875,11 +876,11 @@ mod tests {
     #[test]
     fn phrases_split_on_word_limit_silence_and_duration_without_changing_timestamps() {
         let words = vec![
-            Caption { text: "Observe".into(), start: 0.0, end: 0.4, lines: vec![] },
-            Caption { text: "closely".into(), start: 0.5, end: 0.9, lines: vec![] },
-            Caption { text: "Then".into(), start: 2.0, end: 2.3, lines: vec![] },
-            Caption { text: "begin".into(), start: 2.4, end: 2.8, lines: vec![] },
-            Caption { text: "again".into(), start: 2.9, end: 3.4, lines: vec![] },
+            CaptionWord::new("Observe", f64::from(0.0_f32), f64::from(0.4_f32)),
+            CaptionWord::new("closely", f64::from(0.5_f32), f64::from(0.9_f32)),
+            CaptionWord::new("Then", f64::from(2.0_f32), f64::from(2.3_f32)),
+            CaptionWord::new("begin", f64::from(2.4_f32), f64::from(2.8_f32)),
+            CaptionWord::new("again", f64::from(2.9_f32), f64::from(3.4_f32)),
         ];
         assert_eq!(word_window(&words, 0.2, 7, 0.6, 4.0), 0..2);
         assert_eq!(word_window(&words, 1.8, 7, 0.6, 4.0), 0..2);
@@ -888,14 +889,14 @@ mod tests {
         assert_eq!(word_window(&words, 3.1, 7, 0.6, 1.0), 4..5);
         assert_eq!(word_window(&words, 2.5, 1, 0.6, 4.0), 3..4);
         assert_eq!(words[2].start, 2.0);
-        assert_eq!(words[4].end, 3.4);
+        assert_eq!(words[4].end, f64::from(3.4_f32));
     }
     #[test]
     fn phrases_never_end_on_a_word_that_leans_on_the_next() {
-        let words: Vec<Caption> = "The problem was never too few buses."
+        let words: Vec<CaptionWord> = "The problem was never too few buses."
             .split(' ')
             .enumerate()
-            .map(|(i, w)| Caption { text: w.into(), start: i as f32 * 0.3, end: i as f32 * 0.3 + 0.25, lines: vec![] })
+            .map(|(i, w)| CaptionWord::new(w, f64::from(i as f32 * 0.3), f64::from(i as f32 * 0.3 + 0.25)))
             .collect();
         // "The problem was never too" would strand "too": it starts the next phrase instead.
         assert_eq!(phrase_window(&words, 0.1, 5, 0.6, 9.0, true), 0..4);

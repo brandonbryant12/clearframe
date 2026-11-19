@@ -183,3 +183,66 @@ test('Retired Veo previews fail with a migration path before sending a request',
     /retired.*gemini-omni-1.2-flash/,
   );
 });
+
+test('Neon directs from real catalog entries, validates its result, and respects dry-run and budget', async (t) => {
+  const { adviseShot } =
+    await import('../packages/engine/dist/engine/lib/shot-advice.mjs');
+  const { entries } = await import('../packages/engine/dist/film/discover.mjs');
+  const entry = entries().find((e) => e.id === 'sketch:parallel-checks');
+  assert.ok(entry);
+  let libraryId = entry.id;
+  t.mock.method(globalThis, 'fetch', async () =>
+    Response.json({
+      status: 'completed',
+      steps: [
+        {
+          type: 'model_output',
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify({
+                libraryId,
+                direction: 'Send both reviews before the decision.',
+                check: 'The release waits for both results.',
+              }),
+            },
+          ],
+        },
+      ],
+    }),
+  );
+  const preview = await adviseShot(
+    'Review a change concurrently',
+    [entry],
+    0,
+    true,
+  );
+  assert.equal(preview.request.model, 'gemini-4-neon');
+  assert.equal(preview.request.store, false);
+  assert.deepEqual(
+    preview.request.response_format.schema.properties.libraryId.enum,
+    [entry.id],
+  );
+  assert.ok(preview.estimatedUsd > 0);
+  await assert.rejects(adviseShot('Review a change', [entry], 0), /budget/i);
+  await assert.rejects(adviseShot('No match', [], 1), /No matching/);
+  assert.equal(globalThis.fetch.mock.callCount(), 0);
+  const before = process.env.GEMINI_API_KEY;
+  process.env.GEMINI_API_KEY = 'test-only';
+  t.after(() => {
+    if (before === undefined) delete process.env.GEMINI_API_KEY;
+    else process.env.GEMINI_API_KEY = before;
+  });
+  const selected = await adviseShot('Review a change', [entry], 1);
+  assert.equal(selected.authoring.example.block, 'canvas');
+  assert.equal(
+    selected.authoring.example.props.diagram.nodes[0].label,
+    'Change',
+  );
+  libraryId = 'sketch:invented';
+  await assert.rejects(
+    adviseShot('Review a change', [entry], 1),
+    /outside the shortlist/,
+  );
+  assert.equal(globalThis.fetch.mock.callCount(), 2);
+});

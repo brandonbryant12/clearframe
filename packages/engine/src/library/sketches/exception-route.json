@@ -1,0 +1,67 @@
+{
+  "name": "exception-route",
+  "summary": "A rule sends a routine case through and diverts an exception to a person for a decision.",
+  "use": "Explain a policy exception, a manual review queue or an escalation with one decision point.",
+  "diagram": {
+    "nodes": [
+      {
+        "id": "request",
+        "label": "Request"
+      },
+      {
+        "id": "rule",
+        "label": "Rule",
+        "kind": "state"
+      },
+      {
+        "id": "pass",
+        "label": "Approved",
+        "kind": "state"
+      },
+      {
+        "id": "person",
+        "label": "Reviewer",
+        "kind": "user"
+      }
+    ],
+    "edges": [
+      {
+        "from": "request",
+        "to": "rule"
+      },
+      {
+        "from": "rule",
+        "to": "pass",
+        "label": "qualifies"
+      },
+      {
+        "from": "rule",
+        "to": "person",
+        "label": "exception",
+        "style": "dashed"
+      }
+    ],
+    "steps": [
+      {
+        "at": 1.2,
+        "send": ["request", "rule", "pass"]
+      },
+      {
+        "at": 2.8,
+        "set": {
+          "pass": "added"
+        }
+      },
+      {
+        "at": 3.4,
+        "send": ["request", "rule", "person"]
+      },
+      {
+        "at": 5,
+        "set": {
+          "person": "active"
+        }
+      }
+    ]
+  }
+}

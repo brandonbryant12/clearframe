@@ -114,6 +114,8 @@ export function footageProblems(
 function referencePrompt(count: number): string {
   if (count === 2)
     return 'Use the first reference as the opening composition and the second as the closing composition.';
+  if (count > 2)
+    return 'Use the supplied images as visual references for consistent subjects, colours and setting.';
   return count
     ? 'Match the reference composition, subject, palette and lighting.'
     : '';

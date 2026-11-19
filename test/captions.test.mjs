@@ -94,3 +94,44 @@ test('a vertical frame keeps captions narrower', () => {
     JSON.stringify(cues.map((c) => c.lines)),
   );
 });
+
+test('FFrames keeps measured word times on the film clock and labels rough speech as phrase-only', async () => {
+  const { fframesTrack } =
+    await import('../packages/engine/dist/engine/lib/timing-captions.mjs');
+  const words = [
+    { w: 'Hold', t0: 2, t1: 2.2 },
+    { w: 'here.', t0: 2.5, t1: 3 },
+  ];
+  const { cues } = fframesTrack({
+    width: 1080,
+    height: 1920,
+    fps: 30,
+    beats: [
+      { id: 'silent' },
+      { id: 'recorded', vo: { words, wordTiming: 'measured' } },
+      {
+        id: 'rough',
+        vo: { wordTiming: 'estimated', words: [{ w: 'Next.', t0: 4, t1: 5 }] },
+      },
+    ],
+  });
+  assert.deepEqual(cues, [
+    {
+      id: 'recorded-1',
+      start: 2,
+      end: 3,
+      metadata: { beat: 'recorded', timing: 'measured' },
+      words: [
+        { text: 'Hold', start: 2, end: 2.2 },
+        { text: 'here.', start: 2.5, end: 3 },
+      ],
+    },
+    {
+      id: 'rough-1',
+      start: 4,
+      end: 5,
+      metadata: { beat: 'rough', timing: 'estimated' },
+      text: 'Next.',
+    },
+  ]);
+});

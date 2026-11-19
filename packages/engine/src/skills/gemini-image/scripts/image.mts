@@ -105,9 +105,14 @@ export interface ImageRequest {
   };
 }
 
-export function outputSize(model: string, size: string): string {
+function imageModel(model: string): ImageModel {
   const profile = modelLookup.get(model);
   if (!profile) throw new Error(`Unknown Gemini image model ${model}`);
+  return profile;
+}
+
+export function outputSize(model: string, size: string): string {
+  const profile = imageModel(model);
   const requested = size.toUpperCase();
   const resolved =
     model === 'gemini-3.1-flash-lite-image' ||
@@ -161,7 +166,7 @@ export function estimateCost({
   size?: string | undefined;
 }): number {
   const imageSize = outputSize(model, size);
-  return modelLookup.get(model)!.price[imageSize];
+  return imageModel(model).price[imageSize];
 }
 
 export interface GeneratedImage {

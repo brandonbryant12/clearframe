@@ -742,3 +742,31 @@ test('a sketch moment on a word keeps the sequence it draws', () => {
     `offsets after the word: ${offsets.join(', ')}`,
   );
 });
+
+test('agents can adapt a built-in diagram as a project JSON sketch in both aspect ratios', async (t) => {
+  const { detail } = await import('../packages/engine/dist/film/discover.mjs');
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'clearframe-diagram-'));
+  t.after(() => {
+    useProject(null);
+    fs.rmSync(root, { recursive: true, force: true });
+  });
+  const example = await detail('sketch:exception-route');
+  const diagram = example.example.props.diagram;
+  diagram.nodes[0].label = 'Expense';
+  write(root, 'library/sketches/expense-review.json', {
+    summary: 'Expense approval',
+    use: 'Expense review',
+    diagram,
+  });
+  useProject(root);
+  for (const format of ['vertical', 'landscape']) {
+    const drawing = sketch('expense-review', format);
+    assert.ok(drawing.elements.length > 0);
+    assert.match(JSON.stringify(drawing), /Expense/);
+  }
+  assert.equal(
+    (await detail('sketch:exception-route')).example.props.diagram.nodes[0]
+      .label,
+    'Request',
+  );
+});

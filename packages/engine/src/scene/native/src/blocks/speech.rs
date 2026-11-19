@@ -57,7 +57,7 @@ impl<'a, 'c> Draw<'a, 'c> {
     // ── Speech ──────────────────────────────────────────────────────────────────────
     pub(crate) fn word_layout(
         &self,
-        words: &[Caption],
+        words: &[CaptionWord],
         box_: Area,
         size: f32,
         mode: &str,
@@ -75,11 +75,11 @@ impl<'a, 'c> Draw<'a, 'c> {
         if mode == "word" {
             // Hold the last spoken word through short pauses so the screen does not blink
             // between words; longer silences still clear. Timestamps are not altered.
-            let held = current.or_else(|| words.iter().rposition(|w| self.t >= w.end && self.t - w.end < max_gap));
+            let held = current.or_else(|| words.iter().rposition(|w| w.state_at(f64::from(self.t)) == WordState::Spoken && self.t - (w.end as f32) < max_gap));
             let Some(i) = held else { return empty() };
             let v = self.voice();
             let layout = self.fit(&words[i].text, v.style(v.bold(), size * 1.35, 1.08, true), box_.w, box_.h);
-            let pop = 0.9 + 0.1 * self.m.pop(self.t - words[i].start);
+            let pop = 0.9 + 0.1 * self.m.pop(self.t - words[i].start as f32);
             let (cx, cy) = (box_.x + box_.w / 2.0, box_.y + box_.h / 2.0);
             let y = box_.y + (box_.h - layout.height()) / 2.0;
             let node =
@@ -137,7 +137,7 @@ impl<'a, 'c> Draw<'a, 'c> {
             for &(i, width) in line {
                 let word = &chunk[i];
                 let active = current == Some(start + i);
-                let spoken = self.t >= word.start;
+                let spoken = word.state_at(f64::from(self.t)) != WordState::Upcoming;
                 let (color, opacity) = match mode {
                     _ if active => (self.p.accent.clone(), 1.0),
                     "reveal" => (self.p.ink.clone(), if spoken { 1.0 } else { 0.0 }),
@@ -151,7 +151,7 @@ impl<'a, 'c> Draw<'a, 'c> {
                     let run = self.run(word.text.clone(), x, y, font, size, 0.0, &color);
                     if mode == "reveal" && !caption {
                         // Each word rises a few pixels as it is spoken.
-                        let e = self.m.enter_over(self.t - word.start, 0.22);
+                        let e = self.m.enter_over(self.t - word.start as f32, 0.22);
                         let dy = (1.0 - e.travel) * size * 0.18;
                         shapes.push(draw::group(vec![run.into()]).opacity(e.alpha).translate(0.0, dy));
                     } else if opacity < 1.0 {
@@ -204,9 +204,9 @@ impl<'a, 'c> Draw<'a, 'c> {
         let chunk = &words[window.clone()];
         // Hold a phrase through pauses until the next one starts; the last phrase stays up
         // until the scene leaves.
-        let last_end = chunk.last().map_or(0.0, |w| w.end);
+        let last_end = chunk.last().map_or(0.0, |w| w.end as f32);
         if let Some(next) = words.get(window.end) {
-            if self.t > last_end + n(p, "maxGap", 0.6) as f32 && self.t < next.start - 0.3 {
+            if self.t > last_end + n(p, "maxGap", 0.6) as f32 && self.t < next.start as f32 - 0.3 {
                 return empty();
             }
         }
@@ -229,8 +229,8 @@ impl<'a, 'c> Draw<'a, 'c> {
         let center = s(p, "align") != "left";
         let a = self.area;
         let base = if self.wide { 132.0 } else { 118.0 };
-        let text_of = |w: &Caption| if upper { w.text.to_uppercase() } else { w.text.clone() };
-        let big = |w: &Caption| emphasized.contains(&key(&w.text));
+        let text_of = |w: &CaptionWord| if upper { w.text.to_uppercase() } else { w.text.clone() };
+        let big = |w: &CaptionWord| emphasized.contains(&key(&w.text));
         // Fit: shrink until every line fits the width and the stack fits the height.
         let mut scale = 1.0f32;
         let mut lines: Vec<Vec<(usize, f32, f32)>>;
@@ -300,7 +300,7 @@ impl<'a, 'c> Draw<'a, 'c> {
             for &(i, width, size) in line {
                 let w = &chunk[i];
                 // A word is on screen as it is said, not a beat after.
-                let appear = w.start - 0.12;
+                let appear = w.start as f32 - 0.12;
                 if self.t >= appear {
                     let e = self.m.enter_over(self.t - appear, 0.28);
                     let color = if big(w) { self.p.accent.clone() } else { self.p.ink.clone() };
@@ -348,7 +348,7 @@ impl<'a, 'c> Draw<'a, 'c> {
             (Some(a), Some(b)) => (a, b),
             _ => return empty(),
         };
-        if self.t < first.start - 0.04 || self.t > last.end + 0.45 {
+        if self.t < first.start as f32 - 0.04 || self.t > last.end as f32 + 0.45 {
             return empty();
         }
         let chunk = &words[window.clone()];
@@ -402,7 +402,7 @@ impl<'a, 'c> Draw<'a, 'c> {
                 let active = current == Some(window.start + i);
                 let text = word.text.clone();
                 if active {
-                    let pop = 0.86 + 0.14 * self.m.pop(self.t - word.start);
+                    let pop = 0.86 + 0.14 * self.m.pop(self.t - word.start as f32);
                     let (pw, ph) = (w + size * 0.3, size * 1.08);
                     let (cx, cy) = (x + w / 2.0, baseline - size * 0.34);
                     let pill = rounded(cx - pw / 2.0, cy - ph / 2.0, pw, ph, size * 0.2, &self.p.accent);
@@ -414,7 +414,7 @@ impl<'a, 'c> Draw<'a, 'c> {
                             .translate(cx, cy),
                     );
                 } else {
-                    let spoken = self.t >= word.start;
+                    let spoken = word.state_at(f64::from(self.t)) != WordState::Upcoming;
                     let ink = if spoken { self.p.ink.as_str() } else { self.p.muted.as_str() };
                     back.push(
                         self.run(text.clone(), x, baseline, font, size, 0.0, &self.p.bg).outline(&self.p.bg, outline),
@@ -425,7 +425,7 @@ impl<'a, 'c> Draw<'a, 'c> {
             }
         }
         // The phrase snaps in as a unit.
-        let e = self.m.enter_over(self.t - first.start + 0.04, 0.16);
+        let e = self.m.enter_over(self.t - first.start as f32 + 0.04, 0.16);
         let (cx, cy) = (self.area.x + self.area.w / 2.0, centre_y);
         let scale = 0.9 + 0.1 * e.travel;
         draw::group(vec![back.into(), front.into()]).opacity(e.alpha).scale_about(scale, cx, cy)
@@ -437,9 +437,8 @@ impl<'a, 'c> Draw<'a, 'c> {
     /// and off with the speech, as subtitles do: no fades, no motion.
     fn standard_captions(&self) -> Node {
         let env = &self.b.environment;
-        let Some(cue) = self.b.captions.iter().find(|c| self.t >= c.start && self.t < c.end) else { return empty() };
-        let lines: Vec<&str> =
-            if cue.lines.is_empty() { vec![cue.text.as_str()] } else { cue.lines.iter().map(String::as_str).collect() };
+        let Some((_, cue)) = self.b.captions.active_cues(f64::from(self.t)).next() else { return empty() };
+        let lines: Vec<&str> = cue.text.split('\n').collect();
         let (size, line_h, top, _) = super::compositor::caption_band(env, lines.len(), self.caption_top, self.bar);
         let font = Font::TextStrong;
         // A line too long for the frame's safe width (a long word, a narrow frame) is set smaller.

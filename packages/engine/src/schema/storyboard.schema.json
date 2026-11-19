@@ -348,7 +348,7 @@
         },
         "refs": {
           "type": "array",
-          "maxItems": 2,
+          "maxItems": 6,
           "items": {
             "type": "string"
           }
@@ -386,7 +386,7 @@
           "seconds": {
             "type": "number",
             "exclusiveMinimum": 0,
-            "maximum": 10
+            "maximum": 15
           },
           "resolution": {
             "type": "string"

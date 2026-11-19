@@ -52,7 +52,7 @@ export function plan(root: string) {
 export function assetPlan({ a, P, sb, rows, root }: AssetPlanContext) {
   if (a.kind === 'image') {
     const done =
-      assetMeta(P.img, a.id)?.hash === imageHash(sb, a) &&
+      assetMeta(P.img, a.id)?.hash === imageHash(root, sb, a) &&
       nonempty(path.join(P.img, `${a.id}.${a.cutout ? 'png' : 'jpg'}`));
     rows.push({
       kind: 'image',
