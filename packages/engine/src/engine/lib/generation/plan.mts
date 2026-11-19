@@ -57,7 +57,7 @@ export function assetPlan({ a, P, sb, rows, root }: AssetPlanContext) {
     rows.push({
       kind: 'image',
       id: a.id,
-      detail: `${a.size ?? '2K'} ${a.model ?? 'gemini-3.1-flash-image'}`,
+      detail: `${image.outputSize(a.model ?? image.MODEL, a.size ?? '2K')} ${a.model ?? image.MODEL}`,
       cost: done
         ? 0
         : image.estimateCost({ model: a.model, size: a.size ?? '2K' }),

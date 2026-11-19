@@ -1,0 +1,43 @@
+name: Native film runtime
+on:
+  pull_request:
+    paths:
+      - 'packages/engine/src/scene/native/**'
+      - 'packages/engine/src/engine/lib/timing-captions.mts'
+      - 'archive/fframes/**'
+      - '.github/workflows/native-runtime.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: native-runtime-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  native:
+    runs-on: macos-15
+    timeout-minutes: 45
+    env:
+      CARGO_BUILD_JOBS: '1'
+      RAYON_NUM_THREADS: '2'
+    defaults:
+      run:
+        working-directory: packages/engine/src/scene/native
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Install media tools
+        run: command -v ffmpeg || brew install ffmpeg
+      - name: Test locked renderer and caption timing
+        run: cargo test --release --locked --jobs 1 -- --test-threads=2
+      - name: Read a WebVTT cue through the release binary
+        run: |
+          cargo build --release --locked --jobs 1
+          printf 'WEBVTT\n\n00:00:00.000 --> 00:00:01.000\nOne phrase\n' > "$RUNNER_TEMP/cue.vtt"
+          target/release/clearframe-scene caption-track "$RUNNER_TEMP/cue.vtt" --at 0.5 | jq -e '.active[0].cue.text == "One phrase" and .active[0].activeWords == []'
+      - name: Preserve the tested macOS binary
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: clearframe-scene-macos-arm64
+          path: packages/engine/src/scene/native/target/release/clearframe-scene
+          retention-days: 7

@@ -2,7 +2,9 @@
 // lines of 42 characters (28 on a vertical frame), one sentence per caption where it fits, lines
 // broken where a reader would pause, at most 20 characters a second, on screen 5/6 s to 7 s,
 // 2 frames apart, and never across a cut.
-import type { Word } from '../domain.mjs';
+import fs from 'node:fs';
+import path from 'node:path';
+import type { Timing, Word } from '../domain.mjs';
 
 /** A caption: film seconds and its text, optionally already broken into lines. */
 export interface CaptionText {
@@ -218,4 +220,38 @@ export function toSRT(cues: readonly CaptionText[]): string {
 }
 export function toVTT(cues: readonly CaptionText[]): string {
   return `WEBVTT\n\n${cues.map((c) => `${stamp(c.start, '.')} --> ${stamp(c.end, '.')}\n${(c.lines ?? [c.text]).join('\n')}\n`).join('\n')}`;
+}
+
+/** Timed-word JSON for fframes. Keep the original speech intervals even when a subtitle is
+ * held on screen after the voice. Rough narration exports phrase text, never invented word times. */
+export function fframesTrack(timing: Timing) {
+  const chars = timing.height > timing.width ? 28 : 42;
+  const cues = timing.beats.flatMap((beat) => {
+    const voice = beat.vo;
+    if (!voice) return [];
+    const groups = captionGroups(
+      voice.words.filter((w) => w.w.trim()),
+      chars,
+    );
+    return groups.map((group, i) => ({
+      id: `${beat.id}-${i + 1}`,
+      start: group[0].t0,
+      end: last(group).t1,
+      metadata: { beat: beat.id, timing: voice.wordTiming },
+      ...(voice.wordTiming === 'measured'
+        ? { words: group.map((w) => ({ text: w.w, start: w.t0, end: w.t1 })) }
+        : { text: joined(group) }),
+    }));
+  });
+  return { cues };
+}
+
+export function writeCaptionSidecars(build: string, timing: Timing): void {
+  const cues = captionCues(timing);
+  fs.writeFileSync(path.join(build, 'captions.srt'), toSRT(cues));
+  fs.writeFileSync(path.join(build, 'captions.vtt'), toVTT(cues));
+  fs.writeFileSync(
+    path.join(build, 'captions.fframes.json'),
+    JSON.stringify(fframesTrack(timing), null, 2) + '\n',
+  );
 }

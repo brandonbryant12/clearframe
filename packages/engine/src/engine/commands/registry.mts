@@ -21,6 +21,7 @@ import {
 } from './catalog.mjs';
 import {
   referenceCommand,
+  captionTrackCommand,
   planCommand,
   speechCommand,
   alignCommand,
@@ -69,6 +70,7 @@ export const standaloneCommands: readonly Command[] = [
   { matches: ({ cmd }) => cmd === 'blocks', run: blocksCommand },
   { matches: ({ cmd }) => cmd === 'themes', run: themesCommand },
   { matches: ({ cmd }) => cmd === 'icons', run: iconsCommand },
+  { matches: ({ cmd }) => cmd === 'caption-track', run: captionTrackCommand },
   { matches: ({ cmd }) => cmd === 'reference', run: referenceCommand },
   { matches: ({ cmd }) => cmd === 'treatments', run: treatmentsCommand },
   { matches: ({ cmd }) => cmd === 'types', run: typesCommand },

@@ -18,8 +18,9 @@ import { clipSpec, footageProblems } from '../continuity.mjs';
 
 /** The skill that serves a clip model: Gemini Omni, Veo or Runway (Seedance, Gen-4.5). */
 export function clipProvider(model: string) {
-  if (model === omni.MODEL) return omni;
-  if (Object.hasOwn(veo.MODELS, model)) return veo;
+  if (omni.isOmni(model)) return omni;
+  if (Object.hasOwn(veo.MODELS, model))
+    throw new Error(veo.retirementMessage(model));
   if (Object.hasOwn(runway.MODELS, model)) return runway;
   throw new Error(`Unsupported video model ${model}`);
 }
@@ -63,7 +64,7 @@ export async function clips(
     0,
   );
   log.step(
-    `${todo.length} generated insert(s), approximately ${money(estimate)}. Omni duration and final charges can vary; this is an estimate, not a billing cap.`,
+    `${todo.length} generated insert(s), approximately ${money(estimate)}. Includes estimated video output charges. Input and other provider charges may apply.`,
   );
   guardBudget(estimate, budget ?? sb.budget);
   fs.mkdirSync(P.clips, { recursive: true });
@@ -72,21 +73,16 @@ export async function clips(
       stage = path.join(P.clips, `${a.id}-${process.pid}.tmp.mp4`);
     let result: ClipGenerationResult | undefined;
     try {
-      if (spec.model === omni.MODEL) {
+      if (omni.isOmni(spec.model)) {
         const generated = await omni.generateVideo(spec);
         fs.writeFileSync(stage, generated.data);
         result = generated;
-      } else if (clipProvider(spec.model) === runway)
-        // Two references are the opening and closing keyframes; one is the opening frame.
+      } else {
         result = await runway.generateVideo(
           { ...spec, images: spec.refs.slice(0, 2) },
           { out: stage, onPoll: () => process.stdout.write('.') },
         );
-      else
-        await veo.generateVideo(
-          { ...spec, image: spec.refs[0] },
-          { out: stage, onPoll: () => process.stdout.write('.') },
-        );
+      }
       const seconds = await mediaDuration(stage);
       if (!(seconds > 0)) throw new Error('Generated clip is not playable');
       fs.renameSync(stage, out);
@@ -133,6 +129,7 @@ export function footageUses(
       seconds: b.end - b.start,
       have: made ?? a.seconds ?? 4,
       generated: true,
+      maxTake: (a.model ?? omni.MODEL) === omni.MODEL ? 15 : 10,
     });
   }
   return uses;

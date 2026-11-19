@@ -521,7 +521,7 @@ test('Omni request uses documented fields, MP4 URI delivery and reference order'
     refs: [ref],
     previousInteractionId: 'previous',
   });
-  assert.equal(r.model, 'gemini-omni-1.1-flash');
+  assert.equal(r.model, 'gemini-omni-1.2-flash');
   assert.equal(r.input[0].type, 'image');
   assert.equal(r.previous_interaction_id, 'previous');
   assert.deepEqual(r.response_format, {
@@ -529,10 +529,37 @@ test('Omni request uses documented fields, MP4 URI delivery and reference order'
     aspect_ratio: '16:9',
     resolution: '720p',
     delivery: 'uri',
+    duration: '4s',
   });
   assert.equal(r.duration_seconds, undefined);
-  assert.ok(omni.estimateCost({ seconds: 4 }) > 0.4);
-  assert.throws(() => omni.estimateCost({ resolution: '4k' }), /720p/);
+  assert.equal(omni.estimateCost({ seconds: 4 }), (4 * 5792 * 12) / 1e6);
+  assert.equal(
+    omni.estimateCost({ resolution: '4k', seconds: 15 }),
+    (15 * 17376 * 12) / 1e6,
+  );
+  assert.equal(
+    omni.buildRequest({ prompt: 'pan', seconds: 15, refs: Array(6).fill(ref) })
+      .response_format.duration,
+    '15s',
+  );
+  assert.throws(
+    () => omni.buildRequest({ prompt: 'pan', refs: Array(7).fill(ref) }),
+    /6 reference/,
+  );
+  assert.throws(
+    () => omni.buildRequest({ prompt: 'pan', seconds: 11, refs: [ref, ref] }),
+    /between 3 and 10/,
+  );
+  assert.throws(
+    () => omni.buildRequest({ prompt: 'pan', seconds: 3.5 }),
+    /whole number/,
+  );
+  const legacy = omni.buildRequest({ prompt: 'pan', model: omni.LEGACY_MODEL });
+  assert.equal(legacy.response_format.duration, undefined);
+  assert.equal(
+    omni.estimateCost({ model: legacy.model, seconds: 4 }),
+    (4 * 5792 * 17.5) / 1e6,
+  );
 });
 test('clip cache changes with palette, continuity instructions and reference bytes', (t) => {
   const root = project(t, storyboardFor('concept-explainer')),

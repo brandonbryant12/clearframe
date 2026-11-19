@@ -38,7 +38,13 @@ export type {
   CaptionText,
   CaptionTiming,
 } from './timing-captions.mjs';
-export { captionCues, captionLines, toSRT, toVTT } from './timing-captions.mjs';
+export {
+  captionCues,
+  captionLines,
+  toSRT,
+  toVTT,
+  writeCaptionSidecars,
+} from './timing-captions.mjs';
 
 /** Recommended reading hold from the native catalog. */
 export function blockTail(name: string): number | null {

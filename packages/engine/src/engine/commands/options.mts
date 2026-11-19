@@ -100,6 +100,7 @@ export function parseOptions(args: string[]) {
       shared: { type: 'boolean' },
       'no-agent': { type: 'boolean' },
       index: { type: 'boolean' },
+      neon: { type: 'boolean' },
     },
   });
 }

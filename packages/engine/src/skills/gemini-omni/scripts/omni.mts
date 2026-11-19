@@ -17,7 +17,17 @@ import {
 import { downloadVideoEffect } from '../../../engine/lib/google-files.mjs';
 import type { WaitOptions } from '../../../engine/lib/google-files.mjs';
 
-export const MODEL = 'gemini-omni-1.1-flash';
+export const MODEL = 'gemini-omni-1.2-flash';
+export const LEGACY_MODEL = 'gemini-omni-1.1-flash';
+export const isOmni = (model: string) =>
+  model === MODEL || model === LEGACY_MODEL;
+const tokensPerSecond = new Map([
+  ['360p', 1931],
+  ['720p', 5792],
+  ['1080p', 8688],
+  ['4k', 17376],
+]);
+
 const MIME = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
@@ -32,6 +42,7 @@ export interface OmniRequestOptions {
   resolution?: string | undefined;
   refs?: readonly string[] | undefined;
   previousInteractionId?: string | undefined;
+  seconds?: number | undefined;
   model?: string | undefined;
 }
 export type OmniOptions = OmniRequestOptions & PostOptions & WaitOptions;
@@ -46,6 +57,7 @@ export interface OmniRequest {
     aspect_ratio: string;
     resolution: string;
     delivery: 'uri';
+    duration?: string;
   };
   previous_interaction_id?: string;
 }
@@ -56,19 +68,17 @@ export function buildRequest({
   resolution = '720p',
   refs = [],
   previousInteractionId,
+  seconds = 4,
   model = MODEL,
 }: OmniRequestOptions): OmniRequest {
-  if (model !== MODEL) throw new Error(`Supported Omni model: ${MODEL}`);
+  if (!isOmni(model)) throw new Error(`Supported Omni model: ${MODEL}`);
   if (!prompt?.trim()) throw new Error('Omni needs a prompt');
   if (
     !['16:9', '9:16'].includes(aspect) ||
     !['360p', '720p', '1080p', '4k'].includes(resolution)
   )
     throw new Error('Unsupported Omni aspect or resolution');
-  if (refs.length > 2)
-    throw new Error(
-      'Use at most two continuity references (first and last frame).',
-    );
+  validateClip(model, seconds, refs.length, previousInteractionId);
   const input: OmniInput[] = refs.map((file) => {
     const mime = mimeLookup.get(path.extname(file).toLowerCase());
     if (!mime)
@@ -88,6 +98,7 @@ export function buildRequest({
       aspect_ratio: aspect,
       resolution,
       delivery: 'uri',
+      ...(model === MODEL ? { duration: `${seconds}s` } : {}),
     },
     ...(previousInteractionId
       ? { previous_interaction_id: previousInteractionId }
@@ -95,21 +106,41 @@ export function buildRequest({
   };
 }
 
-// Output token estimate, not a billing cap: duration is requested in the prompt.
+export function validateClip(
+  model: string,
+  seconds: number,
+  refs: number,
+  previous?: string,
+): void {
+  const maxRefs = model === MODEL ? 6 : 2;
+  if (refs > maxRefs)
+    throw new Error(`${model} supports at most ${maxRefs} reference images`);
+  if (model === MODEL) {
+    const max = previous || refs === 2 ? 10 : 15;
+    if (!Number.isInteger(seconds) || seconds < 3 || seconds > max)
+      throw new Error(
+        `This Omni shot needs a whole number of seconds between 3 and ${max}`,
+      );
+  } else if (!Number.isFinite(seconds) || seconds <= 0 || seconds > 10)
+    throw new Error(
+      'Omni 1.1 shots must be longer than zero and at most 10 seconds',
+    );
+}
+
+/** Estimated output cost. Input and thought tokens can add to the bill. */
 export function estimateCost({
   seconds = 4,
   resolution = '720p',
-}: {
-  seconds?: number | undefined;
-  resolution?: string | undefined;
-} = {}): number {
-  if (resolution !== '720p')
+  model = MODEL,
+}: Pick<OmniRequestOptions, 'seconds' | 'resolution' | 'model'> = {}): number {
+  if (!isOmni(model)) throw new Error(`Unsupported Omni model ${model}`);
+  validateClip(model, seconds, 0);
+  const tokens = tokensPerSecond.get(resolution);
+  if (!tokens || (model === LEGACY_MODEL && resolution !== '720p'))
     throw new Error(
-      'ClearFrame currently budgets Omni at 720p only; choose 720p for generated inserts.',
+      `Unsupported budgeted resolution ${resolution} for ${model}`,
     );
-  if (!Number.isFinite(seconds) || seconds <= 0)
-    throw new Error('seconds must be positive');
-  return (seconds * 5792 * 17.5) / 1e6;
+  return (seconds * tokens * (model === MODEL ? 12 : 17.5)) / 1e6;
 }
 
 export interface OmniVideo {

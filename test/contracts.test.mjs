@@ -71,7 +71,20 @@ test('Image: response_format carries aspect_ratio + image_size; lite forces 1K',
     image_size: '2K',
   });
   assert.deepEqual(body.input, [{ type: 'text', text: 'texture' }]);
-  assert.equal(body.model, 'gemini-3.1-flash-image');
+  assert.equal(body.model, 'gemini-nano-banana-2.1');
+  assert.equal(image.estimateCost({ size: '2K' }), 0.0504);
+  assert.equal(
+    image.estimateCost({ model: 'gemini-3.1-flash-image', size: '2K' }),
+    0.101,
+  );
+  assert.throws(
+    () => image.buildRequest({ prompt: 'x', size: '8K' }),
+    /Unsupported image size/,
+  );
+  assert.throws(
+    () => image.buildRequest({ prompt: 'x', refs: Array(15).fill('ref.png') }),
+    /14 reference/,
+  );
   assert.equal(
     image.buildRequest({
       prompt: 'x',
@@ -162,4 +175,11 @@ test('Veo: predictLongRunning body — integer durationSeconds, inlineData image
     /4k/,
   );
   assert.equal(veo.estimateCost({ seconds: 4 }), 0.2);
+});
+
+test('Retired Veo previews fail with a migration path before sending a request', async () => {
+  await assert.rejects(
+    veo.generateVideo({ prompt: 'pan' }),
+    /retired.*gemini-omni-1.2-flash/,
+  );
 });

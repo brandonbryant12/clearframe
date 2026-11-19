@@ -18,12 +18,7 @@ import {
 } from '../scene/engine.mjs';
 import { compilePlan, writePlan } from '../scene/compile.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
-import {
-  computeTiming,
-  captionCues,
-  toSRT,
-  toVTT,
-} from '../engine/lib/timing.mjs';
+import { computeTiming, writeCaptionSidecars } from '../engine/lib/timing.mjs';
 import { writeJSON } from '../engine/lib/util.mjs';
 import { footageProblems } from '../engine/lib/continuity.mjs';
 
@@ -129,14 +124,7 @@ export function prepareProjectSync(
   const planFile = path.join(dir, 'plan.json');
   writePlan(dir, compiled.plan);
   writeJSON(path.join(root, 'build/timing.json'), timing);
-  fs.writeFileSync(
-    path.join(root, 'build/captions.srt'),
-    toSRT(captionCues(timing)),
-  );
-  fs.writeFileSync(
-    path.join(root, 'build/captions.vtt'),
-    toVTT(captionCues(timing)),
-  );
+  writeCaptionSidecars(path.join(root, 'build'), timing);
   const rendererSourceHash = sceneHash();
   const planSha256 = sha256(fs.readFileSync(planFile));
   const manifest: PreparedManifest = {

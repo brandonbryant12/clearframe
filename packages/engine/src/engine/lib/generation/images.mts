@@ -30,7 +30,12 @@ import { palette } from '../../../film/catalog.mjs';
 /** What an image's cache depends on: how it is drawn, not how it is staged (bounds, ground). */
 export function imageHash(sb: ResolvedStoryboard, a: Asset) {
   const { bounds: _bounds, ground: _ground, ...drawn } = a;
-  return hashOf({ ...drawn, prompt: imagePrompt(sb, drawn) });
+  return hashOf({
+    ...drawn,
+    model: a.model ?? image.MODEL,
+    aspect: a.aspect ?? frameAspect(sb.format),
+    prompt: imagePrompt(sb, drawn),
+  });
 }
 
 export function imagePrompt(sb: ResolvedStoryboard, a: Asset): string {
@@ -107,7 +112,7 @@ export async function images(
     const prompt = imagePrompt(sb, a);
     const r = await image.generateImage({
       prompt,
-      model: a.model ?? 'gemini-3.1-flash-image',
+      model: a.model ?? image.MODEL,
       aspect,
       size: a.size ?? '2K',
       refs,
@@ -121,7 +126,7 @@ export async function images(
     } else fs.writeFileSync(path.join(P.img, `${a.id}.jpg`), r.data);
     writeJSON(path.join(P.img, `${a.id}.json`), {
       hash: specHash(a),
-      model: a.model ?? 'gemini-3.1-flash-image',
+      model: a.model ?? image.MODEL,
       prompt,
       note: r.text,
       createdAt: new Date().toISOString(),

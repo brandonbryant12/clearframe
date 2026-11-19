@@ -7,13 +7,18 @@ export interface FootageUse {
   seconds: number;
   have?: number | null;
   generated?: boolean;
+  maxTake?: number;
 }
 import fs from 'node:fs';
 import path from 'node:path';
 import { palette } from '../../film/catalog.mjs';
 import { hashOf } from './util.mjs';
 import { audioHash } from './word-timing.mjs';
-import { MODEL } from '../../skills/gemini-omni/scripts/omni.mjs';
+import {
+  MODEL,
+  isOmni,
+  validateClip,
+} from '../../skills/gemini-omni/scripts/omni.mjs';
 
 export function clipSpec(
   root: string,
@@ -57,7 +62,18 @@ export function clipSpec(
     references,
     ...(a.seed != null ? { seed: a.seed } : {}),
   };
-  if (!Number.isFinite(spec.seconds) || spec.seconds <= 0 || spec.seconds > 10)
+  if (isOmni(spec.model))
+    validateClip(
+      spec.model,
+      spec.seconds,
+      references.length,
+      spec.previousInteractionId,
+    );
+  else if (
+    !Number.isFinite(spec.seconds) ||
+    spec.seconds <= 0 ||
+    spec.seconds > 10
+  )
     throw new Error('Generated inserts must request 0–10 seconds');
   return {
     ...spec,
@@ -81,9 +97,10 @@ export function footageProblems(
     warnings: string[] = [];
   for (const u of uses) {
     const need = u.offset + u.seconds;
-    if (need > maxTake + 1e-3 && u.generated)
+    const limit = u.maxTake ?? maxTake;
+    if (need > limit + 1e-3 && u.generated)
       errors.push(
-        `${u.beat}: ${need.toFixed(1)} s of ${u.source} is needed but one generated take is at most ${maxTake} s; shorten the beat, or cut it into different shots.`,
+        `${u.beat}: ${need.toFixed(1)} s of ${u.source} is needed but one generated take is at most ${limit} s; shorten the beat, or cut it into different shots.`,
       );
     else if (u.have != null && u.have + 1e-3 < need)
       errors.push(
