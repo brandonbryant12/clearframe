@@ -1,8 +1,10 @@
+import fs from 'node:fs';
+import { loadStoryboard } from '../lib/project.mjs';
 import { sketches, sketch, sketchByName } from '../../film/sketches.mjs';
 
 import type { CommandContext } from './options.mjs';
 
-export async function findCommand({ positionals, o }: CommandContext) {
+export async function findCommand({ positionals, o, opts }: CommandContext) {
   // One search over the whole library: blocks, sketches, playbooks, looks, cast shapes and moves,
   // stage mechanisms, examples. A short mixed shortlist, then the exact authoring for one entry.
   const { find, line, detail, markdown } =
@@ -17,6 +19,23 @@ export async function findCommand({ positionals, o }: CommandContext) {
     kinds: o.kind?.split(','),
     limit: 10,
   });
+  if (o.neon) {
+    const { adviseShot } = await import('../lib/shot-advice.mjs');
+    const projectBudget = fs.existsSync('storyboard.json')
+      ? loadStoryboard(process.cwd()).budget
+      : undefined;
+    const budget =
+      projectBudget == null
+        ? opts.budget
+        : Math.min(opts.budget ?? projectBudget, projectBudget);
+    return console.log(
+      JSON.stringify(
+        await adviseShot(positionals.join(' '), hits, budget, o['dry-run']),
+        null,
+        2,
+      ),
+    );
+  }
   if (o.json) return console.log(JSON.stringify(hits, null, 1));
   return console.log(
     hits.map(line).join('\n') +

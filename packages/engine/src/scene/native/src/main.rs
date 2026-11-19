@@ -4,7 +4,7 @@
 //!     info                         format, backend and layers as JSON
 //!     frame <list> -o DIR          PNG stills: frames (`120`) or seconds (`4.2s`), comma separated
 //!     render [A..B] -o OUT.mp4     H.264 of film frames [A, B) on the film's own clock, through
-//!                                  fframes (runtime.rs; CLEARFRAME_RUNTIME=scene for the old pipe)
+//!                                  fframes (runtime.rs)
 //!     inspect [--every S]          sampled diagnostics; exit 2 on errors
 //!     audit FILE                   frame audit JSON (held type cut, covered or too small)
 //!     bench [A..B]                 draw + readback timings without encoding
@@ -13,10 +13,10 @@
 mod audit;
 mod blocks;
 mod compose;
+mod caption_track;
 mod constants;
 mod design;
 mod draw;
-mod encode;
 mod film;
 mod fonts;
 mod fx;
@@ -62,7 +62,7 @@ fn parse() -> Result<Args, String> {
     }
     if a.command.is_empty() {
         return Err(
-            "usage: clearframe-scene --plan PLAN [--scale S] [--draft] info|frame|render|inspect|audit|bench|serve"
+            "usage: clearframe-scene --plan PLAN [--scale S] [--draft] info|frame|render|inspect|audit|bench|serve or caption-track FILE [--at SECONDS]"
                 .into(),
         );
     }
@@ -166,40 +166,6 @@ fn write_frames(engine: &mut Engine, frames: &[usize], dir: &Path) -> Result<Vec
     }
 }
 
-fn render(engine: &mut Engine, a: usize, b: usize, out: &Path, draft: bool) -> Result<serde_json::Value, String> {
-    let ffmpeg = std::env::var("CLEARFRAME_FFMPEG").unwrap_or_else(|_| "ffmpeg".into());
-    let settings = encode::Settings {
-        width: engine.width,
-        height: engine.height,
-        fps: engine.plan.format.fps,
-        draft,
-        ffmpeg: &ffmpeg,
-    };
-    let mut enc = encode::Encoder::start(out, &settings)?;
-    let start = Instant::now();
-    let (mut draw_ms, mut read_ms) = (0.0f64, 0.0f64);
-    for f in a..b {
-        let t = Instant::now();
-        engine.render(f).map_err(|e| format!("frame {f}: {e}"))?;
-        let t2 = Instant::now();
-        let mut px = Vec::new();
-        engine.read(&mut px)?;
-        draw_ms += (t2 - t).as_secs_f64() * 1e3;
-        read_ms += t2.elapsed().as_secs_f64() * 1e3;
-        enc.push(px)?;
-        let done = f + 1 - a;
-        if done % 60 == 0 || f + 1 == b {
-            eprintln!("frames {done}/{} ({:.0}%)", b - a, done as f32 * 100.0 / (b - a) as f32);
-        }
-    }
-    let frames = enc.finish()?;
-    Ok(serde_json::json!({
-        "frames": frames, "range": [a, b], "seconds": start.elapsed().as_secs_f64(),
-        "drawMs": draw_ms, "readbackMs": read_ms, "backend": engine.backend(),
-        "width": engine.width, "height": engine.height, "fps": engine.plan.format.fps
-    }))
-}
-
 fn info(engine: &Engine) -> serde_json::Value {
     serde_json::json!({
         "engine": "clearframe-scene", "backend": engine.backend(),
@@ -208,12 +174,6 @@ fn info(engine: &Engine) -> serde_json::Value {
         "layers": engine.plan.layers.iter().map(|l| serde_json::json!({"id": l.id, "beat": l.beat, "start": l.start, "frames": l.frames})).collect::<Vec<_>>(),
         "beats": engine.film.beats.len(),
     })
-}
-
-/// Renders run through fframes (src/runtime.rs); `CLEARFRAME_RUNTIME=scene` keeps the engine's
-/// own FFmpeg pipe for comparison.
-fn runtime_is_fframes() -> bool {
-    std::env::var("CLEARFRAME_RUNTIME").map(|v| v != "scene").unwrap_or(true)
 }
 
 fn scale_for(args_scale: Option<f32>, draft: bool) -> f32 {
@@ -279,11 +239,7 @@ fn serve(mut engine: Engine, mut plan_file: PathBuf, mut scale: f32, draft: bool
                     .and_then(|r| Some((r.first()?.as_u64()? as usize, r.get(1)?.as_u64()? as usize)))
                     .unwrap_or((0, engine.plan.format.frames));
                 let quality = req.get("draft").and_then(|v| v.as_bool()).unwrap_or(draft);
-                if runtime_is_fframes() {
-                    runtime::render(&plan_file, scale, quality, a, b, &out)
-                } else {
-                    render(&mut engine, a, b, &out, quality)
-                }
+                runtime::render(&plan_file, scale, quality, a, b, &out)
             }
             "inspect" => inspect::inspect(&mut engine, 0.25)
                 .map(|(text, failed)| serde_json::json!({"report": text, "failed": failed})),
@@ -301,6 +257,14 @@ fn serve(mut engine: Engine, mut plan_file: PathBuf, mut scale: f32, draft: bool
 
 fn run() -> Result<ExitCode, String> {
     let args = parse()?;
+    if args.command[0] == "caption-track" {
+        let rest = &args.command[1..];
+        let file = rest.first().ok_or("caption-track needs a VTT or JSON file")?;
+        let at = option(rest, "--at").map(|v| v.parse::<f64>().map_err(|_| "invalid caption time")).transpose()?;
+        let data = std::fs::read_to_string(file).map_err(|e| format!("{file}: {e}"))?;
+        println!("{}", caption_track::inspect(&data, at)?);
+        return Ok(ExitCode::SUCCESS);
+    }
     let t0 = Instant::now();
     let mut engine = Engine::open(&args.plan, scale_for(args.scale, args.draft))?;
     let opened = t0.elapsed();
@@ -330,25 +294,9 @@ fn run() -> Result<ExitCode, String> {
             let pos = positional(rest);
             let (a, b) = range_of(pos.first(), engine.plan.format.frames)?;
             let out = PathBuf::from(option(rest, "-o").ok_or("render needs -o OUT.mp4")?);
-            if runtime_is_fframes() {
-                // fframes runs the render; its workers open their own engines.
-                drop(engine);
-                eprintln!("ClearFrame runtime: fframes, frames {a}..{b}");
-                let mut report = runtime::render(&args.plan, scale_for(args.scale, args.draft), args.draft, a, b, &out)?;
-                report["openMs"] = (opened.as_secs_f64() * 1e3).into();
-                if let Some(r) = option(rest, "--report") {
-                    std::fs::write(r, serde_json::to_string_pretty(&report).unwrap()).map_err(|e| e.to_string())?;
-                }
-                return Ok(ExitCode::SUCCESS);
-            }
-            eprintln!(
-                "ClearFrame engine: scene ({}), {}x{} at {} fps, frames {a}..{b}",
-                engine.backend(),
-                engine.width,
-                engine.height,
-                engine.plan.format.fps
-            );
-            let mut report = render(&mut engine, a, b, &out, args.draft)?;
+            drop(engine);
+            eprintln!("ClearFrame runtime: fframes, frames {a}..{b}");
+            let mut report = runtime::render(&args.plan, scale_for(args.scale, args.draft), args.draft, a, b, &out)?;
             report["openMs"] = (opened.as_secs_f64() * 1e3).into();
             if let Some(r) = option(rest, "--report") {
                 std::fs::write(r, serde_json::to_string_pretty(&report).unwrap()).map_err(|e| e.to_string())?;

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// Gemini native image generation ("Nano Banana 2") via the Interactions API (Node ≥ 22).
+// Gemini native image generation ("Nano Banana 2.1") via the Interactions API (Node ≥ 22).
 //
-// Contract (verified against ai.google.dev, 2026-09-27):
+// Contract (verified against ai.google.dev, 2026-11-18):
 //   POST https://generativelanguage.googleapis.com/v1beta/interactions   header: x-goog-api-key
-//   { model: "gemini-3.1-flash-image",
+//   { model: "gemini-nano-banana-2.1",
 //     input: [ { type: "text", text }, { type: "image", mime_type: "image/png", data: <base64> } ...refs ],
 //     response_format: { type: "image", mime_type: "image/jpeg", aspect_ratio: "16:9", image_size: "2K" } }
 //   → steps[type=model_output].content[type=image] = { mime_type, data (base64) }
@@ -38,10 +38,15 @@ export interface ImageModel {
   price: Readonly<Record<string, number>>;
   note: string;
 }
+export const MODEL = 'gemini-nano-banana-2.1';
 export const MODELS = {
+  [MODEL]: {
+    price: { '1K': 0.0336, '2K': 0.0504, '4K': 0.113 },
+    note: 'Nano Banana 2.1 · default',
+  },
   'gemini-3.1-flash-image': {
     price: { 512: 0.045, '1K': 0.067, '2K': 0.101, '4K': 0.151 },
-    note: 'Nano Banana 2 · default',
+    note: 'Nano Banana 2',
   },
   'gemini-3.1-flash-lite-image': {
     price: { '1K': 0.0336 },
@@ -100,9 +105,28 @@ export interface ImageRequest {
   };
 }
 
+function imageModel(model: string): ImageModel {
+  const profile = modelLookup.get(model);
+  if (!profile) throw new Error(`Unknown Gemini image model ${model}`);
+  return profile;
+}
+
+export function outputSize(model: string, size: string): string {
+  const profile = imageModel(model);
+  const requested = size.toUpperCase();
+  const resolved =
+    model === 'gemini-3.1-flash-lite-image' ||
+    (requested === '512' && model !== 'gemini-3.1-flash-image')
+      ? '1K'
+      : requested;
+  if (!Object.hasOwn(profile.price, resolved))
+    throw new Error(`Unsupported image size ${size} for ${model}`);
+  return resolved;
+}
+
 export function buildRequest({
   prompt,
-  model = 'gemini-3.1-flash-image',
+  model = MODEL,
   aspect = '16:9',
   size = '2K',
   refs = [],
@@ -110,10 +134,9 @@ export function buildRequest({
   if (!prompt?.trim()) throw new Error('prompt is required');
   if (!ASPECTS.includes(aspect))
     throw new Error(`aspect must be one of ${ASPECTS.join(' ')}`);
-  let imageSize = String(size).toUpperCase().replace(/^512$/, '512');
-  if (model.includes('lite') && imageSize !== '1K') imageSize = '1K';
-  if (imageSize === '512' && model !== 'gemini-3.1-flash-image')
-    imageSize = '1K';
+  const imageSize = outputSize(model, size);
+  if (model === MODEL && refs.length > 14)
+    throw new Error('Nano Banana 2.1 supports at most 14 reference images');
   const input: ImageInput[] = [{ type: 'text', text: prompt }];
   for (const ref of refs) {
     const ext = path.extname(ref).toLowerCase();
@@ -136,15 +159,14 @@ export function buildRequest({
 }
 
 export function estimateCost({
-  model = 'gemini-3.1-flash-image',
+  model = MODEL,
   size = '2K',
 }: {
   model?: string | undefined;
   size?: string | undefined;
 }): number {
-  const p: Readonly<Record<string, number>> =
-    modelLookup.get(model)?.price ?? {};
-  return p[String(size).toUpperCase()] ?? p['1K'] ?? 0.1;
+  const imageSize = outputSize(model, size);
+  return imageModel(model).price[imageSize];
 }
 
 export interface GeneratedImage {
@@ -188,7 +210,7 @@ async function main(): Promise<void> {
   const { values: v } = parseArgs({
     options: {
       prompt: { type: 'string' },
-      model: { type: 'string', default: 'gemini-3.1-flash-image' },
+      model: { type: 'string', default: MODEL },
       aspect: { type: 'string', default: '16:9' },
       size: { type: 'string', default: '2K' },
       ref: { type: 'string', multiple: true, default: [] },

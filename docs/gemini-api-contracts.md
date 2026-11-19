@@ -1,8 +1,8 @@
 # Gemini API contracts used by ClearFrame
 
-*Verified against ai.google.dev on **2026-09-27**. All calls use the Gemini Developer API with header `x-goog-api-key: $GEMINI_API_KEY` (never a query string, except the Lyria RealTime socket). The request bodies below are pinned by `test/contracts.test.mjs`. Each script prints its exact request with `--dry-run`, without a key or a network call.*
+*Verified against ai.google.dev on **2026-11-18**. All calls use the Gemini Developer API with header `x-goog-api-key: $GEMINI_API_KEY` (never a query string, except the Lyria RealTime socket). The request bodies below are pinned by `test/contracts.test.mjs`. Each script prints its exact request with `--dry-run`, without a key or a network call.*
 
-Google now recommends the **Interactions API** (`POST /v1beta/interactions`, snake_case, GA June 2026) for new models. `generateContent` remains supported as "legacy". ClearFrame uses Interactions for TTS, image and Lyria, and `predictLongRunning` for Veo.
+Google now recommends the **Interactions API** (`POST /v1beta/interactions`, snake_case, GA June 2026) for new models. `generateContent` remains supported as "legacy". ClearFrame uses Interactions for Neon shot advice, TTS, transcription, image generation, Lyria and Omni video.
 
 ## Text-to-speech: `skills/gemini-tts/scripts/tts.mjs`
 
@@ -25,14 +25,15 @@ POST https://generativelanguage.googleapis.com/v1beta/interactions
 ## Image generation: `skills/gemini-image/scripts/image.mjs`
 
 ```json
-{ "model": "gemini-3.1-flash-image",
+{ "model": "gemini-nano-banana-2.1",
   "input": [{ "type": "text", "text": "…" }, { "type": "image", "mime_type": "image/png", "data": "<b64>" }],
   "response_format": { "type": "image", "mime_type": "image/jpeg", "aspect_ratio": "16:9", "image_size": "2K" } }
 ```
 - **Response:** `steps[type=model_output].content[type=image] → { mime_type, data }`.
 - **Sizes:** `512` (3.1 Flash only), `1K`, `2K`, `4K`, with an uppercase K.
-- **Models and pricing:** `gemini-3.1-flash-image` ($0.067 per image at 1K, $0.101 at 2K), `gemini-3.1-flash-lite-image` ($0.0336, 1K only) and `gemini-3-pro-image` ($0.134 at 1K/2K, $0.24 at 4K; checked 2026-10-04). Pro at 9:16 `2K` returns 1536×2752.
-- **Retired:** Imagen is shut down on the Gemini API, and `gemini-2.5-flash-image` shuts down 2026-10-02.
+- **Default:** Nano Banana 2.1 produces 1K, 2K and 4K images. Estimated output charges are $0.0336, $0.0504 and $0.113 respectively. It accepts up to 14 reference images. [Model](https://aistudio.google.com/docs/models/gemini-nano-banana-2.1)
+- **Earlier model pins:** `gemini-3.1-flash-image` ($0.067 per image at 1K, $0.101 at 2K), `gemini-3.1-flash-lite-image` ($0.0336, 1K only) and `gemini-3-pro-image` ($0.134 at 1K/2K, $0.24 at 4K; checked 2026-10-04). Pro at 9:16 `2K` returns 1536×2752.
+- **Retired:** Imagen is shut down on the Gemini API, and `gemini-2.5-flash-image` is scheduled for shutdown on 2027-03-15.
 - **Sources:** [image-generation](https://ai.google.dev/gemini-api/docs/image-generation) · [interactions API reference](https://ai.google.dev/api/interactions-api)
 
 ## Music: `skills/lyria-music/scripts/music.mjs`
@@ -61,20 +62,15 @@ MP3 request path corrected on 2026-09-28; tests use mocked responses, not paid g
 - **Unverified:** raw-socket auth via `?key=` (the Live API convention) and a v1beta URL.
 - **Sources:** [realtime-music-generation](https://ai.google.dev/gemini-api/docs/realtime-music-generation) · [live_music reference](https://ai.google.dev/api/live_music)
 
-## Video: `skills/veo-video/scripts/veo.mjs`
+## Gemini 4 Neon shot direction
 
-```http
-POST https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-lite-generate-preview:predictLongRunning
-```
-```json
-{ "instances": [{ "prompt": "…", "image": { "inlineData": { "mimeType": "image/jpeg", "data": "<b64>" } } }],
-  "parameters": { "aspectRatio": "16:9", "resolution": "720p", "durationSeconds": 4 } }
-```
-- **Polling:** poll `GET /v1beta/{operation.name}` until `done`, read `response.generateVideoResponse.generatedSamples[0].video.uri`, then download it with the API-key header, following redirects.
-- **Constraints:** 1080p and 4k require 8 s, Lite has no 4k, and `personGeneration` rules depend on mode. `negativePrompt` is not documented.
-- **Output:** MP4 at 24 fps with audio. Files are retained for 2 days.
-- **Pricing:** Lite $0.05/s at 720p and $0.08/s at 1080p; Fast $0.10, $0.12 and $0.30; Standard $0.40, $0.40 and $0.60.
-- **Sources:** [veo](https://ai.google.dev/gemini-api/docs/veo) · [pricing](https://ai.google.dev/gemini-api/docs/pricing) · [deprecations](https://ai.google.dev/gemini-api/docs/deprecations)
+`clearframe find "explain an approval exception" --neon --dry-run` prints the shortlist, the serialized request and an estimated ceiling. Omit `--dry-run` to make one request, optionally setting `--budget USD`. Inside a film, the lower of the command and storyboard budgets applies. Local search remains available without an account. The response schema admits only candidate IDs. ClearFrame resolves the ID into editable catalog data and returns the proposed movement and a visible review check. The model uses low thinking, a 1,024-token output limit, and no stored interaction. The published standard rates are $3 per million input tokens and $15 per million output tokens. [Neon model](https://aistudio.google.com/docs/models/gemini-4-neon)
+
+## Generated video
+
+`gemini-omni-1.2-flash` accepts ordered image and text input. The video response format carries the resolution, aspect, URI delivery and a duration such as `"4s"`. Request 3–15 whole seconds. ClearFrame treats two images as opening and closing frames. That mode and a follow-up interaction allow up to 10 seconds. Up to six image references are supported. Output estimates at 360p, 720p, 1080p and 4K use 1,931, 5,792, 8,688 and 17,376 tokens per second respectively at $12 per million. A four-second 720p shot estimates $0.278016 before variable input charges. Explicit Omni 1.1 pins retain their earlier request shape. [Omni](https://aistudio.google.com/docs/omni) · [Pricing](https://aistudio.google.com/docs/pricing)
+
+The Gemini Developer API retired Veo 3.1 preview, Fast and Lite on October 22. A cached shot can still be rendered. Select Omni and run `plan` to price a replacement. [Google deprecations](https://aistudio.google.com/docs/deprecations)
 
 ## Field notes
 
@@ -87,5 +83,4 @@ Models and prices change. When a call fails with a model-not-found or schema err
 ## Native speech and sparse Omni footage (verified 2026-09-28)
 
 - `gemini-3.5-transcribe`: Interactions, uploaded audio URI, `generation_config.transcription_config.mode = {type:"verbatim", timestamp_granularities:["word"]}`. Parse model-output `word_info` annotations with second-valued offsets. See `packages/engine/src/engine/lib/speech.mts` and [Google transcription](https://ai.google.dev/gemini-api/docs/transcribe).
-- `gemini-omni-1.1-flash`: Interactions, ordered image/text input, video response format with aspect ratio, resolution and URI delivery. Duration is prompt-steered; no duration_seconds parameter. Poll file ACTIVE then download MP4. See `skills/gemini-omni/scripts/omni.mjs` and [Google Omni](https://ai.google.dev/gemini-api/docs/omni).
 - Clip continuity/cache keys include palette, visual instructions and reference bytes. Clip audio is excluded from the native film's shared mix. Provider correctness is covered by mocked tests; no live paid call was made for this migration.

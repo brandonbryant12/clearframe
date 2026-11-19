@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/dmtrKovalenko/fframes",
-  "revision": "28356c5b5473fc3281167e3b2baff12a0d204a67",
-  "committedAt": "2026-10-18T03:37:42Z",
-  "reviewedAt": "2026-10-18",
-  "crateVersion": "1.2.0 (main through #236; 25 commits after the previous pin)",
+  "revision": "49b76066abbc95f5c77ce7755f478e0bfcefc9f2",
+  "committedAt": "2026-11-02T03:00:25Z",
+  "reviewedAt": "2026-11-18",
+  "crateVersion": "1.4.1",
   "minimumRustEdition": "2024",
   "use": "Cargo git dependency of scene/native (crate `fframes`, features h264 + libav-agree-gpl, default features off): the film runtime (Video, FrameScheduler, SegmentWriter, concatenator). No fframes source is copied or patched.",
   "sources": [
@@ -13,18 +13,22 @@
     "fframes/src/renderer/cpu.rs",
     "fframes/src/renderer/scheduler.rs",
     "fframes/src/renderer/segment_writer.rs",
-    "fframes/src/renderer/concatenator.rs"
+    "fframes/src/renderer/concatenator.rs",
+    "fframes-media/src/subtitles_data.rs",
+    "fframes-media/src/subtitles.rs"
   ],
-  "previousRevision": "62f66735e16f19942fdb56c1b7f2590c53e7434c",
+  "previousRevision": "28356c5b5473fc3281167e3b2baff12a0d204a67",
   "license": "MIT",
   "licenseFile": "UPSTREAM-LICENSE.txt",
   "licenseSha256": "648577feb8515d23cb9c762aafcb295397bc2f3a88f0dc3358c9eafc64c48d33",
   "linkedThirdParty": "ffmpeg-sys-fframes 9.0.0 prebuilt static FFmpeg with libx264 (GPL build, cached under ~/Library/Caches/ffmpeg-sys-fframes); see docs/fframes-return.md, Risks",
-  "latestRelease": "v1.2.0 (2026-10-03)",
+  "latestRelease": "v1.4.1 (tag, 2026-11-02)",
   "incorporated": [
-    "#232: stream colour metadata copied to every encoded video frame",
-    "#229: lru 0.18.5 dependency fix",
-    "svgr/usvgr 0.50.2 and media decoder size/duration fixes"
+    "#251: validated timed-word JSON and WebVTT caption tracks with end-exclusive cue lookup",
+    "#241: exact internal workspace dependency versions"
   ],
-  "capabilityBoundary": "ClearFrame uses the scheduling/encoding runtime. Upstream Lottie, SVG inspection, native player and per-track audio APIs are not exposed by this pin alone; ClearFrame retains its native painter and Node audio mixer."
+  "capabilityBoundary": "ClearFrame uses fframes scheduling, encoding, concatenation and cue and word state in rendered films and exported subtitle tracks. ClearFrame owns frame painting, footage decoding and audio finishing.",
+  "evaluated": [
+    "#244 and #250: sample-aspect correction and Clip ranges reviewed. ClearFrame still uses its frame-accurate, rotation-aware footage adapter."
+  ]
 }

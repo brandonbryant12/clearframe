@@ -742,3 +742,85 @@ test('a sketch moment on a word keeps the sequence it draws', () => {
     `offsets after the word: ${offsets.join(', ')}`,
   );
 });
+
+test('agents can adapt a built-in diagram as a project JSON sketch in both aspect ratios', async (t) => {
+  const { detail } = await import('../packages/engine/dist/film/discover.mjs');
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'clearframe-diagram-'));
+  t.after(() => {
+    useProject(null);
+    fs.rmSync(root, { recursive: true, force: true });
+  });
+  const example = await detail('sketch:exception-route');
+  const diagram = example.example.props.diagram;
+  diagram.nodes[0].label = 'Expense';
+  write(root, 'library/sketches/expense-review.json', {
+    summary: 'Expense approval',
+    use: 'Expense review',
+    diagram,
+  });
+  useProject(root);
+  assert.equal(
+    (await detail('sketch:expense-review')).example.props.diagram.nodes[0]
+      .label,
+    'Expense',
+  );
+  write(root, 'library/sketches/second-review.json', {
+    summary: 'Second review',
+    use: 'Another policy',
+    diagram,
+  });
+  useProject(root);
+  assert.equal(
+    (await detail('sketch:second-review')).id,
+    'sketch:second-review',
+  );
+  for (const format of ['vertical', 'landscape']) {
+    const drawing = sketch('expense-review', format);
+    assert.ok(drawing.elements.length > 0);
+    assert.match(JSON.stringify(drawing), /Expense/);
+  }
+  assert.equal(
+    (await detail('sketch:exception-route')).example.props.diagram.nodes[0]
+      .label,
+    'Request',
+  );
+});
+
+test('CLI search sees a film’s JSON diagram and enforces its zero Neon budget', async (t) => {
+  const { spawnSync } = await import('node:child_process');
+  const { fileURLToPath } = await import('node:url');
+  const cli = fileURLToPath(
+    new URL('../apps/cli/dist/main.mjs', import.meta.url),
+  );
+  const root = fs.mkdtempSync(
+    path.join(os.tmpdir(), 'clearframe-local-search-'),
+  );
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  write(root, 'storyboard.json', {
+    budget: 0,
+    music: false,
+    beats: [
+      { id: 'one', block: 'statement', duration: 3, props: { text: 'Review' } },
+    ],
+  });
+  write(root, 'library/sketches/desk-review.json', {
+    summary: 'A review desk',
+    use: 'Review a request',
+    diagram: { nodes: [{ id: 'desk', label: 'Review desk' }] },
+  });
+  const cmd = (...args) =>
+    spawnSync(process.execPath, [cli, ...args], {
+      cwd: root,
+      encoding: 'utf8',
+      env: { ...process.env, GEMINI_API_KEY: '' },
+    });
+  const result = cmd('find', '--id', 'sketch:desk-review');
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(
+    JSON.parse(result.stdout).example.props.diagram.nodes[0].label,
+    'Review desk',
+  );
+  const refused = cmd('find', 'review', '--neon', '--budget', '99');
+  assert.notEqual(refused.status, 0);
+  assert.match(refused.stderr, /exceeds the budget/);
+});

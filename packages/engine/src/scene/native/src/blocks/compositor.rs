@@ -27,26 +27,25 @@ pub fn render(b: &Beat, frame: Frame, ctx: &Ctx) -> Node {
 /// the caption would sit, if the top is clear. Judged once per caption, on the picture as the
 /// caption ends (when the most has arrived), so a caption never jumps while it is read.
 fn caption_top(d: &Draw<'_, '_>) -> bool {
-    use std::collections::HashMap;
-    use std::sync::{Mutex, OnceLock};
     let b = d.b;
     let env = &b.environment;
     // Footage keeps its decoder moving forward; a kinetic beat is its own caption.
     if !env.captions || env.caption_style == "pop" || matches!(b.block.as_str(), "kinetic" | "video") {
         return false;
     }
-    let Some(index) = b.captions.iter().position(|c| d.t >= c.start && d.t < c.end) else { return false };
-    static PLACED: OnceLock<Mutex<HashMap<(String, usize, usize), bool>>> = OnceLock::new();
-    let key = (b.id.clone(), b.start_frame, index);
-    if let Some(top) = PLACED.get_or_init(Default::default).lock().unwrap().get(&key) {
-        return *top;
-    }
-    let cue = &b.captions[index];
-    let fps = d.f.fps as f32;
+    let Some((index, cue)) = b.captions.active_cues(f64::from(d.t)).next() else { return false };
+    let placements = b.caption_placements.get_or_init(|| (0..b.captions.cues().len()).map(|_| Default::default()).collect());
+    *placements[index].get_or_init(|| placement(d, cue))
+}
+
+fn placement(d: &Draw<'_, '_>, cue: &fframes::media::subtitles::CaptionCue) -> bool {
+    let b = d.b;
+    let env = &b.environment;
+    let fps = d.f.fps as f64;
     let probe = ((cue.end * fps).ceil() as usize).saturating_sub(1).max((cue.start * fps).ceil() as usize).min(b.frames.saturating_sub(1));
     let (_, _, content) = picture(b, Frame::new(probe, d.f.global_index - d.f.index + probe, d.f.fps), d.ctx);
     let texts = crate::audit::scan(&content).texts;
-    let lines = cue.lines.len().max(1);
+    let lines = cue.text.split('\n').count();
     // How much of the picture's type a caption there would cover.
     let covered = |top: bool| {
         let (_, _, y0, y1) = caption_band(env, lines, top, d.bar);
@@ -63,9 +62,7 @@ fn caption_top(d: &Draw<'_, '_>) -> bool {
             .sum::<f32>()
     };
     let low = covered(false);
-    let top = low > 0.0 && covered(true) < low;
-    PLACED.get_or_init(Default::default).lock().unwrap().insert(key, top);
-    top
+    low > 0.0 && covered(true) < low
 }
 
 /// Where standard captions sit: (type size, line height, top, bottom) of `lines` lines, low in
@@ -345,7 +342,7 @@ fn scene_motion<'a>(d: &Draw<'a, '_>, plate: Node, content: Node, footer: Node) 
             motion::Preset::Gentle => 0.32,
         })
     };
-    let last_word = b.words.last().map_or(0.0, |w| w.end);
+    let last_word = b.words.last().map_or(0.0, |w| w.end as f32);
     // Never leave while the entrance, a count or a staged item is still running.
     let earliest = last_word.max(d.m.duration() + 0.25).max(b.settle_seconds).max(reveal);
     let x = match exit_kind {

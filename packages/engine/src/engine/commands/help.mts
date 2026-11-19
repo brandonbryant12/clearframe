@@ -22,6 +22,7 @@ export const HELP = `ClearFrame — motion graphics
   icons [--json]                      132 bundled Tabler icons and provenance
   sketch [name] [--vertical]          canvas starting compositions (route, pipeline, balance…) as JSON
   find "idea" [--kind k] | --id k:name | --index   search the whole library: a shortlist, then exact authoring
+  find "idea" --neon [--dry-run] [--budget dollars]   choose a library entry and a visible review check with Gemini 4 Neon
   doctor | build                      tools and disk headroom; compile the renderer
   capabilities [--json]               operations, request/result/event JSON Schemas and lifecycle semantics for any agent framework
   gallery <new-dir> [--vertical] [--theme ink] [--only bars,kinetic] [--sketches]
@@ -39,7 +40,8 @@ export const HELP = `ClearFrame — motion graphics
   align <dir> --beat id --words words.json     import measured word timestamps
   align <dir> --beat id --transcribe [--budget dollars]  paid Gemini word timestamps
   align <dir> --whisper [--beat id] [--model base]      free local Whisper word timestamps for every take
-  timing | captions <dir>             timing JSON / SRT and VTT
+  timing | captions <dir>             timing JSON / SRT, VTT and fframes timed-word JSON
+  caption-track <file> [--at seconds]   inspect VTT or fframes JSON cues and active words on the film clock
   check <dir> [--draft]                validate inputs and native diagnostics
   critique <dir> [--json]             deck-ness, stillness, density, hook and story-link review (instant, no render)
   still <dir> --at seconds | --beat id [--pos .6] [--grid] [--draft] [--out image.png]

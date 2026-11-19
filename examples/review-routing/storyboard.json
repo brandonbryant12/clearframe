@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "title": "How a review moves",
+  "format": { "preset": "landscape", "fps": 30 },
+  "theme": "paper",
+  "type": "inter",
+  "camera": "none",
+  "texture": "none",
+  "captions": false,
+  "music": false,
+  "sfx": false,
+  "beats": [
+    {
+      "id": "checks",
+      "block": "canvas",
+      "duration": 6,
+      "props": {
+        "title": "Both checks must finish",
+        "sketch": "parallel-checks"
+      }
+    },
+    {
+      "id": "exception",
+      "block": "canvas",
+      "duration": 6.5,
+      "transition": "cut",
+      "props": {
+        "title": "An exception goes to a reviewer",
+        "sketch": "exception-route"
+      }
+    }
+  ]
+}

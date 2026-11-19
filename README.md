@@ -4,6 +4,8 @@
 
 Agent-directed motion graphics rendered natively by the **ClearFrame scene engine** (Skia on the GPU; `docs/scene-engine.md`), with [fframes](https://github.com/dmtrKovalenko/fframes) as the film runtime that schedules, encodes and assembles the frames (`docs/fframes-return.md`). A film is one `storyboard.json`, recorded speech and optional media. The engine draws every frame itself from a compiled scene plan. It draws native GPU stages (actors, packets, commit-grounded code, footage, materials, particles, camera and motion blur) and the blocks' type, numbers, charts, diagrams and captions. Google models supply speech, music, images and the occasional footage insert.
 
+FFrames 1.4.1 also drives native caption selection and kinetic word timing. Inspect a measured caption with `clearframe caption-track build/captions.fframes.json --at 2.5`. To direct a shot, try `clearframe find --id sketch:parallel-checks` for an editable diagram or `clearframe find "show two independent reviews" --neon --dry-run` for a priced Gemini 4 Neon request. New generated stills and footage use Nano Banana 2.1 and Omni 1.2 Flash. [Project scorecard and improvement priorities](docs/reports/2026-11-18-clearframe-scorecard.md)
+
 ![Every native block, paper palette](docs/media/blocks.jpg)
 
 ## What it makes

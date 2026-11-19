@@ -6,7 +6,7 @@ import * as tts from '../packages/engine/dist/skills/gemini-tts/scripts/tts.mjs'
 import * as image from '../packages/engine/dist/skills/gemini-image/scripts/image.mjs';
 import * as music from '../packages/engine/dist/skills/lyria-music/scripts/music.mjs';
 import * as rt from '../packages/engine/dist/skills/lyria-music/scripts/realtime.mjs';
-import * as veo from '../packages/engine/dist/skills/veo-video/scripts/veo.mjs';
+import { clipProvider } from '../packages/engine/dist/engine/lib/generation/clips.mjs';
 
 test('TTS: Interactions body with speech_metadata style and speech_config array', () => {
   const body = tts.buildRequest({
@@ -71,7 +71,20 @@ test('Image: response_format carries aspect_ratio + image_size; lite forces 1K',
     image_size: '2K',
   });
   assert.deepEqual(body.input, [{ type: 'text', text: 'texture' }]);
-  assert.equal(body.model, 'gemini-3.1-flash-image');
+  assert.equal(body.model, 'gemini-nano-banana-2.1');
+  assert.equal(image.estimateCost({ size: '2K' }), 0.0504);
+  assert.equal(
+    image.estimateCost({ model: 'gemini-3.1-flash-image', size: '2K' }),
+    0.101,
+  );
+  assert.throws(
+    () => image.buildRequest({ prompt: 'x', size: '8K' }),
+    /Unsupported image size/,
+  );
+  assert.throws(
+    () => image.buildRequest({ prompt: 'x', refs: Array(15).fill('ref.png') }),
+    /14 reference/,
+  );
   assert.equal(
     image.buildRequest({
       prompt: 'x',
@@ -141,25 +154,78 @@ test('Lyria RealTime: one field per client message, setup first', () => {
   assert.throws(() => rt.messages({ prompts: [], scale: 'H_MAJOR' }));
 });
 
-test('Veo: predictLongRunning body — integer durationSeconds, inlineData image, constraints', () => {
-  const body = veo.buildRequest({ prompt: 'slow drift', seconds: 4 });
-  assert.deepEqual(body, {
-    instances: [{ prompt: 'slow drift' }],
-    parameters: { aspectRatio: '16:9', resolution: '720p', durationSeconds: 4 },
+test('retired Veo models fail before a network request', (t) => {
+  t.mock.method(globalThis, 'fetch', () => {
+    throw new Error('Unexpected request');
   });
-  assert.throws(
-    () => veo.buildRequest({ prompt: 'x', resolution: '1080p', seconds: 4 }),
-    /requires seconds=8/,
+  for (const model of [
+    'veo-3.1-lite-generate-preview',
+    'veo-3.1-fast-generate-preview',
+    'veo-3.1-generate-preview',
+  ])
+    assert.throws(() => clipProvider(model), /retired.*gemini-omni-1\.2-flash/);
+  assert.equal(globalThis.fetch.mock.callCount(), 0);
+});
+
+test('Neon directs from real catalog entries, validates its result, and respects dry-run and budget', async (t) => {
+  const { adviseShot } =
+    await import('../packages/engine/dist/engine/lib/shot-advice.mjs');
+  const { entries } = await import('../packages/engine/dist/film/discover.mjs');
+  const entry = entries().find((e) => e.id === 'sketch:parallel-checks');
+  assert.ok(entry);
+  let libraryId = entry.id;
+  t.mock.method(globalThis, 'fetch', async () =>
+    Response.json({
+      status: 'completed',
+      steps: [
+        {
+          type: 'model_output',
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify({
+                libraryId,
+                direction: 'Send both reviews before the decision.',
+                check: 'The release waits for both results.',
+              }),
+            },
+          ],
+        },
+      ],
+    }),
   );
-  assert.throws(
-    () =>
-      veo.buildRequest({
-        prompt: 'x',
-        model: 'veo-3.1-lite-generate-preview',
-        resolution: '4k',
-        seconds: 8,
-      }),
-    /4k/,
+  const preview = await adviseShot(
+    'Review a change concurrently',
+    [entry],
+    0,
+    true,
   );
-  assert.equal(veo.estimateCost({ seconds: 4 }), 0.2);
+  assert.equal(preview.request.model, 'gemini-4-neon');
+  assert.equal(preview.request.store, false);
+  assert.deepEqual(
+    preview.request.response_format.schema.properties.libraryId.enum,
+    [entry.id],
+  );
+  assert.ok(preview.estimatedUsd > 0);
+  await assert.rejects(adviseShot('Review a change', [entry], 0), /budget/i);
+  await assert.rejects(adviseShot('No match', [], 1), /No matching/);
+  assert.equal(globalThis.fetch.mock.callCount(), 0);
+  const before = process.env.GEMINI_API_KEY;
+  process.env.GEMINI_API_KEY = 'test-only';
+  t.after(() => {
+    if (before === undefined) delete process.env.GEMINI_API_KEY;
+    else process.env.GEMINI_API_KEY = before;
+  });
+  const selected = await adviseShot('Review a change', [entry], 1);
+  assert.equal(selected.authoring.example.block, 'canvas');
+  assert.equal(
+    selected.authoring.example.props.diagram.nodes[0].label,
+    'Change',
+  );
+  libraryId = 'sketch:invented';
+  await assert.rejects(
+    adviseShot('Review a change', [entry], 1),
+    /outside the shortlist/,
+  );
+  assert.equal(globalThis.fetch.mock.callCount(), 2);
 });

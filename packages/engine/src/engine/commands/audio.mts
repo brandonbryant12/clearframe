@@ -93,10 +93,21 @@ export async function timingCommand({ cmd, o, dir }: CommandContext) {
     throw new Error(
       'Caption export requires measured word timestamps; align each take, or use --draft for rough captions.',
     );
-  const cues = t.captionCues(timing);
-  fs.writeFileSync(path.join(dir, 'build/captions.srt'), t.toSRT(cues));
-  fs.writeFileSync(path.join(dir, 'build/captions.vtt'), t.toVTT(cues));
+  t.writeCaptionSidecars(path.join(dir, 'build'), timing);
   return console.log(
     'Wrote captions. Timing quality is recorded in build/timing.json.',
   );
+}
+
+export async function captionTrackCommand({
+  positionals,
+  opts,
+}: CommandContext) {
+  const file = positionals[0];
+  if (!file || !fs.statSync(file).isFile())
+    throw new Error('caption-track needs a VTT or fframes JSON file');
+  const { buildScene, run } = await import('../../scene/engine.mjs');
+  const args = ['caption-track', path.resolve(file)];
+  if (opts.at != null) args.push('--at', String(opts.at));
+  console.log((await run(await buildScene(), args, { capture: true })).trim());
 }

@@ -429,6 +429,9 @@ mod tests {
         let mut media = Media::new(&fixtures(), 30);
         let probe = media.probe("bframes-49-at-24fps.mp4").unwrap();
         assert_eq!(probe.pts.len(), 49);
+        // Revisit the adapter when an upstream clip can cover the last partial output sample.
+        assert_eq!(fframes::Clip::new("fixture", 0.0..49.0 / 24.0).frames(30), 61);
+
         assert_eq!(Media::source_frame(&probe, 60.0 / 30.0, 30), Some(48));
         assert_eq!(Media::source_frame(&probe, 61.0 / 30.0, 30), Some(48));
         assert_eq!(Media::source_frame(&probe, 62.0 / 30.0, 30), None);

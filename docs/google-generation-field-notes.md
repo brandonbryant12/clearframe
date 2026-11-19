@@ -2,6 +2,8 @@
 
 *Observed in one paid production on **2026-10-04**: a 20 s vertical (9:16) sizzle reel built from generated plates, with native type and a separately mixed soundtrack. Prices come from [ai.google.dev pricing](https://ai.google.dev/gemini-api/docs/pricing) on that date. Sample sizes are small; treat each behaviour as a lead to check, not a guarantee. Contracts live in `docs/gemini-api-contracts.md`.*
 
+The Veo results below document an October production. The Developer API retired those models on October 22. New footage uses Omni 1.2 Flash. [Current contracts](gemini-api-contracts.md)
+
 ## Where the money went
 
 | Service | Use | Estimate |

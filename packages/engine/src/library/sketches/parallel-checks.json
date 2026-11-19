@@ -1,0 +1,82 @@
+{
+  "name": "parallel-checks",
+  "summary": "Two independent checks run at the same time. Their results meet at one release decision.",
+  "use": "A fan-out and join, concurrent reviews, or a handoff that must wait for two inputs.",
+  "diagram": {
+    "nodes": [
+      {
+        "id": "change",
+        "label": "Change"
+      },
+      {
+        "id": "test",
+        "label": "Tests",
+        "kind": "state"
+      },
+      {
+        "id": "review",
+        "label": "Review",
+        "kind": "state"
+      },
+      {
+        "id": "release",
+        "label": "Release",
+        "kind": "state"
+      }
+    ],
+    "edges": [
+      {
+        "from": "change",
+        "to": "test"
+      },
+      {
+        "from": "change",
+        "to": "review"
+      },
+      {
+        "from": "test",
+        "to": "release"
+      },
+      {
+        "from": "review",
+        "to": "release"
+      }
+    ],
+    "steps": [
+      {
+        "at": 1.2,
+        "send": ["change", "test"]
+      },
+      {
+        "at": 1.2,
+        "send": ["change", "review"]
+      },
+      {
+        "at": 2.1,
+        "set": {
+          "test": "added"
+        }
+      },
+      {
+        "at": 2.4,
+        "send": ["test", "release"]
+      },
+      {
+        "at": 3.5,
+        "set": {
+          "review": "added"
+        }
+      },
+      {
+        "at": 3.8,
+        "send": ["review", "release"]
+      },
+      {
+        "at": 4.7,
+        "set": {
+          "release": "active"
+        }
+      }
+    ]
+  }
+}

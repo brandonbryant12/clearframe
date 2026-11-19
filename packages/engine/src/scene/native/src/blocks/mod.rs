@@ -4,7 +4,9 @@
 use crate::draw::Node;
 use crate::media::Media;
 use crate::{motion, text};
-use serde::Deserialize;
+use fframes::media::subtitles::{CaptionCue, CaptionTrack, CaptionWord};
+use serde::{Deserialize, Deserializer};
+use std::sync::OnceLock;
 use serde_json::Value;
 use std::cell::RefCell;
 
@@ -97,13 +99,35 @@ pub const TRANSITIONS: &[&str] = &["cut", "fade", "wipe", "push", "panel", "into
 pub const BACKDROPS: &[&str] = &["", "none", "grid", "paper"];
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct Caption {
+struct JobCaption {
     pub start: f32,
     pub end: f32,
     pub text: String,
     /// The caption's lines, broken where a reader pauses (`captionCues`); words carry none.
     #[serde(default)]
     pub lines: Vec<String>,
+}
+
+// Prepared jobs carry deliberate line breaks, including jobs from earlier ClearFrame versions.
+// Convert them once and let the upstream track own validation and frame lookups.
+fn read_captions<'de, D: Deserializer<'de>>(input: D) -> Result<CaptionTrack, D::Error> {
+    let captions = Vec::<JobCaption>::deserialize(input)?;
+    CaptionTrack::new(captions.into_iter().map(|cue| {
+        let text = if cue.lines.is_empty() { cue.text } else { cue.lines.join("\n") };
+        CaptionCue::text(f64::from(cue.start), f64::from(cue.end), text)
+    })).map_err(serde::de::Error::custom)
+}
+
+// The painter's clock is f32. Widen the job times once so an exact frame boundary
+// has the same representation for upstream word state and native motion.
+fn read_words<'de, D: Deserializer<'de>>(input: D) -> Result<Vec<CaptionWord>, D::Error> {
+    Ok(Vec::<JobCaption>::deserialize(input)?.into_iter().map(|word|
+        CaptionWord::new(word.text, f64::from(word.start), f64::from(word.end))
+    ).collect())
+}
+
+fn empty_captions() -> CaptionTrack {
+    CaptionTrack::new([]).expect("empty track is valid")
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -162,10 +186,12 @@ pub struct Beat {
     #[serde(default)]
     pub settle_seconds: f32,
     pub props: Value,
-    #[serde(default)]
-    pub captions: Vec<Caption>,
-    #[serde(default)]
-    pub words: Vec<Caption>,
+    #[serde(default = "empty_captions", deserialize_with = "read_captions")]
+    pub captions: CaptionTrack,
+    #[serde(skip)]
+    caption_placements: OnceLock<Vec<OnceLock<bool>>>,
+    #[serde(default, deserialize_with = "read_words")]
+    pub words: Vec<CaptionWord>,
     #[serde(default)]
     pub motion: Option<Motion>,
     /// Author-drawn canvas elements under and over the block: `{under: [...], over: [...]}`.
@@ -310,20 +336,20 @@ impl Film {
                 return Err(format!("invalid native scene {}", beat.id).into());
             }
             let duration = beat.frames as f32 / film.fps as f32;
-            for cues in [&beat.captions, &beat.words] {
-                let mut previous_end = 0.0;
-                for cue in cues {
-                    if !cue.start.is_finite()
-                        || !cue.end.is_finite()
-                        || cue.start < previous_end
-                        || cue.end <= cue.start
-                        || cue.end > duration + 0.001
-                        || cue.text.trim().is_empty()
-                    {
-                        return Err(format!("invalid or overlapping cues in {}", beat.id).into());
-                    }
-                    previous_end = cue.end;
+            let mut previous_end = 0.0;
+            for cue in beat.captions.cues() {
+                if cue.start < previous_end || cue.end > f64::from(duration + 0.001) {
+                    return Err(format!("invalid or overlapping cues in {}", beat.id).into());
                 }
+                previous_end = cue.end;
+            }
+            let mut previous_end = 0.0;
+            for word in &beat.words {
+                if !word.start.is_finite() || !word.end.is_finite() || word.start < previous_end
+                    || word.end <= word.start || word.end > f64::from(duration + 0.001) || word.text.trim().is_empty() {
+                    return Err(format!("invalid or overlapping cues in {}", beat.id).into());
+                }
+                previous_end = word.end;
             }
             if beat.block == "kinetic" && beat.words.is_empty() {
                 return Err(format!("kinetic scene {} requires timed words", beat.id).into());

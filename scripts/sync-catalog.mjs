@@ -176,7 +176,7 @@ const schema = {
         camera: text,
         motion: text,
         motif: text,
-        refs: { type: 'array', maxItems: 2, items: text },
+        refs: { type: 'array', maxItems: 6, items: text },
       },
     },
     assets: {
@@ -191,7 +191,7 @@ const schema = {
           prompt: text,
           model: text,
           refs: { type: 'array', items: text },
-          seconds: { type: 'number', exclusiveMinimum: 0, maximum: 10 },
+          seconds: { type: 'number', exclusiveMinimum: 0, maximum: 15 },
           resolution: text,
           aspect: text,
           previousInteractionId: text,

@@ -46,7 +46,7 @@ SOFTWARE.
 ## fframes (dmtrKovalenko/fframes) — the film runtime
 
 `Cargo.toml` depends on the `fframes` crate from https://github.com/dmtrKovalenko/fframes at
-revision `62f66735e16f19942fdb56c1b7f2590c53e7434c` (MIT; licence SHA-256
+revision `49b76066abbc95f5c77ce7755f478e0bfcefc9f2` (MIT; licence SHA-256
 `648577feb8515d23cb9c762aafcb295397bc2f3a88f0dc3358c9eafc64c48d33`, notice in
 `archive/fframes/UPSTREAM-LICENSE.txt`, provenance in `archive/fframes/upstream.json`).
 `src/runtime.rs` implements fframes' public `FFramesRenderBackend` trait; no fframes source is

@@ -1,3 +1,4 @@
+import { sketchByName } from '../sketches.mjs';
 import { BLOCKS } from '../catalog.mjs';
 import { items } from '../library.mjs';
 import { ICONS } from '../icons.mjs';
@@ -45,6 +46,16 @@ function blockDetail(e: DiscoveryEntry, out: DiscoveryDetail): void {
 
 function sketchDetail(e: DiscoveryEntry, out: DiscoveryDetail): void {
   // Its placeholder type and named moments, so the example shows what to fill.
+  const sketch = sketchByName(e.name);
+  if (sketch?.diagram) {
+    out.example = {
+      block: 'canvas',
+      props: { diagram: structuredClone(sketch.diagram) },
+    };
+    out.note =
+      'Edit the node labels and the events under steps. Each send follows the declared edges.';
+    return;
+  }
   const example = sketchExample(e.name);
   out.example = example;
   const cues = Object.keys(example.props.sketchSay ?? {});

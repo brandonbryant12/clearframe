@@ -1,6 +1,6 @@
 ---
 name: gemini-image
-description: Generate still images with Google's native Gemini image models (Nano Banana 2 — gemini-3.1-flash-image; Lite; Pro) via the Interactions API — depth plates (a painted far layer, cut-out subject and foreground staged in depth), single plates and textures, aspect ratios and sizes, reference images, pricing and prompt recipes. Use for the places a film happens in (depth plates are a regular tool); never for text, numbers, charts, logos or real people.
+description: Generate still images with Google's native Gemini image models (Nano Banana 2.1 — gemini-nano-banana-2.1; Lite; Pro) via the Interactions API — depth plates (a painted far layer, cut-out subject and foreground staged in depth), single plates and textures, aspect ratios and sizes, reference images, pricing and prompt recipes. Use for the places a film happens in (depth plates are a regular tool); never for text, numbers, charts, logos or real people.
 ---
 
 # Gemini image ("Nano Banana 2")
@@ -56,7 +56,7 @@ Reference it from an `image` block (`"props": {"asset": "paper"}`); add `"drift"
 
 ```json
 {
-  "model": "gemini-3.1-flash-image",
+  "model": "gemini-nano-banana-2.1",
   "input": [
     { "type": "text", "text": "…prompt…" },
     { "type": "image", "mime_type": "image/png", "data": "<base64 reference>" }
@@ -70,11 +70,12 @@ The response carries `steps[type="model_output"].content[type="image"] = { mime_
 - `image_size`: `"512"` (3.1 Flash only), `"1K"` (default), `"2K"`, `"4K"`. The K must be uppercase. At 16:9, 2K is 2752×1536, which covers 1080p with room for a slow push.
 - Reference images: up to 14 in total. 3.1 Flash accepts up to 10 object and 4 character references. Use one style reference to keep a series consistent.
 - All output carries a **SynthID** watermark.
-- **Imagen was shut down on the Gemini API (Aug 17 2026).** Don't use `imagen-*`. `gemini-2.5-flash-image` shuts down Oct 2 2026.
+- **Imagen was shut down on the Gemini API (Aug 17 2026).** Don't use `imagen-*`. `gemini-2.5-flash-image` is scheduled for shutdown on March 15, 2027.
 
 | Model | Use | Price per image |
 |---|---|---|
-| `gemini-3.1-flash-image` (default) | best balance | 512: $0.045 · 1K: $0.067 · 2K: $0.101 · 4K: $0.151 |
+| `gemini-nano-banana-2.1` (default) | reference-guided stills | 1K: $0.0336 · 2K: $0.0504 · 4K: $0.113 |
+| `gemini-3.1-flash-image` | existing pinned work | 512: $0.045 · 1K: $0.067 · 2K: $0.101 · 4K: $0.151 |
 | `gemini-3.1-flash-lite-image` | cheapest drafts, 1K only, weak multi-reference | $0.0336 |
 | `gemini-3-pro-image` | hardest compositions | 1K/2K: $0.134 · 4K: $0.24 |
 

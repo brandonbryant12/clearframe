@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import fs from 'node:fs';
 import path from 'node:path';
 import * as Data from 'effect/Data';
 import * as Effect from 'effect/Effect';
@@ -37,8 +38,10 @@ function configure(context: CommandContext): void {
     ]
       .filter(Boolean)
       .join(path.delimiter);
-    useProject(null);
   }
+  if ((cmd === 'find' || cmd === 'sketch') && fs.existsSync('storyboard.json'))
+    useProject(process.cwd());
+  else if (o.library) useProject(null);
   if (opts.scale != null) {
     if (!['render', 'preview', 'draft', 'pipeline'].includes(cmd)) {
       throw new Error(

@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { frames } from './sketch-kit.mjs';
+import { diagramElements } from './system-diagrams.mjs';
 
 import { isRecord, messageOf } from './guards.mjs';
 import type { JsonRecord, LibraryKind, SketchDrawing } from './types.mjs';
@@ -31,7 +32,12 @@ export function jsonSketch(item: JsonRecord & { name: string }): JsonRecord {
         ...rest
       } = item;
       // The drawing is checked where it is drawn (canvas normalizeElements), like any authored canvas.
-      return decodeSketchDrawing(structuredClone(variant ?? rest));
+      const drawing = variant ?? rest;
+      if (isRecord(drawing) && drawing.diagram !== undefined)
+        return {
+          elements: diagramElements(drawing.diagram, { width: w, height: h }),
+        };
+      return decodeSketchDrawing(structuredClone(drawing));
     },
   };
 }

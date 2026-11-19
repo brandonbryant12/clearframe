@@ -52,12 +52,12 @@ export function plan(root: string) {
 export function assetPlan({ a, P, sb, rows, root }: AssetPlanContext) {
   if (a.kind === 'image') {
     const done =
-      assetMeta(P.img, a.id)?.hash === imageHash(sb, a) &&
+      assetMeta(P.img, a.id)?.hash === imageHash(root, sb, a) &&
       nonempty(path.join(P.img, `${a.id}.${a.cutout ? 'png' : 'jpg'}`));
     rows.push({
       kind: 'image',
       id: a.id,
-      detail: `${a.size ?? '2K'} ${a.model ?? 'gemini-3.1-flash-image'}`,
+      detail: `${image.outputSize(a.model ?? image.MODEL, a.size ?? '2K')} ${a.model ?? image.MODEL}`,
       cost: done
         ? 0
         : image.estimateCost({ model: a.model, size: a.size ?? '2K' }),

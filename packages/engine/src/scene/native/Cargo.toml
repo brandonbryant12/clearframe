@@ -33,7 +33,7 @@ serde_json = "1.0"
 # GOP-aligned segments encoded in parallel with in-process FFmpeg/libx264, concatenation and
 # muxing. ClearFrame's engine draws every frame into it (src/runtime.rs). FFmpeg is linked
 # statically from ffmpeg-sys-fframes' prebuilt GPL+x264 archive (cached per machine).
-fframes = { git = "https://github.com/dmtrKovalenko/fframes", rev = "28356c5b5473fc3281167e3b2baff12a0d204a67", default-features = false, features = [
+fframes = { git = "https://github.com/dmtrKovalenko/fframes", rev = "49b76066abbc95f5c77ce7755f478e0bfcefc9f2", default-features = false, features = [
   "h264",
   "libav-agree-gpl",
 ] }
