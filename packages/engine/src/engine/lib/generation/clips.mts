@@ -121,6 +121,9 @@ export function footageUses(
     if (!a || a.file) continue;
     // A made take's measured length wins over the length that was asked for.
     const made = assetMeta(P.clips, a.id)?.seconds;
+    const references =
+      (a.refs ?? sb.continuity?.refs ?? []).length +
+      Number(Boolean(a.image || a.from));
     uses.push({
       beat: b.id,
       index: b.index,
@@ -132,8 +135,7 @@ export function footageUses(
       maxTake: omni.isOmni(a.model ?? omni.MODEL)
         ? omni.maxSeconds(
             a.model ?? omni.MODEL,
-            (a.refs ?? sb.continuity?.refs ?? []).length +
-              (a.image || a.from ? 1 : 0),
+            references,
             a.previousInteractionId,
           )
         : 10,
