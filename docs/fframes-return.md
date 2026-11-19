@@ -1,14 +1,18 @@
 # Returning to fframes
 
-**Status: stages 1 and 2 done on branch `fframes-return`** — every render runs through fframes;
-`CLEARFRAME_RUNTIME=scene` keeps the old FFmpeg pipe for comparison. Numbers below were measured
-on this machine (M1 iMac, 8 GB, macOS 26) on 2026-10-12 while other agents were working, so each
-timing is the best (and median) of interleaved runs, with the load average recorded. Sections
-marked _planned_ are not built yet.
+## November 18 runtime update
+
+ClearFrame pins FFrames **v1.4.1** at `49b76066abbc`. Both one-shot exports and the render server use its scheduler, segment writer and concatenator. The scene engine draws each frame with Skia on Metal. The old RGBA pipe encoder was removed. Compare against a saved prior binary with `node scripts/verify-runtime.mjs OUT PREVIOUS_BINARY`.
+
+The production compositor uses FFrames caption tracks for broadcast captions and its word-state API for kinetic text. Existing prepared jobs retain their authored line breaks and their original frame clock. `clearframe captions DIR` also writes `build/captions.fframes.json`. Inspect a track with `clearframe caption-track FILE --at 2.5`. WebVTT carries phrase intervals. A JSON track can carry timed words and overlapping speakers. [FFrames 1.4.1](https://github.com/dmtrKovalenko/fframes/tree/v1.4.1)
+
+The footage adapter still covers the final partial output sample when frame rates differ and applies display rotation after pixel-aspect correction. The Node audio finisher owns the approved mix. The [project scorecard](reports/2026-11-18-clearframe-scorecard.md) gives the tests for the next substitutions.
+
+The sections below record the October migration and its measurements on an M1 iMac with 8 GB of RAM.
 
 ## October 18 runtime update
 
-The runtime is pinned to upstream main
+On October 18 the runtime was pinned to upstream main
 [`28356c5b5473`](https://github.com/dmtrKovalenko/fframes/commit/28356c5b5473fc3281167e3b2baff12a0d204a67),
 25 commits after the previous `62f6673` pin. The latest tagged release is still `v1.2.0`
 (October 3); using that tag would move backwards. The MIT notice was checked at the new

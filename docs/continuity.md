@@ -1,6 +1,6 @@
 # Native graphics and occasional Omni inserts
 
-Use `gemini-omni-1.1-flash` for a brief establishing shot, atmosphere or an otherwise difficult visual. Keep the story's facts, labels, numbers, charts and speech-following typography in native blocks. The default review threshold is 20% generated footage, configurable with `continuity.maxGeneratedShare`.
+Use `gemini-omni-1.2-flash` for a brief establishing shot, atmosphere or an otherwise difficult visual. Keep the story's facts, labels, numbers, charts and speech-following typography in native blocks. The default review threshold is 20% generated footage, configurable with `continuity.maxGeneratedShare`.
 
 ```json
 {
@@ -14,7 +14,7 @@ Use `gemini-omni-1.1-flash` for a brief establishing shot, atmosphere or an othe
     "motif": "One red thread connecting each scene"
   },
   "assets": [{
-    "id": "room", "kind": "clip", "model": "gemini-omni-1.1-flash",
+    "id": "room", "kind": "clip", "model": "gemini-omni-1.2-flash",
     "prompt": "An empty workshop, a red thread crossing a pale wooden desk",
     "seconds": 4, "resolution": "720p",
     "refs": ["assets/opening.png", "assets/closing.png"]
@@ -26,23 +26,23 @@ Use `gemini-omni-1.1-flash` for a brief establishing shot, atmosphere or an othe
 }
 ```
 
-Merge the example into a complete storyboard. References are optional local PNG/JPEG/WebP files; use one for composition/style, two for opening/closing compositions. Make them by rendering a native `still` or selecting approved visual references. `previousInteractionId` can continue a prior generated interaction; the result ID is recorded in asset metadata. Reference bytes, palette and continuity instructions participate in the cache hash.
+Merge the example into a complete storyboard. References are optional local PNG/JPEG/WebP files; use one for composition/style, two for opening/closing compositions, or three to six for subject and setting references. Make them by rendering a native `still` or selecting approved visual references. `previousInteractionId` can continue a prior generated interaction; the result ID is recorded in asset metadata. Reference bytes, palette and continuity instructions participate in the cache hash.
 
 Run `plan DIR`, then explicitly `clips DIR --only room --budget 1`. The adapter requests MP4 URI delivery, polls processing and downloads without forwarding API credentials to redirect hosts. Native rendering checks the clip covers its authored duration plus source offset; choose a shorter beat if the generated take is short. No invisible freeze or loop fills missing footage.
 
-Duration is requested in the prompt and can vary. The built-in estimate currently supports 720p, based on Google's documented output rate, excluding variable input/text charges; it is not a hard spending cap. View the actual asset before using it. A new request is not automatically retried after an uncertain paid failure.
+Omni receives an explicit duration from 3 to 15 whole seconds. Opening/closing interpolation and extensions allow 3 to 10. The plan estimates video output at 360p, 720p, 1080p and 4K. Input charges can add to the bill. Check the actual duration before using the take.
 
 Continuity requires judgment: compare the last native frame, first clip frame, last clip frame and next native frame. Match color, subject position, scale, lighting and movement. The native media frame, typography and palette connect the treatment; the shared narration/music continues across the cut. Clip audio is excluded from the mix. Review for unwanted text, visual artifacts, identity drift and misleading realism. Prompts and references guide consistency; they cannot guarantee it.
 
 Footage-led films (sizzle, trailer, brand spot) invert this balance; see [footage-led films](hero-footage.md) and the [Runway skill](../skills/runway-video/SKILL.md) for keyframe-first generation, provider routing and cutting to music.
 
-Official contracts: [Omni](https://ai.google.dev/gemini-api/docs/omni), [pricing](https://ai.google.dev/gemini-api/docs/pricing), [Files API](https://ai.google.dev/gemini-api/docs/files). Verified 2026-09-28. Veo remains available only when an asset explicitly selects a supported Veo model.
+The Gemini Developer API retired Veo previews on October 22, 2026. [Omni](https://aistudio.google.com/docs/omni) · [Pricing](https://aistudio.google.com/docs/pricing) · [Deprecations](https://aistudio.google.com/docs/deprecations)
 
 ## B-roll composition and coverage
 
 Choose the placement before generating: `plate.side: "full"` for background footage under native text; `"left"` or `"right"` for a half-screen composition. Use split placement for detailed text, charts or busy footage. For a full background, start with `scrim: 0.8`, `drift: "none"` and a suitable palette treatment. A scrim value is a starting point, not a readability guarantee. Blur alone does not ensure contrast.
 
-Plan Gemini Omni Flash footage for the actual beat duration plus its source `offset` and edit handles. A generated take's measured duration wins over the requested duration. `plan` lists `footage` problems before anything is paid for: a requested take shorter than its beat plus offset, a beat longer than one generated take (10 s), and two beats showing the same source seconds. `clips` refuses to generate a take that cannot cover its beats, and `check` rejects short footage, `plate.loop: true` and an adjacent beat repeating the same seconds (a repeat elsewhere is a warning, for deliberate callbacks); use a longer take, trim the scene without clipping narration, or author a sequence of different shots. Never loop, silently freeze the tail, or slow footage merely to fill a timing gap.
+Plan Gemini Omni Flash footage for the actual beat duration plus its source `offset` and edit handles. A generated take's measured duration wins over the requested duration. `plan` lists `footage` problems before anything is paid for: a requested take shorter than its beat plus offset, a beat longer than the selected model and reference mode allow, and two beats showing the same source seconds. `clips` refuses to generate a take that cannot cover its beats, and `check` rejects short footage, `plate.loop: true` and an adjacent beat repeating the same seconds (a repeat elsewhere is a warning, for deliberate callbacks); use a longer take, trim the scene without clipping narration, or author a sequence of different shots. Never loop, silently freeze the tail, or slow footage merely to fill a timing gap.
 
 Before approving the rough cut, inspect decoded frames at the beginning, middle, end and every major lighting/movement change. Read the headline, labels, numbers, sources and captions at full size and on a 360 px phone view. Watch the full beat to catch moving contrast failures. Increase the scrim, use an opaque native panel, switch to a split, or choose another shot when text cannot be read immediately. Record the frames and decision in DIRECTION.md. Existing geometry audits cannot certify contrast over changing footage.
 

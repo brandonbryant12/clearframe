@@ -13,7 +13,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { palette } from '../../film/catalog.mjs';
 import { hashOf } from './util.mjs';
-import { audioHash } from './word-timing.mjs';
+import { sha256File } from './store.mjs';
 import {
   MODEL,
   isOmni,
@@ -38,7 +38,7 @@ export function clipSpec(
       (!allowMissing && !fs.existsSync(full))
     )
       throw new Error(`Missing project continuity reference: ${file}`);
-    return { file, sha256: fs.existsSync(full) ? audioHash(full) : null };
+    return { file, sha256: fs.existsSync(full) ? sha256File(full) : null };
   });
   const prompt = [
     a.prompt,

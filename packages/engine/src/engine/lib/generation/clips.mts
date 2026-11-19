@@ -16,10 +16,10 @@ import * as omni from '../../../skills/gemini-omni/scripts/omni.mjs';
 import * as runway from '../../../skills/runway-video/scripts/runway.mjs';
 import { clipSpec, footageProblems } from '../continuity.mjs';
 
-/** The skill that serves a clip model: Gemini Omni, Veo or Runway (Seedance, Gen-4.5). */
+/** The skill that serves a clip model: Gemini Omni or Runway (Seedance, Gen-4.5). */
 export function clipProvider(model: string) {
   if (omni.isOmni(model)) return omni;
-  if (Object.hasOwn(veo.MODELS, model))
+  if (veo.retiredModels.has(model))
     throw new Error(veo.retirementMessage(model));
   if (Object.hasOwn(runway.MODELS, model)) return runway;
   throw new Error(`Unsupported video model ${model}`);
@@ -129,7 +129,14 @@ export function footageUses(
       seconds: b.end - b.start,
       have: made ?? a.seconds ?? 4,
       generated: true,
-      maxTake: (a.model ?? omni.MODEL) === omni.MODEL ? 15 : 10,
+      maxTake: omni.isOmni(a.model ?? omni.MODEL)
+        ? omni.maxSeconds(
+            a.model ?? omni.MODEL,
+            (a.refs ?? sb.continuity?.refs ?? []).length +
+              (a.image || a.from ? 1 : 0),
+            a.previousInteractionId,
+          )
+        : 10,
     });
   }
   return uses;

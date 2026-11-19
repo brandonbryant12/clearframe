@@ -46,6 +46,7 @@ for (const kind of KINDS) {
 // Layers over the built-ins, lowest first: shared libraries named in CLEARFRAME_LIBRARY
 // (path-separated; a brand kit or a workspace's templates), then the open project's library/.
 let layers: Layer[] = [];
+export let libraryRevision = 0;
 const shared = (): string[] =>
   (process.env.CLEARFRAME_LIBRARY ?? '')
     .split(path.delimiter)
@@ -69,6 +70,7 @@ export function useProject(root: string | null | undefined): void {
         for (const it of layer.items[kind].values())
           VALIDATE[kind](it, it.source);
     }
+    libraryRevision++;
   } catch (error) {
     layers = previousLayers;
     throw error;

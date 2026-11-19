@@ -342,7 +342,7 @@ fn scene_motion<'a>(d: &Draw<'a, '_>, plate: Node, content: Node, footer: Node) 
             motion::Preset::Gentle => 0.32,
         })
     };
-    let last_word = b.words.last().map_or(0.0, |w| w.end);
+    let last_word = b.words.last().map_or(0.0, |w| w.end as f32);
     // Never leave while the entrance, a count or a staged item is still running.
     let earliest = last_word.max(d.m.duration() + 0.25).max(b.settle_seconds).max(reveal);
     let x = match exit_kind {

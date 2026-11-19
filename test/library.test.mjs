@@ -759,6 +759,21 @@ test('agents can adapt a built-in diagram as a project JSON sketch in both aspec
     diagram,
   });
   useProject(root);
+  assert.equal(
+    (await detail('sketch:expense-review')).example.props.diagram.nodes[0]
+      .label,
+    'Expense',
+  );
+  write(root, 'library/sketches/second-review.json', {
+    summary: 'Second review',
+    use: 'Another policy',
+    diagram,
+  });
+  useProject(root);
+  assert.equal(
+    (await detail('sketch:second-review')).id,
+    'sketch:second-review',
+  );
   for (const format of ['vertical', 'landscape']) {
     const drawing = sketch('expense-review', format);
     assert.ok(drawing.elements.length > 0);

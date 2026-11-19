@@ -1210,3 +1210,68 @@ test('props that would silently drop authored text are rejected', () => {
       if (['title', 'statement', 'endcard'].includes(b.block))
         assert.ok(!(b.props.text && b.props.title), `${p.id}/${b.id}`);
 });
+
+test('the project planner prices current models and invalidates the still when a reference changes in place', async (t) => {
+  const { plan } =
+    await import('../packages/engine/dist/engine/lib/generation/plan.mjs');
+  const { imageHash } =
+    await import('../packages/engine/dist/engine/lib/generation/images.mjs');
+  const a = {
+    id: 'art',
+    kind: 'image',
+    prompt: 'Paper texture',
+    refs: ['source.png'],
+  };
+  const clip = {
+    id: 'take',
+    kind: 'clip',
+    seconds: 15,
+    resolution: '1080p',
+    prompt: 'A slow drift',
+  };
+  const root = project(t, {
+    format: { preset: 'landscape' },
+    music: false,
+    assets: [a, clip],
+    beats: [
+      { id: 'scene', block: 'video', duration: 14, props: { asset: 'take' } },
+    ],
+  });
+  const input = path.join(root, 'source.png');
+  fs.writeFileSync(input, 'first reference');
+  const sb = loadStoryboard(root);
+  const key = imageHash(root, sb, a);
+  const rows = plan(root);
+  assert.equal(rows.footage.errors.length, 0);
+  assert.equal(rows.rows.find((x) => x.id === 'art').cost, 0.0504);
+  assert.equal(
+    rows.rows.find((x) => x.id === 'take').cost,
+    (15 * 8688 * 12) / 1e6,
+  );
+  assert.notEqual(
+    imageHash(root, sb, { ...a, model: 'gemini-3.1-flash-image' }),
+    key,
+  );
+  assert.notEqual(
+    imageHash(
+      root,
+      { ...sb, format: { ...sb.format, width: 1080, height: 1920 } },
+      a,
+    ),
+    key,
+  );
+  fs.writeFileSync(input, 'second reference');
+  assert.notEqual(imageHash(root, sb, a), key);
+  const old = { ...clip, model: 'veo-3.1-generate-preview', seconds: 4 };
+  const original = JSON.parse(
+    fs.readFileSync(path.join(root, 'storyboard.json')),
+  );
+  writeJSON(path.join(root, 'storyboard.json'), { ...original, assets: [old] });
+  assert.throws(() => plan(root), /retired.*gemini-omni-1\.2-flash/);
+  const clips = path.join(root, 'assets/clips');
+  fs.mkdirSync(clips, { recursive: true });
+  const spec = clipSpec(root, loadStoryboard(root), old);
+  writeJSON(path.join(clips, 'take.json'), { hash: spec.hash, seconds: 4 });
+  fs.writeFileSync(path.join(clips, 'take.mp4'), 'existing file');
+  assert.equal(plan(root).rows.find((x) => x.id === 'take').status, 'cached');
+});

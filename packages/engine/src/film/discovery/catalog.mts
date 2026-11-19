@@ -1,17 +1,16 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { BLOCKS } from '../catalog.mjs';
-import { items, libraryDirs } from '../library.mjs';
+import { items, libraryRevision } from '../library.mjs';
 import { CAST_CATALOG } from '../cast.mjs';
 import { MECHANISMS } from './mechanisms.mjs';
 import { ROOT, read, firstSentence, clean, tableRows } from './documents.mjs';
 import { slots, slotText } from './sketches.mjs';
 import type { DiscoveryEntry } from './contracts.mjs';
 let cache: DiscoveryEntry[] | null = null,
-  cacheKey: string | null = null;
+  cachedRevision = -1;
 export function entries(): DiscoveryEntry[] {
-  const key = libraryDirs().join('|');
-  if (cache && cacheKey === key) return cache;
+  if (cache && cachedRevision === libraryRevision) return cache;
   const out: DiscoveryEntry[] = [];
   const add = (
     kind: string,
@@ -36,7 +35,7 @@ export function entries(): DiscoveryEntry[] {
   addReferenceEntries(add);
   addExamples(add);
   cache = out;
-  cacheKey = key;
+  cachedRevision = libraryRevision;
   return out;
 }
 

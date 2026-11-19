@@ -62,7 +62,7 @@ fn parse() -> Result<Args, String> {
     }
     if a.command.is_empty() {
         return Err(
-            "usage: clearframe-scene --plan PLAN [--scale S] [--draft] info|frame|render|inspect|audit|bench|serve"
+            "usage: clearframe-scene --plan PLAN [--scale S] [--draft] info|frame|render|inspect|audit|bench|serve or caption-track FILE [--at SECONDS]"
                 .into(),
         );
     }

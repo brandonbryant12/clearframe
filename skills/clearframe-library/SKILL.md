@@ -7,6 +7,8 @@ description: Choose and combine 31 blocks plus native GPU stages, canvas sketche
 
 Search everything in plain words first: `pnpm cf find "what you want to show"` returns a short mixed shortlist (blocks, sketches, playbooks, looks, cast shapes and moves, mechanisms, examples), and `find --id KIND:NAME` the exact authoring; `docs/library-index.md` is the whole index, and the `clearframe-inspiration` skill turns a brief into concepts with it. Then run `pnpm cf blocks`, `blocks NAME`, `sketch`, `playbooks`, `themes`, `motions` and `icons`. The exact prop reference is [references/blocks.md](references/blocks.md), generated from `packages/engine/src/film/catalog.mts`. Starter storyboards live in `recipes/` and are generated from the playbooks.
 
+For a process with two independent reviews, inspect `find --id sketch:parallel-checks`. For conditional escalation, use `sketch:exception-route`. The returned `example.props.diagram` is editable and can also be saved under `library/sketches/` as JSON with a summary and a use case. For optional Gemini 4 Neon direction, append `--neon --dry-run` to a search for a priced preview.
+
 Palettes, treatments, type voices, sketches and playbooks are files in `packages/engine/src/library/`, one per item. Read [library/README.md](../../packages/engine/src/library/README.md) before adding one: a new look, arc or composition is a new file, not engine code. A project's own `library/` overrides built-ins by id. So does a shared brand kit passed with `--library DIR`. Those layers are JSON only.
 
 Choose the visual by the task:

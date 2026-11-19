@@ -28,5 +28,5 @@
     "#241: exact internal workspace dependency versions",
     "#244: corrected display dimensions for upstream decoded non-square pixels"
   ],
-  "capabilityBoundary": "ClearFrame uses fframes scheduling, encoding, concatenation and subtitle track parsing. ClearFrame owns frame painting, footage decoding and audio finishing."
+  "capabilityBoundary": "ClearFrame uses fframes scheduling, encoding, concatenation and cue and word state in rendered films and exported subtitle tracks. ClearFrame owns frame painting, footage decoding and audio finishing."
 }

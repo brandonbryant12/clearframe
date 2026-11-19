@@ -26,6 +26,16 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
+      - name: Reuse locked Rust dependencies
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/Library/Caches/ffmpeg-sys-fframes
+            packages/engine/src/scene/native/target/release/build
+            packages/engine/src/scene/native/target/release/deps
+            packages/engine/src/scene/native/target/release/.fingerprint
+          key: native-macos-15-${{ runner.arch }}-${{ hashFiles('packages/engine/src/scene/native/Cargo.lock') }}
       - name: Install media tools
         run: command -v ffmpeg || brew install ffmpeg
       - name: Test locked renderer and caption timing

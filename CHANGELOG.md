@@ -1,5 +1,11 @@
 # Changelog
 
+## FFrames 1.4.1 and Gemini tools · November 18, 2026
+
+- FFrames is the sole film encoder and now resolves subtitles and kinetic word state in native renders. Broadcast, word-timed and WebVTT tracks can be inspected with `caption-track`. Caption placement data lives with the prepared beat it describes.
+- Diagram sketches can be authored as project JSON. `parallel-checks` and `exception-route` join three migrated sketches. `find --id` exposes editable nodes, connections and events. `find --neon` can ask Gemini 4 Neon to choose from a local shortlist and suggest a visible review check.
+- Generated images use Nano Banana 2.1 and hash the reference artwork. New video uses Omni 1.2 Flash with explicit duration, up to six image references and resolution-aware cost estimates. Cached Veo MP4s remain usable. [Model contracts](docs/gemini-api-contracts.md)
+
 ## An engine any agent framework can call, with honest evidence
 
 - **Contracts, not conventions.** The harness's job kinds, statuses, requests, records, views, events, start results and health are Effect schemas, and their TypeScript types are inferred from them; the persisted ledger codec reuses the same fields. `createJobHarness().start` now decodes its request at the boundary, so parsed JSON from another runtime with a wrong field type is refused before any job exists. Refusals are a schema-backed `HarnessRequestError` with a reason (`invalid-request`, `approval-required`, `request-key-conflict`, `unknown-job`, `not-running`, `unavailable`) and the HTTP status the studio already returned; `harnessEffects` keeps it in the error channel.

@@ -16,7 +16,7 @@ import path from 'node:path';
 
 import { loadStoryboard, paths } from '../project.mjs';
 
-import { audioHash } from '../word-timing.mjs';
+import { sha256File } from '../store.mjs';
 import { hashOf, log, writeJSON } from '../util.mjs';
 
 import * as image from '../../../skills/gemini-image/scripts/image.mjs';
@@ -43,7 +43,7 @@ export function imageHash(root: string, sb: ResolvedStoryboard, a: Asset) {
     ...(a.refs?.length
       ? {
           referenceBytes: referenceFiles(root, paths(root).img, a).map(
-            (file) => (fs.existsSync(file) ? audioHash(file) : null),
+            (file) => (fs.existsSync(file) ? sha256File(file) : null),
           ),
         }
       : {}),

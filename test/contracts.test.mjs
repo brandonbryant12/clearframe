@@ -6,7 +6,7 @@ import * as tts from '../packages/engine/dist/skills/gemini-tts/scripts/tts.mjs'
 import * as image from '../packages/engine/dist/skills/gemini-image/scripts/image.mjs';
 import * as music from '../packages/engine/dist/skills/lyria-music/scripts/music.mjs';
 import * as rt from '../packages/engine/dist/skills/lyria-music/scripts/realtime.mjs';
-import * as veo from '../packages/engine/dist/skills/veo-video/scripts/veo.mjs';
+import { clipProvider } from '../packages/engine/dist/engine/lib/generation/clips.mjs';
 
 test('TTS: Interactions body with speech_metadata style and speech_config array', () => {
   const body = tts.buildRequest({
@@ -154,34 +154,17 @@ test('Lyria RealTime: one field per client message, setup first', () => {
   assert.throws(() => rt.messages({ prompts: [], scale: 'H_MAJOR' }));
 });
 
-test('Veo: predictLongRunning body — integer durationSeconds, inlineData image, constraints', () => {
-  const body = veo.buildRequest({ prompt: 'slow drift', seconds: 4 });
-  assert.deepEqual(body, {
-    instances: [{ prompt: 'slow drift' }],
-    parameters: { aspectRatio: '16:9', resolution: '720p', durationSeconds: 4 },
+test('retired Veo models fail before a network request', (t) => {
+  t.mock.method(globalThis, 'fetch', () => {
+    throw new Error('Unexpected request');
   });
-  assert.throws(
-    () => veo.buildRequest({ prompt: 'x', resolution: '1080p', seconds: 4 }),
-    /requires seconds=8/,
-  );
-  assert.throws(
-    () =>
-      veo.buildRequest({
-        prompt: 'x',
-        model: 'veo-3.1-lite-generate-preview',
-        resolution: '4k',
-        seconds: 8,
-      }),
-    /4k/,
-  );
-  assert.equal(veo.estimateCost({ seconds: 4 }), 0.2);
-});
-
-test('Retired Veo previews fail with a migration path before sending a request', async () => {
-  await assert.rejects(
-    veo.generateVideo({ prompt: 'pan' }),
-    /retired.*gemini-omni-1.2-flash/,
-  );
+  for (const model of [
+    'veo-3.1-lite-generate-preview',
+    'veo-3.1-fast-generate-preview',
+    'veo-3.1-generate-preview',
+  ])
+    assert.throws(() => clipProvider(model), /retired.*gemini-omni-1\.2-flash/);
+  assert.equal(globalThis.fetch.mock.callCount(), 0);
 });
 
 test('Neon directs from real catalog entries, validates its result, and respects dry-run and budget', async (t) => {

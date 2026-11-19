@@ -23,8 +23,8 @@ Video generation is the expensive step and the least controllable. Decide the pi
 | Need | Use |
 |---|---|
 | Strong motion, keyframe control, sweeping camera | Runway `seedance2_5` ([skill](../skills/runway-video/SKILL.md)) |
-| A subject Seedance moderates, native 1080p, 8 s takes | Veo 3.1 ([skill](../skills/veo-video/SKILL.md)) |
-| Cheap motion drafts | Runway `gen4.5` (720p, first frame) or Veo 3.1 Lite/Fast |
+| A subject Seedance moderates, native 1080p, 8 s takes | Omni 1.2 Flash ([skill](../skills/gemini-omni/SKILL.md)) |
+| Cheap motion drafts | Runway `gen4.5` (720p, first frame) or Omni 1.2 Flash at 360p |
 | Calm establishing inserts in an explainer | Gemini Omni (default) |
 
 Draft on cheap models, then render each chosen shot once on the expensive one. In one 20-second vertical reel, Veo 3.1 Standard was about 80% of the spend and only 2 of its 6 clips made the cut; drafting first would have saved most of it.

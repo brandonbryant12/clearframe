@@ -106,6 +106,14 @@ export function buildRequest({
   };
 }
 
+export function maxSeconds(
+  model: string,
+  references: number,
+  previous?: string,
+): number {
+  return model === MODEL && !previous && references !== 2 ? 15 : 10;
+}
+
 export function validateClip(
   model: string,
   seconds: number,
@@ -116,7 +124,7 @@ export function validateClip(
   if (refs > maxRefs)
     throw new Error(`${model} supports at most ${maxRefs} reference images`);
   if (model === MODEL) {
-    const max = previous || refs === 2 ? 10 : 15;
+    const max = maxSeconds(model, refs, previous);
     if (!Number.isInteger(seconds) || seconds < 3 || seconds > max)
       throw new Error(
         `This Omni shot needs a whole number of seconds between 3 and ${max}`,
